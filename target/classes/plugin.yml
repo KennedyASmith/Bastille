@@ -1,0 +1,8 @@
+name: PrisonMines
+version: 1.0
+main: com.kennedysmithjava.prisonmines.PrisonMines
+api-version: 1.8
+authors: [ "KennedySmithJava", "Hadimhz" ]
+description: PP
+website: MCRivals.com
+depend: [MassiveCore]

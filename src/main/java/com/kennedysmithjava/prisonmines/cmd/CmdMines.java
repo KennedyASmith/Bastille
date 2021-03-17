@@ -1,0 +1,50 @@
+package com.kennedysmithjava.prisonmines.cmd;
+
+import com.kennedysmithjava.prisonmines.PrisonMines;
+import com.kennedysmithjava.prisonmines.entity.MConf;
+import com.massivecraft.massivecore.command.MassiveCommandVersion;
+
+import java.util.List;
+
+public class CmdMines extends MineCommand
+{
+    // -------------------------------------------- //
+    // INSTANCE
+    // -------------------------------------------- //
+
+    private static CmdMines i = new CmdMines();
+
+    // -------------------------------------------- //
+    // FIELDS
+    // -------------------------------------------- //
+    public CmdMinesCreate cmdMinesCreate = new CmdMinesCreate();
+    public CmdMinesRename CmdMinesRename = new CmdMinesRename();
+    public CmdMinesDelete CmdMinesDelete = new CmdMinesDelete();
+    public CmdMinesRegen CmdMinesRegen = new CmdMinesRegen();
+    public CmdMinesSetSpawn CmdMinesSetSpawn = new CmdMinesSetSpawn();
+
+    public MassiveCommandVersion cmdFactionsVersion = new MassiveCommandVersion(PrisonMines.get()).setAliases("v", "version");
+    public CmdMines() {
+
+    }
+
+    // -------------------------------------------- //
+    // CONSTRUCT
+    // -------------------------------------------- //
+
+    public static CmdMines get()
+    {
+        return i;
+    }
+
+    // -------------------------------------------- //
+    // OVERRIDE
+    // -------------------------------------------- //
+
+    @Override
+    public List<String> getAliases()
+    {
+        return MConf.get().aliasesMAdmin;
+    }
+
+}
