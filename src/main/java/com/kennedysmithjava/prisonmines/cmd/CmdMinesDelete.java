@@ -1,10 +1,17 @@
 package com.kennedysmithjava.prisonmines.cmd;
 
+import com.kennedysmithjava.prisonmines.PrisonMines;
 import com.kennedysmithjava.prisonmines.cmd.type.TypeMine;
 import com.kennedysmithjava.prisonmines.entity.Mine;
-import com.kennedysmithjava.prisonmines.entity.MineColl;
 import com.massivecraft.massivecore.MassiveException;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitScheduler;
+import xyz.xenondevs.particle.ParticleBuilder;
+import xyz.xenondevs.particle.ParticleEffect;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CmdMinesDelete extends MineCommand {
     // -------------------------------------------- //
@@ -31,8 +38,10 @@ public class CmdMinesDelete extends MineCommand {
         Mine mine = readArg();
         String name = mine.getName();
 
+
+
         //If mine has an automatic timer, reset it
-        if(mine.isHasTimer()) mine.getRegenCountdown().cancel();
+        mine.getRegenCountdown().cancel();
         msg("You have removed the mine " + name);
         mine.detach();
     }

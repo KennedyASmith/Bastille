@@ -29,7 +29,7 @@ public class CmdMineTeleport extends MineCommand {
         Player player = (Player) sender;
         Mine mine = readArg();
 
-        player.teleport(mine.getSpawnPoint());
+        player.teleport(mine.getSpawnPointLoc());
         player.sendMessage("Teleported you to " + mine.getName());
 
     }

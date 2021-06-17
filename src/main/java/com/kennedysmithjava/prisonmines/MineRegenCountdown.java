@@ -1,19 +1,9 @@
 package com.kennedysmithjava.prisonmines;
 
-import com.boydti.fawe.bukkit.v0.FaweAdapter_All;
-import com.boydti.fawe.util.EditSessionBuilder;
 import com.kennedysmithjava.prisonmines.entity.Mine;
 import com.kennedysmithjava.prisonmines.util.TimeUtil;
-import com.sk89q.worldedit.BlockVector;
-import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.blocks.BaseBlock;
-import com.sk89q.worldedit.bukkit.BukkitUtil;
-import com.sk89q.worldedit.function.pattern.RandomPattern;
-import com.sk89q.worldedit.regions.CuboidRegion;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -30,6 +20,8 @@ public class MineRegenCountdown {
 
     public MineRegenCountdown(Mine mine, int when){
         this.mine = mine;
+        if(mine == null) return;
+
         delay = mine.getRegenTimer();
         counter = 0;
 
@@ -37,7 +29,7 @@ public class MineRegenCountdown {
             @Override
             public void run() {
                 if(counter == delay){
-                    Bukkit.broadcastMessage("Mine " + mine.getName() + " has just reset.");
+                    //Bukkit.broadcastMessage("Mine " + mine.getName() + " has just reset.");
                     sendPlayersToMineSpawn();
                     mine.regen();
                     counter = 0L;
@@ -69,13 +61,13 @@ public class MineRegenCountdown {
     }
 
     public void sendPlayersToMineSpawn(){
-        Location min = mine.getMinLoc();
-        Location max = mine.getMaxLoc();
+        Location min = mine.getMineMin();
+        Location max = mine.getMineMax();
 
         Bukkit.getServer().getOnlinePlayers().forEach(player ->
                 {
                     if(contains(player.getLocation(), min, max)){
-                        player.teleport(mine.getSpawnPoint());
+                        player.teleport(mine.getSpawnPointLoc());
                     }
                 });
     }
@@ -99,4 +91,7 @@ public class MineRegenCountdown {
         return x >= x1 && x <= x2 && y >= y1 && y <= y2 && z >= z1 && z <= z2;
     }
 
+    public void setMine(Mine mine) {
+        this.mine = mine;
+    }
 }

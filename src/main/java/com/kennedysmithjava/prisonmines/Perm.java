@@ -16,9 +16,13 @@ public enum Perm implements Identified
     RENAME,
     DELETE,
     REGEN,
+    POSONE,
+    POSTWO,
+    WAND,
     SET_SPAWN,
     SETSPAWN,
-    TELEPORT
+    TELEPORT,
+    FLOOR
 
 
     // END OF LIST

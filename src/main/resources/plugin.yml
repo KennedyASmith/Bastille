@@ -2,7 +2,9 @@ name: ${project.name}
 version: ${project.version}
 main: com.kennedysmithjava.prisonmines.PrisonMines
 api-version: 1.8
-authors: [ "KennedySmithJava", "Hadimhz" ]
+authors: [ "KennedySmithJava" ]
 description: PP
 website: MCRivals.com
-depend: [MassiveCore]
+depend: [MassiveCore, FastAsyncWorldEdit, Citizens]
+softdepend: [PrisonCore]
+loadbefore: [PrisonCore]

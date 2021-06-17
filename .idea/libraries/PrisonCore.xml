@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="PrisonCore">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../PrisonCore" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../PrisonCore/src/main/java" />
+    </SOURCES>
+  </library>
+</component>

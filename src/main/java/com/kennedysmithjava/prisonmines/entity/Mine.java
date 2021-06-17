@@ -3,12 +3,11 @@ package com.kennedysmithjava.prisonmines.entity;
 import com.boydti.fawe.bukkit.v0.FaweAdapter_All;
 import com.boydti.fawe.util.EditSessionBuilder;
 import com.kennedysmithjava.prisonmines.MineRegenCountdown;
-import com.kennedysmithjava.prisonmines.MinesParticipator;
 import com.kennedysmithjava.prisonmines.PrisonMines;
+import com.kennedysmithjava.prisonmines.upgrades.Upgrade;
 import com.kennedysmithjava.prisonmines.util.LocSerializer;
 import com.kennedysmithjava.prisonmines.util.MiscUtil;
 import com.massivecraft.massivecore.Named;
-import com.massivecraft.massivecore.collections.MassiveMapDef;
 import com.massivecraft.massivecore.store.Entity;
 import com.massivecraft.massivecore.util.MUtil;
 import com.sk89q.worldedit.BlockVector;
@@ -22,6 +21,9 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 public class Mine extends Entity<Mine> implements Named {
@@ -29,16 +31,38 @@ public class Mine extends Entity<Mine> implements Named {
     // CONSTANTS
     // -------------------------------------------- //
 
-    // The actual mine id looks something like "54947df8-0e9e-4471-a2f9-9af509fb5889" and that is not too easy to remember for humans.
-    // Null should never happen. The name must not be null.
+    // MISC
     private String name = null;
     private long regenTimer = 120;
-    private boolean hasTimer = true;
+    private boolean alwaysActive = false;
+
+    // LEVEL & UPGRADES
+    private int level = 1;
+    private List<String> upgrades = new ArrayList<>();
+
+    // LOCATION INFORMATION
     private String world;
-    private String min;
-    private String max;
-    private String spawnPoint;
-    private MassiveMapDef<String, Double> blockDistribution;
+    private Location spawnPoint;
+    private Location origin;
+    private Location mineMin;
+    private Location mineMax;
+    private Location architectLocation;
+    private Location researcherLocation;
+
+    // NPC INFORMATION
+    private String architectUUID = null;
+
+    // PHYSICAL INFORMATION
+    private int wallID;
+    private int pathID;
+    private int pathLVL;
+    private int width;
+    private int height;
+    private Map<String, Double> blockDistribution;
+
+    // -------------------------------------------- //
+    //  CONSTRUCTION
+    // -------------------------------------------- //
 
     public static Mine get(Object oid) {
         return MineColl.get().get(oid);
@@ -60,18 +84,29 @@ public class Mine extends Entity<Mine> implements Named {
 
     @Override
     public Mine load(Mine that) {
-        MineColl.get().countdowns.put(this, new MineRegenCountdown(this, 0));
-        Bukkit.getLogger().log(Level.SEVERE, "MINE " + this.getName() + " LOADED");
         this.setName(that.name);
         this.setRegenTimer(that.regenTimer);
+        this.setOrigin(that.origin);
+        this.setMin(that.mineMin);
+        this.setMax(that.mineMax);
+        this.setSpawnPoint(that.spawnPoint);
+        this.setAlwaysActive(that.alwaysActive);
         this.setBlockDistribution(that.blockDistribution);
-        this.min = that.min;
-        this.max = that.max;
-        this.setHasTimer(that.hasTimer);
-        this.spawnPoint = that.spawnPoint;
+        this.setArchitectUUID(that.architectUUID);
+        this.setArchitectLocation(that.architectLocation);
+        this.setUpgrades(that.upgrades);
+        this.setLevel(that.level);
+        this.setPathID(that.pathID);
+        this.setWallID(that.wallID);
+        this.setPathLVL(that.pathLVL);
 
+        MineColl.get().countdowns.put(this, new MineRegenCountdown(this, 0));
         return this;
     }
+
+    // -------------------------------------------- //
+    //  MISC INFORMATION
+    // -------------------------------------------- //
 
     public String getName() {
         String ret = this.name;
@@ -101,15 +136,6 @@ public class Mine extends Entity<Mine> implements Named {
         this.changed();
     }
 
-    public boolean isHasTimer() {
-        return hasTimer;
-    }
-
-    public void setHasTimer(boolean hasTimer) {
-        this.hasTimer = hasTimer;
-        this.changed();
-    }
-
     public String getComparisonName() {
         return MiscUtil.getComparisonString(this.getName());
     }
@@ -118,29 +144,64 @@ public class Mine extends Entity<Mine> implements Named {
         return prefix + this.getName();
     }
 
-    public String getMin() {
-        return min;
+    public boolean isAlwaysActive() {
+        return alwaysActive;
+    }
+
+    public void setAlwaysActive(boolean alwaysActive) {
+        this.alwaysActive = alwaysActive;
+        this.changed();
+    }
+
+    // -------------------------------------------- //
+    //  LEVEL & UPGRADES
+    // -------------------------------------------- //
+
+    public void addUpgrade(String upgradeID){
+        upgrades.add(upgradeID);
+        this.changed();
+    }
+
+    public void addUpgrade(Upgrade upgrade){
+        addUpgrade(upgrade.getName());
+    }
+
+    public List<String> getUpgrades() {
+        return upgrades;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+
+    public Location getMineMin() {
+        return mineMin;
     }
 
     public void setMin(Location location) {
-        this.min = LocSerializer.getLiteStringFromLocation(location);
+        this.mineMin = location;
         this.changed();
     }
 
-    public String getMax() {
-        return max;
+    public Location getMineMax() {
+        return mineMax;
     }
 
     public void setMax(Location location) {
-        this.max = LocSerializer.getLiteStringFromLocation(location);
+        this.mineMax = location;
         this.changed();
     }
 
-    public MassiveMapDef<String, Double> getBlockDistribution() {
+    public Map<String, Double> getBlockDistribution() {
         return blockDistribution;
     }
 
-    public void setBlockDistribution(MassiveMapDef<String, Double> blockDistribution) {
+    public void setBlockDistribution(Map<String, Double> blockDistribution) {
         this.blockDistribution = blockDistribution;
         this.changed();
     }
@@ -149,25 +210,17 @@ public class Mine extends Entity<Mine> implements Named {
         return MineColl.get().countdowns.get(this);
     }
 
-    public Location getMaxLoc() {
-        return LocSerializer.getLiteLocationFromString(getMax());
-    }
-
-    public Location getMinLoc() {
-        return LocSerializer.getLiteLocationFromString(getMin());
-    }
-
-    public Location getSpawnPoint() {
-        return LocSerializer.getLocationFromString(this.spawnPoint);
+    public Location getSpawnPointLoc() {
+        return spawnPoint;
     }
 
     public void setSpawnPoint(Location location) {
-        this.spawnPoint = LocSerializer.getStringFromLocation(location);
+        this.spawnPoint = location;
         this.changed();
     }
 
     public World getWorld() {
-        return getMaxLoc().getWorld();
+        return getMineMax().getWorld();
     }
 
     public void regen() {
@@ -188,12 +241,98 @@ public class Mine extends Entity<Mine> implements Named {
         World world = getWorld();
 
         CuboidRegion cuboidRegion = new CuboidRegion(BukkitUtil.getLocalWorld(world),
-                new BlockVector(getMinLoc().getBlockX(), getMinLoc().getBlockY(), getMinLoc().getBlockZ()),
-                new BlockVector(getMaxLoc().getBlockX(), getMaxLoc().getBlockY(), getMaxLoc().getBlockZ()));
+                new BlockVector(getMineMin().getBlockX(), getMineMin().getBlockY(), getMineMin().getBlockZ()),
+                new BlockVector(getMineMax().getBlockX(), getMineMax().getBlockY(), getMineMax().getBlockZ()));
         EditSession editSession = (new EditSessionBuilder(BukkitUtil.getLocalWorld(world))).fastmode(true).build();
         Bukkit.getScheduler().runTaskAsynchronously(PrisonMines.get(), () -> {
             editSession.setBlocks(cuboidRegion, pat);
             editSession.flushQueue();
         });
+        this.changed();
     }
+
+    public void setArchitectUUID(String architectUUID) {
+        this.architectUUID = architectUUID;
+        this.changed();
+    }
+
+    public String getArchitectUUID() {
+        return architectUUID;
+    }
+
+
+    public void setArchitectLocation(Location location) {
+        this.architectLocation = location;
+        this.changed();
+    }
+
+    public Location getArchitectLocation() {
+        return architectLocation;
+    }
+
+    public Location getResearcherLocation() {
+        return researcherLocation;
+    }
+
+    public void setOrigin(Location origin) {
+        this.origin = origin;
+        this.changed();
+    }
+
+    public void setUpgrades(List<String> upgrades) {
+        this.upgrades = upgrades;
+    }
+
+    public Location getOrigin() {
+        return origin;
+    }
+
+    public void setWall(){
+
+    }
+
+    public void setPath(){
+
+    }
+
+    public int getPathID() {
+        return pathID;
+    }
+
+    public int getPathLVL() {
+        return pathLVL;
+    }
+
+    public int getWallID() {
+        return wallID;
+    }
+
+    public void setPathID(int pathID) {
+        this.pathID = pathID;
+        this.changed();
+    }
+
+    public void setPathLVL(int pathLVL) {
+        this.pathLVL = pathLVL;
+        this.changed();
+    }
+
+    public void setWallID(int wallID) {
+        this.wallID = wallID;
+        this.changed();
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+
 }

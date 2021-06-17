@@ -18,10 +18,11 @@ public class CmdMines extends MineCommand
     // FIELDS
     // -------------------------------------------- //
     public CmdMinesCreate cmdMinesCreate = new CmdMinesCreate();
-    public CmdMinesRename CmdMinesRename = new CmdMinesRename();
-    public CmdMinesDelete CmdMinesDelete = new CmdMinesDelete();
-    public CmdMinesRegen CmdMinesRegen = new CmdMinesRegen();
-    public CmdMinesSetSpawn CmdMinesSetSpawn = new CmdMinesSetSpawn();
+    public CmdMinesRename cmdMinesRename = new CmdMinesRename();
+    public CmdMinesDelete cmdMinesDelete = new CmdMinesDelete();
+    public CmdMinesRegen cmdMinesRegen = new CmdMinesRegen();
+    public CmdMinesSetSpawn cmdMinesSetSpawn = new CmdMinesSetSpawn();
+    public CmdMinesFloor cmdMinesFloor = new CmdMinesFloor();
 
     public MassiveCommandVersion cmdFactionsVersion = new MassiveCommandVersion(PrisonMines.get()).setAliases("v", "version");
     public CmdMines() {

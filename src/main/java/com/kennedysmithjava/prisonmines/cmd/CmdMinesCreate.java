@@ -1,7 +1,9 @@
 package com.kennedysmithjava.prisonmines.cmd;
 
 import com.kennedysmithjava.prisonmines.MineRegenCountdown;
+import com.kennedysmithjava.prisonmines.PrisonMines;
 import com.kennedysmithjava.prisonmines.cmd.type.TypeMineNameStrict;
+import com.kennedysmithjava.prisonmines.entity.DistributionConf;
 import com.kennedysmithjava.prisonmines.entity.Mine;
 import com.kennedysmithjava.prisonmines.entity.MineColl;
 import com.massivecraft.massivecore.MassiveException;
@@ -16,8 +18,13 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitScheduler;
+import xyz.xenondevs.particle.ParticleBuilder;
+import xyz.xenondevs.particle.ParticleEffect;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class CmdMinesCreate extends MineCommand {
     // -------------------------------------------- //
@@ -42,6 +49,39 @@ public class CmdMinesCreate extends MineCommand {
     public void perform() throws MassiveException {
         if (!(sender instanceof Player)) return;
         Player player = (Player) sender;
+
+        Location loc = player.getLocation();
+
+        List<Location> locs = new ArrayList<>();
+        int[] ang = new int[]{0, 30, 45, 60, 90, 120, 135, 150, 180, 210, 225, 240, 270, 300, 315, 330};
+        int radius = 2;
+        for (int a : ang) {
+            double p = Math.toRadians(a);
+            double x = radius * Math.cos(p);
+            double z = radius * Math.sin(p);
+
+            Bukkit.broadcastMessage("X: " + x + " Y: " + z);
+            Location d = loc.clone().add(x, 0, z);
+            locs.add(d);
+        }
+
+        BukkitScheduler scheduler = PrisonMines.get().getServer().getScheduler();
+        scheduler.scheduleSyncRepeatingTask(PrisonMines.get(), new Runnable() {
+            @Override
+            public void run() {
+
+                locs.forEach(location -> {
+                    new ParticleBuilder(ParticleEffect.FLAME, location)
+                            .setSpeed(0.0f)
+                            .display();
+                });
+
+            }
+        }, 0L, 20L);
+
+        player.sendMessage("Distribution: ");
+        DistributionConf.get().distribution.get(1).getRates().forEach((s, aDouble) -> player.sendMessage(s + " " + aDouble));
+
         String name = readArg();
         long timer = readArg();
 
@@ -49,7 +89,7 @@ public class CmdMinesCreate extends MineCommand {
         Selection selection = worldEdit.getSelection(player);
 
         if (selection == null) {
-            msg("pls no make mine without selection uwu");
+            msg("You cannot create a mine without a selection. Use //wand to select a region.");
             return;
         }
 
@@ -61,7 +101,6 @@ public class CmdMinesCreate extends MineCommand {
 
         mine.setName(name);
         mine.setRegenTimer(timer);
-        mine.setHasTimer(true);
         mine.setMin(pos1);
         mine.setMax(pos2);
         mine.setBlockDistribution(getBlockDistribution(pos1, pos2));
@@ -80,7 +119,6 @@ public class CmdMinesCreate extends MineCommand {
         for (int x = min.getBlockX(); x <= max.getBlockX(); x++) {
             for (int y = min.getBlockY(); y <= max.getBlockY(); y++) {
                 for (int z = min.getBlockZ(); z <= max.getBlockZ(); z++) {
-
                     Block block = world.getBlockAt(x, y, z);
                     Material material = block.getType();
                     if (material.equals(Material.AIR)) continue;
@@ -90,7 +128,6 @@ public class CmdMinesCreate extends MineCommand {
             }
         }
 
-        Bukkit.broadcastMessage("e" + size);
         long finalSize = size;
         MassiveMapDef<String, Double> percentage = new MassiveMapDef<>();
 
