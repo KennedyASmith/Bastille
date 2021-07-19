@@ -1,30 +1,29 @@
 package com.kennedysmithjava.prisonmines.entity;
 
-import com.kennedysmithjava.prisonmines.PrisonMines;
-import com.massivecraft.massivecore.collections.MassiveMapDef;
+import com.kennedysmithjava.prisonmines.util.BlockMaterial;
 import com.massivecraft.massivecore.command.editor.annotation.EditorName;
 import com.massivecraft.massivecore.store.Entity;
 import com.massivecraft.massivecore.util.MUtil;
+import org.bukkit.Material;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @EditorName("config")
-public class MConf extends Entity<MConf>
+public class MinesConf extends Entity<MinesConf>
 {
+
     // -------------------------------------------- //
-    // META
+    // INSTANCE & CONSTRUCT
     // -------------------------------------------- //
 
-    protected static transient MConf i;
+    protected static transient MinesConf i;
 
 
-    public static MConf get() { return i; }
+    public static MinesConf get() { return i; }
 
     @Override
-    public MConf load(MConf that)
+    public MinesConf load(MinesConf that)
     {
         super.load(that);
         return this;
@@ -45,19 +44,22 @@ public class MConf extends Entity<MConf>
     public Long defaultResetTimer = 10L;
     public int mineNameLengthMin = 3;
     public int mineNameLengthMax = 9;
-    public Long getDefaultResetTimer() {
-        return defaultResetTimer;
-    }
+    public int mineDefaultHeight = 3;
+    public int mineDefaultWidth = 3;
+    public int mineDefaultWallID = 1;
+    public int mineDefaultPathID = 1;
+    public String mineDefaultName = "%player%'s Mine";
+
+    public BlockMaterial minesBorderMaterial = new BlockMaterial(Material.BEDROCK, (byte) 0);
 
     // -------------------------------------------- //
     // MISC
     // -------------------------------------------- //
 
     public String timeZone = "America/New_York";
+    public String minesWorldName = "MinesWorld";
     public Map<String, String> minesWorldDefaultGamerules = MUtil.map("doMobSpawning", "false", "doDaylightCycle", "true", "doMobLoot", "false", "doTileDrops", "false", "keepInventory", "true", "mobGriefing", "false");
 
-    public String architectLineNoPermission = "&7[&bRon&7] I don't think you have permission to order from me, pal!";
-    public String architectLineWelcome = "&7[&bRon&7] What can I do for ya today, chief?";
-
 }
+
 

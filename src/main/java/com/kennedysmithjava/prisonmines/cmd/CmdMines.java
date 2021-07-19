@@ -1,7 +1,7 @@
 package com.kennedysmithjava.prisonmines.cmd;
 
 import com.kennedysmithjava.prisonmines.PrisonMines;
-import com.kennedysmithjava.prisonmines.entity.MConf;
+import com.kennedysmithjava.prisonmines.entity.MinesConf;
 import com.massivecraft.massivecore.command.MassiveCommandVersion;
 
 import java.util.List;
@@ -45,7 +45,7 @@ public class CmdMines extends MineCommand
     @Override
     public List<String> getAliases()
     {
-        return MConf.get().aliasesMAdmin;
+        return MinesConf.get().aliasesMAdmin;
     }
 
 }

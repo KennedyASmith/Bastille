@@ -1,6 +1,6 @@
 package com.kennedysmithjava.prisonmines.cmd;
 
-import com.kennedysmithjava.prisonmines.entity.MConf;
+import com.kennedysmithjava.prisonmines.entity.MinesConf;
 import com.kennedysmithjava.prisonmines.util.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -43,7 +43,7 @@ public class CmdOffset extends MineCommand {
 
     @Override
     public List<String> getAliases() {
-        return MConf.get().aliasesOffset;
+        return MinesConf.get().aliasesOffset;
     }
 
     public static void addToPosOneCache(String uuid, Location location){

@@ -101,8 +101,8 @@ public class CmdMinesCreate extends MineCommand {
 
         mine.setName(name);
         mine.setRegenTimer(timer);
-        mine.setMin(pos1);
-        mine.setMax(pos2);
+        mine.setMinVar(pos1);
+        mine.setMaxVar(pos2);
         mine.setBlockDistribution(getBlockDistribution(pos1, pos2));
         mine.setSpawnPoint(player.getLocation());
         MineColl.addCountdown(mine, new MineRegenCountdown(mine, 0));

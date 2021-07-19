@@ -3,14 +3,14 @@ package com.kennedysmithjava.prisonmines.entity;
 import com.massivecraft.massivecore.MassiveCore;
 import com.massivecraft.massivecore.store.Coll;
 
-public class UpgradesGUIConfColl extends Coll<UpgradesGUIConf>
+public class MinesConfColl extends Coll<MinesConf>
 {
     // -------------------------------------------- //
     // INSTANCE & CONSTRUCT
     // -------------------------------------------- //
 
-    private static UpgradesGUIConfColl i = new UpgradesGUIConfColl();
-    public static UpgradesGUIConfColl get() { return i; }
+    private static MinesConfColl i = new MinesConfColl();
+    public static MinesConfColl get() { return i; }
 
     // -------------------------------------------- //
     // STACK TRACEABILITY
@@ -31,7 +31,7 @@ public class UpgradesGUIConfColl extends Coll<UpgradesGUIConf>
     {
         super.setActive(active);
         if (!active) return;
-        UpgradesGUIConf.i = this.get(MassiveCore.INSTANCE, true);
+        MinesConf.i = this.get(MassiveCore.INSTANCE, true);
     }
 
 }

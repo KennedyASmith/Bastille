@@ -31,7 +31,7 @@ public class MineRegenCountdown {
                 if(counter == delay){
                     //Bukkit.broadcastMessage("Mine " + mine.getName() + " has just reset.");
                     sendPlayersToMineSpawn();
-                    mine.regen();
+                    mine.regen(false);
                     counter = 0L;
                     return;
                 }

@@ -12,10 +12,6 @@ public class LayoutConfColl extends Coll<LayoutConf>
     private static LayoutConfColl i = new LayoutConfColl();
     public static LayoutConfColl get() { return i; }
 
-    // -------------------------------------------- //
-    // STACK TRACEABILITY
-    // -------------------------------------------- //
-
     @Override
     public void onTick()
     {

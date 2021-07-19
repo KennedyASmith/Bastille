@@ -46,12 +46,12 @@ public class Floor {
         return schematics;
     }
 
-    public String getSchematic(int level) {
-        return getDirectory() + getSchematicPathname(level);
+    public String getSchematic(int width) {
+        return getDirectory() + getSchematicPathname(width);
     }
 
-    public String getSchematicPathname(int level) {
-        return getSchematics().get(level);
+    public String getSchematicPathname(int width) {
+        return getSchematics().get(width);
     }
 
     public Offset getArchitectNPC() {

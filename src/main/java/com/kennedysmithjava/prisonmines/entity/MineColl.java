@@ -22,14 +22,6 @@ public class MineColl extends Coll<Mine> {
     }
 
     // -------------------------------------------- //
-    // STACK TRACEABILITY
-    // -------------------------------------------- //
-
-    public static HashMap<Mine, MineRegenCountdown> getCountdowns() {
-        return MineColl.get().countdowns;
-    }
-
-    // -------------------------------------------- //
     // OVERRIDE: COLL
     // -------------------------------------------- //
 

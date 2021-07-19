@@ -48,7 +48,7 @@ public class CmdMinesFloor extends MineCommand {
 
         // Parameters
         this.addParameter(TypeInteger.get(), "id");
-        this.addParameter(TypeInteger.get(), "level");
+        this.addParameter(TypeInteger.get(), "width");
 
     }
 
@@ -65,7 +65,7 @@ public class CmdMinesFloor extends MineCommand {
         }*/
 
         int id = readArg();
-        int level = readArg();
+        int width = readArg();
 
         Region region;
 
@@ -135,7 +135,7 @@ public class CmdMinesFloor extends MineCommand {
                     Material.WOOD, 0,
                     "Schematics/Mine_" + id + "/",
                     MUtil.map(
-                            level, "Mine_" + id + "_" + level + ".schematic"),
+                            width, "Mine_" + id + "_" + width + ".schematic"),
                     spawn.get(),
                     mine.get(),
                     architect.get(),
@@ -144,7 +144,7 @@ public class CmdMinesFloor extends MineCommand {
         }else{
             Floor floor = floors.get(id).clone();
             Map<Integer, String> fs = floor.getSchematics();
-            fs.put(level, "Mine_" + id + "_" + level + ".schematic");
+            fs.put(width, "Mine_" + id + "_" + width + ".schematic");
             LayoutConf.get().setFloor(id, floor);
         }
 
@@ -159,8 +159,8 @@ public class CmdMinesFloor extends MineCommand {
         });
 
         Floor finalFloor = LayoutConf.get().getPath(id);
-        saveSchematic(finalFloor.getDirectory(), finalFloor.getSchematicPathname(level), region);
-        msg(ChatColor.translateAlternateColorCodes('&', "&7[&f&lMCRivals&7] Schematic saved under " + finalFloor.getDirectory() + "/" + finalFloor.getSchematicPathname(level)));
+        saveSchematic(finalFloor.getDirectory(), finalFloor.getSchematicPathname(width), region);
+        msg(ChatColor.translateAlternateColorCodes('&', "&7[&f&lMCRivals&7] Schematic saved under " + finalFloor.getDirectory() + "/" + finalFloor.getSchematicPathname(width)));
 
         signs.forEach(signBlock -> {
             Location location = signBlock.getLocation();

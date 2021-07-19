@@ -1,6 +1,6 @@
 package com.kennedysmithjava.prisonmines.cmd.type;
 
-import com.kennedysmithjava.prisonmines.entity.MConf;
+import com.kennedysmithjava.prisonmines.entity.MinesConf;
 import com.kennedysmithjava.prisonmines.entity.MineColl;
 import com.kennedysmithjava.prisonmines.util.MiscUtil;
 import com.massivecraft.massivecore.Named;
@@ -43,13 +43,13 @@ public class TypeMineNameAbstract extends TypeNameAbstract
     @Override
     public Integer getLengthMin()
     {
-        return MConf.get().mineNameLengthMin;
+        return MinesConf.get().mineNameLengthMin;
     }
 
     @Override
     public Integer getLengthMax()
     {
-        return MConf.get().mineNameLengthMax;
+        return MinesConf.get().mineNameLengthMax;
     }
 
 }

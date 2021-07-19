@@ -1,9 +1,8 @@
 package com.kennedysmithjava.prisonmines;
-import com.kennedysmithjava.prisonmines.entity.MConf;
+import com.kennedysmithjava.prisonmines.entity.MinesConf;
 import com.kennedysmithjava.prisonmines.entity.Mine;
 import com.kennedysmithjava.prisonmines.entity.MineColl;
 import com.kennedysmithjava.prisonmines.util.VoidGenerator;
-import com.mcrivals.prisoncore.PrisonCore;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.bukkit.BukkitUtil;
 import org.bukkit.Bukkit;
@@ -18,7 +17,7 @@ import java.util.Collection;
 public class MinesWorldManager {
 
     VoidGenerator generator;
-    String worldName = "MinesWorld";
+    String worldName = MinesConf.get().minesWorldName;
 
     public static MinesWorldManager i = new MinesWorldManager();
     public static MinesWorldManager get() {
@@ -33,7 +32,7 @@ public class MinesWorldManager {
         File file = new File(PrisonMines.get().getServer().getWorldContainer(), worldName);
         if(!file.exists()) {
             World world = Bukkit.createWorld(new WorldCreator(worldName).generator(new VoidGenerator()));
-            MConf.get().minesWorldDefaultGamerules.forEach(world::setGameRuleValue);
+            MinesConf.get().minesWorldDefaultGamerules.forEach(world::setGameRuleValue);
         }
         generator = new VoidGenerator();
     }
@@ -49,9 +48,9 @@ public class MinesWorldManager {
     public Vector getUniqueLocation(){
         Collection<Mine> mines = MineColl.get().getAll();
         if(!(mines.size() > 0)){
-            return BukkitUtil.toVector(new Location(getWorld(), 96, 50, 96));
+            return BukkitUtil.toVector(new Location(getWorld(), 96, 10, 96));
         }else{
-            return BukkitUtil.toVector(new Location(getWorld(),mines.size() * 150, 50, mines.size() * 150));
+            return BukkitUtil.toVector(new Location(getWorld(),mines.size() * 250, 10, mines.size() * 250));
         }
     }
 

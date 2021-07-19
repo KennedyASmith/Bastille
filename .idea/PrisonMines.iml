@@ -52,16 +52,16 @@
     <orderEntry type="module-library">
       <library name="Maven: com.intellectualsites.fawe:FAWE-Bukkit:LATEST">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/libs/FastAsyncWorldEdit-bukkit-19.11.13-5505943-1282-22.3.5.jar!/" />
+          <root url="jar://$MODULE_DIR$/libs/FastAsyncWorldEdit.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="Maven: com.sk89q.worldedit:worldedit-core:6.1.1-SNAPSHOT">
+      <library name="Maven: com.sk89q.worldedit:worldedit-core:LATEST">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/libs/worldedit-bukkit-6.1.3.jar!/" />
+          <root url="jar://$MODULE_DIR$/libs/WorldEdit.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -71,6 +71,15 @@
       <library name="Maven: com.kennedysmithjava:prisoncore:LATEST">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/libs/PrisonCore-1.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.kennedysmithjava:PrisonNPCs:LATEST">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/PrisonNPCs-1.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

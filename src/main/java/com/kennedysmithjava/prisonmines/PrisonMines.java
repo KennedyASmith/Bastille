@@ -1,27 +1,24 @@
 package com.kennedysmithjava.prisonmines;
 
 import com.kennedysmithjava.prisonmines.engine.EngineOffsetWand;
-import com.kennedysmithjava.prisonmines.engine.EnginePersonalMines;
 import com.kennedysmithjava.prisonmines.entity.*;
-import com.kennedysmithjava.prisonmines.traits.ArchitectTrait;
+import com.kennedysmithjava.prisonmines.util.FAWETracker;
+import com.kennedysmithjava.prisonmines.util.MiscUtil;
+import com.kennedysmithjava.prisonmines.util.Offset;
 import com.kennedysmithjava.prisonmines.util.VoidGenerator;
 import com.massivecraft.massivecore.MassivePlugin;
 import com.massivecraft.massivecore.collections.MassiveList;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.trait.TraitInfo;
-import org.bukkit.Bukkit;
+import com.mcrivals.prisoncore.entity.MPlayer;
+import com.sk89q.worldedit.Vector;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.generator.ChunkGenerator;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.File;
 import java.util.List;
-import java.util.logging.Level;
+import java.util.UUID;
 
-public class PrisonMines extends MassivePlugin
-{
-
-    public final static String ID_NONE = "none";
-    public static File schematicConfigFile = null;
-
+public class PrisonMines extends MassivePlugin {
 
     // -------------------------------------------- //
     // INSTANCE & CONSTRUCT
@@ -29,97 +26,131 @@ public class PrisonMines extends MassivePlugin
 
     private static PrisonMines i;
 
-    public PrisonMines()
-    {
+    public PrisonMines() {
         PrisonMines.i = this;
     }
 
-    public static PrisonMines get()
-    {
+    public static PrisonMines get() {
         return i;
     }
+
 
     // -------------------------------------------- //
     // OVERRIDE
     // -------------------------------------------- //
 
     @Override
-    public void onEnableInner()
-    {
-        schematicConfigFile = new File(PrisonMines.get().getDataFolder() + File.separator + "Schematics");
-        if(!schematicConfigFile.exists()) schematicConfigFile.mkdirs();
+    public void onEnableInner() {
 
-        if (getServer().getPluginManager().getPlugin("Citizens") == null || !getServer().getPluginManager().getPlugin("Citizens").isEnabled()) {
-            getLogger().log(Level.SEVERE, "Citizens 2.0 not found or not enabled");
-            getServer().getPluginManager().disablePlugin(this);
-        }
-
-        // Activate
+        // ACTIVATE ENGINES/COLLECTORS
         this.activateAuto();
 
-        pluginEnableMillis = System.currentTimeMillis();
-
-        CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(ArchitectTrait.class).withName("architecttrait"));
-        CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(ArchitectTrait.class).withName("researchertrait"));
-
-    }
-
-    private Long pluginEnableMillis = null;
-
-    public Long getPluginEnableMillis() {
-        return pluginEnableMillis;
     }
 
     @Override
-    public List<Class<?>> getClassesActiveColls()
-    {
+    public List<Class<?>> getClassesActiveColls() {
         // MConf should always be activated first for all plugins. It's simply a standard. The config should have no dependencies.
         // MFlag and MPerm are both dependency free.
-        return new MassiveList<Class<?>>(
-                MConfColl.class,
-                MineColl.class,
+        return new MassiveList<>(
+                MinesConfColl.class,
                 DistributionConfColl.class,
-                UpgradesConfColl.class,
-                UpgradesGUIConfColl.class,
+                MineColl.class,
                 LayoutConfColl.class
         );
     }
 
     @Override
-    public List<Class<?>> getClassesActiveEngines()
-    {
+    public List<Class<?>> getClassesActiveEngines() {
         List<Class<?>> ret = super.getClassesActiveEngines();
-
-        ret.add(EnginePersonalMines.class);
         ret.add(EngineOffsetWand.class);
-
         return ret;
     }
 
-
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         super.onDisable();
     }
 
     @Override
-    public boolean isVersionSynchronized()
-    {
+    public boolean isVersionSynchronized() {
         return false;
     }
-
 
     @Override
     public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
         return new VoidGenerator();
     }
 
-    public static File getSchematicConfigFile() {
-        return schematicConfigFile;
+    // -------------------------------------------- //
+    // STATIC METHODS
+    // -------------------------------------------- //
+
+    @SuppressWarnings("unused")
+    public static void createMine(MPlayer player, Runnable onComplete) {
+
+        //GENERATE A RANDOM ID FOR MINE & ASSIGN TO PLAYER
+        String id = UUID.randomUUID().toString();
+        Mine mine = MineColl.get().create(id);
+        player.setMineID(id);
+
+
+        // DEFINE ESSENTIAL LAYOUTS AND LOCATIONS
+        MinesWorldManager worldManager = MinesWorldManager.get();
+        World world = worldManager.getWorld();
+        LayoutConf layoutConf = LayoutConf.get();
+        Floor floor = layoutConf.getPath(MinesConf.get().mineDefaultWallID);
+        Wall wall = layoutConf.getWall(MinesConf.get().mineDefaultWallID);
+        int width = MinesConf.get().mineDefaultWidth;
+        int height = MinesConf.get().mineDefaultHeight;
+        Offset spawnOffset = floor.getSpawn();
+        Offset mineCOffset = floor.getMineCenter();
+        Offset archOffset = floor.getArchitectNPC();
+        Offset resOffset = floor.getResearcherNPC();
+        Vector minCorner = worldManager.getUniqueLocation();
+        Location origin = new Location(world, minCorner.getBlockX(), minCorner.getBlockY(), minCorner.getBlockZ());
+        Location mineCenter = new Location(world, mineCOffset.getX() + origin.getX(), mineCOffset.getY() + origin.getY(), mineCOffset.getZ() + origin.getZ());
+        Location spawn = new Location(origin.getWorld(), origin.getBlockX() + spawnOffset.getX(), origin.getBlockY() + spawnOffset.getY(), origin.getBlockZ() + spawnOffset.getZ(), spawnOffset.getYaw(), spawnOffset.getPitch());
+        Location maxMine = mineCenter.clone().add(-(width - 2), 0, -(width - 2));
+        Location minMine = maxMine.clone().add(width - 1, -(height - 1), width - 1);
+        Location architectLocation = new Location(world, origin.getBlockX() + archOffset.getX(), origin.getBlockY() + archOffset.getY(), origin.getBlockZ() + archOffset.getZ(), archOffset.getYaw(), archOffset.getPitch());
+        Location researcherLocation = new Location(world, origin.getBlockX() + resOffset.getX(), origin.getBlockY() + resOffset.getY(), origin.getBlockZ() + resOffset.getZ(), resOffset.getYaw(), resOffset.getPitch());
+
+        // SAVE ESSENTIAL MINE VALUES
+        mine.setName(MinesConf.get().mineDefaultName.replaceAll("%player%", player.getPlayer().getName()));
+        mine.setMinVar(minMine);
+        mine.setMaxVar(maxMine);
+        mine.setSpawnPoint(spawn);
+        mine.setArchitectLocation(architectLocation);
+        mine.setArchitectUUID(UUID.randomUUID().toString());
+        mine.setResearcherUUID(UUID.randomUUID().toString());
+        mine.setResearcherLocation(researcherLocation);
+        mine.setOrigin(origin);
+        mine.setMineCenter(mineCenter);
+        mine.setRegenTimer(MinesConf.get().defaultResetTimer);
+        mine.setBlockDistribution(DistributionConf.get().distribution.get(1).getRates());
+        mine.setPathIDVar(MinesConf.get().mineDefaultPathID);
+        mine.setWallIDVar(MinesConf.get().mineDefaultWallID);
+        mine.setWidthVar(MinesConf.get().mineDefaultWidth);
+        mine.setHeightVar(MinesConf.get().mineDefaultHeight);
+
+        //PASTE SCHEMATICS
+        FAWETracker floorT = MiscUtil.pasteSchematic(floor.getSchematic(1), minCorner);
+        FAWETracker wallT = MiscUtil.pasteSchematic(wall.getSchematic(), minCorner);
+
+        //GENERATE UNBREAKABLE BORDER & GENERATE MINE BLOCKS
+        mine.generateBorder(mine.getWidth(), mine.getWidth());
+        mine.regen(false);
+
+        //ENSURE THAT BOTH PASTES ARE FINISHED
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (floorT.isDone() && wallT.isDone()) {
+                    onComplete.run();
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(PrisonMines.get(), 0L, 1L);
     }
 
-    public static File getSchematicFolder() {
-        return schematicConfigFile.getParentFile();
-    }
 }

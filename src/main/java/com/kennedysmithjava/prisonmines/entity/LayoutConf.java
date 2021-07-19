@@ -15,18 +15,24 @@ import java.util.Set;
 @EditorName("config")
 public class LayoutConf extends Entity<LayoutConf> {
     // -------------------------------------------- //
-    // META
+    // INSTANCE & CONSTRUCT
     // -------------------------------------------- //
 
     protected static transient LayoutConf i;
 
+    public static LayoutConf get() {
+        return i;
+    }
 
-    // -------------------------------------------- //
-    // STORED DATA
-    // -------------------------------------------- //
+    @Override
+    public LayoutConf load(LayoutConf that) {
 
-    public Integer defaultWallSchem = 1;
-    public Integer defaultPathSchem = 1;
+        this.setFloors(that.floors);
+        this.setWalls(that.walls);
+
+        super.load(that);
+        return this;
+    }
 
     // ------------------------------------------------------------------------- //
     //  WALLS
@@ -64,27 +70,12 @@ public class LayoutConf extends Entity<LayoutConf> {
                                         1, "Default_1.schematic",
                                     10, "path2.schematic",
                                             30, "path3.schematic"),
-                    new Offset(28, 50, 50, 0F, -90F),
-                    new Offset(50, 49, 50),
-                    new Offset(50, 50, 50, 0F, -90F),
-                    new Offset(28, 50, 50, 0F, -90F)
+                    new Offset(-51, 52, -75, 0F, 0F),
+                    new Offset(-51, 50, -50),
+                    new Offset(-51, 53, -26, 0F, 180F),
+                    new Offset(-47, 53, -26, 0F, 180F)
             )
     );
-
-    public static LayoutConf get() {
-        return i;
-    }
-
-    @Override
-    public LayoutConf load(LayoutConf that) {
-
-        this.setFloors(that.floors);
-        this.setWalls(that.walls);
-
-        super.load(that);
-        return this;
-    }
-
 
     // -------------------------------------------- //
     //                PATH METHODS
@@ -94,8 +85,8 @@ public class LayoutConf extends Entity<LayoutConf> {
         return floors.get(id);
     }
 
-    public String getPathSchematic(int id, int level) {
-        return floors.get(id).getSchematic(level);
+    public String getPathSchematic(int id, int width) {
+        return floors.get(id).getSchematic(width);
     }
 
     public ItemStack getPathIcon(int id) {
@@ -107,13 +98,9 @@ public class LayoutConf extends Entity<LayoutConf> {
         return floors.keySet();
     }
 
-    public boolean pathSchematicExists(int id, int level) {
-        File file = new File(PrisonMines.get().getDataFolder() + File.separator + floors.get(id).getSchematic(level));
+    public boolean pathSchematicExists(int id, int width) {
+        File file = new File(PrisonMines.get().getDataFolder() + File.separator + floors.get(id).getSchematic(width));
         return file.exists();
-    }
-
-    public String getDefaultPathSchem() {
-        return getPathSchematic(defaultPathSchem, 1);
     }
 
     public Map<Integer, Floor> getFloors() {
@@ -154,10 +141,6 @@ public class LayoutConf extends Entity<LayoutConf> {
     public boolean wallSchematicExists(int id) {
         File file = new File(PrisonMines.get().getDataFolder() + File.separator + walls.get(id).getSchematic());
         return file.exists();
-    }
-
-    public String getDefaultWallSchem() {
-        return getWallSchematic(defaultWallSchem);
     }
 
     public Map<Integer, Wall> getWalls() {

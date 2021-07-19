@@ -1,6 +1,6 @@
 package com.kennedysmithjava.prisonmines.util;
 
-import com.kennedysmithjava.prisonmines.entity.MConf;
+import com.kennedysmithjava.prisonmines.entity.MinesConf;
 
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -13,7 +13,7 @@ public class TimeUtil
     private static Calendar getCalenderTimeZone()
     {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeZone(TimeZone.getTimeZone(MConf.get().timeZone));
+        calendar.setTimeZone(TimeZone.getTimeZone(MinesConf.get().timeZone));
 
         return calendar;
     }
