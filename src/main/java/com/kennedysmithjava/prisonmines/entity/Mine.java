@@ -525,7 +525,7 @@ public class Mine extends Entity<Mine> implements Named {
     }
 
     public void spawnResearcher(){
-        PrisonNPCs.spawnArchitectNPC(this, getArchitectUUID());
+        PrisonNPCs.spawnResearcherNPC(this, getResearcherUUID());
     }
 
     public void despawnResearcher(DespawnReason reason){
