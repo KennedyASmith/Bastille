@@ -20,6 +20,7 @@ import com.sk89q.worldedit.blocks.BaseBlock;
 import com.sk89q.worldedit.bukkit.BukkitUtil;
 import com.sk89q.worldedit.function.pattern.RandomPattern;
 import com.sk89q.worldedit.regions.CuboidRegion;
+import jdk.nashorn.internal.ir.Block;
 import net.citizensnpcs.api.event.DespawnReason;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -60,6 +61,8 @@ public class Mine extends Entity<Mine> implements Named {
         this.setWallIDVar(that.wallID);
         this.setHeightVar(that.height);
         this.setWidthVar(that.width);
+        this.setUnlockedDistributions(that.unlockedDistributions);
+        this.setCurrentDistributionIDVar(that.currentDistributionID);
 
         if(alwaysActive) MineColl.get().addCountdown(this);
 
@@ -74,6 +77,7 @@ public class Mine extends Entity<Mine> implements Named {
     // LEVEL & UPGRADES
     private int level = 1;
     private transient List<String> upgrades = new ArrayList<>();
+    private List<Integer> unlockedDistributions = new ArrayList<>();
 
     // LOCATION INFORMATION
     private PS spawnPoint;
@@ -94,6 +98,7 @@ public class Mine extends Entity<Mine> implements Named {
     private int width;
     private int height;
     private Map<String, Double> blockDistribution;
+    private int currentDistributionID;
 
     // -------------------------------------------- //
     //  MINE ARCHITECTURE
@@ -124,9 +129,6 @@ public class Mine extends Entity<Mine> implements Named {
                 new BlockVector(mineMin.getLocationX(), mineMin.getLocationY(), mineMin.getLocationZ()),
                 new BlockVector(mineMax.getLocationX(), mineMax.getLocationY(), mineMax.getLocationZ()));
 
-        Bukkit.broadcastMessage("MineMin: [" + mineMin.getLocationX() + "][" + mineMin.getLocationY() + "][" + mineMin.getLocationZ() + "]");
-        Bukkit.broadcastMessage("MineMax: [" + mineMax.getLocationX() + "][" + mineMax.getLocationY() + "][" + mineMax.getLocationZ() + "]");
-
         EditSession editSession = (new EditSessionBuilder(BukkitUtil.getLocalWorld(world))).fastmode(true).build();
         Bukkit.getScheduler().runTaskAsynchronously(PrisonMines.get(), () -> {
             editSession.setBlocks(cuboidRegion, pat);
@@ -142,8 +144,10 @@ public class Mine extends Entity<Mine> implements Named {
      * @param h The height of the mine in blocks.
      */
     public void setHeight(int h) {
-        generateBorder(getWidth(), h);
+        generateBorder(getWidth(), getHeight(), new BlockMaterial(Material.AIR, (byte) 0));
+        generateBorder(getWidth(), h, MinesConf.get().minesBorderMaterial);
         this.setHeightVar(h);
+        this.regen(false);
     }
 
     /**
@@ -152,9 +156,10 @@ public class Mine extends Entity<Mine> implements Named {
      * @param w The width of the mine in blocks.
      */
     public FAWETracker setWidth(int w) {
-        generateBorder(w, getHeight());
+        generateBorder(getWidth(), getHeight(), new BlockMaterial(Material.AIR, (byte) 0));
+        generateBorder(w, getHeight(), MinesConf.get().minesBorderMaterial);
         this.setWidthVar(w);
-
+        this.regen(false);
         return MiscUtil.pasteSchematic(LayoutConf.get().getPath(getPathID()).getSchematic(getWidth()), new Vector(origin.getLocationX(), origin.getLocationY(), origin.getLocationZ()));
     }
 
@@ -163,8 +168,7 @@ public class Mine extends Entity<Mine> implements Named {
      * @param w The width of the mine in blocks.
      * @param h The height of the mine in blocks.
      */
-    public void generateBorder(int w, int h){
-        BlockMaterial material = MinesConf.get().minesBorderMaterial;
+    public void generateBorder(int w, int h, BlockMaterial borderMaterial){
 
         //WALL LOCATIONS
         Location westTop = getMineCenter().clone().add(-w, 0, -w);
@@ -181,31 +185,18 @@ public class Mine extends Entity<Mine> implements Named {
         Location southEast = eastTop.clone().add(-1, 0, -1);
         Location southWest = southTop.clone().add(-1, 0, 1);
 
-        //Two locations used for clearing the old border
-        /*
-        if(height != null){
-
-        }
-        Location northWestTop = northTop.clone();
-        northWestTop.setY(mineCenter.getLocationY());
-        Location southEastBottom = eastBottom.clone();
-        northWestTop.setY(mineCenter.getLocationY() - height);
-        MiscUtil.blockFill(northWestTop, southEastBottom, new BlockMaterial(Material.AIR, (byte) 0));
-
-        */
-
         //GENERATE THE WALLS
-        MiscUtil.blockFill(westBottom, westTop, material);
-        MiscUtil.blockFill(northBottom, northTop, material);
-        MiscUtil.blockFill(eastBottom, eastTop, material);
-        MiscUtil.blockFill(southBottom, southTop, material);
-        MiscUtil.blockFill(northBottom, southBottom, material);
+        MiscUtil.blockFill(westBottom, westTop, borderMaterial);
+        MiscUtil.blockFill(northBottom, northTop, borderMaterial);
+        MiscUtil.blockFill(eastBottom, eastTop, borderMaterial);
+        MiscUtil.blockFill(southBottom, southTop, borderMaterial);
+        MiscUtil.blockFill(northBottom, southBottom, borderMaterial);
 
         //GENERATE THE CORNER COLUMNS
-        MiscUtil.blockFill(northWest, northWest.clone().add(0,-h,0), material);
-        MiscUtil.blockFill(northEast, northEast.clone().add(0,-h,0), material);
-        MiscUtil.blockFill(southEast, southEast.clone().add(0,-h,0), material);
-        MiscUtil.blockFill(southWest, southWest.clone().add(0,-h,0), material);
+        MiscUtil.blockFill(northWest, northWest.clone().add(0,-h,0), borderMaterial);
+        MiscUtil.blockFill(northEast, northEast.clone().add(0,-h,0), borderMaterial);
+        MiscUtil.blockFill(southEast, southEast.clone().add(0,-h,0), borderMaterial);
+        MiscUtil.blockFill(southWest, southWest.clone().add(0,-h,0), borderMaterial);
     }
 
     public void setMineMax(Location mineMax) {
@@ -245,9 +236,29 @@ public class Mine extends Entity<Mine> implements Named {
         return blockDistribution;
     }
 
+    public void setBlockDistribution(int id) {
+        this.blockDistribution = DistributionConf.get().distribution.get(id).getRates();
+        this.setCurrentDistributionID(id);
+        this.changed();
+    }
+
     public void setBlockDistribution(Map<String, Double> blockDistribution) {
         this.blockDistribution = blockDistribution;
         this.changed();
+    }
+
+    public void setCurrentDistributionID(int id) {
+        this.currentDistributionID = id;
+        setBlockDistribution(DistributionConf.get().distribution.get(id).getRates());
+        this.changed();
+    }
+    public void setCurrentDistributionIDVar(int id) {
+        this.currentDistributionID = id;
+        this.changed();
+    }
+
+    public int getCurrentDistributionID() {
+        return currentDistributionID;
     }
 
     // -------------------------------------------- //
@@ -514,6 +525,20 @@ public class Mine extends Entity<Mine> implements Named {
     public void setAlwaysActive(boolean alwaysActive) {
         this.alwaysActive = alwaysActive;
         this.changed();
+    }
+
+    public void setUnlockedDistributions(List<Integer> unlockedDistributions) {
+        this.unlockedDistributions = unlockedDistributions;
+        this.changed();
+    }
+
+    public void addUnlockedDistribution(Integer integer){
+        unlockedDistributions.add(integer);
+        this.changed();
+    }
+
+    public List<Integer> getUnlockedDistributions() {
+        return unlockedDistributions;
     }
 
     public void spawnArchitect(){

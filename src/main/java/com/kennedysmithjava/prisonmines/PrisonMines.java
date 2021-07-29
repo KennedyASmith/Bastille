@@ -2,12 +2,10 @@ package com.kennedysmithjava.prisonmines;
 
 import com.kennedysmithjava.prisonmines.engine.EngineOffsetWand;
 import com.kennedysmithjava.prisonmines.entity.*;
-import com.kennedysmithjava.prisonmines.util.FAWETracker;
-import com.kennedysmithjava.prisonmines.util.MiscUtil;
-import com.kennedysmithjava.prisonmines.util.Offset;
-import com.kennedysmithjava.prisonmines.util.VoidGenerator;
+import com.kennedysmithjava.prisonmines.util.*;
 import com.massivecraft.massivecore.MassivePlugin;
 import com.massivecraft.massivecore.collections.MassiveList;
+import com.massivecraft.massivecore.util.MUtil;
 import com.mcrivals.prisoncore.entity.MPlayer;
 import com.sk89q.worldedit.Vector;
 import org.bukkit.Location;
@@ -132,13 +130,15 @@ public class PrisonMines extends MassivePlugin {
         mine.setWallIDVar(MinesConf.get().mineDefaultWallID);
         mine.setWidthVar(MinesConf.get().mineDefaultWidth);
         mine.setHeightVar(MinesConf.get().mineDefaultHeight);
+        mine.setUnlockedDistributions(MUtil.list(1));
+        mine.setCurrentDistributionID(1);
 
         //PASTE SCHEMATICS
         FAWETracker floorT = MiscUtil.pasteSchematic(floor.getSchematic(1), minCorner);
         FAWETracker wallT = MiscUtil.pasteSchematic(wall.getSchematic(), minCorner);
 
         //GENERATE UNBREAKABLE BORDER & GENERATE MINE BLOCKS
-        mine.generateBorder(mine.getWidth(), mine.getWidth());
+        mine.generateBorder(mine.getWidth(), mine.getWidth(), MinesConf.get().minesBorderMaterial);
         mine.regen(false);
 
         //ENSURE THAT BOTH PASTES ARE FINISHED

@@ -8,6 +8,7 @@ com\kennedysmithjava\prisonmines\entity\Distribution.class
 com\kennedysmithjava\prisonmines\cmd\CmdMinesRename.class
 com\kennedysmithjava\prisonmines\util\LocSerializer.class
 com\kennedysmithjava\prisonmines\cmd\CmdOffsetPosOne.class
+com\kennedysmithjava\prisonmines\util\Cooldown$1.class
 com\kennedysmithjava\prisonmines\entity\DistributionConfColl.class
 com\kennedysmithjava\prisonmines\cmd\CmdMinesCreate.class
 com\kennedysmithjava\prisonmines\MineRegenCountdown.class
@@ -30,6 +31,7 @@ com\kennedysmithjava\prisonmines\entity\Floor.class
 com\kennedysmithjava\prisonmines\event\EventPrisonPlayerJoin.class
 com\kennedysmithjava\prisonmines\cmd\CmdMinesSetSpawn.class
 com\kennedysmithjava\prisonmines\cmd\MineCommand.class
+com\kennedysmithjava\prisonmines\util\CooldownReason.class
 com\kennedysmithjava\prisonmines\cmd\CmdMine.class
 com\kennedysmithjava\prisonmines\entity\LayoutConfColl.class
 com\kennedysmithjava\prisonmines\util\Offset.class
@@ -37,10 +39,12 @@ com\kennedysmithjava\prisonmines\cmd\CmdMinesRegen.class
 com\kennedysmithjava\prisonmines\util\TimeUtil.class
 com\kennedysmithjava\prisonmines\cmd\type\TypeMineNameAbstract.class
 com\kennedysmithjava\prisonmines\PrisonMines$1.class
+com\kennedysmithjava\prisonmines\util\Cooldown.class
 com\kennedysmithjava\prisonmines\MinesWorldManager.class
 com\kennedysmithjava\prisonmines\costs\CostUpgrade.class
 com\kennedysmithjava\prisonmines\costs\Cost.class
 com\kennedysmithjava\prisonmines\cmd\SignBlock.class
+com\kennedysmithjava\prisonmines\util\DistributionPage.class
 com\kennedysmithjava\prisonmines\costs\CostCurrency.class
 com\kennedysmithjava\prisonmines\MineRegenCountdown$1.class
 com\kennedysmithjava\prisonmines\util\VoidGenerator.class

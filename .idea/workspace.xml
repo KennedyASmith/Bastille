@@ -23,8 +23,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1b9e0ffb-a1e6-445a-91a0-01d4830be670" name="Default Changelist" comment="literally everything v.2">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/util/Cooldown.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/util/CooldownReason.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/util/DistributionPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/PrisonMines.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PrisonMines.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_spigotmc_spigot_api_1_8_R0_1_SNAPSHOT.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_spigotmc_spigot_api_1_8_R0_1_SNAPSHOT.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/PrisonMines.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/PrisonMines.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/entity/Distribution.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/entity/Distribution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/entity/DistributionConf.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/entity/DistributionConf.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/entity/Mine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/entity/Mine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/util/TimeUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/util/TimeUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/PrisonMines.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/PrisonMines.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/entity/Mine.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/entity/Mine.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/original-PrisonMines-1.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-PrisonMines-1.0.jar" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -42,12 +56,13 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="mavenHome" value="E:\IntelliJ\IntelliJ IDEA Community Edition 2020.2.3\plugins\maven\lib\maven3" />
-      </MavenGeneralSettings>
-    </option>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="ProjectId" id="1nDw5G4eYDeepPKmhstjMt5YuLY" />
   <component name="ProjectViewState">
@@ -60,13 +75,14 @@
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Luyten" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.5241379" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="Errors" />
+    <property name="settings.editor.selected.configurable" value="MavenSettings" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -258,91 +274,5 @@
     <MESSAGE value="literally everything" />
     <MESSAGE value="literally everything v.2" />
     <option name="LAST_COMMIT_MESSAGE" value="literally everything v.2" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="586" y="198" key="#Inspections" timestamp="1622795318010">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="586" y="198" key="#Inspections/0.0.1920.1040@0.0.1920.1040" timestamp="1622795318010" />
-    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser" timestamp="1625895852469">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1625895852469" />
-    <state x="130" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1625352120141">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="130" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1625352120141" />
-    <state x="698" y="265" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1626154798903">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="698" y="265" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1626154798903" />
-    <state x="707" y="375" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1622789036442">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="707" y="375" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1920.1040@0.0.1920.1040" timestamp="1622789036442" />
-    <state x="778" y="476" key="DetectedRootsChooserDialog" timestamp="1619233910728">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="778" y="476" key="DetectedRootsChooserDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1619233910728" />
-    <state x="926" y="268" key="FileChooserDialogImpl" timestamp="1623398254144">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="926" y="268" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1623398254144" />
-    <state width="711" height="153" key="GridCell.Tab.0.bottom" timestamp="1626743406988">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="711" height="153" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1626743406988" />
-    <state width="711" height="153" key="GridCell.Tab.0.center" timestamp="1626743406988">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="711" height="153" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1626743406988" />
-    <state width="711" height="153" key="GridCell.Tab.0.left" timestamp="1626743406988">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="711" height="153" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1626743406988" />
-    <state width="711" height="153" key="GridCell.Tab.0.right" timestamp="1626743406988">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="711" height="153" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1626743406988" />
-    <state width="1877" height="348" key="GridCell.Tab.1.bottom" timestamp="1626068335011">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1626068335011" />
-    <state width="1877" height="348" key="GridCell.Tab.1.center" timestamp="1626068335011">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1626068335011" />
-    <state width="1877" height="348" key="GridCell.Tab.1.left" timestamp="1626068335011">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1626068335011" />
-    <state width="1877" height="348" key="GridCell.Tab.1.right" timestamp="1626068335011">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1626068335011" />
-    <state x="461" y="165" key="SettingsEditor" timestamp="1626238413008">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="461" y="165" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1626238413008" />
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1626664473695">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1626664473695" />
-    <state x="685" y="482" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1619233898209">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="685" y="482" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD/0.0.1920.1040@0.0.1920.1040" timestamp="1619233898209" />
-    <state x="667" y="253" width="585" height="592" key="find.popup" timestamp="1626245122969">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="667" y="253" width="585" height="592" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1626245122969" />
-    <state x="616" y="240" key="run.anything.popup" timestamp="1621669391283">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="616" y="240" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1621669391283" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1626238410671">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1626238410671" />
   </component>
 </project>
