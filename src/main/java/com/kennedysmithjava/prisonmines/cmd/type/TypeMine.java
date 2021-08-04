@@ -48,10 +48,6 @@ public class TypeMine extends TypeAbstract<Mine>
             if (ret != null) return ret;
         }
 
-        // Faction Name Exact
-        ret = MineColl.get().getByName(str);
-        if (ret != null) return ret;
-
         throw new MassiveException().addMsg("<b>No mine matching \"<p>%s<b>\".", str);
     }
 
@@ -62,9 +58,9 @@ public class TypeMine extends TypeAbstract<Mine>
         Set<String> ret = new TreeSet<>(ComparatorCaseInsensitive.get());
 
         // Fill
-        for (Mine mine : MineColl.get().getAll())
+        for (String mine : MineColl.get().getIds())
         {
-            ret.add(ChatColor.stripColor(mine.getName()));
+            ret.add(ChatColor.stripColor(mine));
         }
 
         // Return

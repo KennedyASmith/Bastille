@@ -38,12 +38,10 @@ public class CmdMinesDelete extends MineCommand {
         Mine mine = readArg();
         String name = mine.getName();
 
-
-
         //If mine has an automatic timer, reset it
-        mine.getRegenCountdown().cancel();
-        msg("You have removed the mine " + name);
+        mine.removeCountdown();
         mine.detach();
+        msg("You have removed the mine " + name);
     }
 
 }

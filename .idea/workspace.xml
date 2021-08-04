@@ -23,23 +23,90 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1b9e0ffb-a1e6-445a-91a0-01d4830be670" name="Default Changelist" comment="literally everything v.2">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/util/Cooldown.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/util/CooldownReason.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/util/DistributionPage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/libs/PrisonNPCs-1.1.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/entity/BlocksConf.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/entity/BlocksConfColl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/PrisonMines.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PrisonMines.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_spigotmc_spigot_api_1_8_R0_1_SNAPSHOT.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_spigotmc_spigot_api_1_8_R0_1_SNAPSHOT.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libs/PrisonNPCs-1.0.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/MineRegenCountdown.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/MineRegenCountdown.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/PrisonMines.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/PrisonMines.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/cmd/CmdMinesCreate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/cmd/CmdMinesCreate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/cmd/CmdMinesDelete.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/cmd/CmdMinesDelete.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/cmd/CmdMinesRegen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/cmd/CmdMinesRegen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/cmd/type/TypeMine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/cmd/type/TypeMine.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/entity/Distribution.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/entity/Distribution.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/entity/DistributionConf.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/entity/DistributionConf.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/entity/LayoutConf.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/entity/LayoutConf.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/entity/Mine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/entity/Mine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/util/TimeUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/util/TimeUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/PrisonMines.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/PrisonMines.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/entity/Mine.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/entity/Mine.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/original-PrisonMines-1.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-PrisonMines-1.0.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/entity/MineColl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/entity/MineColl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/util/BlockMaterial.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/util/BlockMaterial.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/util/MiscUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kennedysmithjava/prisonmines/util/MiscUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/PrisonMines-1.0.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/MineRegenCountdown$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/MineRegenCountdown.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/MinesParticipator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/MinesWorldManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/Perm.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/PrisonMines$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/PrisonMines.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/cmd/CmdMine.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/cmd/CmdMineTeleport.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/cmd/CmdMines.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/cmd/CmdMinesCreate$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/cmd/CmdMinesCreate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/cmd/CmdMinesDelete.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/cmd/CmdMinesFloor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/cmd/CmdMinesRegen.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/cmd/CmdMinesRename.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/cmd/CmdMinesSetSpawn.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/cmd/CmdOffset.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/cmd/CmdOffsetPosOne.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/cmd/CmdOffsetPosTwo.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/cmd/CmdOffsetWand.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/cmd/MineCommand.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/cmd/SignBlock.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/cmd/type/TypeMine.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/cmd/type/TypeMineNameAbstract.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/cmd/type/TypeMineNameStrict.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/costs/Cost.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/costs/CostCurrency.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/costs/CostPlayerLevel.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/costs/CostUpgrade.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/engine/EngineOffsetWand.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/entity/Distribution.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/entity/DistributionConf.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/entity/DistributionConfColl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/entity/Floor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/entity/LayoutConf.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/entity/LayoutConfColl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/entity/Mine.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/entity/MineColl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/entity/MinesConf.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/entity/MinesConfColl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/entity/Wall.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/event/EventNewMine.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/event/EventPrisonPlayerJoin.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/util/BlockMaterial.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/util/Color.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/util/Cooldown$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/util/Cooldown.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/util/CooldownReason.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/util/DistributionPage.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/util/FAWETracker.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/util/Glow.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/util/LocSerializer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/util/MiscUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/util/Offset.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/util/TimeUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/kennedysmithjava/prisonmines/util/VoidGenerator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/plugin.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/original-PrisonMines-1.0.jar" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -274,5 +341,43 @@
     <MESSAGE value="literally everything" />
     <MESSAGE value="literally everything v.2" />
     <option name="LAST_COMMIT_MESSAGE" value="literally everything v.2" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser" timestamp="1628061452852">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1628061452852" />
+    <state x="1127" y="301" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1627963923989">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="1127" y="301" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1627963923989" />
+    <state width="1877" height="255" key="GridCell.Tab.0.bottom" timestamp="1628103716873">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="255" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1628103716873" />
+    <state width="1877" height="255" key="GridCell.Tab.0.center" timestamp="1628103716872">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="255" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1628103716872" />
+    <state width="1877" height="255" key="GridCell.Tab.0.left" timestamp="1628103716872">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="255" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1628103716872" />
+    <state width="1877" height="255" key="GridCell.Tab.0.right" timestamp="1628103716872">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="255" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1628103716872" />
+    <state x="572" y="340" width="585" height="534" key="find.popup" timestamp="1628038903716">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="572" y="340" width="585" height="534" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1628038903716" />
+    <state x="616" y="240" width="672" height="677" key="run.anything.popup" timestamp="1628103152810">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="616" y="240" width="672" height="677" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1628103152810" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1628054030858">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1628054030858" />
   </component>
 </project>

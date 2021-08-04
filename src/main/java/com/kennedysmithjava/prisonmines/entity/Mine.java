@@ -9,10 +9,16 @@ import com.kennedysmithjava.prisonmines.util.BlockMaterial;
 import com.kennedysmithjava.prisonmines.util.FAWETracker;
 import com.kennedysmithjava.prisonmines.util.MiscUtil;
 import com.kennedysmithjava.prisonnpcs.PrisonNPCs;
+import com.kennedysmithjava.prisonnpcs.entity.ArchitectConf;
+import com.kennedysmithjava.prisonnpcs.entity.MConf;
+import com.kennedysmithjava.prisonnpcs.entity.WarrenConf;
+import com.kennedysmithjava.prisonnpcs.npcs.NPCArchitect;
+import com.kennedysmithjava.prisonnpcs.npcs.NPCWarren;
 import com.massivecraft.massivecore.Named;
 import com.massivecraft.massivecore.ps.PS;
 import com.massivecraft.massivecore.store.Entity;
 import com.massivecraft.massivecore.util.MUtil;
+import com.mcrivals.prisoncore.entity.MPlayer;
 import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.Vector;
@@ -21,15 +27,19 @@ import com.sk89q.worldedit.bukkit.BukkitUtil;
 import com.sk89q.worldedit.function.pattern.RandomPattern;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import jdk.nashorn.internal.ir.Block;
+import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.event.DespawnReason;
+import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class Mine extends Entity<Mine> implements Named {
 
@@ -45,26 +55,22 @@ public class Mine extends Entity<Mine> implements Named {
     public Mine load(Mine that) {
 
         this.setRegenTimer(that.regenTimer);
-        this.setAlwaysActive(that.alwaysActive);
         this.setOrigin(that.origin);
-        this.setMinVar(that.mineMin);
-        this.setMaxVar(that.mineMax);
+        this.setMineMin(that.mineMin);
+        this.setMineMax(that.mineMax);
         this.setSpawnPoint(that.spawnPoint);
         this.setArchitectLocation(that.architectLocation);
         this.setUpgrades(that.upgrades);
         this.setMineCenter(that.mineCenter);
         this.setArchitectUUID(that.architectUUID);
         this.setResearcherUUID(that.researcherUUID);
-        this.setBlockDistribution(that.blockDistribution);
         this.setLevel(that.level);
         this.setPathIDVar(that.pathID);
         this.setWallIDVar(that.wallID);
         this.setHeightVar(that.height);
         this.setWidthVar(that.width);
         this.setUnlockedDistributions(that.unlockedDistributions);
-        this.setCurrentDistributionIDVar(that.currentDistributionID);
-
-        if(alwaysActive) MineColl.get().addCountdown(this);
+        this.setBlockDistribution(that.currentDistributionID);
 
         return this;
     }
@@ -72,7 +78,7 @@ public class Mine extends Entity<Mine> implements Named {
     // MISC
     private String name;
     private long regenTimer;
-    private boolean alwaysActive = false;
+    private transient MineRegenCountdown countdown;
 
     // LEVEL & UPGRADES
     private int level = 1;
@@ -97,7 +103,6 @@ public class Mine extends Entity<Mine> implements Named {
     private int pathID;
     private int width;
     private int height;
-    private Map<String, Double> blockDistribution;
     private int currentDistributionID;
 
     // -------------------------------------------- //
@@ -106,36 +111,28 @@ public class Mine extends Entity<Mine> implements Named {
 
     /**
      * Regenerates the blocks in this mine.
-     * @param resetTimer Set true to manually reset the mine's regeneration timer, false if otherwise.
      */
-    public void regen(boolean resetTimer) {
-        RandomPattern pat = new RandomPattern();
+    public void regen() {
         try {
+            RandomPattern pat = new RandomPattern();
             FaweAdapter_All adapter = new FaweAdapter_All();
             this.getBlockDistribution().forEach((material, aDouble) -> {
-                String[] materialArgs = material.split(":");
-
-                BaseBlock baseBlock = new BaseBlock(adapter.getBlockId(Material.valueOf(materialArgs[0])), Integer.parseInt(materialArgs[1]));
-
+                BaseBlock baseBlock = new BaseBlock(adapter.getBlockId(material.getMaterial()), material.getData());
                 pat.add(baseBlock, (aDouble / 100));
             });
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
+            World world = getWorld();
 
-        World world = getWorld();
+            Location mineMin = getMineMin();
+            Location mineMax = getMineMax();
 
-        CuboidRegion cuboidRegion = new CuboidRegion(BukkitUtil.getLocalWorld(world),
-                new BlockVector(mineMin.getLocationX(), mineMin.getLocationY(), mineMin.getLocationZ()),
-                new BlockVector(mineMax.getLocationX(), mineMax.getLocationY(), mineMax.getLocationZ()));
-
-        EditSession editSession = (new EditSessionBuilder(BukkitUtil.getLocalWorld(world))).fastmode(true).build();
-        Bukkit.getScheduler().runTaskAsynchronously(PrisonMines.get(), () -> {
-            editSession.setBlocks(cuboidRegion, pat);
-            editSession.flushQueue();
-        });
-
-        this.changed();
+            CuboidRegion cuboidRegion = new CuboidRegion(BukkitUtil.getLocalWorld(world), new BlockVector(mineMin.getBlockX(), mineMin.getBlockY(), mineMin.getBlockZ()), new BlockVector(mineMax.getBlockX(), mineMax.getBlockY(), mineMax.getBlockZ()));
+            EditSession editSession = (new EditSessionBuilder(BukkitUtil.getLocalWorld(world))).fastmode(true).build();
+            Bukkit.getScheduler().runTaskAsynchronously(PrisonMines.get(), () -> {
+                editSession.setBlocks(cuboidRegion, pat);
+                editSession.flushQueue();
+            });
+            this.getRegenCountdown().resetCounter();
+        } catch (Throwable throwable) { throwable.printStackTrace(); }
     }
 
     /**
@@ -144,10 +141,15 @@ public class Mine extends Entity<Mine> implements Named {
      * @param h The height of the mine in blocks.
      */
     public void setHeight(int h) {
-        generateBorder(getWidth(), getHeight(), new BlockMaterial(Material.AIR, (byte) 0));
-        generateBorder(getWidth(), h, MinesConf.get().minesBorderMaterial);
+        this.pauseRegenCountdown(true);
+        this.clearMine();
+        this.clearBorder();
+        this.generateBorder(getWidth(), h, MinesConf.get().minesBorderMaterial);
+        int heightDifference = h - getHeight();
+        this.setMineMin(getMineMin().clone().add(0, -heightDifference, 0));
         this.setHeightVar(h);
-        this.regen(false);
+        this.regen();
+        this.pauseRegenCountdown(false);
     }
 
     /**
@@ -155,12 +157,50 @@ public class Mine extends Entity<Mine> implements Named {
      * Regenerates the unbreakable border around the mine.
      * @param w The width of the mine in blocks.
      */
-    public FAWETracker setWidth(int w) {
-        generateBorder(getWidth(), getHeight(), new BlockMaterial(Material.AIR, (byte) 0));
-        generateBorder(w, getHeight(), MinesConf.get().minesBorderMaterial);
-        this.setWidthVar(w);
-        this.regen(false);
-        return MiscUtil.pasteSchematic(LayoutConf.get().getPath(getPathID()).getSchematic(getWidth()), new Vector(origin.getLocationX(), origin.getLocationY(), origin.getLocationZ()));
+    public void setWidth(int w, Runnable onFinish) {
+
+        despawnArchitectNPC();
+        despawnResearcherNPC();
+
+        this.pauseRegenCountdown(true);
+        this.clearBorder();
+        this.clearMine();
+
+        FAWETracker clearTracker = MiscUtil.pasteSchematic(LayoutConf.get().getPath(getPathID()).getSchematic(getWidth()), new Vector(origin.getLocationX(), origin.getLocationY(), origin.getLocationZ()), true);
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if(clearTracker.isDone()){
+                    setWidthVar(w);
+                    FAWETracker wallTracker = MiscUtil.pasteSchematic(LayoutConf.get().getWall(getWallID()).getSchematic(), new Vector(origin.getLocationX(), origin.getLocationY(), origin.getLocationZ()));
+                    FAWETracker floorTracker = MiscUtil.pasteSchematic(LayoutConf.get().getPath(getPathID()).getSchematic(getWidth()), new Vector(origin.getLocationX(), origin.getLocationY(), origin.getLocationZ()));
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if(wallTracker.isDone() && floorTracker.isDone()){
+                                generateBorder(w, getHeight(), MinesConf.get().minesBorderMaterial);
+
+                                Location newMax = getMineCenter().add(-(w - 2), 0, -(w - 2));
+                                Location newMin = getMineCenter().add(w - 2, -(getHeight() - 1), w - 2);
+
+                                setMineMax(newMax);
+                                setMineMin(newMin);
+
+                                regen();
+                                spawnArchitectNPC();
+                                spawnResearcherNPC();
+                                onFinish.run();
+                                pauseRegenCountdown(false);
+                                this.cancel();
+                                return;
+                            }
+                        }
+                    }.runTaskTimer(PrisonMines.get(), 0, 10);
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(PrisonMines.get(), 0, 10);
     }
 
     /**
@@ -199,12 +239,18 @@ public class Mine extends Entity<Mine> implements Named {
         MiscUtil.blockFill(southWest, southWest.clone().add(0,-h,0), borderMaterial);
     }
 
+    public void clearBorder(){
+        this.generateBorder(getWidth(), getHeight(), new BlockMaterial(Material.AIR, (byte) 0));
+    }
+
     public void setMineMax(Location mineMax) {
         this.mineMax = PS.valueOf(mineMax);
+        this.changed();
     }
 
     public void setMineMin(Location mineMin) {
         this.mineMin = PS.valueOf(mineMin);
+        this.changed();
     }
 
     // -------------------------------------------- //
@@ -232,27 +278,11 @@ public class Mine extends Entity<Mine> implements Named {
         this.level = level;
     }
 
-    public Map<String, Double> getBlockDistribution() {
-        return blockDistribution;
+    public Map<BlockMaterial, Double> getBlockDistribution() {
+        return DistributionConf.get().distribution.get(getCurrentDistributionID()).getRates();
     }
 
     public void setBlockDistribution(int id) {
-        this.blockDistribution = DistributionConf.get().distribution.get(id).getRates();
-        this.setCurrentDistributionID(id);
-        this.changed();
-    }
-
-    public void setBlockDistribution(Map<String, Double> blockDistribution) {
-        this.blockDistribution = blockDistribution;
-        this.changed();
-    }
-
-    public void setCurrentDistributionID(int id) {
-        this.currentDistributionID = id;
-        setBlockDistribution(DistributionConf.get().distribution.get(id).getRates());
-        this.changed();
-    }
-    public void setCurrentDistributionIDVar(int id) {
         this.currentDistributionID = id;
         this.changed();
     }
@@ -276,7 +306,7 @@ public class Mine extends Entity<Mine> implements Named {
     }
 
     /** Sets the saved value for this mine's width.
-     *  Use {@link #setWidth(int)} for physically adjusting the mine's width.
+     *  Use {@link #setWidth(int, Runnable)} for physically adjusting the mine's width.
      * @param width The width of the mine in blocks.
      * */
     public void setWidthVar(int width) {
@@ -285,7 +315,7 @@ public class Mine extends Entity<Mine> implements Named {
     }
 
     /** Sets the saved value for this mine's path ID.
-     *  Use {@link #setPathID(int)} or {@link #setWidth(int)} for physically adjusting the mine's paths.
+     *  Use {@link #setPathID(int)} or {@link #setWidth(int, Runnable)} for physically adjusting the mine's paths.
      * @param pathID a key for the path's schematic in the {@link LayoutConf} file.
      * */
     public void setPathIDVar(int pathID) {
@@ -304,34 +334,18 @@ public class Mine extends Entity<Mine> implements Named {
 
     /** Sets the saved value for this mine's lowest XYZ position.
      *  Use {@link #setMineMin(Location)} for physically adjusting the mine's minimum location.
-     * @param location Bukkit location of the mine's lowest XYZ position.
-     * */
-    public void setMinVar(Location location) {
-        setMinVar(PS.valueOf(location));
-    }
-
-    /** Sets the saved value for this mine's lowest XYZ position.
-     *  Use {@link #setMineMin(Location)} for physically adjusting the mine's minimum location.
      * @param location MassiveCore location of the mine's lowest XYZ position.
      * */
-    public void setMinVar(PS location) {
+    public void setMineMin(PS location) {
         this.mineMin = location;
         this.changed();
     }
 
     /** Sets the saved value for this mine's greatest XYZ position.
      *  Use {@link #setMineMax(Location)} for physically adjusting the mine's maximum location.
-     * @param location Bukkit location of the mine's greatest XYZ position.
-     * */
-    public void setMaxVar(Location location) {
-        setMaxVar(PS.valueOf(location));
-    }
-
-    /** Sets the saved value for this mine's greatest XYZ position.
-     *  Use {@link #setMineMax(Location)} for physically adjusting the mine's maximum location.
      * @param location MassiveCore location of the mine's greatest XYZ position.
      * */
-    public void setMaxVar(PS location) {
+    public void setMineMax(PS location) {
         this.mineMax = location;
         this.changed();
     }
@@ -478,7 +492,7 @@ public class Mine extends Entity<Mine> implements Named {
     // -------------------------------------------- //
 
     public MineRegenCountdown getRegenCountdown() {
-        return MineColl.get().countdowns.get(this);
+        return countdown;
     }
 
 
@@ -518,15 +532,6 @@ public class Mine extends Entity<Mine> implements Named {
         return prefix + this.getName();
     }
 
-    public boolean isAlwaysActive() {
-        return alwaysActive;
-    }
-
-    public void setAlwaysActive(boolean alwaysActive) {
-        this.alwaysActive = alwaysActive;
-        this.changed();
-    }
-
     public void setUnlockedDistributions(List<Integer> unlockedDistributions) {
         this.unlockedDistributions = unlockedDistributions;
         this.changed();
@@ -541,19 +546,48 @@ public class Mine extends Entity<Mine> implements Named {
         return unlockedDistributions;
     }
 
-    public void spawnArchitect(){
-        PrisonNPCs.spawnArchitectNPC(this, getArchitectUUID());
+    @SuppressWarnings("unused")
+    public void spawnArchitectNPC(){
+        setArchitectUUID(new NPCArchitect().spawn(ArchitectConf.get().architectName,  getArchitectLocation(), 1));
     }
 
-    public void despawnArchitect(DespawnReason reason){
-        PrisonNPCs.despawnNPC(getArchitectUUID(), reason);
+    @SuppressWarnings("unused")
+    public void spawnResearcherNPC(){
+        setResearcherUUID(new NPCWarren().spawn(WarrenConf.get().researcherName, getResearcherLocation(), 1));
     }
 
-    public void spawnResearcher(){
-        PrisonNPCs.spawnResearcherNPC(this, getResearcherUUID());
+    @SuppressWarnings("unused")
+    public void despawnArchitectNPC(){
+        NPC npc = CitizensAPI.getNPCRegistry().getByUniqueId(UUID.fromString(architectUUID));
+        if(npc != null) npc.destroy();
     }
 
-    public void despawnResearcher(DespawnReason reason){
-        PrisonNPCs.despawnNPC(getResearcherUUID(), reason);
+    @SuppressWarnings("unused")
+    public void despawnResearcherNPC(){
+        NPC npc = CitizensAPI.getNPCRegistry().getByUniqueId(UUID.fromString(researcherUUID));
+        if(npc != null) npc.destroy();
+    }
+
+    public void clearMine(){
+        MiscUtil.blockFill(getMineMin(), getMineMax(), new BlockMaterial(Material.AIR, (byte) 0));
+    }
+
+    public MineRegenCountdown createRegenCountdown(){
+        this.countdown = new MineRegenCountdown(this, 0);
+        return getRegenCountdown();
+    }
+
+    public void pauseRegenCountdown(boolean paused){
+        countdown.pause(paused);
+    }
+
+    public void removeCountdown(){
+        this.countdown.stop();
+        this.countdown = null;
+    }
+
+    public boolean isRegenCountdownActive(){
+        return countdown != null && !countdown.isPaused();
     }
 }
+

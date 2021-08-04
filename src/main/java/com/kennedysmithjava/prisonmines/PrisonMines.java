@@ -2,12 +2,14 @@ package com.kennedysmithjava.prisonmines;
 
 import com.kennedysmithjava.prisonmines.engine.EngineOffsetWand;
 import com.kennedysmithjava.prisonmines.entity.*;
+import com.kennedysmithjava.prisonmines.event.EventNewMine;
 import com.kennedysmithjava.prisonmines.util.*;
 import com.massivecraft.massivecore.MassivePlugin;
 import com.massivecraft.massivecore.collections.MassiveList;
 import com.massivecraft.massivecore.util.MUtil;
 import com.mcrivals.prisoncore.entity.MPlayer;
 import com.sk89q.worldedit.Vector;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.generator.ChunkGenerator;
@@ -115,8 +117,8 @@ public class PrisonMines extends MassivePlugin {
 
         // SAVE ESSENTIAL MINE VALUES
         mine.setName(MinesConf.get().mineDefaultName.replaceAll("%player%", player.getPlayer().getName()));
-        mine.setMinVar(minMine);
-        mine.setMaxVar(maxMine);
+        mine.setMineMin(minMine);
+        mine.setMineMax(maxMine);
         mine.setSpawnPoint(spawn);
         mine.setArchitectLocation(architectLocation);
         mine.setArchitectUUID(UUID.randomUUID().toString());
@@ -125,21 +127,19 @@ public class PrisonMines extends MassivePlugin {
         mine.setOrigin(origin);
         mine.setMineCenter(mineCenter);
         mine.setRegenTimer(MinesConf.get().defaultResetTimer);
-        mine.setBlockDistribution(DistributionConf.get().distribution.get(1).getRates());
         mine.setPathIDVar(MinesConf.get().mineDefaultPathID);
         mine.setWallIDVar(MinesConf.get().mineDefaultWallID);
         mine.setWidthVar(MinesConf.get().mineDefaultWidth);
         mine.setHeightVar(MinesConf.get().mineDefaultHeight);
         mine.setUnlockedDistributions(MUtil.list(1));
-        mine.setCurrentDistributionID(1);
+        mine.setBlockDistribution(1);
 
         //PASTE SCHEMATICS
-        FAWETracker floorT = MiscUtil.pasteSchematic(floor.getSchematic(1), minCorner);
+        FAWETracker floorT = MiscUtil.pasteSchematic(floor.getSchematic(mine.getWidth()), minCorner);
         FAWETracker wallT = MiscUtil.pasteSchematic(wall.getSchematic(), minCorner);
 
         //GENERATE UNBREAKABLE BORDER & GENERATE MINE BLOCKS
         mine.generateBorder(mine.getWidth(), mine.getWidth(), MinesConf.get().minesBorderMaterial);
-        mine.regen(false);
 
         //ENSURE THAT BOTH PASTES ARE FINISHED
         new BukkitRunnable() {
@@ -147,6 +147,9 @@ public class PrisonMines extends MassivePlugin {
             public void run() {
                 if (floorT.isDone() && wallT.isDone()) {
                     onComplete.run();
+                    mine.createRegenCountdown();
+                    mine.regen();
+                    Bukkit.getServer().getPluginManager().callEvent(new EventNewMine(player, mine));
                     this.cancel();
                 }
             }

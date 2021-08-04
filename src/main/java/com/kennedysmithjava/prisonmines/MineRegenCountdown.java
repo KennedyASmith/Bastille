@@ -7,16 +7,14 @@ import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.Collection;
-
 public class MineRegenCountdown {
 
     Mine mine;
     long delay;
     long counter;
     BukkitTask task;
-
-    public static Collection<MineRegenCountdown> countdowns;
+    boolean paused;
+    boolean stopped;
 
     public MineRegenCountdown(Mine mine, int when){
         this.mine = mine;
@@ -28,10 +26,10 @@ public class MineRegenCountdown {
         task = new BukkitRunnable(){
             @Override
             public void run() {
+                if(paused) return;
                 if(counter == delay){
-                    //Bukkit.broadcastMessage("Mine " + mine.getName() + " has just reset.");
                     sendPlayersToMineSpawn();
-                    mine.regen(false);
+                    mine.regen();
                     counter = 0L;
                     return;
                 }
@@ -40,7 +38,7 @@ public class MineRegenCountdown {
         }.runTaskTimer(PrisonMines.get(), when, 20L);
     }
 
-    public void forceReset(){
+    public void resetCounter(){
         counter = 0;
     }
 
@@ -56,7 +54,15 @@ public class MineRegenCountdown {
         return mine;
     }
 
-    public void cancel() {
+    public void pause(boolean paused){
+        this.paused = paused;
+    }
+
+    public boolean isPaused(){
+        return paused;
+    }
+
+    public void stop() {
         this.task.cancel();
     }
 

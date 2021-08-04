@@ -1,6 +1,7 @@
 package com.kennedysmithjava.prisonmines.util;
 
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 public class BlockMaterial {
 
@@ -10,6 +11,11 @@ public class BlockMaterial {
     public BlockMaterial(Material material, byte data){
         this.material = material;
         this.data = data;
+    }
+
+    public BlockMaterial(Material material, int data){
+        this.material = material;
+        this.data = (byte) data;
     }
 
     public BlockMaterial(Material material){
@@ -23,5 +29,9 @@ public class BlockMaterial {
 
     public Material getMaterial() {
         return material;
+    }
+
+    public ItemStack getItem(int amount){
+        return new ItemStack(getMaterial(), 1, (short) 0, getData());
     }
 }

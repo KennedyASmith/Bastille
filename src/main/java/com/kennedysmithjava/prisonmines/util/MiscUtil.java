@@ -2,12 +2,16 @@ package com.kennedysmithjava.prisonmines.util;
 
 import com.boydti.fawe.FaweAPI;
 import com.boydti.fawe.bukkit.v0.FaweAdapter_All;
+import com.boydti.fawe.object.schematic.Schematic;
 import com.kennedysmithjava.prisonmines.MinesWorldManager;
 import com.kennedysmithjava.prisonmines.PrisonMines;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.blocks.BaseBlock;
+import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.ClipboardFormats;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
+import com.sk89q.worldedit.regions.Region;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 
@@ -61,22 +65,43 @@ public class MiscUtil {
                 }
             }
         }
-        Bukkit.broadcastMessage("Successful fill!");
     }
 
+    public static FAWETracker pasteSchematic(String filepath, Vector location){
+        return pasteSchematic(filepath, location, false);
+    }
 
-    public static FAWETracker pasteSchematic(String filepath, Vector location) {
+    public static FAWETracker pasteSchematic(String filepath, Vector location, boolean destroy) {
         MinesWorldManager worldManager = MinesWorldManager.get();
 
         FAWETracker tracker = new FAWETracker();
 
         try {
             File file = new File(PrisonMines.get().getDataFolder() + File.separator + filepath);
-            EditSession es = ClipboardFormats.findByFile(file).load(file).paste(FaweAPI.getWorld(worldManager.getWorld().getName()), location, false, false, null);
+            Schematic schematic = ClipboardFormats.findByFile(file).load(file);
+            Clipboard clipboard = schematic.getClipboard();
+
+            if(destroy){
+                FaweAdapter_All adapter = new FaweAdapter_All();
+                for (int x = clipboard.getMinimumPoint().getBlockX() - 1; x <= clipboard.getMaximumPoint().getBlockX() - 1; x++) {
+                    for (int y = clipboard.getMinimumPoint().getBlockY(); y <= clipboard.getMaximumPoint().getBlockY(); y++) {
+                        for (int z = clipboard.getMinimumPoint().getBlockZ() - 1; z <= clipboard.getMaximumPoint().getBlockZ() - 1; z++) {
+
+                            if(!adapter.getMaterial(clipboard.getBlock(new Vector(x, y, z)).getType()).equals(Material.AIR)){
+                                BaseBlock baseBlock = new BaseBlock(adapter.getBlockId(Material.PISTON_MOVING_PIECE), 0);
+                                clipboard.setBlock(x, y, z, baseBlock);
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            EditSession es = schematic.paste(FaweAPI.getWorld(worldManager.getWorld().getName()), location, false, false, null);
+
             es.setFastMode(true);
             es.getQueue().setProgressTask(tracker);
-
-        } catch (Exception e) {
+            } catch (Throwable e) {
             e.printStackTrace();
         }
 
@@ -84,3 +109,4 @@ public class MiscUtil {
     }
 
 }
+

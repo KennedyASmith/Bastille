@@ -32,8 +32,8 @@ public class CmdMinesRegen extends MineCommand {
 
         Mine mine = MineColl.get().getByName(name);
         //If mine has an automatic timer, reset it
-        mine.getRegenCountdown().forceReset();
-        mine.regen(true);
+        mine.getRegenCountdown().resetCounter();
+        mine.regen();
         msg("Mine has been regenerated successfully!");
     }
 

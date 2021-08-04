@@ -47,6 +47,7 @@ public class CmdMinesCreate extends MineCommand {
 
     @Override
     public void perform() throws MassiveException {
+        /*
         if (!(sender instanceof Player)) return;
         Player player = (Player) sender;
 
@@ -138,6 +139,7 @@ public class CmdMinesCreate extends MineCommand {
                 }
         );
         return percentage;
-    }
 
+*/
+    }
 }

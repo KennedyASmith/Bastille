@@ -117,7 +117,7 @@
             <artifactId>PrisonNPCs</artifactId>
             <version>LATEST</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/PrisonNPCs-1.0.jar</systemPath>
+            <systemPath>${project.basedir}/libs/PrisonNPCs-1.1.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>net.citizensnpcs</groupId>

@@ -70,7 +70,7 @@
     <orderEntry type="module-library">
       <library name="Maven: com.kennedysmithjava:prisoncore:LATEST">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/libs/prisoncore-1.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/libs/PrisonCore-1.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -79,7 +79,7 @@
     <orderEntry type="module-library">
       <library name="Maven: com.kennedysmithjava:PrisonNPCs:LATEST">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/libs/PrisonNPCs-1.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/libs/PrisonNPCs-1.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

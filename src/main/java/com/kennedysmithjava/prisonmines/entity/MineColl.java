@@ -15,7 +15,6 @@ public class MineColl extends Coll<Mine> {
     // -------------------------------------------- //
 
     private static final MineColl i = new MineColl();
-    public HashMap<Mine, MineRegenCountdown> countdowns = new HashMap<>();
 
     public static MineColl get() {
         return i;
@@ -25,9 +24,7 @@ public class MineColl extends Coll<Mine> {
     // OVERRIDE: COLL
     // -------------------------------------------- //
 
-    public static void addCountdown(Mine mine, MineRegenCountdown countdown) {
-        MineColl.get().countdowns.put(mine, countdown);
-    }
+
 
     @Override
     public void onTick() {
@@ -38,12 +35,6 @@ public class MineColl extends Coll<Mine> {
     public void setActive(boolean active) {
         super.setActive(active);
         if (!active) return;
-
-        // Gets all "always active" Mines, registers their timers, applies a delay from their timers to prevent parallel threads.
-        Collection<Mine> coll = MineColl.get().getAll();
-        coll.stream().filter(Mine::isAlwaysActive).forEach(mine -> {
-            countdowns.put(mine, new MineRegenCountdown(mine, new Random(mine.getRegenTimer()).nextInt()));
-        });
     }
 
     @Override
@@ -57,18 +48,4 @@ public class MineColl extends Coll<Mine> {
         return null;
     }
 
-    public boolean countdownPresent(Mine mine){
-        return countdowns.get(mine) != null;
-    }
-
-    public void addCountdown(Mine mine){
-        countdowns.putIfAbsent(mine, new MineRegenCountdown(mine, 0));
-    }
-
-    public void removeCountdown(Mine mine){
-        if(countdowns.get(mine) != null){
-            countdowns.get(mine).cancel();
-            countdowns.remove(mine);
-        }
-    }
 }
