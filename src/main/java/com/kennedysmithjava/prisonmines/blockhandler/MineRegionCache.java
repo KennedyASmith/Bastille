@@ -76,6 +76,18 @@ public class MineRegionCache {
         return true;
     }
 
+    public void invalidate(LazyRegion region) {
+        this.distributionMap.remove(region);
+
+        int key = this.getKey(region.getMinX());
+        int validationKey = this.getKey(region.getMaxX());
+
+        if (key != validationKey || !region.getWorld().equals(this.minesWorldName)) {
+            this.alternativelyCachedRegions.remove(region);
+        } else {
+            this.mineRegionCache.remove(key);
+        }
+    }
 
     public void cacheRegion(LazyRegion region, Distribution distribution) {
         // Let's make the distibutions accessible via HashMap to get O(1) lookup times on them.

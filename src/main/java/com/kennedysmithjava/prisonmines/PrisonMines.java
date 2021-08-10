@@ -1,6 +1,7 @@
 package com.kennedysmithjava.prisonmines;
 
 import com.kennedysmithjava.prisonmines.blockhandler.BlockBreakEngine;
+import com.kennedysmithjava.prisonmines.blockhandler.CacheUpdateEngine;
 import com.kennedysmithjava.prisonmines.engine.EngineOffsetWand;
 import com.kennedysmithjava.prisonmines.entity.*;
 import com.kennedysmithjava.prisonmines.entity.DistributionConfColl;
@@ -70,6 +71,7 @@ public class PrisonMines extends MassivePlugin {
         List<Class<?>> ret = super.getClassesActiveEngines();
         ret.add(EngineOffsetWand.class);
         ret.add(BlockBreakEngine.class);
+        ret.add(CacheUpdateEngine.class);
         return ret;
     }
 
