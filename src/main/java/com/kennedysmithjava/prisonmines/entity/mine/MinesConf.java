@@ -1,4 +1,4 @@
-package com.kennedysmithjava.prisonmines.entity;
+package com.kennedysmithjava.prisonmines.entity.mine;
 
 import com.kennedysmithjava.prisonmines.util.BlockMaterial;
 import com.massivecraft.massivecore.command.editor.annotation.EditorName;

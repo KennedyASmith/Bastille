@@ -1,6 +1,6 @@
 package com.kennedysmithjava.prisonmines.util;
 
-import com.kennedysmithjava.prisonmines.entity.MinesConf;
+import com.kennedysmithjava.prisonmines.entity.mine.MinesConf;
 
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -100,11 +100,11 @@ public class TimeUtil
     {
         int minutes = seconds / 60;
         if (minutes < 1)
-            return String.valueOf(seconds) + "s";
+            return seconds + "s";
         else
         {
             int secs = seconds - minutes * 60;
-            return String.valueOf(minutes) + "m " + String.valueOf(secs) + "s";
+            return minutes + "m " + secs + "s";
         }
     }
 
@@ -206,19 +206,19 @@ public class TimeUtil
 
         if (days != 0)
         {
-            if (days > 1) sb.append(days + " days ");
+            if (days > 1) sb.append(days).append(" days ");
             else if (days == 1) sb.append("1 day ");
         }
 
         if (hours != 0)
         {
-            if (hours > 1) sb.append(hours + " hours ");
+            if (hours > 1) sb.append(hours).append(" hours ");
             else if (hours == 1) sb.append("1 hour ");
         }
 
         if (minutes != 0)
         {
-            if (minutes > 1) sb.append(minutes + " minutes ");
+            if (minutes > 1) sb.append(minutes).append(" minutes ");
             else if (minutes == 1) sb.append("1 minute ");
         }
 

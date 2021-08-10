@@ -1,7 +1,7 @@
 package com.kennedysmithjava.prisonmines.cmd;
 
 import com.kennedysmithjava.prisonmines.PrisonMines;
-import com.kennedysmithjava.prisonmines.entity.MinesConf;
+import com.kennedysmithjava.prisonmines.entity.mine.MinesConf;
 import com.massivecraft.massivecore.command.MassiveCommandVersion;
 
 import java.util.List;

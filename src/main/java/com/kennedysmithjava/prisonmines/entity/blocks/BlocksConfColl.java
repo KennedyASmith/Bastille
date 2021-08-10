@@ -1,16 +1,16 @@
-package com.kennedysmithjava.prisonmines.entity;
+package com.kennedysmithjava.prisonmines.entity.blocks;
 
 import com.massivecraft.massivecore.MassiveCore;
 import com.massivecraft.massivecore.store.Coll;
 
-public class DistributionConfColl extends Coll<DistributionConf>
+public class BlocksConfColl extends Coll<BlocksConf>
 {
     // -------------------------------------------- //
     // INSTANCE & CONSTRUCT
     // -------------------------------------------- //
 
-    private static DistributionConfColl i = new DistributionConfColl();
-    public static DistributionConfColl get() { return i; }
+    private static final BlocksConfColl i = new BlocksConfColl();
+    public static BlocksConfColl get() { return i; }
 
     // -------------------------------------------- //
     // STACK TRACEABILITY
@@ -31,7 +31,7 @@ public class DistributionConfColl extends Coll<DistributionConf>
     {
         super.setActive(active);
         if (!active) return;
-        DistributionConf.i = this.get(MassiveCore.INSTANCE, true);
+        BlocksConf.i = this.get(MassiveCore.INSTANCE, true);
     }
 
 }

@@ -1,7 +1,7 @@
 package com.kennedysmithjava.prisonmines;
-import com.kennedysmithjava.prisonmines.entity.MinesConf;
-import com.kennedysmithjava.prisonmines.entity.Mine;
-import com.kennedysmithjava.prisonmines.entity.MineColl;
+import com.kennedysmithjava.prisonmines.entity.mine.MinesConf;
+import com.kennedysmithjava.prisonmines.entity.mine.Mine;
+import com.kennedysmithjava.prisonmines.entity.mine.MineColl;
 import com.kennedysmithjava.prisonmines.util.VoidGenerator;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.bukkit.BukkitUtil;
@@ -15,6 +15,8 @@ import java.io.File;
 import java.util.Collection;
 
 public class MinesWorldManager {
+
+    public static int WORLD_GAP = 8;
 
     VoidGenerator generator;
     String worldName = MinesConf.get().minesWorldName;

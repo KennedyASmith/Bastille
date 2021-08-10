@@ -1,17 +1,9 @@
 package com.kennedysmithjava.prisonmines.cmd;
 
-import com.kennedysmithjava.prisonmines.PrisonMines;
 import com.kennedysmithjava.prisonmines.cmd.type.TypeMine;
-import com.kennedysmithjava.prisonmines.entity.Mine;
+import com.kennedysmithjava.prisonmines.entity.mine.Mine;
 import com.massivecraft.massivecore.MassiveException;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitScheduler;
-import xyz.xenondevs.particle.ParticleBuilder;
-import xyz.xenondevs.particle.ParticleEffect;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CmdMinesDelete extends MineCommand {
     // -------------------------------------------- //

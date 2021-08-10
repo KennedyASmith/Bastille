@@ -1,16 +1,12 @@
 package com.kennedysmithjava.prisonmines.cmd.type;
 
-import com.kennedysmithjava.prisonmines.entity.Mine;
-import com.kennedysmithjava.prisonmines.entity.MineColl;
-import com.massivecraft.massivecore.MassiveCore;
+import com.kennedysmithjava.prisonmines.entity.mine.Mine;
+import com.kennedysmithjava.prisonmines.entity.mine.MineColl;
 import com.massivecraft.massivecore.MassiveException;
 import com.massivecraft.massivecore.command.type.TypeAbstract;
 import com.massivecraft.massivecore.comparator.ComparatorCaseInsensitive;
-import com.massivecraft.massivecore.util.IdUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.Collection;
 import java.util.Set;

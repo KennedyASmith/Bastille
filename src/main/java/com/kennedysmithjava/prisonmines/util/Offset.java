@@ -1,13 +1,11 @@
 package com.kennedysmithjava.prisonmines.util;
 
-import org.bukkit.Location;
-
 public class Offset {
 
     int x; int y; int z;
     float pitch; float yaw;
 
-    public Offset(int x, int y, int z, float pitch, float yaw){
+    public Offset(int x, int y, int z, float pitch, float yaw) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -15,7 +13,7 @@ public class Offset {
         this.yaw = yaw;
     }
 
-    public Offset(int x, int y, int z){
+    public Offset(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;

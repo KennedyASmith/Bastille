@@ -1,7 +1,7 @@
 package com.kennedysmithjava.prisonmines.event;
 
-import com.kennedysmithjava.prisonmines.entity.Mine;
-import com.kennedysmithjava.prisonmines.entity.MineColl;
+import com.kennedysmithjava.prisonmines.entity.mine.Mine;
+import com.kennedysmithjava.prisonmines.entity.mine.MineColl;
 import com.mcrivals.prisoncore.entity.MPlayer;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

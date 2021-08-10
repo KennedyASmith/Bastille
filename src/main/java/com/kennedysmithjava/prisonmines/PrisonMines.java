@@ -1,7 +1,13 @@
 package com.kennedysmithjava.prisonmines;
 
+import com.kennedysmithjava.prisonmines.blockhandler.BlockBreakEngine;
 import com.kennedysmithjava.prisonmines.engine.EngineOffsetWand;
 import com.kennedysmithjava.prisonmines.entity.*;
+import com.kennedysmithjava.prisonmines.entity.blocks.DistributionConfColl;
+import com.kennedysmithjava.prisonmines.entity.mine.Mine;
+import com.kennedysmithjava.prisonmines.entity.mine.MineColl;
+import com.kennedysmithjava.prisonmines.entity.mine.MinesConf;
+import com.kennedysmithjava.prisonmines.entity.mine.MinesConfColl;
 import com.kennedysmithjava.prisonmines.event.EventNewMine;
 import com.kennedysmithjava.prisonmines.util.*;
 import com.massivecraft.massivecore.MassivePlugin;
@@ -17,13 +23,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 public class PrisonMines extends MassivePlugin {
 
     // -------------------------------------------- //
     // INSTANCE & CONSTRUCT
     // -------------------------------------------- //
-
     private static PrisonMines i;
 
     public PrisonMines() {
@@ -63,6 +69,7 @@ public class PrisonMines extends MassivePlugin {
     public List<Class<?>> getClassesActiveEngines() {
         List<Class<?>> ret = super.getClassesActiveEngines();
         ret.add(EngineOffsetWand.class);
+        ret.add(BlockBreakEngine.class);
         return ret;
     }
 

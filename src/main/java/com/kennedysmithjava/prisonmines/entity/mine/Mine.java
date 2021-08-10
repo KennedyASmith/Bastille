@@ -1,16 +1,17 @@
-package com.kennedysmithjava.prisonmines.entity;
+package com.kennedysmithjava.prisonmines.entity.mine;
 
 import com.boydti.fawe.bukkit.v0.FaweAdapter_All;
 import com.boydti.fawe.util.EditSessionBuilder;
 import com.kennedysmithjava.prisonmines.MineRegenCountdown;
 import com.kennedysmithjava.prisonmines.MinesWorldManager;
 import com.kennedysmithjava.prisonmines.PrisonMines;
+import com.kennedysmithjava.prisonmines.entity.blocks.DistributionConf;
+import com.kennedysmithjava.prisonmines.entity.LayoutConf;
 import com.kennedysmithjava.prisonmines.util.BlockMaterial;
 import com.kennedysmithjava.prisonmines.util.FAWETracker;
+import com.kennedysmithjava.prisonmines.util.LazyRegion;
 import com.kennedysmithjava.prisonmines.util.MiscUtil;
-import com.kennedysmithjava.prisonnpcs.PrisonNPCs;
 import com.kennedysmithjava.prisonnpcs.entity.ArchitectConf;
-import com.kennedysmithjava.prisonnpcs.entity.MConf;
 import com.kennedysmithjava.prisonnpcs.entity.WarrenConf;
 import com.kennedysmithjava.prisonnpcs.npcs.NPCArchitect;
 import com.kennedysmithjava.prisonnpcs.npcs.NPCWarren;
@@ -18,7 +19,6 @@ import com.massivecraft.massivecore.Named;
 import com.massivecraft.massivecore.ps.PS;
 import com.massivecraft.massivecore.store.Entity;
 import com.massivecraft.massivecore.util.MUtil;
-import com.mcrivals.prisoncore.entity.MPlayer;
 import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.Vector;
@@ -26,9 +26,7 @@ import com.sk89q.worldedit.blocks.BaseBlock;
 import com.sk89q.worldedit.bukkit.BukkitUtil;
 import com.sk89q.worldedit.function.pattern.RandomPattern;
 import com.sk89q.worldedit.regions.CuboidRegion;
-import jdk.nashorn.internal.ir.Block;
 import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.event.DespawnReason;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -393,8 +391,16 @@ public class Mine extends Entity<Mine> implements Named {
         return getMineMax().getWorld();
     }
 
+    public LazyRegion getLazyRegion() {
+        return new LazyRegion(this.getMineMin(), this.getMineMax());
+    }
+
     public Location getMineMin() {
         return new Location(MinesWorldManager.get().getWorld(), mineMin.getLocationX(), mineMin.getLocationY(), mineMin.getLocationZ());
+    }
+
+    public int getMinX() {
+        return mineMin.getBlockX();
     }
 
     public Location getMineMax() {

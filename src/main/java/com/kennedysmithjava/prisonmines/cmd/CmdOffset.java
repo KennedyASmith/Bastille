@@ -1,6 +1,6 @@
 package com.kennedysmithjava.prisonmines.cmd;
 
-import com.kennedysmithjava.prisonmines.entity.MinesConf;
+import com.kennedysmithjava.prisonmines.entity.mine.MinesConf;
 import com.kennedysmithjava.prisonmines.util.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

@@ -34,4 +34,8 @@ public class BlockMaterial {
     public ItemStack getItem(int amount){
         return new ItemStack(getMaterial(), 1, (short) 0, getData());
     }
+
+    public boolean isFrom(Material material, byte data) {
+        return this.material.equals(material) && this.data == data;
+    }
 }
