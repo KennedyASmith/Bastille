@@ -1,4 +1,4 @@
-package com.kennedysmithjava.prisonmines.entity.mine;
+package com.kennedysmithjava.prisonmines.entity;
 
 import com.massivecraft.massivecore.MassiveCore;
 import com.massivecraft.massivecore.store.Coll;

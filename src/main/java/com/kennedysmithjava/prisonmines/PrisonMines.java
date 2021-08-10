@@ -3,11 +3,11 @@ package com.kennedysmithjava.prisonmines;
 import com.kennedysmithjava.prisonmines.blockhandler.BlockBreakEngine;
 import com.kennedysmithjava.prisonmines.engine.EngineOffsetWand;
 import com.kennedysmithjava.prisonmines.entity.*;
-import com.kennedysmithjava.prisonmines.entity.blocks.DistributionConfColl;
-import com.kennedysmithjava.prisonmines.entity.mine.Mine;
-import com.kennedysmithjava.prisonmines.entity.mine.MineColl;
-import com.kennedysmithjava.prisonmines.entity.mine.MinesConf;
-import com.kennedysmithjava.prisonmines.entity.mine.MinesConfColl;
+import com.kennedysmithjava.prisonmines.entity.DistributionConfColl;
+import com.kennedysmithjava.prisonmines.entity.Mine;
+import com.kennedysmithjava.prisonmines.entity.MineColl;
+import com.kennedysmithjava.prisonmines.entity.MinesConf;
+import com.kennedysmithjava.prisonmines.entity.MinesConfColl;
 import com.kennedysmithjava.prisonmines.event.EventNewMine;
 import com.kennedysmithjava.prisonmines.util.*;
 import com.massivecraft.massivecore.MassivePlugin;
@@ -23,7 +23,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 public class PrisonMines extends MassivePlugin {
 
@@ -59,6 +58,7 @@ public class PrisonMines extends MassivePlugin {
         // MFlag and MPerm are both dependency free.
         return new MassiveList<>(
                 MinesConfColl.class,
+                BlocksConfColl.class,
                 DistributionConfColl.class,
                 MineColl.class,
                 LayoutConfColl.class

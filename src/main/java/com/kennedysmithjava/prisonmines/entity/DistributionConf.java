@@ -1,4 +1,4 @@
-package com.kennedysmithjava.prisonmines.entity.blocks;
+package com.kennedysmithjava.prisonmines.entity;
 
 import com.kennedysmithjava.prisonmines.util.DistributionPage;
 import com.massivecraft.massivecore.command.editor.annotation.EditorName;
@@ -15,10 +15,14 @@ public class DistributionConf extends Entity<DistributionConf>
     // META
     // -------------------------------------------- //
 
-    protected static transient DistributionConf i;
+    protected static DistributionConf i;
 
 
     public static DistributionConf get() { return i; }
+
+    public DistributionConf() {
+
+    }
 
     @Override
     public DistributionConf load(DistributionConf that)

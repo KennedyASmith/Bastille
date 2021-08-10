@@ -2,10 +2,10 @@ package com.kennedysmithjava.prisonmines.blockhandler.event;
 
 import com.avaje.ebean.validation.NotNull;
 import com.kennedysmithjava.prisonmines.blockhandler.animation.BreakAnimation;
-import com.kennedysmithjava.prisonmines.entity.blocks.Distribution;
-import com.kennedysmithjava.prisonmines.entity.blocks.PrisonBlock;
-import com.kennedysmithjava.prisonmines.entity.mine.Mine;
-import com.kennedysmithjava.prisonmines.entity.mine.MineColl;
+import com.kennedysmithjava.prisonmines.entity.Distribution;
+import com.kennedysmithjava.prisonmines.entity.Mine;
+import com.kennedysmithjava.prisonmines.entity.MineColl;
+import com.kennedysmithjava.prisonmines.entity.PrisonBlock;
 import com.kennedysmithjava.prisonmines.util.LazyRegion;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -13,7 +13,6 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class MineBlockBreakEvent extends Event implements Cancellable {
@@ -34,7 +33,9 @@ public class MineBlockBreakEvent extends Event implements Cancellable {
         this.distribution = distribution;
         this.mineRegion = region;
 
-        this.rewards = new ArrayList<>(Collections.singletonList(distribution.generatePrisonBlock(blockBreakEvent.getBlock().getType(), blockBreakEvent.getBlock().getData())));
+        this.rewards = new ArrayList<>();
+        this.rewards.add(distribution.generatePrisonBlock(blockBreakEvent.getBlock().getType(), blockBreakEvent.getBlock().getData()));
+
         this.breakAnimations = new ArrayList<>();
     }
 

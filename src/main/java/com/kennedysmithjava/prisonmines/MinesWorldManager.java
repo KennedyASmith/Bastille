@@ -1,7 +1,7 @@
 package com.kennedysmithjava.prisonmines;
-import com.kennedysmithjava.prisonmines.entity.mine.MinesConf;
-import com.kennedysmithjava.prisonmines.entity.mine.Mine;
-import com.kennedysmithjava.prisonmines.entity.mine.MineColl;
+import com.kennedysmithjava.prisonmines.entity.MinesConf;
+import com.kennedysmithjava.prisonmines.entity.Mine;
+import com.kennedysmithjava.prisonmines.entity.MineColl;
 import com.kennedysmithjava.prisonmines.util.VoidGenerator;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.bukkit.BukkitUtil;
@@ -50,9 +50,9 @@ public class MinesWorldManager {
     public Vector getUniqueLocation(){
         Collection<Mine> mines = MineColl.get().getAll();
         if(!(mines.size() > 0)){
-            return BukkitUtil.toVector(new Location(getWorld(), 96, 10, 96));
+            return BukkitUtil.toVector(new Location(getWorld(), 0, 10, 0));
         }else{
-            return BukkitUtil.toVector(new Location(getWorld(),mines.size() * 250, 10, mines.size() * 250));
+            return BukkitUtil.toVector(new Location(getWorld(),mines.size() * (1 << WORLD_GAP), 10, mines.size() * (1 << WORLD_GAP)));
         }
     }
 

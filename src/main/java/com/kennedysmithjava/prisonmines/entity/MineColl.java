@@ -1,10 +1,12 @@
-package com.kennedysmithjava.prisonmines.entity.mine;
+package com.kennedysmithjava.prisonmines.entity;
 
 import com.kennedysmithjava.prisonmines.MinesWorldManager;
+import com.kennedysmithjava.prisonmines.PrisonMines;
 import com.kennedysmithjava.prisonmines.util.MiscUtil;
 import com.massivecraft.massivecore.store.Coll;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 
 public class MineColl extends Coll<Mine> {
@@ -32,7 +34,11 @@ public class MineColl extends Coll<Mine> {
     public void postAttach(Mine entity, String id) {
         super.postAttach(entity, id);
 
-        this.mineLocationCache.put(this.getLocationHashKey(entity), entity);
+        Bukkit.getScheduler()
+                .scheduleSyncDelayedTask(PrisonMines.get(),
+                        () -> this.mineLocationCache.put(this.getLocationHashKey(entity), entity),
+                        20L);
+
     }
 
     @Override

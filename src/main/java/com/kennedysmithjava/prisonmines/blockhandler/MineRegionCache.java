@@ -1,12 +1,13 @@
 package com.kennedysmithjava.prisonmines.blockhandler;
 
 import com.boydti.fawe.object.collection.SoftHashMap;
+import com.kennedysmithjava.prisonmines.MinesWorldManager;
 import com.kennedysmithjava.prisonmines.PrisonMines;
-import com.kennedysmithjava.prisonmines.entity.blocks.Distribution;
-import com.kennedysmithjava.prisonmines.entity.blocks.DistributionConf;
-import com.kennedysmithjava.prisonmines.entity.mine.Mine;
-import com.kennedysmithjava.prisonmines.entity.mine.MineColl;
-import com.kennedysmithjava.prisonmines.entity.mine.MinesConf;
+import com.kennedysmithjava.prisonmines.entity.Distribution;
+import com.kennedysmithjava.prisonmines.entity.DistributionConf;
+import com.kennedysmithjava.prisonmines.entity.Mine;
+import com.kennedysmithjava.prisonmines.entity.MineColl;
+import com.kennedysmithjava.prisonmines.entity.MinesConf;
 import com.kennedysmithjava.prisonmines.util.LazyRegion;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -120,7 +121,8 @@ public class MineRegionCache {
     }
 
     public boolean isInRegion(Block b) {
-        return this.mineRegionCache.get(this.getKey(b)) != null
+        LazyRegion lazyRegion = this.mineRegionCache.get(this.getKey(b));
+        return (lazyRegion != null && lazyRegion.contains(b))
                 || this.alternativelyCachedRegions.stream().anyMatch(r -> r.contains(b));
     }
 
@@ -133,7 +135,7 @@ public class MineRegionCache {
     }
 
     public int getKey(int x) {
-        return x << 8;
+        return x >> MinesWorldManager.WORLD_GAP;
     }
 
 }

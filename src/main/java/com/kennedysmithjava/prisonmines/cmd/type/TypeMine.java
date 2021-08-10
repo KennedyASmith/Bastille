@@ -1,7 +1,7 @@
 package com.kennedysmithjava.prisonmines.cmd.type;
 
-import com.kennedysmithjava.prisonmines.entity.mine.Mine;
-import com.kennedysmithjava.prisonmines.entity.mine.MineColl;
+import com.kennedysmithjava.prisonmines.entity.Mine;
+import com.kennedysmithjava.prisonmines.entity.MineColl;
 import com.massivecraft.massivecore.MassiveException;
 import com.massivecraft.massivecore.command.type.TypeAbstract;
 import com.massivecraft.massivecore.comparator.ComparatorCaseInsensitive;

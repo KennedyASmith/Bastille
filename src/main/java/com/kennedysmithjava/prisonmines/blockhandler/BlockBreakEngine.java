@@ -2,7 +2,7 @@ package com.kennedysmithjava.prisonmines.blockhandler;
 
 import com.kennedysmithjava.prisonmines.blockhandler.event.BlockEventFulfiller;
 import com.kennedysmithjava.prisonmines.blockhandler.event.MineBlockBreakEvent;
-import com.kennedysmithjava.prisonmines.entity.blocks.Distribution;
+import com.kennedysmithjava.prisonmines.entity.Distribution;
 import com.kennedysmithjava.prisonmines.util.LazyRegion;
 import com.massivecraft.massivecore.Engine;
 import org.bukkit.Bukkit;
@@ -33,6 +33,7 @@ public class BlockBreakEngine extends Engine {
     // -------------------------------------------- //
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent event) {
+        // Mine region for the Mine, not null unless mine itself isnt cached.
         LazyRegion region = cache.getRegion(event.getBlock());
 
         // We may need to cache this region if it doesn't exist!
@@ -43,6 +44,12 @@ public class BlockBreakEngine extends Engine {
             }
 
             // No mine region exists there, we'll let something else handle the block breaking.
+            return;
+        }
+
+        if (!region.contains(event.getBlock())) {
+            // No mine region exists there, we'll let something else handle the block breaking.
+
             return;
         }
 

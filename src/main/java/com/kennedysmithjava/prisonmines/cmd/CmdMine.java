@@ -1,6 +1,6 @@
 package com.kennedysmithjava.prisonmines.cmd;
 
-import com.kennedysmithjava.prisonmines.entity.mine.MinesConf;
+import com.kennedysmithjava.prisonmines.entity.MinesConf;
 
 import java.util.List;
 

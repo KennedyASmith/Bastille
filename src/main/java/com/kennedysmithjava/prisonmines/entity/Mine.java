@@ -1,12 +1,10 @@
-package com.kennedysmithjava.prisonmines.entity.mine;
+package com.kennedysmithjava.prisonmines.entity;
 
 import com.boydti.fawe.bukkit.v0.FaweAdapter_All;
 import com.boydti.fawe.util.EditSessionBuilder;
 import com.kennedysmithjava.prisonmines.MineRegenCountdown;
 import com.kennedysmithjava.prisonmines.MinesWorldManager;
 import com.kennedysmithjava.prisonmines.PrisonMines;
-import com.kennedysmithjava.prisonmines.entity.blocks.DistributionConf;
-import com.kennedysmithjava.prisonmines.entity.LayoutConf;
 import com.kennedysmithjava.prisonmines.util.BlockMaterial;
 import com.kennedysmithjava.prisonmines.util.FAWETracker;
 import com.kennedysmithjava.prisonmines.util.LazyRegion;
@@ -400,7 +398,7 @@ public class Mine extends Entity<Mine> implements Named {
     }
 
     public int getMinX() {
-        return mineMin.getBlockX();
+        return (int) Math.ceil(mineMin.getLocationX());
     }
 
     public Location getMineMax() {

@@ -1,6 +1,6 @@
 package com.kennedysmithjava.prisonmines.util;
 
-import com.kennedysmithjava.prisonmines.entity.mine.MinesConf;
+import com.kennedysmithjava.prisonmines.entity.MinesConf;
 
 import java.util.Calendar;
 import java.util.TimeZone;

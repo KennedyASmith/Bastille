@@ -3,6 +3,8 @@ package com.kennedysmithjava.prisonmines.util;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Objects;
+
 public class BlockMaterial {
 
     Material material;
@@ -37,5 +39,19 @@ public class BlockMaterial {
 
     public boolean isFrom(Material material, byte data) {
         return this.material.equals(material) && this.data == data;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!obj.getClass().equals(getClass()))
+            return false;
+
+        BlockMaterial blockMaterial = ((BlockMaterial) obj);
+        return blockMaterial.getMaterial().equals(this.getMaterial()) && this.data == blockMaterial.getData();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(material, data);
     }
 }

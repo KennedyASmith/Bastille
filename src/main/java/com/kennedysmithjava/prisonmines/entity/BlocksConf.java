@@ -1,15 +1,11 @@
-package com.kennedysmithjava.prisonmines.entity.blocks;
+package com.kennedysmithjava.prisonmines.entity;
 
 import com.kennedysmithjava.prisonmines.util.BlockMaterial;
-import com.kennedysmithjava.prisonmines.util.Color;
 import com.massivecraft.massivecore.command.editor.annotation.EditorName;
 import com.massivecraft.massivecore.store.Entity;
 import com.massivecraft.massivecore.util.MUtil;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.List;
 import java.util.Map;
 
 @EditorName("config")

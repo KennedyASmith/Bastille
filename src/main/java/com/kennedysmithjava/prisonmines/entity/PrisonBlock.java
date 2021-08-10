@@ -1,4 +1,4 @@
-package com.kennedysmithjava.prisonmines.entity.blocks;
+package com.kennedysmithjava.prisonmines.entity;
 
 import com.kennedysmithjava.prisonmines.util.BlockMaterial;
 import com.kennedysmithjava.prisonmines.util.Color;

@@ -1,6 +1,6 @@
 package com.kennedysmithjava.prisonmines;
 
-import com.kennedysmithjava.prisonmines.entity.mine.Mine;
+import com.kennedysmithjava.prisonmines.entity.Mine;
 import com.kennedysmithjava.prisonmines.util.TimeUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

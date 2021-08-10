@@ -1,18 +1,19 @@
-package com.kennedysmithjava.prisonmines.entity.blocks;
+package com.kennedysmithjava.prisonmines.entity;
 
 import com.kennedysmithjava.prisonmines.util.BlockMaterial;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
 import java.util.*;
 
 public class Distribution {
-    private final Map<BlockMaterial, SortedMap<Double, Integer>> cumulativeRates;
+    private final Map<BlockMaterial, TreeMap<Double, Integer>> cumulativeRates;
     private final Map<BlockMaterial, Double> rates;
+    private final Map<BlockMaterial, Double> sums;
 
     private final Material icon;
     private final String name;
     private final List<String> lore;
-    private final Map<BlockMaterial, Double> sums;
     private final Random random = new Random();
 
     public Distribution(String name, Material icon, Map<Integer, Double> rates, List<String> lore) {
@@ -31,10 +32,12 @@ public class Distribution {
             Integer blockKey = integerDoubleEntry.getKey();
             BlockMaterial bm = blocks.get(blockKey).getBlock();
 
-            double sum = this.sums.get(bm);
-            this.cumulativeRates
-                    .getOrDefault(bm, this.cumulativeRates.put(bm, new TreeMap<>(Double::compare)))
-                    .put(sum, blockKey);
+            double sum = this.sums.getOrDefault(bm, 0D);
+
+            TreeMap<Double, Integer> map = this.cumulativeRates.getOrDefault(bm, new TreeMap<>());
+            map.put(sum, blockKey);
+
+            this.cumulativeRates.put(bm, map);
 
             Double value = integerDoubleEntry.getValue();
 
@@ -58,16 +61,13 @@ public class Distribution {
             return null;
         }
 
-        double rand = sum * random.nextDouble() + Double.MIN_NORMAL;
+        double rand = sum * random.nextDouble();
 
-        SortedMap<Double, Integer> partial = this.cumulativeRates.get(key).headMap(rand);
+        SortedMap<Double, Integer> partial = this.cumulativeRates.get(key).headMap(rand, true);
 
         int prisonBlockId = partial.get(partial.lastKey());
         return BlocksConf.get().blocks.get(prisonBlockId);
     }
-
-
-
 
     public Map<BlockMaterial, Double> getRates() {
         return this.rates;

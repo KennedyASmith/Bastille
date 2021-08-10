@@ -1,6 +1,6 @@
 package com.kennedysmithjava.prisonmines.blockhandler.event;
 
-import com.kennedysmithjava.prisonmines.entity.blocks.PrisonBlock;
+import com.kennedysmithjava.prisonmines.entity.PrisonBlock;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -55,8 +55,11 @@ public class BlockEventFulfiller {
                make a method that handles pouches and inventories proactively.
          */
 
-        rewards.forEach(e -> player.getInventory().addItem(e.getProductItem(1)));
-
+        rewards.forEach(e -> {
+            if (e != null) {
+                player.getInventory().addItem(e.getProductItem(1));
+            }
+        });
     }
 
 

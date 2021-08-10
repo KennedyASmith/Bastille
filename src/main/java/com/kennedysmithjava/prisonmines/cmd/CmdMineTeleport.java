@@ -1,7 +1,7 @@
 package com.kennedysmithjava.prisonmines.cmd;
 
 import com.kennedysmithjava.prisonmines.cmd.type.TypeMine;
-import com.kennedysmithjava.prisonmines.entity.mine.Mine;
+import com.kennedysmithjava.prisonmines.entity.Mine;
 import com.massivecraft.massivecore.MassiveException;
 import org.bukkit.entity.Player;
 
