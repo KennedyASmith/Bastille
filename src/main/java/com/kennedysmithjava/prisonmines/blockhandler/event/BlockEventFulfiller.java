@@ -37,7 +37,7 @@ public class BlockEventFulfiller {
             return;
         }
 
-        Block block = finishedEvent.getParentEvent().getBlock();
+        Block block = finishedEvent.getBlock();
 
         finishedEvent.getBreakAnimations().forEach(a -> a.play(block));
 
@@ -45,7 +45,7 @@ public class BlockEventFulfiller {
             block.setType(Material.AIR);
         }
 
-        this.rewardPlayer(finishedEvent.getParentEvent().getPlayer(), finishedEvent.getRewards());
+        this.rewardPlayer(finishedEvent.getPlayer(), finishedEvent.getRewards());
 
     }
 

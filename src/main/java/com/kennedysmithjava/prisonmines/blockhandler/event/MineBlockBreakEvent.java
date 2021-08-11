@@ -7,6 +7,8 @@ import com.kennedysmithjava.prisonmines.entity.Mine;
 import com.kennedysmithjava.prisonmines.entity.MineColl;
 import com.kennedysmithjava.prisonmines.entity.PrisonBlock;
 import com.kennedysmithjava.prisonmines.util.LazyRegion;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -22,29 +24,37 @@ public class MineBlockBreakEvent extends Event implements Cancellable {
     @NotNull
     private final LazyRegion mineRegion;
     @NotNull
-    private final BlockBreakEvent parentEvent;
+    private final Block block;
+    private final Player player;
+
     private final List<PrisonBlock> rewards;
     private final List<BreakAnimation> breakAnimations;
     private boolean cancelled = false;
     private boolean shouldDeleteBlock = true;
 
     public MineBlockBreakEvent(BlockBreakEvent blockBreakEvent, LazyRegion region, Distribution distribution) {
-        this.parentEvent = blockBreakEvent;
+        this(blockBreakEvent.getBlock(), blockBreakEvent.getPlayer(), region, distribution);
+    }
+
+    public MineBlockBreakEvent(Block block, Player player, LazyRegion region, Distribution distribution) {
+        this.block = block;
+        this.player = player;
         this.distribution = distribution;
         this.mineRegion = region;
 
         this.rewards = new ArrayList<>();
-        this.rewards.add(distribution.generatePrisonBlock(blockBreakEvent.getBlock().getType(), blockBreakEvent.getBlock().getData()));
+        this.rewards.add(distribution.generatePrisonBlock(block.getType(), block.getData()));
 
         this.breakAnimations = new ArrayList<>();
     }
+
 
     // ----------------------- //
     // BOILER PLATE
     // ----------------------- //
 
     public Mine tryGetMine() {
-        return MineColl.get().getByLocation(this.parentEvent.getBlock());
+        return MineColl.get().getByLocation(this.getBlock());
     }
 
     public LazyRegion getMineRegion() {
@@ -87,8 +97,12 @@ public class MineBlockBreakEvent extends Event implements Cancellable {
         return distribution;
     }
 
-    public BlockBreakEvent getParentEvent() {
-        return parentEvent;
+    public Block getBlock() {
+        return block;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     @Override

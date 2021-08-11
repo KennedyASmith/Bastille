@@ -26,7 +26,6 @@ public class Distribution {
         return icon;
     }
 
-
     public PrisonBlock generatePrisonBlock(Material material, byte data) {
         if (this.blockPrisonBlockMap == null) {
             this.initRates();
@@ -39,7 +38,6 @@ public class Distribution {
     }
 
     private void initRates() {
-
         final Map<Integer, PrisonBlock> blocks = BlocksConf.get().blocks;
 
         this.blockPrisonBlockMap = new HashMap<>();
@@ -54,7 +52,6 @@ public class Distribution {
 
             this.rates.put(bm, integerDoubleEntry.getValue());
         }
-
     }
 
     public Map<BlockMaterial, Double> getRates() {
