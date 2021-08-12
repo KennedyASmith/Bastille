@@ -32,10 +32,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class Mine extends Entity<Mine> implements Named {
 
@@ -61,8 +58,8 @@ public class Mine extends Entity<Mine> implements Named {
         this.setArchitectUUID(that.architectUUID);
         this.setResearcherUUID(that.researcherUUID);
         this.setLevel(that.level);
-        this.setPathIDVar(that.pathID);
-        this.setWallIDVar(that.wallID);
+        this.setPathID(that.pathID);
+        this.setWallID(that.wallID);
         this.setHeightVar(that.height);
         this.setWidthVar(that.width);
         this.setUnlockedDistributions(that.unlockedDistributions);
@@ -155,41 +152,98 @@ public class Mine extends Entity<Mine> implements Named {
      */
     public void setWidth(int w, Runnable onFinish) {
 
-        despawnArchitectNPC();
-        despawnResearcherNPC();
-
+        this.despawnResearcherNPC();
+        this.despawnArchitectNPC();
         this.pauseRegenCountdown(true);
         this.clearBorder();
         this.clearMine();
 
+        pasteFloor(getPathID(), w, () -> {
+            regen();
+            spawnArchitectNPC();
+            spawnResearcherNPC();
+            pauseRegenCountdown(false);
+            onFinish.run();
+        });
+
+    }
+
+    public void rebuildSchematics(int floorID, int wallID, Runnable onFinish){
+
+        boolean rebuildFloor = floorID != this.getPathID();
+        boolean rebuildWall = wallID != this.getWallID();
+
+        List<Boolean> pasteTrackers = new ArrayList<>();
+
+        if(rebuildFloor){
+            pasteTrackers.add(false);
+            Floor floor = LayoutConf.get().getPath(getPathID());
+            this.despawnArchitectNPC();
+            this.despawnResearcherNPC();
+            this.pauseRegenCountdown(true);
+            this.clearBorder();
+            this.clearMine();
+            this.setLocations(floor);
+            this.pasteFloor(floorID, getWidth(), () -> {
+                regen();
+                spawnArchitectNPC();
+                spawnResearcherNPC();
+                pauseRegenCountdown(false);
+                pasteTrackers.add(true);
+            });
+        }
+
+        if(rebuildWall){
+            pasteTrackers.add(false);
+            this.pasteWall(wallID, () -> {
+                pasteTrackers.add(true);
+            });
+        }
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                //The count of true/false booleans must be equal for all pastes to be complete.
+                int done = 0; //True values
+                int notDone = 0; //False values
+                for (Boolean isDone : pasteTrackers) {
+                    if (isDone) {
+                        done++;
+                    } else {
+                        notDone++;
+                    }
+                }
+                if(done == notDone) { onFinish.run(); this.cancel(); }
+            }
+        }.runTaskTimer(PrisonMines.get(), 0, 10);
+
+    }
+
+    /**
+     * Pastes the floor schematic for the currently set FloorID given a new width.
+     * Unsafe for NPCs.
+     */
+    private void pasteFloor(int floorID, int width, Runnable onFinish){
         FAWETracker clearTracker = MiscUtil.pasteSchematic(LayoutConf.get().getPath(getPathID()).getSchematic(getWidth()), new Vector(origin.getLocationX(), origin.getLocationY(), origin.getLocationZ()), true);
 
         new BukkitRunnable() {
             @Override
             public void run() {
                 if(clearTracker.isDone()){
-                    setWidthVar(w);
-                    FAWETracker wallTracker = MiscUtil.pasteSchematic(LayoutConf.get().getWall(getWallID()).getSchematic(), new Vector(origin.getLocationX(), origin.getLocationY(), origin.getLocationZ()));
-                    FAWETracker floorTracker = MiscUtil.pasteSchematic(LayoutConf.get().getPath(getPathID()).getSchematic(getWidth()), new Vector(origin.getLocationX(), origin.getLocationY(), origin.getLocationZ()));
+                    setWallID(wallID);
+                    setWidthVar(width);
+                    FAWETracker floorTracker = MiscUtil.pasteSchematic(LayoutConf.get().getPath(floorID).getSchematic(width), new Vector(origin.getLocationX(), origin.getLocationY(), origin.getLocationZ()));
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            if(wallTracker.isDone() && floorTracker.isDone()){
-                                generateBorder(w, getHeight(), MinesConf.get().minesBorderMaterial);
-
-                                Location newMax = getMineCenter().add(-(w - 2), 0, -(w - 2));
-                                Location newMin = getMineCenter().add(w - 2, -(getHeight() - 1), w - 2);
-
+                            if(floorTracker.isDone()){
+                                generateBorder(width, getHeight(), MinesConf.get().minesBorderMaterial);
+                                Location newMax = getMineCenter().add(-(width - 2), 0, -(width - 2));
+                                Location newMin = getMineCenter().add(width - 2, -(getHeight() - 1), width - 2);
                                 setMineMax(newMax);
                                 setMineMin(newMin);
-
-                                regen();
-                                spawnArchitectNPC();
-                                spawnResearcherNPC();
                                 onFinish.run();
-                                pauseRegenCountdown(false);
                                 this.cancel();
-                                return;
                             }
                         }
                     }.runTaskTimer(PrisonMines.get(), 0, 10);
@@ -197,6 +251,43 @@ public class Mine extends Entity<Mine> implements Named {
                 }
             }
         }.runTaskTimer(PrisonMines.get(), 0, 10);
+
+
+
+    }
+
+    /**
+     * Pastes the wall schematic for the currently set WallID.
+     * Unsafe for NPCs.
+     */
+    private void pasteWall(int wallID, Runnable onFinish){
+        FAWETracker clearTracker = MiscUtil.pasteSchematic(LayoutConf.get().getWall(getWallID()).getSchematic(), new Vector(origin.getLocationX(), origin.getLocationY(), origin.getLocationZ()), true);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if(clearTracker.isDone()){
+                    setWallID(wallID);
+                    FAWETracker wallTracker = MiscUtil.pasteSchematic(LayoutConf.get().getWall(wallID).getSchematic(), new Vector(origin.getLocationX(), origin.getLocationY(), origin.getLocationZ()));
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if(wallTracker.isDone()){
+                                onFinish.run();
+                                this.cancel();
+                            }
+                        }
+                    }.runTaskTimer(PrisonMines.get(), 0, 10);
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(PrisonMines.get(), 0, 10);
+    }
+
+    private void setLocations(Floor floor){
+        //TODO: Set building locations
+        this.setSpawnPoint(floor.getSpawn().get(getOrigin()));
+        this.setArchitectLocation(floor.getArchitectNPC().get(getOrigin()));
+        this.setResearcherLocation(floor.getResearcherNPC().get(getOrigin()));
     }
 
     /**
@@ -254,7 +345,7 @@ public class Mine extends Entity<Mine> implements Named {
     // -------------------------------------------- //
 
     public void addUpgrade(String upgradeID) {
-        upgrades.add(upgradeID);
+        this.upgrades.add(upgradeID);
         this.changed();
     }
 
@@ -314,16 +405,15 @@ public class Mine extends Entity<Mine> implements Named {
      *  Use {@link #setPathID(int)} or {@link #setWidth(int, Runnable)} for physically adjusting the mine's paths.
      * @param pathID a key for the path's schematic in the {@link LayoutConf} file.
      * */
-    public void setPathIDVar(int pathID) {
+    public void setPathID(int pathID) {
         this.pathID = pathID;
         this.changed();
     }
 
     /** Sets the saved value for this mine's wall ID.
-     *  Use {@link #setWallID(int)} for physically adjusting the mine's paths.
      * @param wallID a key for the wall's schematic in the {@link LayoutConf} file.
      * */
-    public void setWallIDVar(int wallID) {
+    public void setWallID(int wallID) {
         this.wallID = wallID;
         this.changed();
     }
@@ -369,16 +459,8 @@ public class Mine extends Entity<Mine> implements Named {
         return pathID;
     }
 
-    public void setPathID(int pathID) {
-        this.pathID = pathID;
-    }
-
     public int getWallID() {
         return wallID;
-    }
-
-    public void setWallID(int wallID) {
-        this.wallID = wallID;
     }
 
     // -------------------------------------------- //
@@ -410,7 +492,7 @@ public class Mine extends Entity<Mine> implements Named {
     }
 
     public void setOrigin(Location origin) {
-        setOrigin(PS.valueOf(origin));
+        this.setOrigin(PS.valueOf(origin));
     }
 
     public void setOrigin(PS origin) {
@@ -423,7 +505,7 @@ public class Mine extends Entity<Mine> implements Named {
     }
 
     public void setMineCenter(Location mineCenter) {
-        setMineCenter(PS.valueOf(mineCenter));
+        this.setMineCenter(PS.valueOf(mineCenter));
     }
 
     public void setMineCenter(PS mineCenter) {
@@ -440,7 +522,7 @@ public class Mine extends Entity<Mine> implements Named {
     }
 
     public void setSpawnPoint(Location location) {
-        setSpawnPoint(PS.valueOf(location));
+        this.setSpawnPoint(PS.valueOf(location));
     }
 
     public void setSpawnPoint(PS location) {
@@ -475,7 +557,7 @@ public class Mine extends Entity<Mine> implements Named {
     }
 
     public void setArchitectLocation(Location location) {
-        setArchitectLocation(PS.valueOf(location));
+        this.setArchitectLocation(PS.valueOf(location));
     }
 
     public void setArchitectLocation(PS location) {
@@ -582,7 +664,7 @@ public class Mine extends Entity<Mine> implements Named {
     }
 
     public void pauseRegenCountdown(boolean paused){
-        countdown.pause(paused);
+        if(this.countdown != null) this.countdown.pause(paused);
     }
 
     public void removeCountdown(){
@@ -591,7 +673,7 @@ public class Mine extends Entity<Mine> implements Named {
     }
 
     public boolean isRegenCountdownActive(){
-        return countdown != null && !countdown.isPaused();
+        return this.countdown != null && !this.countdown.isPaused();
     }
 }
 

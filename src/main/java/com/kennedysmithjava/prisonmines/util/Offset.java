@@ -1,5 +1,7 @@
 package com.kennedysmithjava.prisonmines.util;
 
+import org.bukkit.Location;
+
 public class Offset {
 
     int x; int y; int z;
@@ -39,6 +41,10 @@ public class Offset {
 
     public float getYaw() {
         return yaw;
+    }
+
+    public Location get(Location origin){
+        return origin.clone().add(getX(), getY(), getZ());
     }
 
     @Override

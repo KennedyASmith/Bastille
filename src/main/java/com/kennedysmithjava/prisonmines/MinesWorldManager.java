@@ -12,7 +12,7 @@ import org.bukkit.WorldCreator;
 import org.bukkit.generator.ChunkGenerator;
 
 import java.io.File;
-import java.util.Collection;
+import java.util.*;
 
 public class MinesWorldManager {
 

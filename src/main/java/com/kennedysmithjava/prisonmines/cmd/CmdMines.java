@@ -18,7 +18,6 @@ public class CmdMines extends MineCommand
     // FIELDS
     // -------------------------------------------- //
     public CmdMinesCreate cmdMinesCreate = new CmdMinesCreate();
-    public CmdMinesRename cmdMinesRename = new CmdMinesRename();
     public CmdMinesDelete cmdMinesDelete = new CmdMinesDelete();
     public CmdMinesRegen cmdMinesRegen = new CmdMinesRegen();
     public CmdMinesSetSpawn cmdMinesSetSpawn = new CmdMinesSetSpawn();

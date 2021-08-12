@@ -31,6 +31,14 @@ public class Wall {
         return schematic;
     }
 
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public List<String> getLore() {
+        return lore;
+    }
+
     @Override
     public String toString() {
         return "Building{" +

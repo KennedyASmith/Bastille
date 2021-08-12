@@ -13,7 +13,6 @@ public enum Perm implements Identified
     ACCESS,
     CREATE,
     BASECOMMAND,
-    RENAME,
     DELETE,
     REGEN,
     POSONE,
