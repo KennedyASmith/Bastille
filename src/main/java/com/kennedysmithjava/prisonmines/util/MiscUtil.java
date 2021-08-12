@@ -83,9 +83,12 @@ public class MiscUtil {
 
             if(destroy){
                 FaweAdapter_All adapter = new FaweAdapter_All();
-                for (int x = clipboard.getMinimumPoint().getBlockX() - 1; x <= clipboard.getMaximumPoint().getBlockX() - 1; x++) {
-                    for (int y = clipboard.getMinimumPoint().getBlockY(); y <= clipboard.getMaximumPoint().getBlockY(); y++) {
-                        for (int z = clipboard.getMinimumPoint().getBlockZ() - 1; z <= clipboard.getMaximumPoint().getBlockZ() - 1; z++) {
+                Vector minimumPoint = clipboard.getMinimumPoint();
+                Vector maximumPoint = clipboard.getMaximumPoint();
+
+                for (int x = minimumPoint.getBlockX() - 1; x <= maximumPoint.getBlockX(); x++) {
+                    for (int y = minimumPoint.getBlockY() - 1; y <= maximumPoint.getBlockY(); y++) {
+                        for (int z = minimumPoint.getBlockZ() - 1; z <= maximumPoint.getBlockZ(); z++) {
 
                             if(!adapter.getMaterial(clipboard.getBlock(new Vector(x, y, z)).getType()).equals(Material.AIR)){
                                 BaseBlock baseBlock = new BaseBlock(adapter.getBlockId(Material.PISTON_MOVING_PIECE), 0);

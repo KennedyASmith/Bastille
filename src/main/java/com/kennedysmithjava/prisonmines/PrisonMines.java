@@ -136,7 +136,7 @@ public class PrisonMines extends MassivePlugin {
         mine.setOrigin(origin);
         mine.setMineCenter(mineCenter);
         mine.setRegenTimer(MinesConf.get().defaultResetTimer);
-        mine.setPathID(MinesConf.get().mineDefaultPathID);
+        mine.setFloorID(MinesConf.get().mineDefaultPathID);
         mine.setWallID(MinesConf.get().mineDefaultWallID);
         mine.setWidthVar(MinesConf.get().mineDefaultWidth);
         mine.setHeightVar(MinesConf.get().mineDefaultHeight);

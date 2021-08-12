@@ -58,7 +58,7 @@ public class Mine extends Entity<Mine> implements Named {
         this.setArchitectUUID(that.architectUUID);
         this.setResearcherUUID(that.researcherUUID);
         this.setLevel(that.level);
-        this.setPathID(that.pathID);
+        this.setFloorID(that.pathID);
         this.setWallID(that.wallID);
         this.setHeightVar(that.height);
         this.setWidthVar(that.width);
@@ -230,7 +230,7 @@ public class Mine extends Entity<Mine> implements Named {
             @Override
             public void run() {
                 if(clearTracker.isDone()){
-                    setWallID(wallID);
+                    setFloorID(floorID);
                     setWidthVar(width);
                     FAWETracker floorTracker = MiscUtil.pasteSchematic(LayoutConf.get().getPath(floorID).getSchematic(width), new Vector(origin.getLocationX(), origin.getLocationY(), origin.getLocationZ()));
                     new BukkitRunnable() {
@@ -402,10 +402,10 @@ public class Mine extends Entity<Mine> implements Named {
     }
 
     /** Sets the saved value for this mine's path ID.
-     *  Use {@link #setPathID(int)} or {@link #setWidth(int, Runnable)} for physically adjusting the mine's paths.
+     *  Use {@link #setFloorID(int)} or {@link #setWidth(int, Runnable)} for physically adjusting the mine's paths.
      * @param pathID a key for the path's schematic in the {@link LayoutConf} file.
      * */
-    public void setPathID(int pathID) {
+    public void setFloorID(int pathID) {
         this.pathID = pathID;
         this.changed();
     }
