@@ -21,8 +21,7 @@ public class PouchGiveCommand extends MassiveCommand {
         int id = this.readArg();
 
         ItemStack newPouchItem = PouchType.from(id).getNewPouchItem();
-        me.getInventory().addItem(newPouchItem);
 
-        PlayerPouchHandler.get().registerPouch(me.getUniqueId(), new Pouch(newPouchItem));
+        me.getInventory().addItem(newPouchItem);
     }
 }

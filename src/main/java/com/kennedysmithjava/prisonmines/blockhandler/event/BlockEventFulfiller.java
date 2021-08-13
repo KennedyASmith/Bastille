@@ -2,14 +2,20 @@ package com.kennedysmithjava.prisonmines.blockhandler.event;
 
 import com.kennedysmithjava.prisonmines.entity.PrisonBlock;
 import com.kennedysmithjava.prisonmines.pouch.NoPouchFoundException;
-import com.kennedysmithjava.prisonmines.pouch.PlayerPouchHandler;
+import com.kennedysmithjava.prisonmines.pouch.Pouch;
 import com.kennedysmithjava.prisonmines.pouch.PouchFullException;
+import com.kennedysmithjava.prisonmines.pouch.PouchManager;
+import com.kennedysmithjava.prisonmines.util.Pair;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class BlockEventFulfiller {
 
@@ -53,19 +59,34 @@ public class BlockEventFulfiller {
 
     }
 
-    private void rewardPlayer(Player player, List<PrisonBlock> rewards) {
-        PlayerPouchHandler pouchHandler = PlayerPouchHandler.get();
-        UUID uuid = player.getUniqueId();
-        rewards.forEach(e -> {
-            if (e != null) {
+    private void rewardPlayer(Player player, List<PrisonBlock> r) {
+
+        final List<PrisonBlock> rewards = r.stream().filter(Objects::nonNull).collect(Collectors.toList());
+
+        getPouches(player).forEach(pair -> {
+            Pouch pouch = pair.getRight();
+            ItemStack item = pair.getLeft();
+
+            rewards.removeIf(p -> {
                 try {
-                    pouchHandler.tryFulfill(uuid, e, 1);
-                } catch (PouchFullException | NoPouchFoundException pouchFullException) {
-                    // TODO: Maybe give a message if the pouch is full
-                    player.getInventory().addItem(e.getProductItem(1));
+                    pouch.pouch(p, item);
+                    return true;
+                } catch (PouchFullException e) {
+                    return false;
                 }
-            }
+            });
+
         });
+
+        rewards.forEach(e -> player.getInventory().addItem(e.getProductItem(1)));
+        player.updateInventory();
+    }
+//
+    private List<Pair<ItemStack, Pouch>> getPouches(Player player) {
+        PouchManager pouchManager = PouchManager.get();
+        return Arrays.stream(player.getInventory().getContents())
+                .map(item -> new Pair<>(item, pouchManager.getPouch(item)))
+                .filter(p -> p.getRight() != null).collect(Collectors.toList());
     }
 
 

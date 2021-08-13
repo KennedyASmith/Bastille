@@ -1,6 +1,12 @@
 package com.kennedysmithjava.prisonmines.pouch;
 
+import com.kennedysmithjava.prisonmines.PrisonMines;
+import com.massivecraft.massivecore.MassiveException;
 import com.massivecraft.massivecore.command.MassiveCommand;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class PouchCommand extends MassiveCommand {
 
@@ -15,5 +21,12 @@ public class PouchCommand extends MassiveCommand {
         this.setAliases("pouch");
         this.addChild(pouchGiveCommand);
         this.setSetupEnabled(true);
+    }
+
+    @Override
+    public void perform() throws MassiveException {
+        ItemStack itemStack = new ItemStack(Material.APPLE);
+
+        me.getInventory().addItem(itemStack);
     }
 }

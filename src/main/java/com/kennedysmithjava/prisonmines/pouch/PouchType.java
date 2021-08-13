@@ -1,6 +1,5 @@
 package com.kennedysmithjava.prisonmines.pouch;
 
-import de.tr7zw.nbtapi.NBTCompoundList;
 import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -9,7 +8,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PouchType {
+public final class PouchType {
 
     private final int capacity;
     private final int typeCapacity;
@@ -55,25 +54,31 @@ public class PouchType {
 
     public List<String> getCompiledLore(Pouch pouch) {
         List<String> res = new ArrayList<>(this.lore);
-        res.add(" ");
-        pouch.getPouched().forEach((p, i) -> {
-            res.add(String.format(this.format, i, p.getDisplayName()));
-        });
+//        res.add(" ");
+//        pouch.getPouched().forEach((p, i) ->
+//            res.add(ChatColor.translateAlternateColorCodes('&', String.format(this.format, i, p.getDisplayName())))
+//        );
 
         return res;
     }
 
     public ItemStack getNewPouchItem() {
-        ItemStack item = new ItemStack(this.icon);
-        ItemMeta itemMeta = item.getItemMeta();
+        ItemStack itemStack = new ItemStack(this.icon);
+
+        ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setLore(this.getLore());
         itemMeta.setDisplayName(this.name);
-        item.setItemMeta(itemMeta);
+        itemStack.setItemMeta(itemMeta);
 
-        NBTItem nbtItem = new NBTItem(item);
+        NBTItem nbtItem = new NBTItem(itemStack);
+
+        PouchManager.get().generateUUID(nbtItem);
+
         nbtItem.setInteger(PouchConf.POUCH_TYPE_NBT_TAG, PouchConf.get().getPouchTypeID(this));
         nbtItem.getCompoundList(PouchConf.POUCH_DATA_TAG);
 
-        return item;
+        nbtItem.applyNBT(itemStack);
+        return itemStack;
     }
+
 }

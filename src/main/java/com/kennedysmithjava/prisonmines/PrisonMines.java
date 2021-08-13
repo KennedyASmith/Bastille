@@ -12,7 +12,7 @@ import com.kennedysmithjava.prisonmines.entity.MinesConfColl;
 import com.kennedysmithjava.prisonmines.event.EventNewMine;
 import com.kennedysmithjava.prisonmines.pouch.Pouch;
 import com.kennedysmithjava.prisonmines.pouch.PouchCommand;
-import com.kennedysmithjava.prisonmines.pouch.PouchDetectionEngine;
+import com.kennedysmithjava.prisonmines.pouch.PouchConfColl;
 import com.kennedysmithjava.prisonmines.util.*;
 import com.massivecraft.massivecore.MassivePlugin;
 import com.massivecraft.massivecore.collections.MassiveList;
@@ -67,7 +67,8 @@ public class PrisonMines extends MassivePlugin {
                 BlocksConfColl.class,
                 DistributionConfColl.class,
                 MineColl.class,
-                LayoutConfColl.class
+                LayoutConfColl.class,
+                PouchConfColl.class
         );
     }
 
@@ -77,7 +78,6 @@ public class PrisonMines extends MassivePlugin {
         ret.add(EngineOffsetWand.class);
         ret.add(BlockBreakEngine.class);
         ret.add(CacheUpdateEngine.class);
-        ret.add(PouchDetectionEngine.class);
         return ret;
     }
 

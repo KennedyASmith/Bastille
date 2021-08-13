@@ -2,7 +2,7 @@ package com.kennedysmithjava.prisonmines.pouch;
 
 import com.mcrivals.prisoncore.CurrencyType;
 
-public class DatalessPouchable implements Pouchable {
+public class DatalessPouchable implements Pouchable, Comparable<DatalessPouchable> {
 
     private final double value;
     private final String nbt;
@@ -37,7 +37,30 @@ public class DatalessPouchable implements Pouchable {
     }
 
     @Override
+    public String toString() {
+        return "DatalessPouchable{" +
+                "value=" + value +
+                ", nbt='" + nbt + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", currencyType=" + currencyType +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DatalessPouchable pouchable = (DatalessPouchable) o;
+        return nbt.equals(pouchable.nbt);
+    }
+
+    @Override
     public int hashCode() {
         return this.nbt.hashCode();
+    }
+
+    @Override
+    public int compareTo(DatalessPouchable o) {
+        return nbt.compareTo(o.getUniqueNbt());
     }
 }
