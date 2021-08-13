@@ -1,11 +1,15 @@
 package com.kennedysmithjava.prisonmines.blockhandler.event;
 
 import com.kennedysmithjava.prisonmines.entity.PrisonBlock;
+import com.kennedysmithjava.prisonmines.pouch.NoPouchFoundException;
+import com.kennedysmithjava.prisonmines.pouch.PlayerPouchHandler;
+import com.kennedysmithjava.prisonmines.pouch.PouchFullException;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.UUID;
 
 public class BlockEventFulfiller {
 
@@ -50,14 +54,16 @@ public class BlockEventFulfiller {
     }
 
     private void rewardPlayer(Player player, List<PrisonBlock> rewards) {
-        /*
-         TODO: Decide whether to simply call the giveItem or and then modify that if they have a pouch or
-               make a method that handles pouches and inventories proactively.
-         */
-
+        PlayerPouchHandler pouchHandler = PlayerPouchHandler.get();
+        UUID uuid = player.getUniqueId();
         rewards.forEach(e -> {
             if (e != null) {
-                player.getInventory().addItem(e.getProductItem(1));
+                try {
+                    pouchHandler.tryFulfill(uuid, e, 1);
+                } catch (PouchFullException | NoPouchFoundException pouchFullException) {
+                    // TODO: Maybe give a message if the pouch is full
+                    player.getInventory().addItem(e.getProductItem(1));
+                }
             }
         });
     }

@@ -1,14 +1,16 @@
 package com.kennedysmithjava.prisonmines.entity;
 
+import com.kennedysmithjava.prisonmines.pouch.Pouchable;
 import com.kennedysmithjava.prisonmines.util.BlockMaterial;
 import com.kennedysmithjava.prisonmines.util.Color;
+import com.mcrivals.prisoncore.CurrencyType;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 
-public class PrisonBlock {
+public class PrisonBlock implements Pouchable {
 
     String name;
     double value;
@@ -39,8 +41,24 @@ public class PrisonBlock {
         return name;
     }
 
+    @Override
     public double getValue() {
         return value;
+    }
+
+    @Override
+    public String getUniqueNbt() {
+        return String.valueOf(BlocksConf.get().getId(this));
+    }
+
+    @Override
+    public String getDisplayName() {
+        return this.name;
+    }
+
+    @Override
+    public CurrencyType getCurrencyType() {
+        return CurrencyType.GOLD;
     }
 
     public BlockMaterial getBlock() {
