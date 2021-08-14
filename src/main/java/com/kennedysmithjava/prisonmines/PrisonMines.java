@@ -2,6 +2,7 @@ package com.kennedysmithjava.prisonmines;
 
 import com.kennedysmithjava.prisonmines.blockhandler.BlockBreakEngine;
 import com.kennedysmithjava.prisonmines.blockhandler.CacheUpdateEngine;
+import com.kennedysmithjava.prisonmines.engine.EngineMain;
 import com.kennedysmithjava.prisonmines.engine.EngineOffsetWand;
 import com.kennedysmithjava.prisonmines.entity.*;
 import com.kennedysmithjava.prisonmines.entity.DistributionConfColl;
@@ -76,6 +77,7 @@ public class PrisonMines extends MassivePlugin {
     public List<Class<?>> getClassesActiveEngines() {
         List<Class<?>> ret = super.getClassesActiveEngines();
         ret.add(EngineOffsetWand.class);
+        ret.add(EngineMain.class);
         ret.add(BlockBreakEngine.class);
         ret.add(CacheUpdateEngine.class);
         return ret;
@@ -108,7 +110,6 @@ public class PrisonMines extends MassivePlugin {
         Mine mine = MineColl.get().create(id);
         player.setMineID(id);
 
-
         // DEFINE ESSENTIAL LAYOUTS AND LOCATIONS
         MinesWorldManager worldManager = MinesWorldManager.get();
         World world = worldManager.getWorld();
@@ -136,8 +137,6 @@ public class PrisonMines extends MassivePlugin {
         mine.setMineMax(maxMine);
         mine.setSpawnPoint(spawn);
         mine.setArchitectLocation(architectLocation);
-        mine.setArchitectUUID(UUID.randomUUID().toString());
-        mine.setResearcherUUID(UUID.randomUUID().toString());
         mine.setResearcherLocation(researcherLocation);
         mine.setOrigin(origin);
         mine.setMineCenter(mineCenter);
