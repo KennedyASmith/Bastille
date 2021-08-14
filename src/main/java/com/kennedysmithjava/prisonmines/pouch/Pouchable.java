@@ -1,8 +1,9 @@
 package com.kennedysmithjava.prisonmines.pouch;
 
+import com.kennedysmithjava.prisonmines.blockhandler.Reward;
 import com.mcrivals.prisoncore.CurrencyType;
 
-public interface Pouchable {
+public interface Pouchable extends Reward {
 
     double getValue();
 

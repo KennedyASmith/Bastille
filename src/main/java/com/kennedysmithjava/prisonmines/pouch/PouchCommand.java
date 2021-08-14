@@ -3,6 +3,7 @@ package com.kennedysmithjava.prisonmines.pouch;
 import com.kennedysmithjava.prisonmines.PrisonMines;
 import com.massivecraft.massivecore.MassiveException;
 import com.massivecraft.massivecore.command.MassiveCommand;
+import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -27,6 +28,8 @@ public class PouchCommand extends MassiveCommand {
     public void perform() throws MassiveException {
         ItemStack itemStack = new ItemStack(Material.APPLE);
 
-        me.getInventory().addItem(itemStack);
+        ItemStack itemInHand = me.getItemInHand();
+        NBTItem nbtItem = new NBTItem(itemInHand);
+        me.sendMessage(nbtItem.toString());
     }
 }

@@ -1,6 +1,7 @@
 package com.kennedysmithjava.prisonmines.pouch;
 
 import de.tr7zw.nbtapi.NBTItem;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -54,10 +55,10 @@ public final class PouchType {
 
     public List<String> getCompiledLore(Pouch pouch) {
         List<String> res = new ArrayList<>(this.lore);
-//        res.add(" ");
-//        pouch.getPouched().forEach((p, i) ->
-//            res.add(ChatColor.translateAlternateColorCodes('&', String.format(this.format, i, p.getDisplayName())))
-//        );
+        res.add(" ");
+        pouch.getPouched().forEach((p, i) ->
+            res.add(ChatColor.translateAlternateColorCodes('&', String.format(this.format, i, p.getDisplayName())))
+        );
 
         return res;
     }
