@@ -53,10 +53,11 @@ public class Mine extends Entity<Mine> implements Named {
         this.setMineMax(that.mineMax);
         this.setSpawnPoint(that.spawnPoint);
         this.setArchitectLocation(that.architectLocation);
+        this.setResearcherLocation(that.researcherLocation);
         this.setUpgrades(that.upgrades);
         this.setMineCenter(that.mineCenter);
-        this.setArchitectUUID(that.architectUUID);
-        this.setResearcherUUID(that.researcherUUID);
+        this.setArchitectID(that.architectID);
+        this.setResearcherID(that.researcherID);
         this.setLevel(that.level);
         this.setFloorID(that.pathID);
         this.setWallID(that.wallID);
@@ -88,8 +89,8 @@ public class Mine extends Entity<Mine> implements Named {
     private PS researcherLocation;
 
     // NPC INFORMATION
-    private String architectUUID;
-    private String researcherUUID;
+    private int architectID;
+    private int researcherID;
 
     // PHYSICAL INFORMATION
     private int wallID;
@@ -534,21 +535,21 @@ public class Mine extends Entity<Mine> implements Named {
     //  NPCs
     // -------------------------------------------- //
 
-    public String getArchitectUUID() {
-        return architectUUID;
+    public int getArchitectID() {
+        return architectID;
     }
 
-    public void setArchitectUUID(String architectUUID) {
-        this.architectUUID = architectUUID;
+    public void setArchitectID(int architectID) {
+        this.architectID = architectID;
         this.changed();
     }
 
-    public String getResearcherUUID() {
-        return researcherUUID;
+    public int getResearcherID() {
+        return researcherID;
     }
 
-    public void setResearcherUUID(String researcherUUID) {
-        this.researcherUUID = researcherUUID;
+    public void setResearcherID(int researcherID) {
+        this.researcherID = researcherID;
         this.changed();
     }
 
@@ -570,7 +571,12 @@ public class Mine extends Entity<Mine> implements Named {
     }
 
     public void setResearcherLocation(Location researcherLocation) {
-        this.researcherLocation = PS.valueOf(researcherLocation);
+        this.setResearcherLocation(PS.valueOf(researcherLocation));
+    }
+
+    public void setResearcherLocation(PS researcherLocation) {
+        this.researcherLocation = researcherLocation;
+        this.changed();
     }
 
     // -------------------------------------------- //
@@ -634,24 +640,44 @@ public class Mine extends Entity<Mine> implements Named {
 
     @SuppressWarnings("unused")
     public void spawnArchitectNPC(){
-        setArchitectUUID(new NPCArchitect().spawn(ArchitectConf.get().architectName,  getArchitectLocation(), 1));
+        NPC npc = new NPCArchitect().spawn(ArchitectConf.get().architectName,  getArchitectLocation(), 1);
+        setArchitectID(npc.getId());
     }
 
     @SuppressWarnings("unused")
     public void spawnResearcherNPC(){
-        setResearcherUUID(new NPCWarren().spawn(WarrenConf.get().researcherName, getResearcherLocation(), 1));
+        NPC npc = new NPCWarren().spawn(WarrenConf.get().researcherName, getResearcherLocation(), 1);
+        setResearcherID(npc.getId());
     }
 
     @SuppressWarnings("unused")
     public void despawnArchitectNPC(){
-        NPC npc = CitizensAPI.getNPCRegistry().getByUniqueId(UUID.fromString(architectUUID));
+        NPC npc = CitizensAPI.getNPCRegistry().getById(architectID);
         if(npc != null) npc.destroy();
+        setArchitectID(0);
     }
 
     @SuppressWarnings("unused")
     public void despawnResearcherNPC(){
-        NPC npc = CitizensAPI.getNPCRegistry().getByUniqueId(UUID.fromString(researcherUUID));
+        NPC npc = CitizensAPI.getNPCRegistry().getById(researcherID);
         if(npc != null) npc.destroy();
+        setResearcherID(0);
+    }
+
+    public void spawnNPCs(){
+        this.spawnResearcherNPC();
+        this.spawnArchitectNPC();
+        Bukkit.broadcastMessage("Spawning all NPCs.");
+    }
+
+    public void despawnNPCs(){
+        this.despawnResearcherNPC();
+        this.despawnArchitectNPC();
+        Bukkit.broadcastMessage("Despawning all NPCs.");
+    }
+
+    public boolean npcsSpawned(){
+        return getArchitectID() != 0 && getResearcherID() != 0;
     }
 
     public void clearMine(){
