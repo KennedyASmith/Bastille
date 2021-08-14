@@ -15,6 +15,11 @@ public class BlocksConf extends Entity<BlocksConf> {
     // -------------------------------------------- //
 
     protected static transient BlocksConf i;
+
+
+    public int getId(PrisonBlock block) {
+        return this.blocks.entrySet().stream().filter(e -> e.getValue().equals(block)).map(Map.Entry::getKey).findAny().orElse(-1);
+    }
     public Map<Integer, PrisonBlock> blocks = MUtil.map(
 
             //Common Rocks

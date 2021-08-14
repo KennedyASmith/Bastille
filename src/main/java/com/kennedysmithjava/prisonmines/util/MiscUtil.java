@@ -16,8 +16,8 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class MiscUtil {
 
@@ -27,6 +27,19 @@ public class MiscUtil {
             "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r",
             "s", "t", "u", "v", "w", "x", "y", "z"
     }));
+
+
+    //SORTS DESC
+    public static <X extends Comparable<X>>  Map<X, Integer> sortByValue(Map<X, Integer> unsortMap) {
+        List<Map.Entry<X, Integer>> list = new LinkedList<>(unsortMap.entrySet());
+
+        // Sorting the list based on values
+        list.sort((o1, o2) -> o2.getValue().compareTo(o1.getValue()) == 0
+        ? o2.getKey().compareTo(o1.getKey())
+        : o2.getValue().compareTo(o1.getValue()));
+        return list.stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> b, LinkedHashMap::new));
+
+    }
 
     public static String getComparisonString(String str)
     {

@@ -11,6 +11,9 @@ import com.kennedysmithjava.prisonmines.entity.MineColl;
 import com.kennedysmithjava.prisonmines.entity.MinesConf;
 import com.kennedysmithjava.prisonmines.entity.MinesConfColl;
 import com.kennedysmithjava.prisonmines.event.EventNewMine;
+import com.kennedysmithjava.prisonmines.pouch.Pouch;
+import com.kennedysmithjava.prisonmines.pouch.PouchCommand;
+import com.kennedysmithjava.prisonmines.pouch.PouchConfColl;
 import com.kennedysmithjava.prisonmines.util.*;
 import com.massivecraft.massivecore.MassivePlugin;
 import com.massivecraft.massivecore.collections.MassiveList;
@@ -49,6 +52,8 @@ public class PrisonMines extends MassivePlugin {
     @Override
     public void onEnableInner() {
 
+        this.activate(PouchCommand.class);
+
         // ACTIVATE ENGINES/COLLECTORS
         this.activateAuto();
 
@@ -63,7 +68,8 @@ public class PrisonMines extends MassivePlugin {
                 BlocksConfColl.class,
                 DistributionConfColl.class,
                 MineColl.class,
-                LayoutConfColl.class
+                LayoutConfColl.class,
+                PouchConfColl.class
         );
     }
 

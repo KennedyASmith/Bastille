@@ -14,7 +14,7 @@ public class DistributionConf extends Entity<DistributionConf> {
     // META
     // -------------------------------------------- //
 
-    protected static DistributionConf i;
+    protected static transient DistributionConf i;
 
 
     public static DistributionConf get() {
