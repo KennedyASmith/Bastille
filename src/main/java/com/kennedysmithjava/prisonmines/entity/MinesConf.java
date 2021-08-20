@@ -41,7 +41,7 @@ public class MinesConf extends Entity<MinesConf>
     // MINE SETTINGS
     // -------------------------------------------- //
 
-    public Long defaultResetTimer = 10L;
+    public Long defaultResetTimer = 25L;
     public int mineNameLengthMin = 3;
     public int mineNameLengthMax = 9;
     public int mineDefaultHeight = 3;

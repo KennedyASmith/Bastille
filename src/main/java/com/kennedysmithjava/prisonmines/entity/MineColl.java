@@ -7,6 +7,7 @@ import com.massivecraft.massivecore.store.Coll;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 
 public class MineColl extends Coll<Mine> {
@@ -64,9 +65,12 @@ public class MineColl extends Coll<Mine> {
     }
 
     public Mine getByLocation(Block b) {
-        return this.mineLocationCache.get(this.getLocationHashKey(b.getX()));
+        return this.getByLocation(b.getLocation());
     }
 
+    public Mine getByLocation(Location l) {
+        return this.mineLocationCache.get(this.getLocationHashKey(l.getBlockX()));
+    }
 
     private int getLocationHashKey(Mine mine) {
         return this.getLocationHashKey(mine.getMinX());

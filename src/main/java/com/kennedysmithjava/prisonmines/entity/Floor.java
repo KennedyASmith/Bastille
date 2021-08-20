@@ -122,17 +122,24 @@ public class Floor {
         this.directory = directory;
     }
 
-    @Override
-    public String toString() {
-        return "Path{" +
-                "icon=" + icon +
-                ", data=" + materialData +
-                ", schematics=" + schematics +
-                '}';
-    }
-
     public Floor clone(){
         return new Floor(getDisplayName(), getLore(), getCompatibleWalls(), getIcon(), getMaterialData(), getDirectory(), getSchematics(), getSpawn() ,getMineCenter() ,getArchitectNPC(), getResearcherNPC());
     }
 
+    @Override
+    public String toString() {
+        return "Floor{" +
+                "displayName='" + displayName + '\'' +
+                ", icon=" + icon +
+                ", materialData=" + materialData +
+                ", schematics=" + schematics +
+                ", spawn=" + spawn +
+                ", mineCenter=" + mineCenter +
+                ", architectNPC=" + architectNPC +
+                ", researcherNPC=" + researcherNPC +
+                ", lore=" + lore +
+                ", compatibleWalls=" + compatibleWalls +
+                ", directory='" + directory + '\'' +
+                '}';
+    }
 }

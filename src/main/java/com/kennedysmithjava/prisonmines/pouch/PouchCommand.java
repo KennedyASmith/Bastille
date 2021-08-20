@@ -32,4 +32,6 @@ public class PouchCommand extends MassiveCommand {
         NBTItem nbtItem = new NBTItem(itemInHand);
         me.sendMessage(nbtItem.toString());
     }
+
+
 }
