@@ -1,20 +1,17 @@
 package com.kennedysmithjava.prisonmines.blockhandler.event;
 
+import com.kennedysmithjava.prisonmines.blockhandler.Reward;
 import com.kennedysmithjava.prisonmines.entity.PrisonBlock;
-import com.kennedysmithjava.prisonmines.pouch.NoPouchFoundException;
-import com.kennedysmithjava.prisonmines.pouch.Pouch;
-import com.kennedysmithjava.prisonmines.pouch.PouchFullException;
-import com.kennedysmithjava.prisonmines.pouch.PouchManager;
+import com.kennedysmithjava.prisonmines.pouch.*;
 import com.kennedysmithjava.prisonmines.util.Pair;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.sql.Array;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class BlockEventFulfiller {
@@ -59,17 +56,20 @@ public class BlockEventFulfiller {
 
     }
 
-    private void rewardPlayer(Player player, List<PrisonBlock> r) {
+    private void rewardPlayer(Player player, List<Reward> r) {
 
-        final List<PrisonBlock> rewards = r.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        final List<Reward> rewards = r.stream().filter(Objects::nonNull).collect(Collectors.toList());
 
-        getPouches(player).forEach(pair -> {
-            Pouch pouch = pair.getRight();
-            ItemStack item = pair.getLeft();
+        Map<Integer, Pouch> pouches = this.getPouches(player.getInventory());
+        pouches.forEach((index, pouch) -> {
+            ItemStack item = player.getInventory().getItem(index);
 
             rewards.removeIf(p -> {
+                if (!(p instanceof Pouchable)) {
+                    return false;
+                }
                 try {
-                    pouch.pouch(p, item);
+                    pouch.pouch((Pouchable) p, item);
                     return true;
                 } catch (PouchFullException e) {
                     return false;
@@ -82,11 +82,25 @@ public class BlockEventFulfiller {
         player.updateInventory();
     }
 //
-    private List<Pair<ItemStack, Pouch>> getPouches(Player player) {
-        PouchManager pouchManager = PouchManager.get();
-        return Arrays.stream(player.getInventory().getContents())
-                .map(item -> new Pair<>(item, pouchManager.getPouch(item)))
-                .filter(p -> p.getRight() != null).collect(Collectors.toList());
+    private Map<Integer, Pouch> getPouches(PlayerInventory inventory) {
+        final PouchManager pouchManager = PouchManager.get();
+        final Map<Integer,Pouch> result = new HashMap<>(5);
+
+        for (int i = 0; i < inventory.getSize(); i++) {
+            ItemStack item = inventory.getItem(i);
+            if (!Pouch.isPouch(item)) {
+                continue;
+            }
+
+            Pouch pouch = pouchManager.getPouch(item);
+            if (pouch == null) {
+                continue;
+            }
+
+            result.put(i, pouch);
+        }
+
+        return result;
     }
 
 

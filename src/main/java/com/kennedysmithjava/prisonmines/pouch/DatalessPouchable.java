@@ -1,6 +1,7 @@
 package com.kennedysmithjava.prisonmines.pouch;
 
 import com.mcrivals.prisoncore.CurrencyType;
+import org.bukkit.inventory.ItemStack;
 
 public class DatalessPouchable implements Pouchable, Comparable<DatalessPouchable> {
 
@@ -62,5 +63,10 @@ public class DatalessPouchable implements Pouchable, Comparable<DatalessPouchabl
     @Override
     public int compareTo(DatalessPouchable o) {
         return nbt.compareTo(o.getUniqueNbt());
+    }
+
+    @Override
+    public ItemStack getProductItem(int amount) {
+        return null;
     }
 }

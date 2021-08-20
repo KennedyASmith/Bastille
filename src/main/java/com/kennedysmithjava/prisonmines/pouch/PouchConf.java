@@ -12,7 +12,7 @@ public class PouchConf extends Entity<PouchConf>  {
     public static final transient String POUCH_DATA_DISPLAY_TAG = "DISPLAY";
     public static final transient String POUCH_DATA_QUANTITY_TAG = "QUANTITY";
     public static final transient String POUCH_DATA_NBT_VALUE_TAG = "NBT";
-    public static final transient String POUCH_DATA_NBT_CURRENCY_TAG = "NBT";
+    public static final transient String POUCH_DATA_NBT_CURRENCY_TAG = "CURRENCY";
 
     public static final transient String POUCH_DATA_TAG = "POUCH_DATA";
     public static final transient String POUCH_TYPE_NBT_TAG = "POUCH_TYPE";

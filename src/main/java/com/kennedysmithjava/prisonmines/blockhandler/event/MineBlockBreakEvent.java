@@ -1,6 +1,7 @@
 package com.kennedysmithjava.prisonmines.blockhandler.event;
 
 import com.avaje.ebean.validation.NotNull;
+import com.kennedysmithjava.prisonmines.blockhandler.Reward;
 import com.kennedysmithjava.prisonmines.blockhandler.animation.BreakAnimation;
 import com.kennedysmithjava.prisonmines.entity.Distribution;
 import com.kennedysmithjava.prisonmines.entity.Mine;
@@ -27,7 +28,7 @@ public class MineBlockBreakEvent extends Event implements Cancellable {
     private final Block block;
     private final Player player;
 
-    private final List<PrisonBlock> rewards;
+    private List<Reward> rewards;
     private final List<BreakAnimation> breakAnimations;
     private boolean cancelled = false;
     private boolean shouldDeleteBlock = true;
@@ -89,8 +90,12 @@ public class MineBlockBreakEvent extends Event implements Cancellable {
         this.rewards.add(reward);
     }
 
-    public List<PrisonBlock> getRewards() {
+    public List<Reward> getRewards() {
         return this.rewards;
+    }
+
+    public void setRewards(List<Reward> rewards) {
+        this.rewards = rewards;
     }
 
     public Distribution getDistribution() {

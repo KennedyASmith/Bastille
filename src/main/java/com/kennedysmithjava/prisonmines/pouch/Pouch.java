@@ -7,6 +7,7 @@ import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.NBTCompoundList;
 import de.tr7zw.nbtapi.NBTItem;
 import de.tr7zw.nbtapi.NBTListCompound;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -105,10 +106,12 @@ public class Pouch {
 
         DatalessPouchable key = pouchable.toDataless();
         int newAmount = pouched.getOrDefault(key, 0) + 1;
+        Bukkit.broadcastMessage(newAmount + " blocks");
         pouched.put(key, newAmount);
         count++;
 
-        this.loreUpdater.trigger(item);
+        this.updateLore(item);
+        //this.loreUpdater.trigger(item);
         this.nbtUpdater.trigger(item);
     }
 
@@ -116,9 +119,8 @@ public class Pouch {
         return this.pouched;
     }
 
-    private void updateLore(ItemStack item) {
-        this.pouched = MiscUtil.sortByValue(this.pouched);
-
+    public void updateLore(ItemStack item) {
+        //this.pouched = MiscUtil.sortByValue(this.pouched);
         ItemMeta itemMeta = item.getItemMeta();
         itemMeta.setLore(this.type.getCompiledLore(this));
         item.setItemMeta(itemMeta);
@@ -151,7 +153,7 @@ public class Pouch {
     }
 
     public static boolean isPouch(ItemStack item) {
-        return item != null && !item.getType().equals(Material.AIR) && new NBTItem(item, true).hasKey(PouchConf.POUCH_TYPE_NBT_TAG);
+        return item != null && !item.getType().equals(Material.AIR) && new NBTItem(item).hasKey(PouchConf.POUCH_TYPE_NBT_TAG);
     }
 
 }

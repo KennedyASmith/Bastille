@@ -4,6 +4,7 @@ import com.kennedysmithjava.prisonmines.pouch.Pouchable;
 import com.kennedysmithjava.prisonmines.util.BlockMaterial;
 import com.kennedysmithjava.prisonmines.util.Color;
 import com.mcrivals.prisoncore.CurrencyType;
+import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -83,6 +84,11 @@ public class PrisonBlock implements Pouchable {
         meta.setDisplayName(Color.get(getName()));
         meta.setLore(getLore());
         base.setItemMeta(meta);
+
+        NBTItem item = new NBTItem(base);
+        item.setDouble("VALUE", value);
+        item.applyNBT(base);
+
         return base;
     }
 
