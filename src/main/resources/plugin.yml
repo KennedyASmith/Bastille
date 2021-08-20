@@ -8,3 +8,4 @@ website: MCRivals.com
 depend: [MassiveCore, FastAsyncWorldEdit, Citizens, NBTAPI]
 softdepend: [PrisonCore]
 loadbefore: [PrisonCore]
+load: STARTUP
