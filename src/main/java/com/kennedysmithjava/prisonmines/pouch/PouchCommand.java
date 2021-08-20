@@ -29,4 +29,6 @@ public class PouchCommand extends MassiveCommand {
 
         me.getInventory().addItem(itemStack);
     }
+
+
 }

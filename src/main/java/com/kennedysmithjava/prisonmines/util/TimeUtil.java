@@ -148,19 +148,13 @@ public class TimeUtil
         millis -= TimeUnit.MINUTES.toMillis(minutes);
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
 
-        if (days > 1) output += days + " days ";
-        else if (days == 1) output += days + " day ";
+        if (minutes >= 1 && minutes < 10) output += "0" + minutes + ":";
+        else if (minutes >= 10) output += minutes + ":";
+        else output += "00:";
 
-        if (hours > 1) output += hours + " hours ";
-        else if (hours == 1) output += hours + " hour ";
-
-        if (minutes > 1) output += minutes + " minutes ";
-        else if (minutes == 1) output += minutes + " minute ";
-
-        if (seconds > 1) output += seconds + " seconds ";
-        else if (seconds == 1) output += seconds + " second ";
-
-        if (output.isEmpty()) return "0 seconds ";
+        if (seconds >= 1 && seconds < 10) output += "0" + seconds;
+        else if (seconds >= 10) output += seconds;
+        else output += "00";
 
         return output;
     }

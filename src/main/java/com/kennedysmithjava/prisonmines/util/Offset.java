@@ -44,7 +44,14 @@ public class Offset {
     }
 
     public Location get(Location origin){
-        return origin.clone().add(getX(), getY(), getZ());
+        if(yaw != 0F && pitch != 0F){
+            return origin.clone().add(getX(), getY(), getZ());
+        }else{
+            Location location = origin.clone().add(getX(), getY(), getZ());
+            location.setPitch(pitch);
+            location.setYaw(yaw);
+            return location;
+        }
     }
 
     @Override

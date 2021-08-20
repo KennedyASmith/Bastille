@@ -54,6 +54,7 @@ public class CmdMinesFloor extends MineCommand {
 
     @Override
     public void perform() throws MassiveException {
+
         if (!(sender instanceof Player)) return;
         Player player = (Player) sender;
 
@@ -63,6 +64,7 @@ public class CmdMinesFloor extends MineCommand {
         if (selection == null) {
             return;
         }*/
+/*
 
         int id = readArg();
         int width = readArg();
@@ -170,7 +172,7 @@ public class CmdMinesFloor extends MineCommand {
             Sign sign = (Sign) block.getState();
             sign.setLine(0, signBlock.getLine());
             sign.update();
-        });
+        });*/
     }
 
     public Map<String, Location> getLocationMap(Location min, Location max) {

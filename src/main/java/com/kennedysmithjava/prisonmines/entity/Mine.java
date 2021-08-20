@@ -2,17 +2,19 @@ package com.kennedysmithjava.prisonmines.entity;
 
 import com.boydti.fawe.bukkit.v0.FaweAdapter_All;
 import com.boydti.fawe.util.EditSessionBuilder;
+import com.gmail.filoghost.holographicdisplays.HolographicDisplays;
+import com.gmail.filoghost.holographicdisplays.api.Hologram;
+import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
+import com.gmail.filoghost.holographicdisplays.api.placeholder.PlaceholderReplacer;
 import com.kennedysmithjava.prisonmines.MineRegenCountdown;
 import com.kennedysmithjava.prisonmines.MinesWorldManager;
 import com.kennedysmithjava.prisonmines.PrisonMines;
-import com.kennedysmithjava.prisonmines.util.BlockMaterial;
-import com.kennedysmithjava.prisonmines.util.FAWETracker;
-import com.kennedysmithjava.prisonmines.util.LazyRegion;
-import com.kennedysmithjava.prisonmines.util.MiscUtil;
+import com.kennedysmithjava.prisonmines.util.*;
 import com.kennedysmithjava.prisonnpcs.entity.ArchitectConf;
 import com.kennedysmithjava.prisonnpcs.entity.WarrenConf;
 import com.kennedysmithjava.prisonnpcs.npcs.NPCArchitect;
 import com.kennedysmithjava.prisonnpcs.npcs.NPCWarren;
+import com.kennedysmithjava.prisonnpcs.upgrades.Upgrade;
 import com.massivecraft.massivecore.Named;
 import com.massivecraft.massivecore.ps.PS;
 import com.massivecraft.massivecore.store.Entity;
@@ -30,7 +32,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 
@@ -43,6 +48,8 @@ public class Mine extends Entity<Mine> implements Named {
     public static Mine get(Object oid) {
         return MineColl.get().get(oid);
     }
+
+    public static Player p = Bukkit.getPlayer("Kennedy");
 
     @Override
     public Mine load(Mine that) {
@@ -65,6 +72,8 @@ public class Mine extends Entity<Mine> implements Named {
         this.setWidthVar(that.width);
         this.setUnlockedDistributions(that.unlockedDistributions);
         this.setBlockDistribution(that.currentDistributionID);
+        this.setAutoRegenEnabled(that.autoRegenEnabled);
+        this.setRegenLeverID(that.regenLeverID);
 
         return this;
     }
@@ -73,10 +82,11 @@ public class Mine extends Entity<Mine> implements Named {
     private String name;
     private long regenTimer;
     private transient MineRegenCountdown countdown;
+    private transient Hologram regenHologram;
 
     // LEVEL & UPGRADES
     private int level = 1;
-    private transient List<String> upgrades = new ArrayList<>();
+    private List<String> upgrades = new ArrayList<>();
     private List<Integer> unlockedDistributions = new ArrayList<>();
 
     // LOCATION INFORMATION
@@ -91,6 +101,7 @@ public class Mine extends Entity<Mine> implements Named {
     // NPC INFORMATION
     private int architectID;
     private int researcherID;
+    private int regenLeverID;
 
     // PHYSICAL INFORMATION
     private int wallID;
@@ -98,6 +109,8 @@ public class Mine extends Entity<Mine> implements Named {
     private int width;
     private int height;
     private int currentDistributionID;
+
+    private boolean autoRegenEnabled;
 
     // -------------------------------------------- //
     //  MINE ARCHITECTURE
@@ -125,8 +138,138 @@ public class Mine extends Entity<Mine> implements Named {
                 editSession.setBlocks(cuboidRegion, pat);
                 editSession.flushQueue();
             });
-            this.getRegenCountdown().resetCounter();
         } catch (Throwable throwable) { throwable.printStackTrace(); }
+    }
+
+    public void regenAnimation(){
+
+        final BlockMaterial material = new BlockMaterial(Material.STEP, 0);
+
+        final World world = getWorld();
+        final Location mineMin = getMineMin();
+        final Location mineMax = getMineMax();
+        final int width = Math.abs(mineMax.getBlockX() - mineMin.getBlockX()) + 1;
+        final int frameCount = width + 2;
+        final Location northWestCorner = mineMax.clone().add(-1, 1, -1);
+        final Location southWestCorner = northWestCorner.clone().add(0, 0, width + 1);
+
+        final Location southEastCorner = northWestCorner.clone().add(width + 1, 0, width + 1);
+        final Location northEastCorner = northWestCorner.clone().add(width + 1, 0, 0);
+        final int minX = southWestCorner.getBlockX();
+        final int maxX = southEastCorner.getBlockX();
+        final int z = southEastCorner.getBlockZ();
+        final int y = northEastCorner.getBlockY();
+        int speed = 10;
+
+        BukkitRunnable openAnimation = new BukkitRunnable() {
+
+            int counter;
+            int frame;
+
+            @Override
+            public void run() {
+
+                if(frame < (width + 3) && counter == speed){
+                    for (int x = minX; x <= maxX; x++) {
+                        Block block = world.getBlockAt(x, y, (z - frame));
+                        block.setType(Material.AIR);
+                    }
+                    frame++;
+                    counter = 0;
+                }else if (frame == width + 2){
+                    this.cancel();
+                    if(countdown != null){
+                        countdown.setRegenerating(false);
+                        countdown.setPaused(false);
+                    }
+                }
+
+                counter++;
+            }
+        };
+
+        Runnable onClosed = () -> {
+            regen();
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    openAnimation.runTaskTimer(PrisonMines.get(), 0, 1);
+                }
+            }.runTaskLater(PrisonMines.get(), 20 * 5);
+        };
+
+        BukkitTask closeAnimation = new BukkitRunnable() {
+
+
+            int animation = 1;
+            int counter;
+            int frame;
+
+            @Override
+            public void run() {
+                switch(animation){
+                    case 1:
+
+                        //-----------------//
+                        // First Animation
+                        //-----------------//
+
+                        if(frame < frameCount && counter == speed){
+                            Block block1 = world.getBlockAt(northWestCorner.clone().add(0,0, frame));
+                            block1.setType(material.getMaterial());
+                            block1.setData(material.getData());
+                            Block block2 = world.getBlockAt(southEastCorner.clone().add(0,0, -frame));
+                            block2.setType(material.getMaterial());
+                            block2.setData(material.getData());
+                            frame++;
+                            counter = 0;
+                        }else if (frame == frameCount){
+                            animation = 2;
+                            frame = 0;
+                            counter = speed - 1;
+                        }
+                        break;
+                    case 2:
+
+                        //-----------------//
+                        // Second Animation
+                        //-----------------//
+                        if(frame < frameCount && counter == speed){
+                            Block block1 = world.getBlockAt(southWestCorner.clone().add(frame,0, 0));
+                            block1.setType(material.getMaterial());
+                            block1.setData(material.getData());
+                            Block block2 = world.getBlockAt(northEastCorner.clone().add(-frame,0, 0));
+                            block2.setType(material.getMaterial());
+                            block2.setData(material.getData());
+                            frame++;
+                            counter = 0;
+                        }else if (frame == frameCount){
+                            animation = 3;
+                            frame = 0;
+                            counter = speed - 1;
+                        }
+                        break;
+                    case 3:
+                        //-----------------//
+                        // Third Animation
+                        //-----------------//
+                        if(frame < (width + 2) && counter == speed){
+                            for (int x = minX; x <= maxX; x++) {
+                                Block block = world.getBlockAt(x, y, (z - (frame + 1)));
+                                block.setType(material.getMaterial());
+                                block.setData(material.getData());
+                            }
+                            frame++;
+                            counter = 0;
+                        }else if (frame == width + 1){
+                            onClosed.run();
+                            this.cancel();
+                        }
+                        break;
+                }
+                counter++;
+            }
+        }.runTaskTimer(PrisonMines.get(), 0, 1);
     }
 
     /**
@@ -350,11 +493,19 @@ public class Mine extends Entity<Mine> implements Named {
         this.changed();
     }
 
-    public List<String> getUpgrades() {
+    public boolean hasUpgrade(Upgrade upgrade){
+        return hasUpgrade(upgrade.getId());
+    }
+
+    public boolean hasUpgrade(String upgrade){
+        return this.upgrades.contains(upgrade);
+    }
+
+    private List<String> getUpgrades() {
         return upgrades;
     }
 
-    public void setUpgrades(List<String> upgrades) {
+    private void setUpgrades(List<String> upgrades) {
         this.upgrades = upgrades;
     }
 
@@ -650,6 +801,12 @@ public class Mine extends Entity<Mine> implements Named {
         setResearcherID(npc.getId());
     }
 
+    public void despawnLeverHoloNPC(){
+        NPC npc = CitizensAPI.getNPCRegistry().getById(getRegenLeverID());
+        if(npc != null) npc.destroy();
+        setRegenLeverID(0);
+    }
+
     @SuppressWarnings("unused")
     public void despawnArchitectNPC(){
         NPC npc = CitizensAPI.getNPCRegistry().getById(architectID);
@@ -667,12 +824,13 @@ public class Mine extends Entity<Mine> implements Named {
     public void spawnNPCs(){
         this.spawnResearcherNPC();
         this.spawnArchitectNPC();
-        Bukkit.broadcastMessage("Spawning all NPCs.");
+        if(!autoRegenEnabled) placeLever();
     }
 
     public void despawnNPCs(){
         this.despawnResearcherNPC();
         this.despawnArchitectNPC();
+        if(!autoRegenEnabled) removeLever();
         Bukkit.broadcastMessage("Despawning all NPCs.");
     }
 
@@ -699,7 +857,79 @@ public class Mine extends Entity<Mine> implements Named {
     }
 
     public boolean isRegenCountdownActive(){
-        return this.countdown != null && !this.countdown.isPaused();
+        return this.countdown != null;
+    }
+
+    public void setAutoRegenEnabled(boolean autoRegenEnabled) {
+        this.autoRegenEnabled = autoRegenEnabled;
+    }
+
+    public Location getLeverLocation(){
+        return getMineMax().clone().add(-2, 2, -2);
+    }
+
+    public void placeLever(){
+        World world = MinesWorldManager.get().getWorld();
+
+        Block tempStand = world.getBlockAt(getLeverLocation().clone().add(0, -1,0));
+        tempStand.setType(Material.DOUBLE_STONE_SLAB2);
+        tempStand.setData((byte) 8);
+
+        Block lever = world.getBlockAt(getLeverLocation());
+        lever.setType(Material.LEVER);
+        lever.setData((byte) 5);
+
+        Hologram hologram = HologramsAPI.createHologram(PrisonMines.get(), getLeverLocation().clone().add(0.5, 1.5, 0.5));
+        hologram.setAllowPlaceholders(true);
+        hologram.appendTextLine("&a&lREGEN MINE");
+        hologram.appendTextLine("&a{fast}%countdown_" + this.getId() + "%");
+        setRegenHologram(hologram);
+    }
+
+    public void removeLever(){
+        World world = MinesWorldManager.get().getWorld();
+        world.getBlockAt(getLeverLocation().clone().add(0, -1,0)).setType(Material.AIR);
+        world.getBlockAt(getLeverLocation()).setType(Material.AIR);
+
+        getRegenHologram().delete();
+    }
+
+    public boolean isAutoRegenEnabled() {
+        return autoRegenEnabled;
+    }
+
+    public void toggleAutoRegenEnabled(){
+        if(autoRegenEnabled){
+            removeLever();
+            setAutoRegenEnabled(false);
+        }else{
+            placeLever();
+            setAutoRegenEnabled(true);
+        }
+    }
+
+    public boolean tryManualRegen(){
+        if(!isRegenCountdownActive()) return false;
+        if(autoRegenEnabled) return false;
+        countdown.setRegenerating(true);
+        regenAnimation();
+        return true;
+    }
+
+    public void setRegenLeverID(int regenLeverID){
+        this.regenLeverID = regenLeverID;
+    }
+
+    public int getRegenLeverID() {
+        return regenLeverID;
+    }
+
+    public void setRegenHologram(Hologram regenHologram){
+        this.regenHologram = regenHologram;
+    }
+
+    public Hologram getRegenHologram() {
+        return regenHologram;
     }
 }
 
