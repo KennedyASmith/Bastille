@@ -36,7 +36,7 @@ public class CmdMinesFloor extends MineCommand {
     // CONSTRUCT
     // -------------------------------------------- //
 
-    public static Collection<String> signTypes = MUtil.list("mine", "spawn", "architect", "researcher", "portal1", "portal2", "enchant", "beacon");
+    public static Collection<String> signTypes = MUtil.list("mine", "spawn", "architect", "researcher", "collector", "portal1", "portal2", "enchant", "beacon");
 
     // -------------------------------------------- //
     // OVERRIDE
@@ -93,6 +93,7 @@ public class CmdMinesFloor extends MineCommand {
         AtomicReference<Offset> mine = new AtomicReference<>();
         AtomicReference<Offset> architect = new AtomicReference<>();
         AtomicReference<Offset> researcher = new AtomicReference<>();
+        AtomicReference<Offset> collector = new AtomicReference<>();
         AtomicReference<Offset> portalOne = new AtomicReference<>();
         AtomicReference<Offset> portalTwo = new AtomicReference<>();
         AtomicReference<Offset> enchantTable = new AtomicReference<>();
@@ -124,6 +125,8 @@ public class CmdMinesFloor extends MineCommand {
                 case "researcher":
                     researcher.set(getOffset(getRotatedLocation(location), origin));
                     break;
+                case "collector":
+                    collector.set(getOffset(getRotatedLocation(location), origin));
             }
         });
 
@@ -141,7 +144,8 @@ public class CmdMinesFloor extends MineCommand {
                     spawn.get(),
                     mine.get(),
                     architect.get(),
-                    researcher.get()
+                    researcher.get(),
+                    collector.get()
             ));
         }else{
             Floor floor = floors.get(id).clone();

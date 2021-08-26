@@ -11,8 +11,10 @@ import com.kennedysmithjava.prisonmines.MinesWorldManager;
 import com.kennedysmithjava.prisonmines.PrisonMines;
 import com.kennedysmithjava.prisonmines.util.*;
 import com.kennedysmithjava.prisonnpcs.entity.ArchitectConf;
+import com.kennedysmithjava.prisonnpcs.entity.CoinCollectorConf;
 import com.kennedysmithjava.prisonnpcs.entity.WarrenConf;
 import com.kennedysmithjava.prisonnpcs.npcs.NPCArchitect;
+import com.kennedysmithjava.prisonnpcs.npcs.NPCCoinCollector;
 import com.kennedysmithjava.prisonnpcs.npcs.NPCWarren;
 import com.kennedysmithjava.prisonnpcs.upgrades.Upgrade;
 import com.massivecraft.massivecore.Named;
@@ -61,10 +63,12 @@ public class Mine extends Entity<Mine> implements Named {
         this.setSpawnPoint(that.spawnPoint);
         this.setArchitectLocation(that.architectLocation);
         this.setResearcherLocation(that.researcherLocation);
+        this.setCollectorLocation(that.collectorLocation);
         this.setUpgrades(that.upgrades);
         this.setMineCenter(that.mineCenter);
         this.setArchitectID(that.architectID);
         this.setResearcherID(that.researcherID);
+        this.setCollectorID(that.collectorID);
         this.setLevel(that.level);
         this.setFloorID(that.pathID);
         this.setWallID(that.wallID);
@@ -97,10 +101,12 @@ public class Mine extends Entity<Mine> implements Named {
     private PS mineCenter;
     private PS architectLocation;
     private PS researcherLocation;
+    private PS collectorLocation;
 
     // NPC INFORMATION
     private int architectID;
     private int researcherID;
+    private int collectorID;
     private int regenLeverID;
 
     // PHYSICAL INFORMATION
@@ -298,6 +304,7 @@ public class Mine extends Entity<Mine> implements Named {
 
         this.despawnResearcherNPC();
         this.despawnArchitectNPC();
+        this.despawnCollectorNPC();
         this.pauseRegenCountdown(true);
         this.clearBorder();
         this.clearMine();
@@ -306,6 +313,7 @@ public class Mine extends Entity<Mine> implements Named {
             regen();
             spawnArchitectNPC();
             spawnResearcherNPC();
+            spawnCollectorNPC();
             pauseRegenCountdown(false);
             onFinish.run();
         });
@@ -324,6 +332,7 @@ public class Mine extends Entity<Mine> implements Named {
             Floor floor = LayoutConf.get().getPath(getPathID());
             this.despawnArchitectNPC();
             this.despawnResearcherNPC();
+            this.despawnCollectorNPC();
             this.pauseRegenCountdown(true);
             this.clearBorder();
             this.clearMine();
@@ -432,6 +441,7 @@ public class Mine extends Entity<Mine> implements Named {
         this.setSpawnPoint(floor.getSpawn().get(getOrigin()));
         this.setArchitectLocation(floor.getArchitectNPC().get(getOrigin()));
         this.setResearcherLocation(floor.getResearcherNPC().get(getOrigin()));
+        this.setCollectorLocation(floor.getCollectorNPC().get(getOrigin()));
     }
 
     /**
@@ -686,6 +696,15 @@ public class Mine extends Entity<Mine> implements Named {
     //  NPCs
     // -------------------------------------------- //
 
+    public int getCollectorID() {
+        return collectorID;
+    }
+
+    public void setCollectorID(int collectorID) {
+        this.collectorID = collectorID;
+        this.changed();
+    }
+
     public int getArchitectID() {
         return architectID;
     }
@@ -727,6 +746,19 @@ public class Mine extends Entity<Mine> implements Named {
 
     public void setResearcherLocation(PS researcherLocation) {
         this.researcherLocation = researcherLocation;
+        this.changed();
+    }
+
+    public Location getCollectorLocation() {
+        return new Location(MinesWorldManager.get().getWorld(), collectorLocation.getLocationX(), collectorLocation.getLocationY(), collectorLocation.getLocationZ(), collectorLocation.getYaw(), collectorLocation.getPitch());
+    }
+
+    public void setCollectorLocation(Location collectorLocation) {
+        this.setCollectorLocation(PS.valueOf(collectorLocation));
+    }
+
+    public void setCollectorLocation(PS collectorLocation) {
+        this.collectorLocation = collectorLocation;
         this.changed();
     }
 
@@ -807,11 +839,24 @@ public class Mine extends Entity<Mine> implements Named {
         setRegenLeverID(0);
     }
 
+    public void spawnCollectorNPC() {
+        NPC npc = new NPCCoinCollector().spawn(CoinCollectorConf.get().researcherName, getCollectorLocation(), 1);
+        setCollectorID(npc.getId());
+    }
+
     @SuppressWarnings("unused")
     public void despawnArchitectNPC(){
         NPC npc = CitizensAPI.getNPCRegistry().getById(architectID);
         if(npc != null) npc.destroy();
         setArchitectID(0);
+    }
+
+
+    @SuppressWarnings("unused")
+    public void despawnCollectorNPC(){
+        NPC npc = CitizensAPI.getNPCRegistry().getById(collectorID);
+        if(npc != null) npc.destroy();
+        setCollectorID(0);
     }
 
     @SuppressWarnings("unused")
@@ -825,17 +870,20 @@ public class Mine extends Entity<Mine> implements Named {
         this.spawnResearcherNPC();
         this.spawnArchitectNPC();
         if(!autoRegenEnabled) placeLever();
+        this.spawnCollectorNPC();
+        Bukkit.broadcastMessage("Spawning all NPCs.");
     }
 
     public void despawnNPCs(){
         this.despawnResearcherNPC();
         this.despawnArchitectNPC();
         if(!autoRegenEnabled) removeLever();
+        this.despawnCollectorNPC();
         Bukkit.broadcastMessage("Despawning all NPCs.");
     }
 
     public boolean npcsSpawned(){
-        return getArchitectID() != 0 && getResearcherID() != 0;
+        return getArchitectID() != 0 && getResearcherID() != 0 && getCollectorID() != 0;
     }
 
     public void clearMine(){

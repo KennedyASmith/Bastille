@@ -16,11 +16,12 @@ public class Floor {
     Offset mineCenter;
     Offset architectNPC;
     Offset researcherNPC;
+    Offset collectorNPC;
     List<String> lore;
     List<Integer> compatibleWalls;
     String directory;
 
-    public Floor(String displayName, List<String> lore, List<Integer> compatibleWalls, Material icon, int materialData, String directory, Map<Integer, String> schematics, Offset spawn, Offset mineCenter, Offset architectNPC, Offset researcherNPC) {
+    public Floor(String displayName, List<String> lore, List<Integer> compatibleWalls, Material icon, int materialData, String directory, Map<Integer, String> schematics, Offset spawn, Offset mineCenter, Offset architectNPC, Offset researcherNPC, Offset collectorNPC) {
         this.displayName = displayName;
         this.icon = icon;
         this.materialData = materialData;
@@ -29,6 +30,7 @@ public class Floor {
         this.mineCenter = mineCenter;
         this.architectNPC = architectNPC;
         this.researcherNPC = researcherNPC;
+        this.collectorNPC = collectorNPC;
         this.lore = lore;
         this.compatibleWalls = compatibleWalls;
         this.directory = directory;
@@ -64,6 +66,11 @@ public class Floor {
 
     public Offset getResearcherNPC() {
         return researcherNPC;
+    }
+
+
+    public Offset getCollectorNPC() {
+        return collectorNPC;
     }
 
     public Offset getSpawn() {
@@ -123,7 +130,7 @@ public class Floor {
     }
 
     public Floor clone(){
-        return new Floor(getDisplayName(), getLore(), getCompatibleWalls(), getIcon(), getMaterialData(), getDirectory(), getSchematics(), getSpawn() ,getMineCenter() ,getArchitectNPC(), getResearcherNPC());
+        return new Floor(getDisplayName(), getLore(), getCompatibleWalls(), getIcon(), getMaterialData(), getDirectory(), getSchematics(), getSpawn() ,getMineCenter() ,getArchitectNPC(), getResearcherNPC(), getCollectorNPC());
     }
 
     @Override

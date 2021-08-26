@@ -85,7 +85,8 @@ public class LayoutConf extends Entity<LayoutConf> {
                     new Offset(-51, 50, -50),
 
                     new Offset(-47, 53, -26, 0F, 180F),
-                    new Offset(-51, 53, -26, 0F, 180F)
+                    new Offset(-51, 53, -26, 0F, 180F),
+                    new Offset(-55, 53, -26, 0, 180F)
             ),
             2, new Floor(
                     "&7&lTest 2 Mine",
@@ -103,7 +104,8 @@ public class LayoutConf extends Entity<LayoutConf> {
                     new Offset(-51, 52, -75, 0F, 0F),
                     new Offset(-51, 50, -50),
                     new Offset(-47, 53, -26, 0F, 180F),
-                    new Offset(-51, 53, -26, 0F, 180F)
+                    new Offset(-51, 53, -26, 0F, 180F),
+                    new Offset(-55, 53, -26, 0F, 180F)
             ),
             3, new Floor(
                     "&7&lTest 3 Mine",
@@ -121,7 +123,8 @@ public class LayoutConf extends Entity<LayoutConf> {
                     new Offset(-51, 52, -75, 0F, 0F),
                     new Offset(-51, 50, -50),
                     new Offset(-47, 53, -26, 0F, 180F),
-                    new Offset(-51, 53, -26, 0F, 180F)
+                    new Offset(-51, 53, -26, 0F, 180F),
+                    new Offset(-55, 53, -26, 0F, 180F)
             )
     );
 

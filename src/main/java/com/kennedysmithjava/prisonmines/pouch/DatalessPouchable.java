@@ -1,11 +1,12 @@
 package com.kennedysmithjava.prisonmines.pouch;
 
+import com.kennedysmithjava.prisonmines.blockhandler.ValueMutable;
 import com.mcrivals.prisoncore.CurrencyType;
 import org.bukkit.inventory.ItemStack;
 
-public class DatalessPouchable implements Pouchable, Comparable<DatalessPouchable> {
+public class DatalessPouchable implements Pouchable, ValueMutable, Comparable<DatalessPouchable> {
 
-    private final double value;
+    private double value;
     private final String nbt;
     private final String displayName;
     private final CurrencyType currencyType;
@@ -20,6 +21,11 @@ public class DatalessPouchable implements Pouchable, Comparable<DatalessPouchabl
     @Override
     public double getValue() {
         return this.value;
+    }
+
+    @Override
+    public void setValue(double amount) {
+        this.value = amount;
     }
 
     @Override
