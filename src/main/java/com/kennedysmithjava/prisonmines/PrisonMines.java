@@ -137,6 +137,7 @@ public class PrisonMines extends MassivePlugin {
         Location spawn = floor.getSpawn().get(origin);
         Location architectLocation = floor.getArchitectNPC().get(origin);
         Location researcherLocation = floor.getResearcherNPC().get(origin);
+        Location collectorLocation = floor.getCollectorNPC().get(origin);
 
         Location maxMine = mineCenter.clone().add(-(width - 2), 0, -(width - 2));
         Location minMine = maxMine.clone().add(width - 1, -(height - 1), width - 1);
@@ -148,6 +149,7 @@ public class PrisonMines extends MassivePlugin {
         mine.setSpawnPoint(spawn);
         mine.setArchitectLocation(architectLocation);
         mine.setResearcherLocation(researcherLocation);
+        mine.setCollectorLocation(collectorLocation);
         mine.setOrigin(origin);
         mine.setMineCenter(mineCenter);
         mine.setRegenTimer(MinesConf.get().defaultResetTimer);
