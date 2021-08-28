@@ -68,6 +68,11 @@ public class Floor {
         return researcherNPC;
     }
 
+
+    public Offset getCollectorNPC() {
+        return collectorNPC;
+    }
+
     public Offset getSpawn() {
         return spawn;
     }

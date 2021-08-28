@@ -6,10 +6,10 @@ import com.mcrivals.prisoncore.CurrencyType;
 import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.inventory.ItemStack;
 
-public class ValueModifiedPrisonBlock implements Pouchable {
+public class ValueModifiedPrisonBlock implements Pouchable, ValueMutable {
 
     final PrisonBlock prisonBlock;
-    final double newValue;
+    double newValue;
 
     public ValueModifiedPrisonBlock(PrisonBlock prisonBlock, double newValue) {
         this.prisonBlock = prisonBlock;
@@ -29,6 +29,11 @@ public class ValueModifiedPrisonBlock implements Pouchable {
     @Override
     public double getValue() {
         return newValue;
+    }
+
+    @Override
+    public void setValue(double amount) {
+        this.newValue = amount;
     }
 
     @Override

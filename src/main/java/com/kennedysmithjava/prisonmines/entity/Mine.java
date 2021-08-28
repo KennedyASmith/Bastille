@@ -33,6 +33,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -63,6 +64,7 @@ public class Mine extends Entity<Mine> implements Named {
         this.setMineCenter(that.mineCenter);
         this.setArchitectID(that.architectID);
         this.setResearcherID(that.researcherID);
+        this.setCollectorID(that.collectorID);
         this.setLevel(that.level);
         this.setFloorID(that.pathID);
         this.setWallID(that.wallID);
@@ -882,7 +884,7 @@ public class Mine extends Entity<Mine> implements Named {
     public void despawnNPCs(){
         this.despawnResearcherNPC();
         this.despawnArchitectNPC();
-        this.despawnNPCs();
+        this.despawnCollectorNPC();
     }
 
     public boolean npcsSpawned(){

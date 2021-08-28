@@ -1,5 +1,6 @@
 package com.kennedysmithjava.prisonmines.entity;
 
+import com.kennedysmithjava.prisonmines.blockhandler.ValueModifiedPrisonBlock;
 import com.kennedysmithjava.prisonmines.pouch.Pouchable;
 import com.kennedysmithjava.prisonmines.util.BlockMaterial;
 import com.kennedysmithjava.prisonmines.util.Color;
@@ -13,12 +14,12 @@ import java.util.List;
 
 public class PrisonBlock implements Pouchable {
 
-    String name;
-    double value;
-    BlockMaterial product;
-    BlockMaterial block;
-    boolean isSpecial;
-    List<String> lore;
+    private final String name;
+    private final double value;
+    private final BlockMaterial product;
+    private final BlockMaterial block;
+    private final boolean isSpecial;
+    private final List<String> lore;
 
     PrisonBlock(String name, BlockMaterial block, BlockMaterial product, double value, List<String> lore) {
         this.name = name;
@@ -45,6 +46,11 @@ public class PrisonBlock implements Pouchable {
     @Override
     public double getValue() {
         return value;
+    }
+
+    @Override
+    public ValueModifiedPrisonBlock getMutable() {
+        return new ValueModifiedPrisonBlock(this, this.value);
     }
 
     @Override
