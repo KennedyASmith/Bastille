@@ -1,7 +1,7 @@
 package com.kennedysmithjava.prisonmines.pouch;
 
 import com.kennedysmithjava.prisonmines.blockhandler.ValueMutable;
-import com.mcrivals.prisoncore.CurrencyType;
+import com.mcrivals.prisoncore.eco.CurrencyType;
 import org.bukkit.inventory.ItemStack;
 
 public class DatalessPouchable implements Pouchable, ValueMutable, Comparable<DatalessPouchable> {

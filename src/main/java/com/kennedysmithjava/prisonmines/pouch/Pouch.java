@@ -1,8 +1,7 @@
 package com.kennedysmithjava.prisonmines.pouch;
 
 import com.kennedysmithjava.prisonmines.util.LazyConsumer;
-import com.kennedysmithjava.prisonmines.util.MiscUtil;
-import com.mcrivals.prisoncore.CurrencyType;
+import com.mcrivals.prisoncore.eco.CurrencyType;
 import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.NBTCompoundList;
 import de.tr7zw.nbtapi.NBTItem;

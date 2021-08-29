@@ -7,6 +7,7 @@ import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import com.kennedysmithjava.prisonmines.MineRegenCountdown;
 import com.kennedysmithjava.prisonmines.MinesWorldManager;
 import com.kennedysmithjava.prisonmines.PrisonMines;
+import com.kennedysmithjava.prisonmines.cmd.type.TypeMobility;
 import com.kennedysmithjava.prisonmines.util.*;
 import com.kennedysmithjava.prisonnpcs.entity.ArchitectConf;
 import com.kennedysmithjava.prisonnpcs.entity.CoinCollectorConf;
@@ -26,6 +27,7 @@ import com.sk89q.worldedit.blocks.BaseBlock;
 import com.sk89q.worldedit.bukkit.BukkitUtil;
 import com.sk89q.worldedit.function.pattern.RandomPattern;
 import com.sk89q.worldedit.regions.CuboidRegion;
+import com.sk89q.worldedit.util.Direction;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Bukkit;
@@ -33,7 +35,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -74,6 +75,7 @@ public class Mine extends Entity<Mine> implements Named {
         this.setBlockDistribution(that.currentDistributionID);
         this.setAutoRegenEnabled(that.autoRegenEnabled);
         this.setRegenLeverID(that.regenLeverID);
+        this.setSelectedMobility(that.selectedMobility);
 
         return this;
     }
@@ -86,8 +88,9 @@ public class Mine extends Entity<Mine> implements Named {
 
     // LEVEL & UPGRADES
     private int level = 1;
-    private List<String> upgrades = new ArrayList<>();
+    private List<String> upgrades = MUtil.list("LADDER_1_ON");
     private List<Integer> unlockedDistributions = new ArrayList<>();
+    private TypeMobility selectedMobility = TypeMobility.LADDER_1;
 
     // LOCATION INFORMATION
     private PS spawnPoint;
@@ -283,7 +286,9 @@ public class Mine extends Entity<Mine> implements Named {
         this.pauseRegenCountdown(true);
         this.clearMine();
         this.clearBorder();
+        this.clearMobilityArea();
         this.generateBorder(getWidth(), h, MinesConf.get().minesBorderMaterial);
+        this.generateMobilityArea();
         int heightDifference = h - getHeight();
         this.setMineMin(getMineMin().clone().add(0, -heightDifference, 0));
         this.setHeightVar(h);
@@ -300,6 +305,7 @@ public class Mine extends Entity<Mine> implements Named {
 
         this.despawnNPCs();
         this.pauseRegenCountdown(true);
+        this.clearMobilityArea();
         this.clearBorder();
         this.clearMine();
         if(!autoRegenEnabled) removeLever();
@@ -384,6 +390,7 @@ public class Mine extends Entity<Mine> implements Named {
                         public void run() {
                             if(floorTracker.isDone()){
                                 generateBorder(width, getHeight(), MinesConf.get().minesBorderMaterial);
+                                generateMobilityArea();
                                 Location newMax = getMineCenter().add(-(width - 2), 0, -(width - 2));
                                 Location newMin = getMineCenter().add(width - 2, -(getHeight() - 1), width - 2);
                                 setMineMax(newMax);
@@ -472,6 +479,67 @@ public class Mine extends Entity<Mine> implements Named {
         MiscUtil.blockFill(southEast, southEast.clone().add(0,-h,0), borderMaterial);
         MiscUtil.blockFill(southWest, southWest.clone().add(0,-h,0), borderMaterial);
     }
+
+    public void generateMobilityArea(){
+
+        int w = getWidth();
+        int h = getHeight();
+
+        Location mineCenter = getMineCenter();
+
+        switch(selectedMobility){
+            case LADDER_1:
+                MiscUtil.blockFill(mineCenter.clone().add(-(w-1), -(h-1), 0), mineCenter.clone().add(-(w-1), 0, 0), MiscUtil.getLadder(Direction.WEST));
+                return;
+            case LADDER_2:
+                MiscUtil.blockFill(mineCenter.clone().add(0, -(h-1), (w-1)), mineCenter.clone().add(0, 0, (w-1)), MiscUtil.getLadder(Direction.SOUTH));
+                MiscUtil.blockFill(mineCenter.clone().add(0, -(h-1), -(w-1)), mineCenter.clone().add(0, 0, -(w-1)), MiscUtil.getLadder(Direction.NORTH));
+                MiscUtil.blockFill(mineCenter.clone().add((w-1), -(h-1), 0), mineCenter.clone().add((w-1), 0, 0), MiscUtil.getLadder(Direction.EAST));
+                MiscUtil.blockFill(mineCenter.clone().add(-(w-1), -(h-1), 0), mineCenter.clone().add(-(w-1), 0, 0), MiscUtil.getLadder(Direction.WEST));
+                return;
+            case FULL_LADDER:
+                Location westTop = mineCenter.clone().add(-(w-1), 0, -(w-1));
+                Location westBottom = westTop.clone().add(0, -(h-1), (w-1) * 2);
+                Location northTop = westBottom.clone().add(0, (h-1), 0);
+                Location northBottom = northTop.clone().add((w-1) * 2, -(h-1), 0);
+                Location eastTop = northBottom.clone().add(0, (h-1), 0);
+                Location eastBottom = eastTop.clone().add(0, -(h-1), -(w-1) * 2);
+                Location southTop = eastBottom.clone().add(0, (h-1), 0);
+                Location southBottom = southTop.clone().add(-(w-1) * 2, -(h-1), 0);
+
+                MiscUtil.blockFill(westBottom, westTop, MiscUtil.getLadder(Direction.WEST));
+                MiscUtil.blockFill(northBottom, northTop, MiscUtil.getLadder(Direction.NORTH));
+                MiscUtil.blockFill(eastBottom, eastTop, MiscUtil.getLadder(Direction.EAST));
+                MiscUtil.blockFill(southBottom, southTop, MiscUtil.getLadder(Direction.SOUTH));
+                return;
+            case JUMP_PAD:
+                return;
+        }
+
+    }
+
+    public void clearMobilityArea(){
+        Location mineCenter = getMineCenter();
+
+        int w = getWidth();
+        int h = getHeight();
+
+        Location westTop = mineCenter.clone().add(-(w-1), 0, -(w-1));
+        Location westBottom = westTop.clone().add(0, -(h-1), (w-1) * 2);
+        Location northTop = westBottom.clone().add(0, (h-1), 0);
+        Location northBottom = northTop.clone().add((w-1) * 2, -(h-1), 0);
+        Location eastTop = northBottom.clone().add(0, (h-1), 0);
+        Location eastBottom = eastTop.clone().add(0, -(h-1), -(w-1) * 2);
+        Location southTop = eastBottom.clone().add(0, (h-1), 0);
+        Location southBottom = southTop.clone().add(-(w-1) * 2, -(h-1), 0);
+
+        BlockMaterial air = new BlockMaterial(Material.AIR);
+        MiscUtil.blockFill(westBottom, westTop, air);
+        MiscUtil.blockFill(northBottom, northTop, air);
+        MiscUtil.blockFill(eastBottom, eastTop, air);
+        MiscUtil.blockFill(southBottom, southTop, air);
+    }
+
 
     public void clearBorder(){
         this.generateBorder(getWidth(), getHeight(), new BlockMaterial(Material.AIR, (byte) 0));
@@ -984,5 +1052,16 @@ public class Mine extends Entity<Mine> implements Named {
     public Hologram getRegenHologram() {
         return regenHologram;
     }
+
+    public TypeMobility getSelectedMobility() {
+        return selectedMobility;
+    }
+
+    public void setSelectedMobility(TypeMobility selectedMobility) {
+        this.selectedMobility = selectedMobility;
+        this.changed();
+    }
+
+
 }
 

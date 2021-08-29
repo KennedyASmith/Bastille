@@ -129,10 +129,6 @@ public class Floor {
         this.directory = directory;
     }
 
-    public Offset getCollectorNPC() {
-        return collectorNPC;
-    }
-
     public Floor clone(){
         return new Floor(getDisplayName(), getLore(), getCompatibleWalls(), getIcon(), getMaterialData(), getDirectory(), getSchematics(), getSpawn() ,getMineCenter() ,getArchitectNPC(), getResearcherNPC(), getCollectorNPC());
     }
