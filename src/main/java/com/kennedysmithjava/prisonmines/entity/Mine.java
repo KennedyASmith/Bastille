@@ -341,6 +341,7 @@ public class Mine extends Entity<Mine> implements Named {
                 regen();
                 spawnArchitectNPC();
                 spawnResearcherNPC();
+                spawnCollectorNPC();
                 pauseRegenCountdown(false);
                 pasteTrackers.add(true);
             });
@@ -869,16 +870,18 @@ public class Mine extends Entity<Mine> implements Named {
     public void spawnNPCs(){
         this.spawnResearcherNPC();
         this.spawnArchitectNPC();
-        if(!autoRegenEnabled) placeLever();
         this.spawnCollectorNPC();
+        if(!autoRegenEnabled) placeLever();
         Bukkit.broadcastMessage("Spawning all NPCs.");
     }
 
     public void despawnNPCs(){
         this.despawnResearcherNPC();
         this.despawnArchitectNPC();
-        if(!autoRegenEnabled) removeLever();
         this.despawnCollectorNPC();
+
+        if(!autoRegenEnabled) removeLever();
+
         Bukkit.broadcastMessage("Despawning all NPCs.");
     }
 

@@ -9,6 +9,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import uk.m4xy.mineworldmanager.MineWorldManager;
 
 public class MineColl extends Coll<Mine> {
     // -------------------------------------------- //
@@ -85,7 +86,7 @@ public class MineColl extends Coll<Mine> {
      * @return The hashkey of the mine to be used in {@code mineLocationCache}
      */
     private int getLocationHashKey(int x) {
-        return x >> MinesWorldManager.WORLD_GAP;
+        return x >> MineWorldManager.get().getWorldGap();
     }
 
 }

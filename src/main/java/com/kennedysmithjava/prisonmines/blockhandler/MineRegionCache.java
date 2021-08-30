@@ -11,6 +11,9 @@ import com.kennedysmithjava.prisonmines.entity.MinesConf;
 import com.kennedysmithjava.prisonmines.util.LazyRegion;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import uk.m4xy.mineworldmanager.MineWorldManager;
+import uk.m4xy.mineworldmanager.entity.MineWorldConf;
+import uk.m4xy.mineworldmanager.entity.MineWorldConfColl;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -46,7 +49,7 @@ public class MineRegionCache {
 
     private final Set<LazyRegion> alternativelyCachedRegions;
 
-    private final String minesWorldName = MinesConf.get().minesWorldName;
+    private final String minesWorldName = MineWorldConf.get().minesWorldName;
 
     // -------------------------------------------- //
     // IMPL
@@ -147,7 +150,7 @@ public class MineRegionCache {
     }
 
     public int getKey(int x) {
-        return x >> MinesWorldManager.WORLD_GAP;
+        return x >> MineWorldManager.get().getWorldGap();
     }
 
 }

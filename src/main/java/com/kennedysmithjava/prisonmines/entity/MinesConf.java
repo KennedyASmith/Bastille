@@ -57,8 +57,6 @@ public class MinesConf extends Entity<MinesConf>
     // -------------------------------------------- //
 
     public String timeZone = "America/New_York";
-    public String minesWorldName = "MinesWorld";
-    public Map<String, String> minesWorldDefaultGamerules = MUtil.map("doMobSpawning", "false", "doDaylightCycle", "true", "doMobLoot", "false", "doTileDrops", "false", "keepInventory", "true", "mobGriefing", "false");
 
 }
 
