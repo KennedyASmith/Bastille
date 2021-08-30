@@ -1,6 +1,5 @@
 package com.kennedysmithjava.prisonmines;
 
-import com.gmail.filoghost.holographicdisplays.placeholder.RelativePlaceholder;
 import com.kennedysmithjava.prisonmines.blockhandler.BlockBreakEngine;
 import com.kennedysmithjava.prisonmines.blockhandler.CacheUpdateEngine;
 import com.kennedysmithjava.prisonmines.engine.EngineMain;
@@ -12,7 +11,6 @@ import com.kennedysmithjava.prisonmines.entity.MineColl;
 import com.kennedysmithjava.prisonmines.entity.MinesConf;
 import com.kennedysmithjava.prisonmines.entity.MinesConfColl;
 import com.kennedysmithjava.prisonmines.event.EventNewMine;
-import com.kennedysmithjava.prisonmines.pouch.Pouch;
 import com.kennedysmithjava.prisonmines.pouch.PouchCommand;
 import com.kennedysmithjava.prisonmines.pouch.PouchConfColl;
 import com.kennedysmithjava.prisonmines.util.*;
@@ -21,11 +19,9 @@ import com.massivecraft.massivecore.collections.MassiveList;
 import com.massivecraft.massivecore.util.MUtil;
 import com.mcrivals.prisoncore.entity.MPlayer;
 import com.sk89q.worldedit.Vector;
-import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -167,6 +163,7 @@ public class PrisonMines extends MassivePlugin {
 
         //GENERATE UNBREAKABLE BORDER & GENERATE MINE BLOCKS
         mine.generateBorder(mine.getWidth(), mine.getWidth(), MinesConf.get().minesBorderMaterial);
+        mine.generateMobilityArea();
 
         //ENSURE THAT BOTH PASTES ARE FINISHED
         new BukkitRunnable() {

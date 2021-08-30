@@ -4,7 +4,7 @@ import com.kennedysmithjava.prisonmines.blockhandler.ValueModifiedPrisonBlock;
 import com.kennedysmithjava.prisonmines.pouch.Pouchable;
 import com.kennedysmithjava.prisonmines.util.BlockMaterial;
 import com.kennedysmithjava.prisonmines.util.Color;
-import com.mcrivals.prisoncore.CurrencyType;
+import com.mcrivals.prisoncore.eco.CurrencyType;
 import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -65,7 +65,7 @@ public class PrisonBlock implements Pouchable {
 
     @Override
     public CurrencyType getCurrencyType() {
-        return CurrencyType.GOLD;
+        return CurrencyType.CASH;
     }
 
     public BlockMaterial getBlock() {

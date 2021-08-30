@@ -133,6 +133,8 @@ public class Floor {
         return new Floor(getDisplayName(), getLore(), getCompatibleWalls(), getIcon(), getMaterialData(), getDirectory(), getSchematics(), getSpawn() ,getMineCenter() ,getArchitectNPC(), getResearcherNPC(), getCollectorNPC());
     }
 
+
+
     @Override
     public String toString() {
         return "Floor{" +

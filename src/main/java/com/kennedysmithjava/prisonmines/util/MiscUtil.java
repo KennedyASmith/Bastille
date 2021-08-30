@@ -12,6 +12,7 @@ import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.ClipboardFormats;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.util.Direction;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 
@@ -20,6 +21,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class MiscUtil {
+
+
+    public static BlockMaterial westLadder = new BlockMaterial(Material.LADDER, 5);
+    public static BlockMaterial eastLadder = new BlockMaterial(Material.LADDER, 4);
+    public static BlockMaterial northLadder = new BlockMaterial(Material.LADDER, 3);
+    public static BlockMaterial southLadder = new BlockMaterial(Material.LADDER, 2);
+
 
     public static HashSet<String> substanceChars = new HashSet<>(Arrays.asList(new String[]{
             "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H",
@@ -39,6 +47,19 @@ public class MiscUtil {
         : o2.getValue().compareTo(o1.getValue()));
         return list.stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> b, LinkedHashMap::new));
 
+    }
+
+    public static BlockMaterial getLadder(Direction direction){
+        switch (direction){
+            case SOUTH:
+                return southLadder;
+            case EAST:
+                return eastLadder;
+            case WEST:
+                return westLadder;
+            default:
+                return northLadder;
+        }
     }
 
     public static String getComparisonString(String str)
@@ -123,6 +144,10 @@ public class MiscUtil {
 
         return tracker;
     }
+
+
+
+
 
 }
 

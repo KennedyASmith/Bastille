@@ -2,7 +2,7 @@ package com.kennedysmithjava.prisonmines.blockhandler;
 
 import com.kennedysmithjava.prisonmines.entity.PrisonBlock;
 import com.kennedysmithjava.prisonmines.pouch.Pouchable;
-import com.mcrivals.prisoncore.CurrencyType;
+import com.mcrivals.prisoncore.eco.CurrencyType;
 import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.inventory.ItemStack;
 

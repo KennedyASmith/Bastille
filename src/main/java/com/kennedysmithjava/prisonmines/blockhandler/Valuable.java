@@ -1,6 +1,6 @@
 package com.kennedysmithjava.prisonmines.blockhandler;
 
-import com.mcrivals.prisoncore.CurrencyType;
+import com.mcrivals.prisoncore.eco.CurrencyType;
 
 public interface Valuable {
 
