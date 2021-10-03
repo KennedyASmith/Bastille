@@ -146,7 +146,28 @@ public class MiscUtil {
     }
 
 
+    public static int yawToBlockData(int yaw){
+        switch(yaw){
+            case 0:
+                return 3;
+            case 90:
+                return 4;
+            case 270:
+                return 5;
+            default:
+                return 2;
+        }
+    }
 
+    public static int yawToPortalData(int yaw){
+        switch(yaw){
+            case 90:
+            case 270:
+                return 1;
+            default:
+                return 2;
+        }
+    }
 
 
 }

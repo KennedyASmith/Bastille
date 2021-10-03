@@ -70,61 +70,31 @@ public class LayoutConf extends Entity<LayoutConf> {
     private Map<Integer, Floor> floors = MUtil.map(
             1, new Floor(
                     "&7&lDefault Mine",
+                    Material.GRASS,0,
+                    MUtil.map(
+                        3, "Default_1.schematic",
+                        4, "Default_2.schematic",
+                                5, "Default_3.schematic",
+                                6, "Default_4.schematic",
+                                7, "Default_5.schematic",
+                                8, "Default_6.schematic"),
                     MUtil.list("&7Common", "&6", "&7The default mine layout.", "&m", "Wall Options:", "%compatible_walls%"),
                     MUtil.list(1, 2, 3),
-                    Material.GRASS, 0,
                     "Schematics/Default/",
-                    MUtil.map(
-                                        3, "Default_1.schematic",
-                            4, "Default_2.schematic",
-                            5, "Default_3.schematic",
-                            6, "Default_4.schematic",
-                            7, "Default_5.schematic",
-                            8, "Default_6.schematic"),
+
                     new Offset(-51, 52, -75, 0F, 0F),
                     new Offset(-51, 50, -50),
 
                     new Offset(-47, 53, -26, 0F, 180F),
                     new Offset(-51, 53, -26, 0F, 180F),
-                    new Offset(-55, 52, -26, 0F, 180F)
-            ),
-            2, new Floor(
-                    "&7&lTest 2 Mine",
-                    MUtil.list("&7Common", "&6", "&7The default mine layout.", "&m", "Wall Options:", "%compatible_walls%"),
-                    MUtil.list( 2, 3),
-                    Material.WOOD, 0,
-                    "Schematics/Default/",
-                    MUtil.map(
-                            3, "Default_1.schematic",
-                            4, "Default_2.schematic",
-                            5, "Default_3.schematic",
-                            6, "Default_4.schematic",
-                            7, "Default_5.schematic",
-                            8, "Default_6.schematic"),
-                    new Offset(-51, 52, -75, 0F, 0F),
-                    new Offset(-51, 50, -50),
-                    new Offset(-47, 53, -26, 0F, 180F),
-                    new Offset(-51, 53, -26, 0F, 180F),
-                    new Offset(-55, 52, -26, 0F, 180F)
-            ),
-            3, new Floor(
-                    "&7&lTest 3 Mine",
-                    MUtil.list("&7Common", "&6", "&7The default mine layout.", "&m", "Wall Options:", "%compatible_walls%"),
-                    MUtil.list(1),
-                    Material.STONE, 2,
-                    "Schematics/Default/",
-                    MUtil.map(
-                            3, "Default_1.schematic",
-                            4, "Default_2.schematic",
-                            5, "Default_3.schematic",
-                            6, "Default_4.schematic",
-                            7, "Default_5.schematic",
-                            8, "Default_6.schematic"),
-                    new Offset(-51, 52, -75, 0F, 0F),
-                    new Offset(-51, 50, -50),
-                    new Offset(-47, 53, -26, 0F, 180F),
-                    new Offset(-51, 53, -26, 0F, 180F),
-                    new Offset(-55, 52, -26, 0F, 180F)
+                    new Offset(-55, 52, -26, 0F, 180F),
+
+                    new Offset(-27, 51, -50, 0F, 90F),
+                    new Offset(-74, 52, -50, 0F, 270F),
+                    new Offset(-51, 51, -28, 0F, 180F),
+                    new Offset(-52, 56, -80, 0F, 0F),
+                    new Offset(-50, 51, -80, 0F, 0F)
+
             )
     );
 

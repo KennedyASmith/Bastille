@@ -100,6 +100,7 @@ public class PrisonMines extends MassivePlugin {
         return false;
     }
 
+
     @Override
     public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
         return new VoidGenerator();
@@ -114,7 +115,7 @@ public class PrisonMines extends MassivePlugin {
 
         //GENERATE A RANDOM ID FOR MINE & ASSIGN TO PLAYER
         String id = UUID.randomUUID().toString();
-        Mine mine = MineColl.get().create(id);
+        Mine mine = new Mine();
         player.setMineID(id);
 
         // DEFINE ESSENTIAL LAYOUTS AND LOCATIONS
@@ -146,6 +147,11 @@ public class PrisonMines extends MassivePlugin {
         mine.setArchitectLocation(architectLocation);
         mine.setResearcherLocation(researcherLocation);
         mine.setCollectorLocation(collectorLocation);
+        mine.setPortalMinLocation(floor.getPortalMin().get(origin));
+        mine.setPortalMaxLocation(floor.getPortalMax().get(origin));
+        mine.setBeaconLocation(floor.getBeacon().get(origin));
+        mine.setChestLocation(floor.getChest().get(origin));
+        mine.setEnchantTableLocation(floor.getEnchantTable().get(origin));
         mine.setOrigin(origin);
         mine.setMineCenter(mineCenter);
         mine.setRegenTimer(MinesConf.get().defaultResetTimer);
@@ -156,6 +162,8 @@ public class PrisonMines extends MassivePlugin {
         mine.setUnlockedDistributions(MUtil.list(1));
         mine.setBlockDistribution(1);
         mine.setAutoRegenEnabled(false);
+
+        MineColl.get().attach(mine, id);
 
         //PASTE SCHEMATICS
         FAWETracker floorT = MiscUtil.pasteSchematic(floor.getSchematic(mine.getWidth()), minCorner);

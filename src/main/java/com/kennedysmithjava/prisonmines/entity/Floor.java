@@ -1,5 +1,7 @@
 package com.kennedysmithjava.prisonmines.entity;
 
+import com.kennedysmithjava.prisonmines.util.BlockMaterial;
+import com.kennedysmithjava.prisonmines.util.MiscUtil;
 import com.kennedysmithjava.prisonmines.util.Offset;
 import org.bukkit.Material;
 
@@ -12,28 +14,39 @@ public class Floor {
     Material icon;
     int materialData;
     Map<Integer, String> schematics;
+    List<String> lore;
+    List<Integer> compatibleWalls;
+    String directory;
+
     Offset spawn;
     Offset mineCenter;
     Offset architectNPC;
     Offset researcherNPC;
     Offset collectorNPC;
-    List<String> lore;
-    List<Integer> compatibleWalls;
-    String directory;
+    Offset enchantTable;
+    Offset beacon;
+    Offset chest;
+    Offset portalMax;
+    Offset portalMin;
 
-    public Floor(String displayName, List<String> lore, List<Integer> compatibleWalls, Material icon, int materialData, String directory, Map<Integer, String> schematics, Offset spawn, Offset mineCenter, Offset architectNPC, Offset researcherNPC, Offset collectorNPC) {
+    public Floor(String displayName, Material icon, int materialData, Map<Integer, String> schematics, List<String> lore, List<Integer> compatibleWalls, String directory, Offset spawn, Offset mineCenter, Offset architectNPC, Offset researcherNPC, Offset collectorNPC, Offset enchantTable, Offset beacon, Offset chest, Offset portalMax, Offset portalMin) {
         this.displayName = displayName;
         this.icon = icon;
         this.materialData = materialData;
         this.schematics = schematics;
+        this.lore = lore;
+        this.compatibleWalls = compatibleWalls;
+        this.directory = directory;
         this.spawn = spawn;
         this.mineCenter = mineCenter;
         this.architectNPC = architectNPC;
         this.researcherNPC = researcherNPC;
         this.collectorNPC = collectorNPC;
-        this.lore = lore;
-        this.compatibleWalls = compatibleWalls;
-        this.directory = directory;
+        this.enchantTable = enchantTable;
+        this.beacon = beacon;
+        this.chest = chest;
+        this.portalMax = portalMax;
+        this.portalMin = portalMin;
     }
 
     public Material getIcon() {
@@ -68,7 +81,6 @@ public class Floor {
         return researcherNPC;
     }
 
-
     public Offset getCollectorNPC() {
         return collectorNPC;
     }
@@ -77,6 +89,7 @@ public class Floor {
         return spawn;
     }
 
+    @SuppressWarnings("unused")
     public String getDisplayName() {
         return displayName;
     }
@@ -85,6 +98,7 @@ public class Floor {
         return lore;
     }
 
+    @SuppressWarnings("unused")
     public List<Integer> getCompatibleWalls() {
         return compatibleWalls;
     }
@@ -93,47 +107,39 @@ public class Floor {
         return directory;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+
+    public Offset getBeacon() {
+        return beacon;
     }
 
-    public void setArchitectNPC(Offset architectNPC) {
-        this.architectNPC = architectNPC;
+    public Offset getChest() {
+        return chest;
     }
 
-    public void setIcon(Material icon) {
-        this.icon = icon;
+    public Offset getEnchantTable() {
+        return enchantTable;
     }
 
-    public void setMaterialData(int materialData) {
-        this.materialData = materialData;
+    public Offset getPortalMax() {
+        return portalMax;
     }
 
-    public void setMineCenter(Offset mineCenter) {
-        this.mineCenter = mineCenter;
+    public Offset getPortalMin() {
+        return portalMin;
     }
 
-    public void setResearcherNPC(Offset researcherNPC) {
-        this.researcherNPC = researcherNPC;
+    public BlockMaterial getEnchantTableBlock(){
+        return new BlockMaterial(Material.ENCHANTMENT_TABLE, MiscUtil.yawToBlockData((int) getEnchantTable().getYaw()));
     }
-
-    public void setSchematics(Map<Integer, String> schematics) {
-        this.schematics = schematics;
+    public BlockMaterial getBeaconBlock(){
+        return new BlockMaterial(Material.BEACON, MiscUtil.yawToBlockData((int) getEnchantTable().getYaw()));
     }
-
-    public void setSpawn(Offset spawn) {
-        this.spawn = spawn;
+    public BlockMaterial getChestBlock(){
+        return new BlockMaterial(Material.CHEST, MiscUtil.yawToBlockData((int) getEnchantTable().getYaw()));
     }
-
-    public void setDirectory(String directory) {
-        this.directory = directory;
+    public BlockMaterial getPortalBlock(){
+        return new BlockMaterial(Material.PORTAL, MiscUtil.yawToPortalData((int) getPortalMax().getYaw()));
     }
-
-    public Floor clone(){
-        return new Floor(getDisplayName(), getLore(), getCompatibleWalls(), getIcon(), getMaterialData(), getDirectory(), getSchematics(), getSpawn() ,getMineCenter() ,getArchitectNPC(), getResearcherNPC(), getCollectorNPC());
-    }
-
-
 
     @Override
     public String toString() {
@@ -146,6 +152,12 @@ public class Floor {
                 ", mineCenter=" + mineCenter +
                 ", architectNPC=" + architectNPC +
                 ", researcherNPC=" + researcherNPC +
+                ", collectorNPC=" + collectorNPC +
+                ", enchantTable=" + enchantTable +
+                ", beacon=" + beacon +
+                ", chest=" + chest +
+                ", portalMax=" + portalMax +
+                ", portalMin=" + portalMin +
                 ", lore=" + lore +
                 ", compatibleWalls=" + compatibleWalls +
                 ", directory='" + directory + '\'' +

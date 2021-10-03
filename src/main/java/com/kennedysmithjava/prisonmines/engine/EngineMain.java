@@ -8,6 +8,7 @@ import com.mcrivals.prisoncore.engine.Cooldown;
 import com.mcrivals.prisoncore.engine.CooldownReason;
 import com.mcrivals.prisoncore.entity.MPlayer;
 import com.mcrivals.prisoncore.entity.MPlayerColl;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -29,18 +30,20 @@ public class EngineMain extends Engine {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDisconnect(PlayerQuitEvent event) {
-
+        leaveProtocol(event.getPlayer());
     }
 
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerKick(PlayerKickEvent event) {
-
+        leaveProtocol(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
-
+        MPlayer mPlayer = MPlayer.get(event.getPlayer());
+        if(mPlayer == null) return;
+        joinProtocol(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -51,7 +54,30 @@ public class EngineMain extends Engine {
         Mine mine = MineColl.get().getByLocation(block);
         if(mine != null) {
             if(Cooldown.inCooldown(event.getPlayer(), CooldownReason.REGEN)) return;
-            if(mine.tryManualRegen()) Cooldown.add(event.getPlayer(), 20*10, CooldownReason.REGEN);
+            //TODO: Handle cooldown with getRegenLeverCooldownTime(); or something
+            if(mine.tryManualRegen()) Cooldown.add(event.getPlayer(), 20*30, CooldownReason.REGEN);
+        }
+    }
+
+
+    private void leaveProtocol(Player player){
+        MPlayer mPlayer = MPlayer.get(player);
+        if(mPlayer.hasMine()){
+            if(mPlayer.inCooldown(CooldownReason.LOG_OFF)){
+                Bukkit.broadcastMessage("Player is in log off cooldown.");
+                return;
+            }
+            Mine mine = mPlayer.getMine();
+            mine.despawnNPCs();
+            Cooldown.add(player, 20 * 15, CooldownReason.LOG_OFF);
+        }
+    }
+
+    private void joinProtocol(Player player){
+        MPlayer mPlayer = MPlayer.get(player);
+        if(mPlayer.hasMine()){
+            Mine mine = mPlayer.getMine();
+            if(!mine.npcsSpawned()) mine.spawnNPCs();
         }
     }
 }

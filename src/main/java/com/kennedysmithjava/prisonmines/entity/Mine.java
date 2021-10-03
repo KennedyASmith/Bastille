@@ -9,13 +9,10 @@ import com.kennedysmithjava.prisonmines.MinesWorldManager;
 import com.kennedysmithjava.prisonmines.PrisonMines;
 import com.kennedysmithjava.prisonmines.cmd.type.TypeMobility;
 import com.kennedysmithjava.prisonmines.util.*;
-import com.kennedysmithjava.prisonnpcs.entity.ArchitectConf;
-import com.kennedysmithjava.prisonnpcs.entity.CoinCollectorConf;
-import com.kennedysmithjava.prisonnpcs.entity.WarrenConf;
+import com.kennedysmithjava.prisonnpcs.PrisonNPCs;
 import com.kennedysmithjava.prisonnpcs.npcs.NPCArchitect;
 import com.kennedysmithjava.prisonnpcs.npcs.NPCCoinCollector;
 import com.kennedysmithjava.prisonnpcs.npcs.NPCWarren;
-import com.kennedysmithjava.prisonnpcs.upgrades.Upgrade;
 import com.massivecraft.massivecore.Named;
 import com.massivecraft.massivecore.ps.PS;
 import com.massivecraft.massivecore.store.Entity;
@@ -28,8 +25,8 @@ import com.sk89q.worldedit.bukkit.BukkitUtil;
 import com.sk89q.worldedit.function.pattern.RandomPattern;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.util.Direction;
-import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.api.npc.NPCRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -61,6 +58,11 @@ public class Mine extends Entity<Mine> implements Named {
         this.setArchitectLocation(that.architectLocation);
         this.setResearcherLocation(that.researcherLocation);
         this.setCollectorLocation(that.collectorLocation);
+        this.setEnchantTableLocation(that.enchantTableLocation);
+        this.setBeaconLocation(that.beaconLocation);
+        this.setChestLocation(that.chestLocation);
+        this.setPortalMaxLocation(that.portalMaxLocation);
+        this.setPortalMinLocation(that.portalMinLocation);
         this.setUpgrades(that.upgrades);
         this.setMineCenter(that.mineCenter);
         this.setArchitectID(that.architectID);
@@ -74,11 +76,13 @@ public class Mine extends Entity<Mine> implements Named {
         this.setUnlockedDistributions(that.unlockedDistributions);
         this.setBlockDistribution(that.currentDistributionID);
         this.setAutoRegenEnabled(that.autoRegenEnabled);
-        this.setRegenLeverID(that.regenLeverID);
         this.setSelectedMobility(that.selectedMobility);
+        this.setUnlockedBuildings(that.unlockedBuildings);
 
         return this;
     }
+
+
 
     // MISC
     private String name;
@@ -91,6 +95,7 @@ public class Mine extends Entity<Mine> implements Named {
     private List<String> upgrades = MUtil.list("LADDER_1_ON");
     private List<Integer> unlockedDistributions = new ArrayList<>();
     private TypeMobility selectedMobility = TypeMobility.LADDER_1;
+    private List<BuildingType> unlockedBuildings = new ArrayList<>();
 
     // LOCATION INFORMATION
     private PS spawnPoint;
@@ -101,11 +106,15 @@ public class Mine extends Entity<Mine> implements Named {
     private PS architectLocation;
     private PS researcherLocation;
     private PS collectorLocation;
+    private PS enchantTableLocation;
+    private PS beaconLocation;
+    private PS chestLocation;
+    private PS portalMaxLocation;
+    private PS portalMinLocation;
 
     // NPC INFORMATION
     private int architectID;
     private int researcherID;
-    private int regenLeverID;
     private int collectorID;
 
     // PHYSICAL INFORMATION
@@ -335,6 +344,7 @@ public class Mine extends Entity<Mine> implements Named {
             this.pauseRegenCountdown(true);
             this.clearBorder();
             this.clearMine();
+            this.clearBuildings();
             this.setLocations(floor);
             this.pasteFloor(floorID, getWidth(), () -> {
                 regen();
@@ -392,6 +402,7 @@ public class Mine extends Entity<Mine> implements Named {
                             if(floorTracker.isDone()){
                                 generateBorder(width, getHeight(), MinesConf.get().minesBorderMaterial);
                                 generateMobilityArea();
+                                buildBuildings();
                                 Location newMax = getMineCenter().add(-(width - 2), 0, -(width - 2));
                                 Location newMin = getMineCenter().add(width - 2, -(getHeight() - 1), width - 2);
                                 setMineMax(newMax);
@@ -438,12 +449,17 @@ public class Mine extends Entity<Mine> implements Named {
         }.runTaskTimer(PrisonMines.get(), 0, 10);
     }
 
-    private void setLocations(Floor floor){
+    public void setLocations(Floor floor){
         //TODO: Set building locations
         this.setSpawnPoint(floor.getSpawn().get(getOrigin()));
         this.setArchitectLocation(floor.getArchitectNPC().get(getOrigin()));
         this.setResearcherLocation(floor.getResearcherNPC().get(getOrigin()));
         this.setCollectorLocation(floor.getCollectorNPC().get(getOrigin()));
+        this.setEnchantTableLocation(floor.getEnchantTable().get(getOrigin()));
+        this.setBeaconLocation(floor.getBeacon().get(getOrigin()));
+        this.setChestLocation(floor.getChest().get(getOrigin()));
+        this.setPortalMaxLocation(floor.getPortalMax().get(getOrigin()));
+        this.setPortalMinLocation(floor.getPortalMin().get(getOrigin()));
     }
 
     /**
@@ -520,6 +536,24 @@ public class Mine extends Entity<Mine> implements Named {
 
     }
 
+    public void clearBuildings(){
+        buildBeacon(true);
+        buildChest(true);
+        buildEnchantTable(true);
+        buildPortal(true);
+    }
+
+    public void buildBuildings(){
+        buildBeacon(false);
+        buildChest(false);
+        buildEnchantTable(false);
+        buildPortal(false);
+    }
+
+    public boolean hasBuilding(BuildingType buildingType){
+        return getUnlockedBuildings().contains(buildingType);
+    }
+
     public void clearMobilityArea(){
         Location mineCenter = getMineCenter();
 
@@ -542,7 +576,6 @@ public class Mine extends Entity<Mine> implements Named {
         MiscUtil.blockFill(southBottom, southTop, air);
     }
 
-
     public void clearBorder(){
         this.generateBorder(getWidth(), getHeight(), new BlockMaterial(Material.AIR, (byte) 0));
     }
@@ -557,6 +590,40 @@ public class Mine extends Entity<Mine> implements Named {
         this.changed();
     }
 
+    public Floor getFloor(){
+        return LayoutConf.get().getPath(getPathID());
+    }
+
+    public void buildEnchantTable(boolean destroy){
+        if(!hasBuilding(BuildingType.ENCHANT_TABLE)) return;
+        setBlock(getFloor().getEnchantTableBlock(), getEnchantTableLocation(), destroy);
+    }
+
+    public void buildBeacon(boolean destroy){
+        if(!hasBuilding(BuildingType.BEACON)) return;
+        setBlock(getFloor().getBeaconBlock(), getBeaconLocation(), destroy);
+    }
+
+    public void buildChest(boolean destroy){
+        if(!hasBuilding(BuildingType.CHEST)) return;
+        setBlock(getFloor().getChestBlock(), getChestLocation(), destroy);
+    }
+
+    public void buildPortal(boolean destroy){
+        if(!hasBuilding(BuildingType.PORTAL)) return;
+        BlockMaterial blockMaterial = getFloor().getPortalBlock();
+        if(destroy) blockMaterial = new BlockMaterial(Material.AIR);
+        MiscUtil.blockFill(getPortalMinLocation(), getPortalMaxLocation(), blockMaterial);
+    }
+
+    private void setBlock(BlockMaterial material, Location location, boolean destroy){
+        Block block = location.getBlock();
+        if(destroy) material = new BlockMaterial(Material.AIR);
+        block.setType(material.getMaterial(), false);
+        block.setData(material.getData(), false);
+    }
+
+
     // -------------------------------------------- //
     //  LEVEL & UPGRADES
     // -------------------------------------------- //
@@ -569,10 +636,6 @@ public class Mine extends Entity<Mine> implements Named {
     public void removeUpgrade(String upgradeID) {
         this.upgrades.remove(upgradeID);
         this.changed();
-    }
-
-    public boolean hasUpgrade(Upgrade upgrade){
-        return hasUpgrade(upgrade.getId());
     }
 
     public boolean hasUpgrade(String upgrade){
@@ -841,6 +904,71 @@ public class Mine extends Entity<Mine> implements Named {
         this.changed();
     }
 
+
+    public void setBeaconLocation(PS beaconLocation) {
+        this.beaconLocation = beaconLocation;
+        this.changed();
+    }
+
+    public void setChestLocation(PS chestLocation) {
+        this.chestLocation = chestLocation;
+        this.changed();
+    }
+
+    public void setEnchantTableLocation(PS enchantTableLocation) {
+        this.enchantTableLocation = enchantTableLocation;
+        this.changed();
+    }
+
+    public void setPortalMaxLocation(PS portalMaxLocation) {
+        this.portalMaxLocation = portalMaxLocation;
+        this.changed();
+    }
+
+    public void setPortalMinLocation(PS portalMinLocation) {
+        this.portalMinLocation = portalMinLocation;
+        this.changed();
+    }
+
+    public void setPortalMaxLocation(Location portalMaxLocation) {
+        this.setPortalMaxLocation(PS.valueOf(portalMaxLocation));
+    }
+
+    public void setPortalMinLocation(Location portalMinLocation) {
+        this.setPortalMinLocation(PS.valueOf(portalMinLocation));
+    }
+
+    public void setBeaconLocation(Location beaconLocation) {
+        this.setBeaconLocation(PS.valueOf(beaconLocation));
+    }
+
+    public void setChestLocation(Location chestLocation) {
+        this.setChestLocation(PS.valueOf(chestLocation));
+    }
+
+    public void setEnchantTableLocation(Location enchantTableLocation) {
+        this.setEnchantTableLocation(PS.valueOf(enchantTableLocation));
+    }
+
+    public Location getBeaconLocation() {
+        return new Location(MinesWorldManager.get().getWorld(), beaconLocation.getLocationX(), beaconLocation.getLocationY(), beaconLocation.getLocationZ());
+    }
+
+    public Location getChestLocation() {
+        return new Location(MinesWorldManager.get().getWorld(), chestLocation.getLocationX(), chestLocation.getLocationY(), chestLocation.getLocationZ());
+    }
+
+    public Location getEnchantTableLocation() {
+        return new Location(MinesWorldManager.get().getWorld(), enchantTableLocation.getLocationX(), enchantTableLocation.getLocationY(), enchantTableLocation.getLocationZ());
+    }
+
+    public Location getPortalMaxLocation() {
+        return new Location(MinesWorldManager.get().getWorld(), portalMaxLocation.getLocationX(), portalMaxLocation.getLocationY(), portalMaxLocation.getLocationZ());
+    }
+    public Location getPortalMinLocation() {
+        return new Location(MinesWorldManager.get().getWorld(), portalMinLocation.getLocationX(), portalMinLocation.getLocationY(), portalMinLocation.getLocationZ());
+    }
+
     // -------------------------------------------- //
     //  EXTRA METHODS
     // -------------------------------------------- //
@@ -902,47 +1030,46 @@ public class Mine extends Entity<Mine> implements Named {
 
     @SuppressWarnings("unused")
     public void spawnArchitectNPC(){
-        NPC npc = new NPCArchitect().spawn(ArchitectConf.get().architectName,  getArchitectLocation(), 1);
+        despawnArchitectNPC();
+        NPC npc = new NPCArchitect().spawn("Archie-" + this.getId(),  getArchitectLocation(), 1);
         setArchitectID(npc.getId());
     }
 
     @SuppressWarnings("unused")
     public void spawnResearcherNPC(){
-        NPC npc = new NPCWarren().spawn(WarrenConf.get().researcherName, getResearcherLocation(), 1);
+        despawnResearcherNPC();
+        NPC npc = new NPCWarren().spawn("Warden-" + this.getId(), getResearcherLocation(), 1);
         setResearcherID(npc.getId());
     }
 
     @SuppressWarnings("unused")
     public void spawnCollectorNPC(){
-        NPC npc = new NPCCoinCollector().spawn(CoinCollectorConf.get().collectorName, getCollectorLocation(), 1);
+        despawnCollectorNPC();
+        NPC npc = new NPCCoinCollector().spawn("Collector-" + this.getId(), getCollectorLocation(), 1);
         setCollectorID(npc.getId());
-    }
-
-    public void despawnLeverHoloNPC(){
-        NPC npc = CitizensAPI.getNPCRegistry().getById(getRegenLeverID());
-        if(npc != null) npc.destroy();
-        setRegenLeverID(0);
     }
 
     @SuppressWarnings("unused")
     public void despawnArchitectNPC(){
-        NPC npc = CitizensAPI.getNPCRegistry().getById(architectID);
-        if(npc != null) npc.destroy();
-        setArchitectID(0);
+        despawnNPC(getArchitectID());
     }
 
     @SuppressWarnings("unused")
     public void despawnResearcherNPC(){
-        NPC npc = CitizensAPI.getNPCRegistry().getById(researcherID);
-        if(npc != null) npc.destroy();
-        setResearcherID(0);
+        despawnNPC(getResearcherID());
     }
 
     @SuppressWarnings("unused")
     public void despawnCollectorNPC(){
-        NPC npc = CitizensAPI.getNPCRegistry().getById(collectorID);
-        if(npc != null) npc.destroy();
-        setCollectorID(0);
+        despawnNPC(getCollectorID());
+    }
+
+    private void despawnNPC(int id){
+        NPCRegistry npcRegistry = PrisonNPCs.getRegistry();
+        NPC npc = npcRegistry.getById(id);
+        if(npc != null){
+            npc.destroy();
+        }
     }
 
     public void spawnNPCs(){
@@ -958,7 +1085,15 @@ public class Mine extends Entity<Mine> implements Named {
     }
 
     public boolean npcsSpawned(){
-        return getArchitectID() != 0 && getResearcherID() != 0 && getCollectorID() != 0;
+        NPCRegistry registry = PrisonNPCs.getRegistry();
+        NPC architect = registry.getById(getArchitectID());
+        if(architect == null) return false;
+        NPC researcher = registry.getById(getArchitectID());
+        if(researcher == null) return false;
+        NPC collector = registry.getById(getArchitectID());
+        if(collector == null) return false;
+        NPC lever = registry.getById(getArchitectID());
+        return lever != null;
     }
 
     public void clearMine(){
@@ -1002,6 +1137,10 @@ public class Mine extends Entity<Mine> implements Named {
         lever.setType(Material.LEVER);
         lever.setData((byte) 5);
 
+        createRegenHologram();
+    }
+
+    public void createRegenHologram(){
         Hologram hologram = HologramsAPI.createHologram(PrisonMines.get(), getLeverLocation().clone().add(0.5, 1.5, 0.5));
         hologram.setAllowPlaceholders(true);
         hologram.appendTextLine("&a&lREGEN MINE");
@@ -1009,12 +1148,18 @@ public class Mine extends Entity<Mine> implements Named {
         setRegenHologram(hologram);
     }
 
+    public boolean hologramExists(){
+        return this.regenHologram != null;
+    }
+
     public void removeLever(){
         World world = MinesWorldManager.get().getWorld();
         world.getBlockAt(getLeverLocation().clone().add(0, -1,0)).setType(Material.AIR);
         world.getBlockAt(getLeverLocation()).setType(Material.AIR);
 
-        getRegenHologram().delete();
+
+        Hologram hologram = getRegenHologram();
+        if(hologram != null) hologram.delete();
     }
 
     public boolean isAutoRegenEnabled() {
@@ -1039,14 +1184,6 @@ public class Mine extends Entity<Mine> implements Named {
         return true;
     }
 
-    public void setRegenLeverID(int regenLeverID){
-        this.regenLeverID = regenLeverID;
-    }
-
-    public int getRegenLeverID() {
-        return regenLeverID;
-    }
-
     public void setRegenHologram(Hologram regenHologram){
         this.regenHologram = regenHologram;
     }
@@ -1064,6 +1201,18 @@ public class Mine extends Entity<Mine> implements Named {
         this.changed();
     }
 
+    public void setUnlockedBuildings(List<BuildingType> unlockedBuildings) {
+        this.unlockedBuildings = unlockedBuildings;
+        this.changed();
+    }
 
+    public void addUnlockedBuilding(BuildingType type){
+        this.unlockedBuildings.add(type);
+        this.changed();
+    }
+
+    public List<BuildingType> getUnlockedBuildings() {
+        return unlockedBuildings;
+    }
 }
 
