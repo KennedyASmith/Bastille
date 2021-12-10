@@ -63,7 +63,7 @@ public class Mine extends Entity<Mine> implements Named {
         this.setChestLocation(that.chestLocation);
         this.setPortalMaxLocation(that.portalMaxLocation);
         this.setPortalMinLocation(that.portalMinLocation);
-        this.setUpgrades(that.upgrades);
+        this.setUpgrades(upgrades);
         this.setMineCenter(that.mineCenter);
         this.setArchitectID(that.architectID);
         this.setResearcherID(that.researcherID);
@@ -92,7 +92,7 @@ public class Mine extends Entity<Mine> implements Named {
 
     // LEVEL & UPGRADES
     private int level = 1;
-    private List<String> upgrades = MUtil.list("LADDER_1_ON");
+    private Map<String, UpgradeStatus> upgrades = MUtil.map("LADDER_1_ON", new UpgradeStatus(true, true));
     private List<Integer> unlockedDistributions = new ArrayList<>();
     private TypeMobility selectedMobility = TypeMobility.LADDER_1;
     private List<BuildingType> unlockedBuildings = new ArrayList<>();
@@ -213,7 +213,6 @@ public class Mine extends Entity<Mine> implements Named {
         };
 
         BukkitTask closeAnimation = new BukkitRunnable() {
-
 
             int animation = 1;
             int counter;
@@ -628,25 +627,50 @@ public class Mine extends Entity<Mine> implements Named {
     //  LEVEL & UPGRADES
     // -------------------------------------------- //
 
-    public void addUpgrade(String upgradeID) {
-        this.upgrades.add(upgradeID);
+    public void unlockUpgrade(String upgradeID, boolean purchased, boolean active){
+        this.upgrades.put(upgradeID, new UpgradeStatus(purchased, active));
         this.changed();
     }
 
-    public void removeUpgrade(String upgradeID) {
+    public void purchaseUpgrade(String upgradeID, boolean active){
+        upgrades.put(upgradeID, new UpgradeStatus(true, active));
+        this.changed();
+    }
+
+    public void activateUpgrade(String upgradeID){
+        upgrades.put(upgradeID, new UpgradeStatus(true, true));
+        this.changed();
+    }
+
+    public void deactivateUpgrade(String upgradeID){
+        upgrades.put(upgradeID, new UpgradeStatus(true, false));
+        this.changed();
+    }
+
+    public void lockUpgrade(String upgradeID) {
         this.upgrades.remove(upgradeID);
         this.changed();
     }
 
-    public boolean hasUpgrade(String upgrade){
-        return this.upgrades.contains(upgrade);
+    public boolean isUpgradePurchased(String upgrade){
+        if(!isUpgradeUnlocked(upgrade)) return false;
+        return upgrades.get(upgrade).isPurchased();
     }
 
-    public List<String> getUpgrades() {
+    public boolean isUpgradeActive(String upgrade){
+        if(!isUpgradeUnlocked(upgrade)) return false;
+        return upgrades.get(upgrade).isActive();
+    }
+
+    public boolean isUpgradeUnlocked(String upgrade){
+        return this.upgrades.containsKey(upgrade);
+    }
+
+    public Map<String, UpgradeStatus> getUpgrades() {
         return upgrades;
     }
 
-    public void setUpgrades(List<String> upgrades) {
+    public void setUpgrades(Map<String, UpgradeStatus> upgrades) {
         this.upgrades = upgrades;
     }
 
@@ -1216,3 +1240,29 @@ public class Mine extends Entity<Mine> implements Named {
     }
 }
 
+class UpgradeStatus{
+
+    private boolean purchased;
+    private boolean active;
+
+    public UpgradeStatus(boolean purchased, boolean active) {
+        this.purchased = purchased;
+        this.active = active;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public boolean isPurchased() {
+        return purchased;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public void setPurchased(boolean purchased) {
+        this.purchased = purchased;
+    }
+}

@@ -1,7 +1,5 @@
 package com.kennedysmithjava.prisonmines.engine;
 
-import com.kennedysmithjava.prisonmines.entity.Mine;
-import com.kennedysmithjava.prisonmines.entity.MineColl;
 import com.kennedysmithjava.prisonmines.util.Color;
 import com.kennedysmithjava.prisontools.enchantment.Enchant;
 import com.kennedysmithjava.prisontools.entity.Pickaxe;
@@ -10,9 +8,6 @@ import com.kennedysmithjava.prisontools.util.Glow;
 import com.massivecraft.massivecore.Engine;
 import com.massivecraft.massivecore.chestgui.ChestGui;
 import com.massivecraft.massivecore.util.MUtil;
-import com.mcrivals.prisoncore.engine.Cooldown;
-import com.mcrivals.prisoncore.engine.CooldownReason;
-import com.mcrivals.prisoncore.entity.MPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -21,9 +16,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
