@@ -82,8 +82,6 @@ public class Mine extends Entity<Mine> implements Named {
         return this;
     }
 
-
-
     // MISC
     private String name;
     private long regenTimer;
@@ -1168,8 +1166,14 @@ public class Mine extends Entity<Mine> implements Named {
         Hologram hologram = HologramsAPI.createHologram(PrisonMines.get(), getLeverLocation().clone().add(0.5, 1.5, 0.5));
         hologram.setAllowPlaceholders(true);
         hologram.appendTextLine("&a&lREGEN MINE");
-        hologram.appendTextLine("&a{fast}%countdown_" + this.getId() + "%");
+        hologram.appendTextLine("{fast}&a%countdown_" + this.getId() + "% &r");
         setRegenHologram(hologram);
+    }
+
+    public void removeRegenHologram(){
+        Hologram hologram = getRegenHologram();
+        if(hologram != null) hologram.delete();
+        this.regenHologram = null;
     }
 
     public boolean hologramExists(){
@@ -1201,7 +1205,10 @@ public class Mine extends Entity<Mine> implements Named {
     }
 
     public boolean tryManualRegen(){
-        if(!isRegenCountdownActive()) return false;
+        if(!isRegenCountdownActive()){
+            Bukkit.broadcastMessage("Regen countdown not active");
+            return false;
+        }
         if(autoRegenEnabled) return false;
         countdown.setRegenerating(true);
         regenAnimation();

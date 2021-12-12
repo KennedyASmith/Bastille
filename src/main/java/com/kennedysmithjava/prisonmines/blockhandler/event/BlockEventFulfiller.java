@@ -1,16 +1,14 @@
 package com.kennedysmithjava.prisonmines.blockhandler.event;
 
 import com.kennedysmithjava.prisonmines.blockhandler.Reward;
-import com.kennedysmithjava.prisonmines.entity.PrisonBlock;
+import com.kennedysmithjava.prisonmines.engine.ResearchPointEngine;
 import com.kennedysmithjava.prisonmines.pouch.*;
-import com.kennedysmithjava.prisonmines.util.Pair;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import java.sql.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -21,6 +19,7 @@ public class BlockEventFulfiller {
     // -------------------------------------------- //
 
     private static final BlockEventFulfiller i = new BlockEventFulfiller();
+    private static final ResearchPointEngine rpEngine = ResearchPointEngine.get();
 
     private BlockEventFulfiller() {
     }
@@ -28,6 +27,7 @@ public class BlockEventFulfiller {
     public static BlockEventFulfiller get() {
         return i;
     }
+
 
     // -------------------------------------------- //
     // IMPL
@@ -53,7 +53,7 @@ public class BlockEventFulfiller {
         }
 
         this.rewardPlayer(finishedEvent.getPlayer(), finishedEvent.getRewards());
-
+        rpEngine.addBlockCount(finishedEvent.getPlayer());
     }
 
     private void rewardPlayer(Player player, List<Reward> r) {
@@ -81,7 +81,7 @@ public class BlockEventFulfiller {
         rewards.forEach(e -> player.getInventory().addItem(e.getProductItem(1)));
         player.updateInventory();
     }
-//
+
     private Map<Integer, Pouch> getPouches(PlayerInventory inventory) {
         final PouchManager pouchManager = PouchManager.get();
         final Map<Integer,Pouch> result = new HashMap<>(5);

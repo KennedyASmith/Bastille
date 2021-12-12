@@ -34,12 +34,21 @@ public class MineColl extends Coll<Mine> {
     @Override
     public void postAttach(Mine entity, String id) {
         super.postAttach(entity, id);
+        addMineToCache(entity);
+    }
 
+    public void addMineToCache(Mine mine){
         Bukkit.getScheduler()
                 .scheduleSyncDelayedTask(PrisonMines.get(),
-                        () -> this.mineLocationCache.put(this.getLocationHashKey(entity), entity),
+                        () -> this.mineLocationCache.put(this.getLocationHashKey(mine), mine),
                         20L);
+    }
 
+    public void removeMineFromCache(Mine mine){
+        Bukkit.getScheduler()
+                .scheduleSyncDelayedTask(PrisonMines.get(),
+                        () -> this.mineLocationCache.remove(this.getLocationHashKey(mine)),
+                        20L);
     }
 
     @Override

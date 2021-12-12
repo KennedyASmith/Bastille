@@ -110,7 +110,6 @@ public class Pouch {
         count++;
 
         this.updateLore(item);
-        //this.loreUpdater.trigger(item);
         this.nbtUpdater.trigger(item);
     }
 

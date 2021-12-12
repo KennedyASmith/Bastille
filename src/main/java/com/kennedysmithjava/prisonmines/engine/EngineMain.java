@@ -1,13 +1,12 @@
 package com.kennedysmithjava.prisonmines.engine;
 
-import com.kennedysmithjava.prisonmines.blockhandler.MineRegionCache;
+import com.kennedysmithjava.prisonmines.PrisonMines;
 import com.kennedysmithjava.prisonmines.entity.Mine;
 import com.kennedysmithjava.prisonmines.entity.MineColl;
 import com.massivecraft.massivecore.Engine;
 import com.mcrivals.prisoncore.engine.Cooldown;
 import com.mcrivals.prisoncore.engine.CooldownReason;
 import com.mcrivals.prisoncore.entity.MPlayer;
-import com.mcrivals.prisoncore.entity.MPlayerColl;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -54,7 +53,6 @@ public class EngineMain extends Engine {
         Mine mine = MineColl.get().getByLocation(block);
         if(mine != null) {
             if(Cooldown.inCooldown(event.getPlayer(), CooldownReason.REGEN)) return;
-            //TODO: Handle cooldown with getRegenLeverCooldownTime(); or something
             if(mine.tryManualRegen()) Cooldown.add(event.getPlayer(), 20*30, CooldownReason.REGEN);
         }
     }
@@ -67,9 +65,12 @@ public class EngineMain extends Engine {
                 Bukkit.broadcastMessage("Player is in log off cooldown.");
                 return;
             }
-            Mine mine = mPlayer.getMine();
-            mine.despawnNPCs();
             Cooldown.add(player, 20 * 15, CooldownReason.LOG_OFF);
+            Mine mine = mPlayer.getMine();
+
+            mine.despawnNPCs();
+            mine.removeCountdown();
+            MineColl.get().removeMineFromCache(mine);
         }
     }
 
@@ -77,7 +78,10 @@ public class EngineMain extends Engine {
         MPlayer mPlayer = MPlayer.get(player);
         if(mPlayer.hasMine()){
             Mine mine = mPlayer.getMine();
+            MineColl.get().addMineToCache(mine);
+            mine.createRegenCountdown();
             if(!mine.npcsSpawned()) mine.spawnNPCs();
+            if(!mine.hologramExists()) mine.createRegenHologram();
         }
     }
 }

@@ -2,6 +2,7 @@ package com.kennedysmithjava.prisonmines.blockhandler;
 
 import com.kennedysmithjava.prisonmines.blockhandler.event.BlockEventFulfiller;
 import com.kennedysmithjava.prisonmines.blockhandler.event.MineBlockBreakEvent;
+import com.kennedysmithjava.prisonmines.engine.ResearchPointEngine;
 import com.kennedysmithjava.prisonmines.entity.Distribution;
 import com.kennedysmithjava.prisonmines.util.LazyRegion;
 import com.massivecraft.massivecore.Engine;
