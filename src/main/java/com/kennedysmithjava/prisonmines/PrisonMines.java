@@ -43,7 +43,6 @@ public class PrisonMines extends MassivePlugin {
         return i;
     }
 
-
     // -------------------------------------------- //
     // OVERRIDE
     // -------------------------------------------- //

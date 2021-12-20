@@ -25,6 +25,8 @@ import com.sk89q.worldedit.bukkit.BukkitUtil;
 import com.sk89q.worldedit.function.pattern.RandomPattern;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.util.Direction;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.managers.RegionManager;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.npc.NPCRegistry;
 import org.bukkit.Bukkit;
@@ -292,7 +294,6 @@ public class Mine extends Entity<Mine> implements Named {
         this.pauseRegenCountdown(true);
         this.clearMine();
         this.clearBorder();
-        this.clearMobilityArea();
         this.generateBorder(getWidth(), h, MinesConf.get().minesBorderMaterial);
         this.generateMobilityArea();
         int heightDifference = h - getHeight();
@@ -311,7 +312,6 @@ public class Mine extends Entity<Mine> implements Named {
 
         this.despawnNPCs();
         this.pauseRegenCountdown(true);
-        this.clearMobilityArea();
         this.clearBorder();
         this.clearMine();
         if(!autoRegenEnabled) removeLever();
@@ -499,35 +499,48 @@ public class Mine extends Entity<Mine> implements Named {
 
         int w = getWidth();
         int h = getHeight();
-
         Location mineCenter = getMineCenter();
+
+        int widthV = (w-1);
+        int heightV = (h-1);
+
+        Location westTop = mineCenter.clone().add(-widthV, 0, -widthV);
+        Location westBottom = westTop.clone().add(0, -heightV, widthV * 2);
+        Location northTop = westBottom.clone().add(0, heightV, 0);
+        Location northBottom = northTop.clone().add(widthV * 2, -heightV, 0);
+        Location eastTop = northBottom.clone().add(0, heightV, 0);
+        Location eastBottom = eastTop.clone().add(0, -heightV, -widthV * 2);
+        Location southTop = eastBottom.clone().add(0, heightV, 0);
+        Location southBottom = southTop.clone().add(-widthV * 2, -heightV, 0);
+
+        BlockMaterial air = new BlockMaterial(Material.AIR);
+        MiscUtil.blockFill(westBottom, westTop, air);
+        MiscUtil.blockFill(northBottom, northTop, air);
+        MiscUtil.blockFill(eastBottom, eastTop, air);
+        MiscUtil.blockFill(southBottom, southTop, air);
 
         switch(selectedMobility){
             case LADDER_1:
-                MiscUtil.blockFill(mineCenter.clone().add(-(w-1), -(h-1), 0), mineCenter.clone().add(-(w-1), 0, 0), MiscUtil.getLadder(Direction.WEST));
+                MiscUtil.blockFill(mineCenter.clone().add(-widthV, -heightV, 0), mineCenter.clone().add(-widthV, 0, 0), MiscUtil.getLadder(Direction.WEST));
                 return;
             case LADDER_2:
-                MiscUtil.blockFill(mineCenter.clone().add(0, -(h-1), (w-1)), mineCenter.clone().add(0, 0, (w-1)), MiscUtil.getLadder(Direction.SOUTH));
-                MiscUtil.blockFill(mineCenter.clone().add(0, -(h-1), -(w-1)), mineCenter.clone().add(0, 0, -(w-1)), MiscUtil.getLadder(Direction.NORTH));
-                MiscUtil.blockFill(mineCenter.clone().add((w-1), -(h-1), 0), mineCenter.clone().add((w-1), 0, 0), MiscUtil.getLadder(Direction.EAST));
-                MiscUtil.blockFill(mineCenter.clone().add(-(w-1), -(h-1), 0), mineCenter.clone().add(-(w-1), 0, 0), MiscUtil.getLadder(Direction.WEST));
+                MiscUtil.blockFill(mineCenter.clone().add(0, -heightV, widthV), mineCenter.clone().add(0, 0, widthV), MiscUtil.getLadder(Direction.SOUTH));
+                MiscUtil.blockFill(mineCenter.clone().add(0, -heightV, -widthV), mineCenter.clone().add(0, 0, -widthV), MiscUtil.getLadder(Direction.NORTH));
+                MiscUtil.blockFill(mineCenter.clone().add(widthV, -heightV, 0), mineCenter.clone().add(widthV, 0, 0), MiscUtil.getLadder(Direction.EAST));
+                MiscUtil.blockFill(mineCenter.clone().add(-widthV, -heightV, 0), mineCenter.clone().add(-widthV, 0, 0), MiscUtil.getLadder(Direction.WEST));
                 return;
             case FULL_LADDER:
-                Location westTop = mineCenter.clone().add(-(w-1), 0, -(w-1));
-                Location westBottom = westTop.clone().add(0, -(h-1), (w-1) * 2);
-                Location northTop = westBottom.clone().add(0, (h-1), 0);
-                Location northBottom = northTop.clone().add((w-1) * 2, -(h-1), 0);
-                Location eastTop = northBottom.clone().add(0, (h-1), 0);
-                Location eastBottom = eastTop.clone().add(0, -(h-1), -(w-1) * 2);
-                Location southTop = eastBottom.clone().add(0, (h-1), 0);
-                Location southBottom = southTop.clone().add(-(w-1) * 2, -(h-1), 0);
-
                 MiscUtil.blockFill(westBottom, westTop, MiscUtil.getLadder(Direction.WEST));
                 MiscUtil.blockFill(northBottom, northTop, MiscUtil.getLadder(Direction.NORTH));
                 MiscUtil.blockFill(eastBottom, eastTop, MiscUtil.getLadder(Direction.EAST));
                 MiscUtil.blockFill(southBottom, southTop, MiscUtil.getLadder(Direction.SOUTH));
                 return;
             case JUMP_PAD:
+                BlockMaterial plate = new BlockMaterial(Material.GOLD_PLATE);
+                MiscUtil.blockFill(southBottom, southTop.clone().add(0, -heightV, 0), plate);
+                MiscUtil.blockFill(westBottom, westTop.clone().add(0, -heightV, 0), plate);
+                MiscUtil.blockFill(eastBottom, eastTop.clone().add(0, -heightV, 0), plate);
+                MiscUtil.blockFill(northBottom, northTop.clone().add(0, -heightV, 0), plate);
                 return;
         }
 
@@ -549,28 +562,6 @@ public class Mine extends Entity<Mine> implements Named {
 
     public boolean hasBuilding(BuildingType buildingType){
         return getUnlockedBuildings().contains(buildingType);
-    }
-
-    public void clearMobilityArea(){
-        Location mineCenter = getMineCenter();
-
-        int w = getWidth();
-        int h = getHeight();
-
-        Location westTop = mineCenter.clone().add(-(w-1), 0, -(w-1));
-        Location westBottom = westTop.clone().add(0, -(h-1), (w-1) * 2);
-        Location northTop = westBottom.clone().add(0, (h-1), 0);
-        Location northBottom = northTop.clone().add((w-1) * 2, -(h-1), 0);
-        Location eastTop = northBottom.clone().add(0, (h-1), 0);
-        Location eastBottom = eastTop.clone().add(0, -(h-1), -(w-1) * 2);
-        Location southTop = eastBottom.clone().add(0, (h-1), 0);
-        Location southBottom = southTop.clone().add(-(w-1) * 2, -(h-1), 0);
-
-        BlockMaterial air = new BlockMaterial(Material.AIR);
-        MiscUtil.blockFill(westBottom, westTop, air);
-        MiscUtil.blockFill(northBottom, northTop, air);
-        MiscUtil.blockFill(eastBottom, eastTop, air);
-        MiscUtil.blockFill(southBottom, southTop, air);
     }
 
     public void clearBorder(){

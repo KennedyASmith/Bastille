@@ -10,19 +10,17 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 
-import java.io.File;
 import java.util.Collection;
 
 public class MinesWorldManager {
 
-    String worldName = "MinesWorld";
-    World world;
+    public static String worldName = "MinesWorld";
     public static int WORLD_GAP = 8;
-
     public static MinesWorldManager i = new MinesWorldManager();
     public static MinesWorldManager get() {
         return i;
     }
+    private World world;
 
         public MinesWorldManager(){
             world = Bukkit.createWorld(new WorldCreator(worldName).generator(PrisonMines.get().getDefaultWorldGenerator(worldName, "prisonminesMinesWorld")));
@@ -43,4 +41,7 @@ public class MinesWorldManager {
             }
         }
 
+    public static String getWorldName() {
+        return worldName;
+    }
 }

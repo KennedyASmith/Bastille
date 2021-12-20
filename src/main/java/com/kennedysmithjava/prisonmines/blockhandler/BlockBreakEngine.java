@@ -1,9 +1,11 @@
 package com.kennedysmithjava.prisonmines.blockhandler;
 
+import com.kennedysmithjava.prisonmines.MinesWorldManager;
 import com.kennedysmithjava.prisonmines.blockhandler.event.BlockEventFulfiller;
 import com.kennedysmithjava.prisonmines.blockhandler.event.MineBlockBreakEvent;
 import com.kennedysmithjava.prisonmines.engine.ResearchPointEngine;
 import com.kennedysmithjava.prisonmines.entity.Distribution;
+import com.kennedysmithjava.prisonmines.util.Color;
 import com.kennedysmithjava.prisonmines.util.LazyRegion;
 import com.massivecraft.massivecore.Engine;
 import org.bukkit.Bukkit;
@@ -43,14 +45,17 @@ public class BlockBreakEngine extends Engine {
             if (cache.tryCache(event.getBlock())) {
                 this.onBlockBreak(event);
             }
-
-            // No mine region exists there, we'll let something else handle the block breaking.
+            if(event.getBlock().getWorld().getName().equals(MinesWorldManager.getWorldName())){
+                event.setCancelled(!event.getPlayer().isOp());
+            }
             return;
         }
 
         if (!region.contains(event.getBlock())) {
             // No mine region exists there, we'll let something else handle the block breaking.
-
+            if(event.getBlock().getWorld().getName().equals(MinesWorldManager.getWorldName())){
+                event.setCancelled(!event.getPlayer().isOp());
+            }
             return;
         }
 
@@ -61,6 +66,7 @@ public class BlockBreakEngine extends Engine {
                in another person's Mine when we don't want them to.
          */
 
+
         // We'll handle the block break ourselves to prevent lag.
         event.setCancelled(true);
 
@@ -69,5 +75,6 @@ public class BlockBreakEngine extends Engine {
 
         fulfiller.handleEventReturn(customEvent);
     }
+
 
 }

@@ -1,5 +1,8 @@
 package com.kennedysmithjava.prisonmines.engine;
 
+import com.kennedysmithjava.prisonmines.PrisonMines;
+import com.kennedysmithjava.prisonmines.entity.Mine;
+import com.kennedysmithjava.prisonmines.entity.MineColl;
 import com.kennedysmithjava.prisonmines.util.Color;
 import com.kennedysmithjava.prisontools.enchantment.Enchant;
 import com.kennedysmithjava.prisontools.entity.Pickaxe;
@@ -9,7 +12,9 @@ import com.massivecraft.massivecore.Engine;
 import com.massivecraft.massivecore.chestgui.ChestGui;
 import com.massivecraft.massivecore.util.MUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,6 +24,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,22 +34,50 @@ import java.util.Map;
 public class EngineMineBuildings extends Engine {
 
     private static final EngineMineBuildings i = new EngineMineBuildings();
-
     public static EngineMineBuildings get() {
         return i;
     }
 
+    private static final MineColl mineColl = MineColl.get();
+    private static final double VELOCITY = Math.sqrt(4 * 4 * 0.08);
+    private static final List<Material> BUILDINGS = MUtil.list(Material.ENCHANTMENT_TABLE, Material.BEACON, Material.CHEST, Material.ANVIL, Material.HOPPER);
 
-    public static List<Material> blockList = MUtil.list(Material.ENCHANTMENT_TABLE, Material.BEACON, Material.CHEST, Material.ANVIL, Material.HOPPER);
+    @EventHandler
+    public void onJumpPadPress(PlayerInteractEvent ev) {
+        if (ev.getAction().equals(Action.PHYSICAL)) {
+            if (ev.getClickedBlock().getType() == Material.GOLD_PLATE) {
+                Player player = ev.getPlayer();
+                Mine mine = mineColl.getByLocation(ev.getClickedBlock());
+                if(mine == null) return;
+                int targetY = (player.getLocation().getBlockY() + mine.getHeight());
 
+                BukkitRunnable jumpAnimation = new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        if(player == null || player.getLocation().getY() > targetY) {
+                            end();
+                            return;
+                        }
+                        player.setVelocity(new Vector(player.getVelocity().getX(), VELOCITY, player.getVelocity().getZ()));
+                        player.playEffect(player.getLocation().clone().add(0,-1,0), Effect.VILLAGER_THUNDERCLOUD, 1);
+                        player.playSound(player.getLocation(), Sound.FIZZ, 0.5F, 0.0F);
+                    }
 
+                    public void end(){
+                        this.cancel();
+                    }
+                };
+                jumpAnimation.runTaskTimerAsynchronously(PrisonMines.get(), 0, 10);
+            }
+        }
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerBlockInteract(PlayerInteractEvent event) {
         Action action = event.getAction();
         if(action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK) {
             Block block = event.getClickedBlock();
-            if(!blockList.contains(block.getType())) return;
+            if(!BUILDINGS.contains(block.getType())) return;
 
             switch(block.getType()){
                 default:
