@@ -603,7 +603,7 @@ public class Mine extends Entity<Mine> implements Named {
 
     public void buildPortal(boolean destroy){
         if(!hasBuilding(BuildingType.PORTAL)) return;
-        BlockMaterial blockMaterial = getFloor().getPortalBlock();
+        BlockMaterial blockMaterial = new BlockMaterial(Material.STATIONARY_WATER);
         if(destroy) blockMaterial = new BlockMaterial(Material.AIR);
         MiscUtil.blockFill(getPortalMinLocation(), getPortalMaxLocation(), blockMaterial);
     }

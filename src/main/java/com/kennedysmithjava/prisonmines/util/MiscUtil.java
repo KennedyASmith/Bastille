@@ -163,9 +163,9 @@ public class MiscUtil {
         switch(yaw){
             case 90:
             case 270:
-                return 1;
-            default:
                 return 2;
+            default:
+                return 1;
         }
     }
 

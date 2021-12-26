@@ -137,9 +137,6 @@ public class Floor {
     public BlockMaterial getChestBlock(){
         return new BlockMaterial(Material.CHEST, MiscUtil.yawToBlockData((int) getEnchantTable().getYaw()));
     }
-    public BlockMaterial getPortalBlock(){
-        return new BlockMaterial(Material.PORTAL, MiscUtil.yawToPortalData((int) getPortalMax().getYaw()));
-    }
 
     @Override
     public String toString() {

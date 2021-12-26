@@ -4,6 +4,8 @@ import com.kennedysmithjava.prisonmines.PrisonMines;
 import com.kennedysmithjava.prisonmines.entity.Mine;
 import com.kennedysmithjava.prisonmines.entity.MineColl;
 import com.kennedysmithjava.prisonmines.util.Color;
+import com.kennedysmithjava.prisonmines.util.LazyRegion;
+import com.kennedysmithjava.prisontools.PrisonTools;
 import com.kennedysmithjava.prisontools.enchantment.Enchant;
 import com.kennedysmithjava.prisontools.entity.Pickaxe;
 import com.kennedysmithjava.prisontools.entity.Tool;
@@ -11,16 +13,20 @@ import com.kennedysmithjava.prisontools.util.Glow;
 import com.massivecraft.massivecore.Engine;
 import com.massivecraft.massivecore.chestgui.ChestGui;
 import com.massivecraft.massivecore.util.MUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.Effect;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import com.mcrivals.prisoncore.PrisonCore;
+import com.mcrivals.prisoncore.engine.EngineLoadingScreen;
+import com.mcrivals.prisoncore.entity.MConf;
+import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -72,6 +78,48 @@ public class EngineMineBuildings extends Engine {
         }
     }
 
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerPortalUse(PlayerMoveEvent event){
+        Player player = event.getPlayer();
+        if(player == null) return;
+        Material m = player.getLocation().getBlock().getType();
+        Material a = player.getLocation().clone().add(0,1,0).getBlock().getType();
+        if ((m != Material.STATIONARY_WATER && m != Material.WATER) && (a != Material.STATIONARY_WATER && a != Material.WATER)) return;
+
+        Mine mine = mineColl.getByLocation(event.getTo());
+        if(mine == null) return;
+
+        LazyRegion region = new LazyRegion(mine.getPortalMaxLocation(), mine.getPortalMinLocation());
+        if(!region.contains(player.getLocation())) return;
+
+        Inventory inventory = Bukkit.createInventory(null, InventoryType.HOPPER, Color.get("&8&lSelect a Destination"));
+        ChestGui gui = ChestGui.getCreative(inventory);
+        gui.setAutoclosing(false);
+        blockFill(inventory, Material.STAINED_GLASS_PANE, (short) 1);
+
+        ItemStack spawnItem = getItem("&a&lTown", Material.COMPASS, MUtil.list("", "&7Teleport to the spawn Town!"), false);
+        inventory.setItem(2, spawnItem);
+
+
+        gui.setAction(2, clickEvent -> {
+            Location spawn = MConf.get().getSpawnLocation().add(-0.5, 0, -0.5);
+            player.teleport(spawn);
+            return true;
+        });
+
+        player.openInventory(gui.getInventory());
+    }
+
+    public boolean inRegion(Player p, Location loc1, Location loc2) {
+        double x1 = loc1.getX();
+        double y1 = loc1.getY();
+        double z1 = loc1.getZ();
+        double x2 = loc2.getX();
+        double y2 = loc2.getY();
+        double z2 = loc2.getZ();
+        return (p.getLocation().getX() > x1) && (p.getLocation().getY() > y1) && (p.getLocation().getZ() > z1) && (p.getLocation().getX() < x2) && (p.getLocation().getY() < y2) && (p.getLocation().getZ() < z2);
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerBlockInteract(PlayerInteractEvent event) {
         Action action = event.getAction();
@@ -120,10 +168,9 @@ public class EngineMineBuildings extends Engine {
         Inventory enchantInv= Bukkit.createInventory(null, 6*9, Color.get("&8&lPickaxe Enchantments"));
         ChestGui gui = ChestGui.getCreative(enchantInv);
         gui.setAutoclosing(false);
-
-        enchantInv.setItem(13, item);
-
         blockFill(enchantInv, Material.STAINED_GLASS_PANE, (short) 1);
+
+        enchantInv.setItem(13, item.clone());
 
         Map<String, Integer> enchants = pickaxe.getEnchantsRaw();
 
