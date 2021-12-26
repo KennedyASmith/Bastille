@@ -27,11 +27,7 @@ public class CmdMinesRegen extends MineCommand {
     @Override
     public void perform() throws MassiveException {
         if (!(sender instanceof Player)) return;
-        Player player = (Player) sender;
-        String name = readArg();
-
-        Mine mine = MineColl.get().getByName(name);
-        //If mine has an automatic timer, reset it
+        Mine mine = readArg();
         mine.getRegenCountdown().resetCounter();
         mine.regen();
         msg("Mine has been regenerated successfully!");

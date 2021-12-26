@@ -33,6 +33,10 @@ public class MineBlockBreakEvent extends Event implements Cancellable {
     private boolean cancelled = false;
     private boolean shouldDeleteBlock = true;
 
+    private double blockMultiplier = 1;
+    private double awardMultiplier = 1;
+    private int toolDurabilityLoss = 5;
+
     public MineBlockBreakEvent(BlockBreakEvent blockBreakEvent, LazyRegion region, Distribution distribution) {
         this(blockBreakEvent.getBlock(), blockBreakEvent.getPlayer(), region, distribution);
     }
@@ -118,6 +122,34 @@ public class MineBlockBreakEvent extends Event implements Cancellable {
     @Override
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
+    }
+
+    //-----------------------//
+    // Multipliers
+    //-----------------------//
+
+    public void setAwardMultiplier(double awardMultiplier) {
+        this.awardMultiplier = awardMultiplier;
+    }
+
+    public void setBlockMultiplier(double blockMultiplier) {
+        this.blockMultiplier = blockMultiplier;
+    }
+
+    public double getAwardMultiplier() {
+        return awardMultiplier;
+    }
+
+    public double getBlockMultiplier() {
+        return blockMultiplier;
+    }
+
+    public int getToolDurabilityLoss() {
+        return toolDurabilityLoss;
+    }
+
+    public void setToolDurabilityLoss(int toolDurabilityLoss) {
+        this.toolDurabilityLoss = toolDurabilityLoss;
     }
 
     //-----------------------//

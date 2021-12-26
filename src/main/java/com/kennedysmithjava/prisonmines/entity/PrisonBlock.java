@@ -15,7 +15,7 @@ import java.util.List;
 public class PrisonBlock implements Pouchable {
 
     private final String name;
-    private final double value;
+    private double value;
     private final BlockMaterial product;
     private final BlockMaterial block;
     private final boolean isSpecial;
@@ -96,6 +96,10 @@ public class PrisonBlock implements Pouchable {
         item.applyNBT(base);
 
         return base;
+    }
+
+    public void setValue(double value) {
+        this.value = value;
     }
 
     public boolean isFrom(Material material, byte data) {

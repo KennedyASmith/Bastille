@@ -117,9 +117,11 @@ public class EngineMineBuildings extends Engine {
         Tool tool = Tool.get(item);
         Pickaxe pickaxe = (Pickaxe) tool;
 
-        Inventory enchantInv= Bukkit.createInventory(null, 5*9, Color.get("&8&lPickaxe Enchantments"));
+        Inventory enchantInv= Bukkit.createInventory(null, 6*9, Color.get("&8&lPickaxe Enchantments"));
         ChestGui gui = ChestGui.getCreative(enchantInv);
         gui.setAutoclosing(false);
+
+        enchantInv.setItem(13, item);
 
         blockFill(enchantInv, Material.STAINED_GLASS_PANE, (short) 1);
 
@@ -136,7 +138,7 @@ public class EngineMineBuildings extends Engine {
                             player.sendMessage(Color.get("&aYou have upgraded your " + enchant.getDisplayName().replaceAll("%name%", enchant.getName()) + " &aenchant!"));
                             ItemStack newItem = pickaxe.getItem();
                             ItemMeta meta = pickaxeItem.getItemMeta();
-                            meta.setLore(pickaxe.getType().getLore(pickaxe.getEnchants()));
+                            meta.setLore(pickaxe.getType().getLore(pickaxe.getEnchants(), pickaxe.getDurability(), pickaxe.getMaxDurability()));
                             newItem.setItemMeta(meta);
                             player.setItemInHand(newItem);
                             player.closeInventory();
@@ -150,7 +152,7 @@ public class EngineMineBuildings extends Engine {
                     player.sendMessage(Color.get("&aYou have upgraded your " + enchant.getDisplayName().replaceAll("%name%", enchant.getName()) + " &aenchant!"));
                     ItemStack newItem = pickaxe.getItem();
                     ItemMeta meta = pickaxeItem.getItemMeta();
-                    meta.setLore(pickaxe.getType().getLore(pickaxe.getEnchants()));
+                    meta.setLore(pickaxe.getType().getLore(pickaxe.getEnchants(), pickaxe.getDurability(), pickaxe.getMaxDurability()));
                     newItem.setItemMeta(meta);
                     player.setItemInHand(newItem);
                     player.closeInventory();

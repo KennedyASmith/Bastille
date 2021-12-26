@@ -2,7 +2,9 @@ package com.kennedysmithjava.prisonmines.blockhandler.event;
 
 import com.kennedysmithjava.prisonmines.blockhandler.Reward;
 import com.kennedysmithjava.prisonmines.engine.ResearchPointEngine;
+import com.kennedysmithjava.prisonmines.entity.PrisonBlock;
 import com.kennedysmithjava.prisonmines.pouch.*;
+import com.kennedysmithjava.prisontools.entity.Pickaxe;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -52,13 +54,14 @@ public class BlockEventFulfiller {
             block.setType(Material.AIR);
         }
 
-        this.rewardPlayer(finishedEvent.getPlayer(), finishedEvent.getRewards());
+        this.rewardPlayer(finishedEvent.getPlayer(), finishedEvent.getRewards(), finishedEvent.getBlockMultiplier(), finishedEvent.getAwardMultiplier());
         rpEngine.addBlockCount(finishedEvent.getPlayer());
     }
 
-    private void rewardPlayer(Player player, List<Reward> r) {
+    private void rewardPlayer(Player player, List<Reward> r, double blockMultiplier, double awardMultiplier) {
 
         final List<Reward> rewards = r.stream().filter(Objects::nonNull).collect(Collectors.toList());
+
 
         Map<Integer, Pouch> pouches = this.getPouches(player.getInventory());
         pouches.forEach((index, pouch) -> {
@@ -78,7 +81,13 @@ public class BlockEventFulfiller {
 
         });
 
-        rewards.forEach(e -> player.getInventory().addItem(e.getProductItem(1)));
+        rewards.forEach(e ->{
+            if(e instanceof PrisonBlock){
+                PrisonBlock pb = (PrisonBlock) e;
+                pb.setValue(pb.getValue() * awardMultiplier);
+            }
+            player.getInventory().addItem(e.getProductItem((int) (blockMultiplier)));
+        });
         player.updateInventory();
     }
 

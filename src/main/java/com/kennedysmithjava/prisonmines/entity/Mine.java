@@ -8,6 +8,7 @@ import com.kennedysmithjava.prisonmines.MineRegenCountdown;
 import com.kennedysmithjava.prisonmines.MinesWorldManager;
 import com.kennedysmithjava.prisonmines.PrisonMines;
 import com.kennedysmithjava.prisonmines.cmd.type.TypeMobility;
+import com.kennedysmithjava.prisonmines.event.EventMineChanged;
 import com.kennedysmithjava.prisonmines.util.*;
 import com.kennedysmithjava.prisonnpcs.PrisonNPCs;
 import com.kennedysmithjava.prisonnpcs.npcs.NPCArchitect;
@@ -301,6 +302,7 @@ public class Mine extends Entity<Mine> implements Named {
         this.setHeightVar(h);
         this.regen();
         this.pauseRegenCountdown(false);
+        Bukkit.getServer().getPluginManager().callEvent(new EventMineChanged(this));
     }
 
     /**
@@ -323,7 +325,6 @@ public class Mine extends Entity<Mine> implements Named {
             pauseRegenCountdown(false);
             onFinish.run();
         });
-
     }
 
     public void rebuildSchematics(int floorID, int wallID, Runnable onFinish){
@@ -373,7 +374,10 @@ public class Mine extends Entity<Mine> implements Named {
                         notDone++;
                     }
                 }
-                if(done == notDone) { onFinish.run(); this.cancel(); }
+                if(done == notDone) {
+                    onFinish.run();
+                    this.cancel();
+                }
             }
         }.runTaskTimer(PrisonMines.get(), 0, 10);
 
@@ -385,7 +389,7 @@ public class Mine extends Entity<Mine> implements Named {
      */
     private void pasteFloor(int floorID, int width, Runnable onFinish){
         FAWETracker clearTracker = MiscUtil.pasteSchematic(LayoutConf.get().getPath(getPathID()).getSchematic(getWidth()), new Vector(origin.getLocationX(), origin.getLocationY(), origin.getLocationZ()), true);
-
+        Mine mine = this;
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -406,7 +410,7 @@ public class Mine extends Entity<Mine> implements Named {
                                 setMineMin(newMin);
                                 onFinish.run();
                                 this.cancel();
-
+                                Bukkit.getServer().getPluginManager().callEvent(new EventMineChanged(mine));
                             }
                         }
                     }.runTaskTimer(PrisonMines.get(), 0, 10);

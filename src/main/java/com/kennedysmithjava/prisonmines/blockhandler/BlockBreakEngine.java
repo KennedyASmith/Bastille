@@ -20,7 +20,6 @@ public class BlockBreakEngine extends Engine {
     // -------------------------------------------- //
 
     private static final MineRegionCache cache = MineRegionCache.get();
-    private static final BlockEventFulfiller fulfiller = BlockEventFulfiller.get();
 
     private static final BlockBreakEngine i = new BlockBreakEngine();
 
@@ -61,19 +60,12 @@ public class BlockBreakEngine extends Engine {
 
         Distribution distribution = cache.getDistribution(event.getBlock());
 
-        /*
-         TODO: Potentially add some permission requirements here to prevent players from mining
-               in another person's Mine when we don't want them to.
-         */
-
-
         // We'll handle the block break ourselves to prevent lag.
         event.setCancelled(true);
 
         MineBlockBreakEvent customEvent = new MineBlockBreakEvent(event, region, distribution);
         Bukkit.getPluginManager().callEvent(customEvent);
 
-        fulfiller.handleEventReturn(customEvent);
     }
 
 
