@@ -20,9 +20,9 @@ public class CmdMineSize extends MineCommand {
         //Requirement
         this.addRequirements(RequirementIsPlayer.get(), RequirementHasPerm.get(Perm.ADMIN), RequirementHasMine.get());
 
+        this.addParameter( TypeMineOwner.get(), "player");
         this.addParameter(3, TypeInteger.get(), "width");
         this.addParameter(3, TypeInteger.get(), "height");
-        this.addParameter( TypeMineOwner.get(), "player");
 
         //Description
         this.setDesc("Change the size of a mine.");

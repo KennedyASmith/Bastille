@@ -24,8 +24,8 @@ public class CmdMine extends MineCommand
     public CmdMineDelete cmdMineDelete = new CmdMineDelete();
     public CmdMineRegen cmdMineRegen = new CmdMineRegen();
     public CmdMineSetSpawn cmdMineSetSpawn = new CmdMineSetSpawn();
-    public CmdMineSetSpawn cmdMineSize = new CmdMineSetSpawn();
-    public CmdMineSetSpawn cmdMineTeleport = new CmdMineSetSpawn();
+    public CmdMineSize cmdMineSize = new CmdMineSize();
+    public CmdMineTeleport cmdMineTeleport = new CmdMineTeleport();
 
     public CmdMine() {
 
