@@ -7,26 +7,25 @@ import com.kennedysmithjava.prisonmines.entity.Mine;
 import com.massivecraft.massivecore.MassiveException;
 import com.massivecraft.massivecore.command.requirement.RequirementHasPerm;
 import com.massivecraft.massivecore.command.requirement.RequirementIsPlayer;
+import com.massivecraft.massivecore.command.type.primitive.TypeInteger;
 import com.mcrivals.prisoncore.entity.MPlayer;
 import org.bukkit.entity.Player;
 
-public class CmdMineTeleport extends MineCommand {
+public class CmdMineSize extends MineCommand {
     // -------------------------------------------- //
     // CONSTRUCT
     // -------------------------------------------- //
 
-    public CmdMineTeleport() {
-        //Aliases
-        this.addAliases("tp", "spawn");
-
+    public CmdMineSize() {
         //Requirement
         this.addRequirements(RequirementIsPlayer.get(), RequirementHasPerm.get(Perm.ADMIN), RequirementHasMine.get());
 
-        // Parameters
+        this.addParameter(3, TypeInteger.get(), "width");
+        this.addParameter(3, TypeInteger.get(), "height");
         this.addParameter( TypeMineOwner.get(), "player");
 
         //Description
-        this.setDesc("Teleport to the spawn of the specified mine");
+        this.setDesc("Change the size of a mine.");
     }
 
     // -------------------------------------------- //
@@ -36,13 +35,12 @@ public class CmdMineTeleport extends MineCommand {
     @Override
     public void perform() throws MassiveException {
         if (!(sender instanceof Player)) return;
-        Player playerSender = (Player) sender;
-
+        int width = readArg();
+        int height = readArg();
         MPlayer mineOwner = readArg(MPlayer.get(sender));
         Mine mine = mineOwner.getMine();
-
-        playerSender.teleport(mine.getSpawnPointLoc());
-        msg("Teleported you to the mine owned by " + mineOwner.getName() + ".");
-
+        mine.setHeightVar(height);
+        mine.setWidth(width, () -> msg("Successfully set mine width to " + width + " and height to " + height + "."));
     }
+
 }

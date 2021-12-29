@@ -123,7 +123,6 @@ public class MiscUtil {
                 for (int x = minimumPoint.getBlockX() - 1; x <= maximumPoint.getBlockX(); x++) {
                     for (int y = minimumPoint.getBlockY() - 1; y <= maximumPoint.getBlockY(); y++) {
                         for (int z = minimumPoint.getBlockZ() - 1; z <= maximumPoint.getBlockZ(); z++) {
-
                             if(!adapter.getMaterial(clipboard.getBlock(new Vector(x, y, z)).getType()).equals(Material.AIR)){
                                 BaseBlock baseBlock = new BaseBlock(adapter.getBlockId(Material.PISTON_MOVING_PIECE), 0);
                                 clipboard.setBlock(x, y, z, baseBlock);
@@ -131,13 +130,13 @@ public class MiscUtil {
                         }
                     }
                 }
-
             }
 
             EditSession es = schematic.paste(FaweAPI.getWorld(worldManager.getWorld().getName()), location, false, false, null);
 
             es.setFastMode(true);
             es.getQueue().setProgressTask(tracker);
+
             } catch (Throwable e) {
             e.printStackTrace();
         }

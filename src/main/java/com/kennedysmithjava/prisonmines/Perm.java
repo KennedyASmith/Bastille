@@ -18,10 +18,9 @@ public enum Perm implements Identified
     POSONE,
     POSTWO,
     WAND,
-    SET_SPAWN,
     SETSPAWN,
     TELEPORT,
-    FLOOR
+    ADMIN
 
 
     // END OF LIST

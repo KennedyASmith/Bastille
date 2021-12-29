@@ -7,18 +7,17 @@ import com.kennedysmithjava.prisonmines.entity.Mine;
 import com.massivecraft.massivecore.MassiveException;
 import com.massivecraft.massivecore.command.requirement.RequirementHasPerm;
 import com.massivecraft.massivecore.command.requirement.RequirementIsPlayer;
+import com.mcrivals.prisoncore.PrisonCore;
+import com.mcrivals.prisoncore.entity.MConf;
 import com.mcrivals.prisoncore.entity.MPlayer;
 import org.bukkit.entity.Player;
 
-public class CmdMineTeleport extends MineCommand {
+public class CmdMineDelete extends MineCommand {
     // -------------------------------------------- //
     // CONSTRUCT
     // -------------------------------------------- //
 
-    public CmdMineTeleport() {
-        //Aliases
-        this.addAliases("tp", "spawn");
-
+    public CmdMineDelete() {
         //Requirement
         this.addRequirements(RequirementIsPlayer.get(), RequirementHasPerm.get(Perm.ADMIN), RequirementHasMine.get());
 
@@ -26,7 +25,7 @@ public class CmdMineTeleport extends MineCommand {
         this.addParameter( TypeMineOwner.get(), "player");
 
         //Description
-        this.setDesc("Teleport to the spawn of the specified mine");
+        this.setDesc("Delete a personal mine");
     }
 
     // -------------------------------------------- //
@@ -36,13 +35,18 @@ public class CmdMineTeleport extends MineCommand {
     @Override
     public void perform() throws MassiveException {
         if (!(sender instanceof Player)) return;
-        Player playerSender = (Player) sender;
-
         MPlayer mineOwner = readArg(MPlayer.get(sender));
+
         Mine mine = mineOwner.getMine();
+        mine.removeCountdown();
+        mine.despawnNPCs();
+        mine.removeLever();
+        mineOwner.setMineID("none");
+        if(mineOwner.getPlayer() != null){
+            mineOwner.getPlayer().teleport(MConf.get().getSpawnLocation());
+        }
 
-        playerSender.teleport(mine.getSpawnPointLoc());
-        msg("Teleported you to the mine owned by " + mineOwner.getName() + ".");
-
+        msg("You have removed the mine owned by " + mineOwner.getName() + ".");
     }
+
 }

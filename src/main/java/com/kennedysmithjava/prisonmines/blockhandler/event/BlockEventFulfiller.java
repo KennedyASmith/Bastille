@@ -4,7 +4,7 @@ import com.kennedysmithjava.prisonmines.blockhandler.Reward;
 import com.kennedysmithjava.prisonmines.engine.ResearchPointEngine;
 import com.kennedysmithjava.prisonmines.entity.PrisonBlock;
 import com.kennedysmithjava.prisonmines.pouch.*;
-import com.kennedysmithjava.prisontools.entity.Pickaxe;
+import com.kennedysmithjava.prisontools.ability.event.AbilityUseEvent;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -56,6 +56,15 @@ public class BlockEventFulfiller {
 
         this.rewardPlayer(finishedEvent.getPlayer(), finishedEvent.getRewards(), finishedEvent.getBlockMultiplier(), finishedEvent.getAwardMultiplier());
         rpEngine.addBlockCount(finishedEvent.getPlayer());
+    }
+
+    public void handleEventReturn(AbilityUseEvent finishedEvent) {
+        if (finishedEvent.isCancelled()) {
+            return;
+        }
+
+        Block block = finishedEvent.getBlock();
+        this.rewardPlayer(finishedEvent.getPlayer(), finishedEvent.getRewards(), finishedEvent.getBlockMultiplier(), finishedEvent.getAwardMultiplier());
     }
 
     private void rewardPlayer(Player player, List<Reward> r, double blockMultiplier, double awardMultiplier) {

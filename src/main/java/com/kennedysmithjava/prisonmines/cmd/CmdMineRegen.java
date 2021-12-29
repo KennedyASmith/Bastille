@@ -10,23 +10,20 @@ import com.massivecraft.massivecore.command.requirement.RequirementIsPlayer;
 import com.mcrivals.prisoncore.entity.MPlayer;
 import org.bukkit.entity.Player;
 
-public class CmdMineTeleport extends MineCommand {
+public class CmdMineRegen extends MineCommand {
     // -------------------------------------------- //
     // CONSTRUCT
     // -------------------------------------------- //
 
-    public CmdMineTeleport() {
-        //Aliases
-        this.addAliases("tp", "spawn");
-
+    public CmdMineRegen() {
         //Requirement
         this.addRequirements(RequirementIsPlayer.get(), RequirementHasPerm.get(Perm.ADMIN), RequirementHasMine.get());
 
-        // Parameters
+        //Parameters
         this.addParameter( TypeMineOwner.get(), "player");
 
         //Description
-        this.setDesc("Teleport to the spawn of the specified mine");
+        this.setDesc("Reset the blocks in a mine");
     }
 
     // -------------------------------------------- //
@@ -36,13 +33,12 @@ public class CmdMineTeleport extends MineCommand {
     @Override
     public void perform() throws MassiveException {
         if (!(sender instanceof Player)) return;
-        Player playerSender = (Player) sender;
-
         MPlayer mineOwner = readArg(MPlayer.get(sender));
         Mine mine = mineOwner.getMine();
 
-        playerSender.teleport(mine.getSpawnPointLoc());
-        msg("Teleported you to the mine owned by " + mineOwner.getName() + ".");
-
+        mine.getRegenCountdown().resetCounter();
+        mine.regen();
+        msg("Mine has been regenerated successfully!");
     }
+
 }

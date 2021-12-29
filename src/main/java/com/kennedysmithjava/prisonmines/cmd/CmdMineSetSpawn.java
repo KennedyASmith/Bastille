@@ -2,31 +2,23 @@ package com.kennedysmithjava.prisonmines.cmd;
 
 import com.kennedysmithjava.prisonmines.Perm;
 import com.kennedysmithjava.prisonmines.cmd.requirement.RequirementHasMine;
-import com.kennedysmithjava.prisonmines.cmd.type.TypeMineOwner;
 import com.kennedysmithjava.prisonmines.entity.Mine;
-import com.massivecraft.massivecore.MassiveException;
+import com.kennedysmithjava.prisonmines.entity.MineColl;
 import com.massivecraft.massivecore.command.requirement.RequirementHasPerm;
 import com.massivecraft.massivecore.command.requirement.RequirementIsPlayer;
-import com.mcrivals.prisoncore.entity.MPlayer;
 import org.bukkit.entity.Player;
 
-public class CmdMineTeleport extends MineCommand {
+public class CmdMineSetSpawn extends MineCommand {
     // -------------------------------------------- //
     // CONSTRUCT
     // -------------------------------------------- //
 
-    public CmdMineTeleport() {
-        //Aliases
-        this.addAliases("tp", "spawn");
-
+    public CmdMineSetSpawn() {
         //Requirement
         this.addRequirements(RequirementIsPlayer.get(), RequirementHasPerm.get(Perm.ADMIN), RequirementHasMine.get());
 
-        // Parameters
-        this.addParameter( TypeMineOwner.get(), "player");
-
         //Description
-        this.setDesc("Teleport to the spawn of the specified mine");
+        this.setDesc("Set the spawn of a mine.");
     }
 
     // -------------------------------------------- //
@@ -34,15 +26,16 @@ public class CmdMineTeleport extends MineCommand {
     // -------------------------------------------- //
 
     @Override
-    public void perform() throws MassiveException {
+    public void perform() {
         if (!(sender instanceof Player)) return;
         Player playerSender = (Player) sender;
-
-        MPlayer mineOwner = readArg(MPlayer.get(sender));
-        Mine mine = mineOwner.getMine();
-
-        playerSender.teleport(mine.getSpawnPointLoc());
-        msg("Teleported you to the mine owned by " + mineOwner.getName() + ".");
-
+        Mine mine = MineColl.get().getByLocation(playerSender.getLocation());
+        if(mine != null){
+            mine.setSpawnPoint(playerSender.getLocation());
+            msg("Changed this mine's spawn point");
+        }else{
+            msg("This area is not a mine.");
+        }
     }
+
 }
