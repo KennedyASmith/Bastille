@@ -1,11 +1,8 @@
 name: ${project.name}
 version: ${project.version}
-main: com.kennedysmithjava.prisonmines.PrisonMines
-api-version: 1.8
+main: com.kennedysmithjava.prisoncore.PrisonCore
+api-version: 1.18
 authors: [ "KennedySmithJava" ]
-description: PP
+description: im the best
 website: MCRivals.com
-depend: [MassiveCore, FastAsyncWorldEdit, Citizens]
-softdepend: [PrisonCore]
-loadbefore: [PrisonCore]
-load: STARTUP
+depend: [Citizens, MassiveCore,FastAsyncWorldEdit, HolographicDisplays, ProtocolLib, WorldGuard, PlaceholderAPI]

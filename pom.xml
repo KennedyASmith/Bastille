@@ -6,14 +6,14 @@
 
     <groupId>com.kennedysmithjava</groupId>
     <artifactId>PrisonMines</artifactId>
-    <version>1.0</version>
+    <version>2.0</version>
     <packaging>jar</packaging>
 
-    <name>PrisonMines</name>
+    <name>PrisonCore</name>
 
-    <description>Prison Mines for MCRivals</description>
+    <description>1.18 Prison Core for MCRivals</description>
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <url>McRivals.com</url>
@@ -79,7 +79,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.8-R0.1-SNAPSHOT</version>
+            <version>1.18.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!-- MassiveCore -->
@@ -88,7 +88,7 @@
             <artifactId>massivecore</artifactId>
             <version>LATEST</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/MassiveCore.jar</systemPath>
+            <systemPath>${project.basedir}/libs/MassiveCore-1.17.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>de.tr7zw</groupId>
@@ -98,30 +98,9 @@
         <dependency>
             <groupId>com.massivecraft.massivecore</groupId>
             <artifactId>MassiveCoreXlib</artifactId>
-            <version>2.14.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/libs/MassiveCore.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>com.intellectualsites.fawe</groupId>
-            <artifactId>FAWE-Bukkit</artifactId>
-            <scope>system</scope>
-            <version>LATEST</version>
-            <systemPath>${basedir}/libs/FastAsyncWorldEdit.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>com.sk89q.worldedit</groupId>
-            <artifactId>worldedit-core</artifactId>
             <version>LATEST</version>
             <scope>system</scope>
-            <systemPath>${basedir}/libs/WorldEdit.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>com.kennedysmithjava</groupId>
-            <artifactId>prisoncore</artifactId>
-            <version>LATEST</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/libs/prisoncore-1.0.jar</systemPath>
+            <systemPath>${basedir}/libs/MassiveCore-1.17.jar</systemPath>
         </dependency>
         <!-- WorldGuard -->
         <dependency>
@@ -131,26 +110,20 @@
             <scope>system</scope>
             <systemPath>${basedir}/libs/worldguard-6.0.0-beta-04.jar</systemPath>
         </dependency>
+        <!-- FAWE API -->
         <dependency>
-            <groupId>com.kennedysmithjava</groupId>
-            <artifactId>PrisonNPCs</artifactId>
+            <groupId>com.fastasyncworldedit</groupId>
+            <artifactId>FastAsyncWorldEdit-Core</artifactId>
             <version>LATEST</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/PrisonNPCs-1.1.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>com.kennedysmithjava</groupId>
-            <artifactId>PrisonTools</artifactId>
-            <version>LATEST</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/libs/PrisonTools-1.0.jar</systemPath>
+            <systemPath>${basedir}/libs/FastAsyncWorldEdit-2.0.0.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>net.citizensnpcs</groupId>
             <artifactId>citizensapi</artifactId>
-            <version>2.0.14-SNAPSHOT</version>
-            <type>jar</type>
-            <scope>compile</scope>
+            <version>LATEST</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/Citizens-2.0.29-b2443.jar</systemPath>
         </dependency>
             <dependency>
                 <groupId>xyz.xenondevs</groupId>
@@ -167,16 +140,22 @@
         <dependency>
             <groupId>com.gmail.filoghost.holographicdisplays</groupId>
             <artifactId>holographicdisplays-api</artifactId>
-            <version>2.4.0</version>
+            <version>LATEST</version>
             <scope>system</scope>
-            <systemPath>${basedir}/libs/HolographicDisplays.jar</systemPath>
+            <systemPath>${basedir}/libs/HolographicDisplays-3.0.0.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
-            <version>2.10.10</version>
+            <version>LATEST</version>
             <scope>system</scope>
-            <systemPath>${basedir}/libs/PlaceholderAPI-2.10.10.jar</systemPath>
+            <systemPath>${basedir}/libs/PlaceholderAPI-2.11.1.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.20</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
