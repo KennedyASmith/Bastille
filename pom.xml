@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.kennedysmithjava</groupId>
-    <artifactId>PrisonMines</artifactId>
+    <artifactId>PrisonCore</artifactId>
     <version>2.0</version>
     <packaging>jar</packaging>
 
@@ -123,7 +123,7 @@
             <artifactId>citizensapi</artifactId>
             <version>LATEST</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/Citizens-2.0.29-b2443.jar</systemPath>
+            <systemPath>${project.basedir}/libs/Citizens-2.0.29-b2548.jar</systemPath>
         </dependency>
             <dependency>
                 <groupId>xyz.xenondevs</groupId>
@@ -142,7 +142,7 @@
             <artifactId>holographicdisplays-api</artifactId>
             <version>LATEST</version>
             <scope>system</scope>
-            <systemPath>${basedir}/libs/HolographicDisplays-3.0.0.jar</systemPath>
+            <systemPath>${basedir}/libs/HolographicDisplays.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>me.clip</groupId>

@@ -74,29 +74,27 @@ public class LayoutConf extends Entity<LayoutConf> {
                     "&7&lDefault Mine",
                     Material.GRASS,0,
                     MUtil.map(
-                        3, "Default_1.schematic",
-                        4, "Default_2.schematic",
-                                5, "Default_3.schematic",
-                                6, "Default_4.schematic",
-                                7, "Default_5.schematic",
-                                8, "Default_6.schematic"),
+                        3, "default_mine_1.schem",
+                        4, "default_mine_2.schem",
+                                5, "default_mine_3.schem",
+                                6, "default_mine_4.schem",
+                                7, "default_mine_5.schem",
+                                8, "default_mine_6.schem",
+                                9, "default_mine_7.schem"
+                    ),
                     MUtil.list("&7Common", "&6", "&7The default mine layout.", "&m", "Wall Options:", "%compatible_walls%"),
                     MUtil.list(1, 2, 3),
                     "Schematics/Default/",
-
-                    new Offset(-51, 52, -75, 0F, 0F),
-                    new Offset(-51, 50, -50),
-
-                    new Offset(-47, 53, -26, 0F, 180F),
-                    new Offset(-51, 53, -26, 0F, 180F),
-                    new Offset(-55, 52, -26, 0F, 180F),
-
-                    new Offset(-27, 51, -50, 0F, 90F),
-                    new Offset(-74, 52, -50, 0F, 270F),
-                    new Offset(-51, 51, -28, 0F, 180F),
-                    new Offset(-52, 56, -80, 0F, 0F),
-                    new Offset(-50, 51, -80, 0F, 0F)
-
+                    new Offset(-51, 50, -75, 0F, 0F),
+                    new Offset(-51, 48, -50),
+                    new Offset(-47, 51, -26, 0F, 180F),
+                    new Offset(-51, 51, -26, 0F, 180F),
+                    new Offset(-55, 51, -26, 0F, 180F),
+                    new Offset(-27, 49, -50, 0F, 90F),
+                    new Offset(-74, 50, -50, 0F, 270F),
+                    new Offset(-51, 49, -28, 0F, 180F),
+                    new Offset(-52, 54, -80, 0F, 0F),
+                    new Offset(-50, 49, -80, 0F, 0F)
             )
     );
 

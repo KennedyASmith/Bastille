@@ -244,13 +244,13 @@ public class PrisonCore extends MassivePlugin {
         mine.generateMobilityArea();
 
         //FIRST PASTE FLOOR
-        FAWEPaster.paste(floor.getSchematic(mine.getWidth()), world.getName(), minCorner, false, new RunnableVal<>() {
+        FAWEPaster.paste(floor.getSchematic(mine.getWidth()), world.getName(), minCorner, false, new Runnable() {
             @Override
-            public void run(Boolean value) {
+            public void run() {
                 //THEN PLACE WALL
-                FAWEPaster.paste(wall.getSchematic(), world.getName(), minCorner, false, new RunnableVal<>() {
+                FAWEPaster.paste(wall.getSchematic(), world.getName(), minCorner, false, new Runnable() {
                     @Override
-                    public void run(Boolean value) {
+                    public void run() {
                         onComplete.run();
                         mine.createRegenCountdown();
                         mine.regen();

@@ -332,10 +332,7 @@ public class Mine extends Entity<Mine> implements Named {
         boolean rebuildFloor = floorID != this.getPathID();
         boolean rebuildWall = wallID != this.getWallID();
 
-        List<Boolean> pasteTrackers = new ArrayList<>();
-
         if(rebuildFloor){
-            pasteTrackers.add(false);
             Floor floor = LayoutConf.get().getPath(getPathID());
             this.despawnArchitectNPC();
             this.despawnResearcherNPC();
@@ -350,37 +347,14 @@ public class Mine extends Entity<Mine> implements Named {
                 spawnResearcherNPC();
                 spawnCollectorNPC();
                 pauseRegenCountdown(false);
-                pasteTrackers.add(true);
             });
         }
 
         if(rebuildWall){
-            pasteTrackers.add(false);
-            this.pasteWall(wallID, () -> {
-                pasteTrackers.add(true);
-            });
+            this.pasteWall(wallID, () -> {});
         }
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                //The count of true/false booleans must be equal for all pastes to be complete.
-                int done = 0; //True values
-                int notDone = 0; //False values
-                for (Boolean isDone : pasteTrackers) {
-                    if (isDone) {
-                        done++;
-                    } else {
-                        notDone++;
-                    }
-                }
-                if(done == notDone) {
-                    onFinish.run();
-                    this.cancel();
-                }
-            }
-        }.runTaskTimer(PrisonCore.get(), 0, 10);
-
+        onFinish.run();
     }
 
     /**
@@ -397,21 +371,16 @@ public class Mine extends Entity<Mine> implements Named {
         clearFloor(oldSchematic, world, origin, () -> {
             setFloorID(floorID);
             //Paste the new schematic
-            FAWEPaster.paste(newSchematic, world, origin, false, new RunnableVal<>() {
-                @Override
-                public void run(Boolean isDone) {
-                    if(isDone){
-                        generateBorder(width, getHeight(), MinesConf.get().minesBorderMaterial);
-                        generateMobilityArea();
-                        buildBuildings();
-                        Location newMax = getMineCenter().add(-(width - 2), 0, -(width - 2));
-                        Location newMin = getMineCenter().add(width - 2, -(getHeight() - 1), width - 2);
-                        setMineMax(newMax);
-                        setMineMin(newMin);
-                        onFinish.run();
-                        Bukkit.getServer().getPluginManager().callEvent(new EventMineChanged(mine));
-                    }
-                }
+            FAWEPaster.paste(newSchematic, world, origin, false, () -> {
+                generateBorder(width, getHeight(), MinesConf.get().minesBorderMaterial);
+                generateMobilityArea();
+                buildBuildings();
+                Location newMax = getMineCenter().add(-(width - 2), 0, -(width - 2));
+                Location newMin = getMineCenter().add(width - 2, -(getHeight() - 1), width - 2);
+                setMineMax(newMax);
+                setMineMin(newMin);
+                onFinish.run();
+                Bukkit.getServer().getPluginManager().callEvent(new EventMineChanged(mine));
             });
         });
     }
@@ -421,12 +390,7 @@ public class Mine extends Entity<Mine> implements Named {
                 world,
                 origin,
                 true,
-                new RunnableVal<>() {
-                    @Override
-                    public void run(Boolean done) {
-                        onFinish.run();
-                    }
-                }
+                onFinish
         );
     }
 
@@ -442,25 +406,14 @@ public class Mine extends Entity<Mine> implements Named {
 
         clearWall(oldSchematic, world, origin, () -> {
             setWallID(wallID);
-            FAWEPaster.paste(newSchematic, world, origin, false,
-                    new RunnableVal<>() {
-                        @Override
-                        public void run(Boolean done) {
-                            onFinish.run();
-                        }
-                    }
-            );
+            Bukkit.broadcastMessage("Wall cleared. Now pasting new one.");
+            FAWEPaster.paste(newSchematic, world, origin, false, onFinish);
         });
     }
 
     private void clearWall(String schematic, String world, BlockVector3 origin, Runnable onFinish){
         FAWEPaster.paste(schematic, world, origin, true,
-                new RunnableVal<>() {
-                    @Override
-                    public void run(Boolean done) {
-                        onFinish.run();
-                    }
-                }
+                onFinish
         );
     }
 
@@ -583,6 +536,10 @@ public class Mine extends Entity<Mine> implements Named {
     }
 
     public void clearBorder(){
+        int width = getWidth();
+        int height = getHeight();
+        Bukkit.broadcastMessage("Destroy Width: " + width + " Height: " + height);
+
         this.generateBorder(getWidth(), getHeight(), Material.AIR);
     }
 

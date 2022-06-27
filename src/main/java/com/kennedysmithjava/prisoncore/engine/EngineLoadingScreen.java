@@ -52,7 +52,7 @@ public class EngineLoadingScreen extends Engine {
                     //Give player blindness effect for 5 seconds
                     if (!player.hasPotionEffect(PotionEffectType.BLINDNESS))
                         player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 9999, 1));
-                    TitleUtility.sendTitle(player, 0, 20, 10, title, "Please wait");
+                    player.sendTitle(title, "Please wait", 0, 20, 10);
                 });
 
             }
