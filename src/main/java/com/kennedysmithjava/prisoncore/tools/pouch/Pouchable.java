@@ -1,11 +1,15 @@
 package com.kennedysmithjava.prisoncore.tools.pouch;
 
+import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.blockhandler.Reward;
 import com.kennedysmithjava.prisoncore.blockhandler.Valuable;
+import org.bukkit.NamespacedKey;
 
 public interface Pouchable extends Reward, Valuable {
 
-    String getUniqueNbt();
+    NamespacedKey valueKey = new NamespacedKey(PrisonCore.get(), "pVALUE");
+
+    String getUniqueID();
 
     String getDisplayName();
 
@@ -15,6 +19,6 @@ public interface Pouchable extends Reward, Valuable {
     default int getPouchWeight() { return 1; }
 
     default DatalessPouchable toDataless() {
-        return new DatalessPouchable(getUniqueNbt(), getValue(), getCurrencyType(), getDisplayName());
+        return new DatalessPouchable(getUniqueID(), getValue(), getCurrencyType(), getDisplayName());
     }
 }

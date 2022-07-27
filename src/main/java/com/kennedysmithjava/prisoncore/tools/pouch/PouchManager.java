@@ -1,6 +1,8 @@
 package com.kennedysmithjava.prisoncore.tools.pouch;
 
-import de.tr7zw.nbtapi.NBTItem;
+import com.jeff_media.morepersistentdatatypes.DataType;
+import com.kennedysmithjava.prisoncore.PrisonCore;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -9,7 +11,7 @@ import java.util.UUID;
 
 public class PouchManager {
 
-    private static final String NBT_POUCH_UUID = "POUCH_UUID";
+    private static final NamespacedKey uuidKey = new NamespacedKey(PrisonCore.get(), "POUCH_UUID");
 
     private static final PouchManager i = new PouchManager();
 
@@ -26,7 +28,7 @@ public class PouchManager {
     public Pouch getPouch(ItemStack itemStack) {
        UUID uuid;
         try {
-            uuid = UUID.fromString(new NBTItem(itemStack).getString(NBT_POUCH_UUID));
+            uuid = itemStack.getItemMeta().getPersistentDataContainer().get(uuidKey, DataType.UUID);
         } catch (IllegalArgumentException e) {
             return null;
         }
@@ -40,13 +42,13 @@ public class PouchManager {
        return pouch;
     }
 
-    public UUID generateUUID(NBTItem itemStack) {
+    public UUID generateUUID(ItemStack itemStack) {
         UUID uuid;
         do {
             uuid = UUID.randomUUID();
         } while (this.pouches.containsKey(uuid));
 
-        itemStack.setString(NBT_POUCH_UUID, uuid.toString());
+        itemStack.getItemMeta().getPersistentDataContainer().set(uuidKey, DataType.UUID, uuid);
 
         return uuid;
     }

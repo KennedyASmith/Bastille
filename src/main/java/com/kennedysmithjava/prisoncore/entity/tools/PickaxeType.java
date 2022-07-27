@@ -10,11 +10,8 @@ import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.MiscUtil;
 import com.massivecraft.massivecore.collections.MassiveMap;
 import com.massivecraft.massivecore.store.Entity;
-import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 
@@ -79,31 +76,7 @@ public class PickaxeType extends Entity<PickaxeType> {
      * @return The built item for this {@link PickaxeType}
      */
     public ItemStack getItemStack() {
-        ItemStack item = new ItemStack(getMaterial(), 1);
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(getDisplayName());
-
-        LeveledAbility leveledAbility = new LeveledAbility(getAbility().getAbilityType(), 2, getBuffers());
-
-        meta.setLore(Color.get(getLore(getEnchants(), leveledAbility,getStartDurability(), getMaxDurability())));
-        meta.setUnbreakable(true);
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
-        item.setItemMeta(meta);
-
-        NBTItem nbt = new NBTItem(item);
-        nbt.setString(Tool.itemString, this.getId());
-        String uuid = UUID.randomUUID().toString();
-        nbt.setString("uuid", uuid);
-        nbt.setInteger("durability", this.getStartDurability());
-        nbt.setInteger("maxDurability", this.getMaxDurability());
-
-        nbt.applyNBT(item);
-
-        Pickaxe pickaxe = new Pickaxe(this, item, uuid);
-        enchants.forEach((e, lvl) -> pickaxe.addEnchant(Enchant.getByName(e), lvl));
-        pickaxe.addEnchants(enchants);
-        pickaxe.setLeveledAbility(leveledAbility);
-
+        Pickaxe pickaxe = Pickaxe.create(this);
         return pickaxe.getItem();
     }
 
@@ -150,23 +123,20 @@ public class PickaxeType extends Entity<PickaxeType> {
         if(isAbility)
             buffers = ability.getBufferLevels();
 
-        for (int i = 0; i < rawLore.size(); i++) {
-            String s = rawLore.get(i);
-            if(s.contains("%buffers%")){
-                if(buffers.size() > 0){
+        for (String s : rawLore) {
+            if (s.contains("%buffers%")) {
+                if (buffers.size() > 0) {
                     ArrayList<String> bufferLore = new ArrayList<>();
-                    buffers.forEach((buffer, level) -> {
-                        bufferLore.add(Color.get(buffer.getInfoLore().replaceAll("%level%", String.valueOf(level))));
-                    });
+                    buffers.forEach((buffer, level) -> bufferLore.add(Color.get(buffer.getInfoLore().replaceAll("%level%", String.valueOf(level)))));
                     lore.addAll(bufferLore);
-                }else{
+                } else {
                     lore.add(s.replaceAll("%buffers%", Color.get(("&8- No Buffers -"))));
                 }
             } else if (s.contains("%enchants%")) {
                 ArrayList<String> enchantLore = new ArrayList<>();
                 enchants.forEach((e, level) -> enchantLore.add(Color.get((e.getLore().replaceAll("%level%", String.valueOf(level)).replaceAll("%roman_level%", MiscUtil.getRomanNumeral(level)).replaceAll("%name%", e.getName())))));
                 lore.addAll(enchantLore);
-            } else{
+            } else {
                 lore.add(Color.get(
                         s.replaceAll("%displayname%", getDisplayName())
                                 .replaceAll("%description%", getDescription())
@@ -239,8 +209,7 @@ public class PickaxeType extends Entity<PickaxeType> {
     }
 
     public String getName() {
-        String ret = this.name;
-        return ret;
+        return this.name;
     }
 
 
@@ -269,9 +238,7 @@ public class PickaxeType extends Entity<PickaxeType> {
     public Map<Enchant<?>, Integer> getEnchants() {
 
         Map<Enchant<?>, Integer> returnMap = new HashMap<>();
-        getEnchantsRaw().forEach((enchant, lvl) -> {
-            returnMap.put(Enchant.getByName(enchant), lvl);
-        });
+        getEnchantsRaw().forEach((enchant, lvl) -> returnMap.put(Enchant.getByName(enchant), lvl));
         return returnMap;
     }
 

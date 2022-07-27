@@ -1,9 +1,9 @@
 package com.kennedysmithjava.prisoncore.blockhandler;
 
+import com.jeff_media.morepersistentdatatypes.DataType;
 import com.kennedysmithjava.prisoncore.eco.CurrencyType;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.PrisonBlock;
 import com.kennedysmithjava.prisoncore.tools.pouch.Pouchable;
-import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.inventory.ItemStack;
 
 public class ValueModifiedPrisonBlock implements Pouchable, ValueMutable {
@@ -19,10 +19,7 @@ public class ValueModifiedPrisonBlock implements Pouchable, ValueMutable {
     @Override
     public ItemStack getProductItem(int amount) {
         ItemStack base = prisonBlock.getProductItem(amount);
-        NBTItem item = new NBTItem(base);
-        item.setDouble("VALUE", newValue);
-        item.applyNBT(base);
-
+        base.getItemMeta().getPersistentDataContainer().set(valueKey, DataType.DOUBLE, newValue);
         return base;
     }
 
@@ -37,8 +34,8 @@ public class ValueModifiedPrisonBlock implements Pouchable, ValueMutable {
     }
 
     @Override
-    public String getUniqueNbt() {
-        return prisonBlock.getUniqueNbt();
+    public String getUniqueID() {
+        return prisonBlock.getUniqueID();
     }
 
     @Override

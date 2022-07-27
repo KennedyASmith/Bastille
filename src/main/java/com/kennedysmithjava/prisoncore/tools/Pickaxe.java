@@ -1,26 +1,31 @@
 package com.kennedysmithjava.prisoncore.tools;
 
+import com.jeff_media.morepersistentdatatypes.DataType;
+import com.kennedysmithjava.prisoncore.PrisonCore;
+import com.kennedysmithjava.prisoncore.engine.EngineTools;
 import com.kennedysmithjava.prisoncore.entity.tools.PickaxeType;
-import com.kennedysmithjava.prisoncore.tools.ability.Ability;
-import com.kennedysmithjava.prisoncore.tools.ability.LeveledAbility;
+import com.kennedysmithjava.prisoncore.entity.tools.PickaxeTypeColl;
 import com.kennedysmithjava.prisoncore.event.AbilityUseEvent;
-import com.kennedysmithjava.prisoncore.cmd.CmdPickaxe;
+import com.kennedysmithjava.prisoncore.tools.ability.Ability;
+import com.kennedysmithjava.prisoncore.tools.ability.AbilityType;
+import com.kennedysmithjava.prisoncore.tools.ability.LeveledAbility;
 import com.kennedysmithjava.prisoncore.tools.enchantment.BlockBreakEnchant;
 import com.kennedysmithjava.prisoncore.tools.enchantment.DynamicEnchant;
 import com.kennedysmithjava.prisoncore.tools.enchantment.Enchant;
-import com.kennedysmithjava.prisoncore.engine.EngineTools;
-import de.tr7zw.nbtapi.NBTCompound;
-import de.tr7zw.nbtapi.NBTItem;
+import com.kennedysmithjava.prisoncore.util.Color;
+import com.massivecraft.massivecore.util.MUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 
 /**
  * A @code{Pickaxe} object represents a cached ItemStack for a specific {@link PickaxeType}.
@@ -30,44 +35,16 @@ import java.util.Map;
  *
  * @see PickaxeType
  * @see Tool
- * @see CmdPickaxe
+ * @see com.kennedysmithjava.prisoncore.cmd.CmdPickaxe
  * @see Enchant
+ * @see <a href="https://www.spigotmc.org/threads/more-persistent-data-types-collections-maps-and-arrays-for-pdc.520677/">...</a>
  *
  * @author Kennedy Smith
  */
-
-public class Pickaxe implements Tool {
-
-    // -------------------------------------------- //
-    // META
-    // -------------------------------------------- //
-
-    ItemStack item;
-    NBTItem nbtItem;
-    String originalUser;
-    Map<Enchant<?>, Integer> enchants;
-    Map<BlockBreakEnchant<?>, Integer> blockBreakEnchants;
-    LeveledAbility leveledAbility;
-    int durability;
-    int maxDurability;
-    PickaxeType type;
-    String pickaxeUUID;
-
-    public Pickaxe(PickaxeType type, ItemStack item, String pickaxeUUID) {
-        this.type = type;
-        this.nbtItem = new NBTItem(item);
-        this.pickaxeUUID = pickaxeUUID;
-        this.item = item;
-        buildEnchants();
-        buildDurability();
-        if(hasLeveledAbility()) this.leveledAbility = buildAbility();
-        this.nbtItem.setString("uuid", pickaxeUUID);
-        this.nbtItem.applyNBT(item);
-        cachedPickaxes.put(this.pickaxeUUID, this);
-    }
+public class Pickaxe  implements Tool {
 
     // -------------------------------------------- //
-    // PICKAXE CACHE
+    // STATIC PICKAXE CACHE
     // -------------------------------------------- //
 
     /** Map of cached {@link Pickaxe} objects */
@@ -75,6 +52,7 @@ public class Pickaxe implements Tool {
 
     //Player UUID, Pickaxe
     public static Map<Pickaxe, ItemStack> updateQueue = new HashMap<>();
+
 
     /**
      * Used for updating lore on pickaxes.
@@ -85,7 +63,8 @@ public class Pickaxe implements Tool {
         public void run() {
             List<Pickaxe> removable = new ArrayList<>();
             updateQueue.forEach((pickaxe, pickItem) -> {
-                if(pickItem != null && cachedPickaxes.containsValue(pickaxe) && pickaxe.getType() != null){
+                Bukkit.broadcastMessage("Attempting update of lore!");
+                if(pickItem != null && pickaxe.getType() != null){
                     ItemMeta meta = pickItem.getItemMeta();
                     meta.setLore(pickaxe.getType().getLore(
                             pickaxe.getEnchants(),
@@ -94,6 +73,14 @@ public class Pickaxe implements Tool {
                             pickaxe.getMaxDurability()));
                     pickItem.setItemMeta(meta);
                     pickaxe.setItem(pickItem);
+                    Bukkit.broadcastMessage("Updated lore!");
+                }else{
+                    if(pickaxe.getType() == null){
+                        Bukkit.broadcastMessage("Lore updater: Type was null!");
+                    }
+                    if(pickItem == null){
+                        Bukkit.broadcastMessage("Lore updater: ItemStack was null!");
+                    }
                 }
                 removable.add(pickaxe);
             });
@@ -104,6 +91,7 @@ public class Pickaxe implements Tool {
         }
     };
 
+
     /**
      * Returns a cached {@link Pickaxe} for this uuid.
      * @param uuid UUID of the Pickaxe.
@@ -111,10 +99,6 @@ public class Pickaxe implements Tool {
      */
     public static Pickaxe getByUUID(String uuid) {
         return cachedPickaxes.get(uuid);
-    }
-
-    public void setItem(ItemStack item) {
-        this.item = item;
     }
 
     /**
@@ -127,45 +111,91 @@ public class Pickaxe implements Tool {
     public static void addToLoreUpdateQueue(Pickaxe pickaxe, ItemStack pickItem){
         updateQueue.putIfAbsent(pickaxe, pickItem);
     }
+
+    // -------------------------------------------- //
+    // Namespace Keys
+    // -------------------------------------------- //
+
+    private static final NamespacedKey enchantsKey = new NamespacedKey(PrisonCore.get(), "pick_enchants");
+    private static final NamespacedKey durabilityKey = new NamespacedKey(PrisonCore.get(), "pick_durability");
+    private static final NamespacedKey maxDurabilityKey = new NamespacedKey(PrisonCore.get(), "pick_maxDurability");
+
+    private static final NamespacedKey abilityKey = new NamespacedKey(PrisonCore.get(), "pick_ability");
+
+    private static final NamespacedKey bufferKey = new NamespacedKey(PrisonCore.get(), "pick_buffers");
+
+    private static final NamespacedKey ogUserKey = new NamespacedKey(PrisonCore.get(), "pick_ogUser");
+    
+    private static final NamespacedKey uuidKey = new NamespacedKey(PrisonCore.get(), "pick_uuid");
+    
+    private static final NamespacedKey typeKey = new NamespacedKey(PrisonCore.get(), "pick_type");
+
+    // -------------------------------------------- //
+    // PICKAXE OBJECT VALUES
+    // -------------------------------------------- //
+    private ItemStack item;
+    private Map<Enchant<?>, Integer> enchants;
+    private Map<BlockBreakEnchant<?>, Integer> blockBreakEnchants;
+    private LeveledAbility leveledAbility;
+    private int durability;
+    private int maxDurability;
+    private PickaxeType type;
+    private String pickaxeUUID;
+
+    private String originalUser;
+
+    public Pickaxe(PickaxeType type, ItemStack item, String pickaxeUUID) {
+        this.type = type;
+        this.pickaxeUUID = pickaxeUUID;
+        this.item = item;
+        buildEnchants();
+        buildDurability();
+        buildAbility();
+    }
+
+    public void setItem(ItemStack item) {
+        this.item = item;
+    }
+
     // -------------------------------------------- //
     // ENCHANTS
     // -------------------------------------------- //
 
     /**
      * Builds a list of enchants from the NBTData of this {@link Pickaxe#item}
-     * Runs {@link Pickaxe#enchantsModified()}
+     * Runs {@link Pickaxe}
      */
     private void buildEnchants() {
+        ItemMeta meta = item.getItemMeta();
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        Map<String, Integer> map = pdc.getOrDefault(enchantsKey, DataType.asMap(DataType.STRING, DataType.INTEGER), new HashMap<>());
         enchants = new HashMap<>();
-
-        Map<?, ?> map = nbtItem.getObject("enchants", Map.class);
         if(map != null) {
             map.forEach((enchant, level) -> {
-                if(!Enchant.exists((String) enchant)) return;
-                Enchant<?> e = Enchant.getByName((String) enchant);
+                if(!Enchant.exists(enchant)) return;
+                Enchant<?> e = Enchant.getByName(enchant);
                 Bukkit.broadcastMessage("En: " + e.getName() + " Lvl: " + level);
-                enchants.put(e, (int) Math.round((Double) level));
+                enchants.put(e, level);
             });
         }
-
-        enchantsModified();
+        enchantsModified(meta);
     }
 
     /**
      * Adds an enchant to the NBTData of this {@link Pickaxe#item}
      * Updates {@link Pickaxe#enchants}
-     * Runs {@link Pickaxe#enchantsModified()}
      */
     public void addEnchant(Enchant<?> enchant, int level) {
         enchants.put(enchant, level);
-        nbtItem.setObject("enchants", getEnchantsRaw());
-        enchantsModified();
+        ItemMeta meta = item.getItemMeta();
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        pdc.set(enchantsKey, DataType.asMap(DataType.STRING, DataType.INTEGER), getEnchantsRaw());
+        enchantsModified(meta);
     }
 
     /**
      * Adds an enchant to the NBTData of this {@link Pickaxe#item}
      * Updates {@link Pickaxe#enchants}
-     * Runs {@link Pickaxe#enchantsModified()}
      */
     public void addEnchant(String enchant, int level) {
         addEnchant(Enchant.getByName(enchant), level);
@@ -174,41 +204,41 @@ public class Pickaxe implements Tool {
     /**
      * Adds enchants to the NBTData of this {@link Pickaxe#item}
      * Updates {@link Pickaxe#enchants}
-     * Runs {@link Pickaxe#enchantsModified()}
      */
     public void addEnchants(Map<String, Integer> enchants) {
         Map<Enchant<?>, Integer> newEnchants = new HashMap<>();
         enchants.forEach((s, lvl) -> newEnchants.put(Enchant.getByName(s), lvl));
         this.enchants.putAll(newEnchants);
-        nbtItem.setObject("enchants", getEnchantsRaw());
-        enchantsModified();
+        ItemMeta meta = item.getItemMeta();
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        pdc.set(enchantsKey, DataType.asMap(DataType.STRING, DataType.INTEGER), enchants);
+        enchantsModified(meta);
     }
 
 
     /**
      * Removes an enchant from the NBTData of this {@link Pickaxe#item}
      * Updates {@link Pickaxe#enchants}
-     * Runs {@link Pickaxe#enchantsModified()}
      */
     public void removeEnchant(Enchant<?> enchant) {
         enchants.remove(enchant);
-        nbtItem.setObject("enchants", getEnchantsRaw());
-        enchantsModified();
+        ItemMeta meta = item.getItemMeta();
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        pdc.set(enchantsKey, DataType.asMap(DataType.STRING, DataType.INTEGER), getEnchantsRaw());
+        enchantsModified(meta);
     }
 
     /**
-     * Reapplies {@link Pickaxe#nbtItem} to {@link Pickaxe#item}
+     * Reapplies {@link Pickaxe} to {@link Pickaxe#item}
      * Updates {@link Pickaxe#blockBreakEnchants}
      */
-    public void enchantsModified(){
-        nbtItem.applyNBT(item);
+    public void enchantsModified(ItemMeta meta){
+        item.setItemMeta(meta);
         Map<BlockBreakEnchant<?>, Integer> blockBreakEnchants = new HashMap<>();
         enchants.forEach((enchant, lvl) -> {
-            if(enchant instanceof BlockBreakEnchant){
-                BlockBreakEnchant<?> bbe = (BlockBreakEnchant<?>) enchant;
+            if(enchant instanceof BlockBreakEnchant<?> bbe){
                 blockBreakEnchants.put(bbe, lvl);
-            } else if (enchant instanceof DynamicEnchant){
-                DynamicEnchant<?> dynamicEnchant = (DynamicEnchant<?>) enchant;
+            } else if (enchant instanceof DynamicEnchant<?> dynamicEnchant){
                 dynamicEnchant.onApply(getItem(), lvl);
             }
         });
@@ -241,17 +271,18 @@ public class Pickaxe implements Tool {
     // -------------------------------------------- //
 
     public void buildDurability(){
-        int durability = nbtItem.getInteger("durability");
-        int maxDurability = nbtItem.getInteger("maxDurability");
-        if(durability != 0 && maxDurability != 0) {
-            this.durability = durability;
-            this.maxDurability = maxDurability;
-        }
+        ItemMeta meta = item.getItemMeta();
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        this.durability = pdc.getOrDefault(durabilityKey, DataType.INTEGER, 404);
+        this.maxDurability = pdc.getOrDefault(maxDurabilityKey, DataType.INTEGER, 404);
     }
 
     public void setDurability(int durability) {
         this.durability = durability;
-        nbtItem.applyNBT(item);
+        ItemMeta meta = item.getItemMeta();
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        pdc.set(durabilityKey, DataType.INTEGER, this.durability);
+        item.setItemMeta(meta);
     }
 
     public int getDurability() {
@@ -264,24 +295,41 @@ public class Pickaxe implements Tool {
 
     public void setMaxDurability(int maxDurability) {
         this.maxDurability = maxDurability;
-    }
-
-    // -------------------------------------------- //
-    // BUFFERS
-    // -------------------------------------------- //
-
-    public Map<Buffer, Integer> getBufferLevels() {
-        return this.leveledAbility.getBufferLevels();
+        ItemMeta meta = item.getItemMeta();
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        pdc.set(maxDurabilityKey, DataType.INTEGER, this.maxDurability);
+        item.setItemMeta(meta);
     }
 
     // -------------------------------------------- //
     // LEVELED ABILITY
     // -------------------------------------------- //
 
-    public void runAbility(AbilityUseEvent event) {
-        if(this.leveledAbility != null)
-            this.leveledAbility.perform(event);
+    private void buildAbility() {
+        ItemMeta meta = item.getItemMeta();
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+
+        Map<String, String> abilityInfo = pdc.getOrDefault(abilityKey,
+                DataType.asMap(DataType.STRING, DataType.STRING), new HashMap<>());
+
+        if(abilityInfo.size() > 0){
+            AbilityType type = AbilityType.getFromId(abilityInfo.get("type"));
+            int level = Integer.parseInt(abilityInfo.get("level"));
+            Map<Buffer, Integer> buffers = Buffer.deserialize(pdc.getOrDefault(bufferKey,
+                            DataType.asMap(DataType.STRING, DataType.INTEGER), new HashMap<>()));
+            this.leveledAbility = new LeveledAbility(type, level, buffers);
+        }
     }
+
+    public void setLeveledAbility(@Nullable LeveledAbility leveledAbility) {
+        this.leveledAbility = leveledAbility;
+        ItemMeta meta = item.getItemMeta();
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        pdc.set(abilityKey, DataType.asMap(DataType.STRING, DataType.STRING), MUtil.map("type", leveledAbility.getAbilityType().getId(), "level", String.valueOf(leveledAbility.getLevel())));
+        pdc.set(bufferKey, DataType.asMap(DataType.STRING, DataType.INTEGER), Buffer.serialize(leveledAbility.getBufferLevels()));
+        leveledAbilityModified(meta);
+    }
+
 
     @Nullable
     public Ability<?> getAbility() {
@@ -293,29 +341,18 @@ public class Pickaxe implements Tool {
         return leveledAbility;
     }
 
-    public void setLeveledAbility(@Nullable LeveledAbility leveledAbility) {
-        this.leveledAbility = leveledAbility;
-        if(leveledAbility == null) {
-            nbtItem.removeKey("leveledAbility");
-        } else {
-            NBTCompound nbtCompound = nbtItem.getOrCreateCompound("leveledAbility");
-            leveledAbility.writeNBT(nbtCompound);
-        }
-        leveledAbilityModified();
-    }
 
-    @Nullable
-    private LeveledAbility buildAbility() {
-        NBTCompound nbtCompound = nbtItem.getCompound("leveledAbility");
-        return nbtCompound == null ? null : new LeveledAbility(nbtCompound);
+    public void runAbility(AbilityUseEvent event) {
+        if(this.leveledAbility != null)
+            this.leveledAbility.perform(event);
     }
 
     public boolean hasLeveledAbility(){
-        return nbtItem.hasKey("leveledAbility") && nbtItem.getCompound("leveledAbility") != null;
+        return getLeveledAbility() != null;
     }
 
-    private void leveledAbilityModified(){
-        nbtItem.applyNBT(item);
+    private void leveledAbilityModified(ItemMeta meta){
+        item.setItemMeta(meta);
     }
 
     /**
@@ -339,6 +376,14 @@ public class Pickaxe implements Tool {
     }
 
     // -------------------------------------------- //
+    // BUFFERS
+    // -------------------------------------------- //
+
+    public Map<Buffer, Integer> getBufferLevels() {
+        return this.leveledAbility.getBufferLevels();
+    }
+
+    // -------------------------------------------- //
     // MISC METHODS
     // -------------------------------------------- //
 
@@ -358,10 +403,6 @@ public class Pickaxe implements Tool {
         this.originalUser = originalUser;
     }
 
-    public NBTItem getNbtItem() {
-        return nbtItem;
-    }
-
     public PickaxeType getType() {
         return type;
     }
@@ -374,7 +415,68 @@ public class Pickaxe implements Tool {
         if(item != null) return item;
         throw new NullPointerException();
     }
+    public static boolean isPickaxe(ItemStack i) {
+        Bukkit.broadcastMessage("Checking if it is a pickaxe.");
+        if (i == null || i.getType() == Material.AIR) return false;
+        Bukkit.broadcastMessage("1");
+        if(!isPickaxeType(i.getType())) return false;
+        Bukkit.broadcastMessage("2");
 
+        ItemMeta meta = i.getItemMeta();
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        Bukkit.broadcastMessage("Pdc: ");
+        pdc.getKeys().forEach(namespacedKey -> {
+            Bukkit.broadcastMessage("Key: " + namespacedKey.getKey());
+        });
+        if(pdc.isEmpty()) return false;
+        Bukkit.broadcastMessage("3");
+        if(!pdc.has(uuidKey, DataType.UUID)) return false;
+        Bukkit.broadcastMessage("It is a pickaxe!");
+        return true;
+    }
+    static boolean isPickaxeType(Material material){
+        return switch (material) {
+            case DIAMOND_PICKAXE, WOODEN_PICKAXE, STONE_PICKAXE, IRON_PICKAXE, GOLDEN_PICKAXE, NETHERITE_PICKAXE -> true;
+            default -> false;
+        };
+    }
+    
+    public static Pickaxe get(ItemStack i) {
+        ItemMeta meta = i.getItemMeta();
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        String type = pdc.get(typeKey, DataType.STRING);
+        UUID uuid = pdc.get(uuidKey, DataType.UUID);
+        Pickaxe tool = Pickaxe.getByUUID(uuid.toString());
+        return (tool != null) ? tool : new Pickaxe(PickaxeTypeColl.get().get(type), i, uuid.toString());
+    }
 
+    public static Pickaxe create(PickaxeType type){
 
+        UUID uuid = UUID.randomUUID();
+
+        LeveledAbility leveledAbility = new LeveledAbility(type.getAbility().getAbilityType(), 1, type.getBuffers());
+        ItemStack item = new ItemStack(type.getMaterial(), 1);
+        ItemMeta meta = item.getItemMeta();
+
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        pdc.set(uuidKey, DataType.UUID, uuid);
+        pdc.set(durabilityKey, DataType.INTEGER, type.getStartDurability());
+        pdc.set(maxDurabilityKey, DataType.INTEGER, type.getMaxDurability());
+        pdc.set(abilityKey, DataType.asMap(DataType.STRING, DataType.STRING),
+                MUtil.map("type", leveledAbility.getAbilityType().getId(), "level", String.valueOf(leveledAbility.getLevel())));
+        pdc.set(bufferKey, DataType.asMap(DataType.STRING, DataType.INTEGER), Buffer.serialize(leveledAbility.getBufferLevels()));
+        pdc.set(typeKey, DataType.STRING, type.getId());
+
+        meta.setDisplayName(type.getDisplayName());
+        meta.setLore(Color.get(type.getLore(type.getEnchants(), leveledAbility,type.getStartDurability(), type.getMaxDurability())));
+        meta.setUnbreakable(true);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
+        item.setItemMeta(meta);
+
+        Pickaxe pickaxe = new Pickaxe(type, item, uuid.toString());
+        pickaxe.addEnchants(type.getEnchantsRaw());
+        Bukkit.broadcastMessage("Creating new pickaxe with the ability: " + leveledAbility);
+
+        return pickaxe;
+    }
 }

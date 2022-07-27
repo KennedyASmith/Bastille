@@ -1,40 +1,39 @@
 package com.kennedysmithjava.prisoncore.tools.pouch;
 
-import com.kennedysmithjava.prisoncore.eco.CurrencyType;
-import com.kennedysmithjava.prisoncore.entity.tools.PouchConf;
+import com.jeff_media.morepersistentdatatypes.DataType;
+import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.util.LazyConsumer;
-import de.tr7zw.nbtapi.NBTCompound;
-import de.tr7zw.nbtapi.NBTCompoundList;
-import de.tr7zw.nbtapi.NBTItem;
-import de.tr7zw.nbtapi.NBTListCompound;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class Pouch {
 
+    private static final NamespacedKey pouchTypeKey  = new NamespacedKey(PrisonCore.get(), "pType");
+    private static final NamespacedKey dataKey = new NamespacedKey(PrisonCore.get(), "pData");
+    private static final NamespacedKey quantityKey = new NamespacedKey(PrisonCore.get(), "pQuantity");
+
     private final LazyConsumer<ItemStack> loreUpdater = new LazyConsumer<>(5 * 1000, this::updateLore, true);
-    private final LazyConsumer<ItemStack> nbtUpdater = new LazyConsumer<>(60 * 1000, this::updateNbt, true);
+    private final LazyConsumer<ItemStack> nbtUpdater = new LazyConsumer<>(60 * 1000, this::updateStoredData, true);
 
     private final UUID uuid;
 
     private final PouchType type;
-    private Map<DatalessPouchable, Integer> pouched;
+    private final Map<DatalessPouchable, Integer> pouched;
 
     private int count;
 
     public Pouch(final ItemStack itemStack, final UUID uuid) {
-        NBTItem nbtItem = new NBTItem(itemStack, true);
-
         this.uuid = uuid;
 
-        this.type = getPouchType(nbtItem);
-        this.pouched = getPouchedItems(nbtItem);
+        this.type = getPouchType(itemStack);
+        this.pouched = getPouchedItems(itemStack);
 
         this.updateLore(itemStack);
         this.updateCount();
@@ -48,24 +47,23 @@ public class Pouch {
         return type;
     }
 
-    protected void updateNbt(ItemStack item) {
-        NBTItem nbtItem = new NBTItem(item);
+    protected void updateStoredData(ItemStack item) {
+        ItemMeta meta = item.getItemMeta();
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
 
-        nbtItem.setInteger(PouchConf.POUCH_TYPE_NBT_TAG, PouchConf.get().getPouchTypeID(this.type));
-        NBTCompoundList list = nbtItem.getCompoundList(PouchConf.POUCH_DATA_TAG);
-        list.clear();
+        List<ConfigurationSerializable> pouchables = new ArrayList<>();
+        Map<String, Integer> quantity = new HashMap<>();
 
+        // Add back in each pouched item
         this.pouched.forEach((key, value) -> {
-            NBTCompound compound = list.addCompound();
-            compound.setInteger(PouchConf.POUCH_DATA_QUANTITY_TAG, value);
-
-            compound.setString(PouchConf.POUCH_DATA_DISPLAY_TAG, key.getDisplayName());
-            compound.setString(PouchConf.POUCH_DATA_NBT_VALUE_TAG, key.getUniqueNbt());
-            compound.setString(PouchConf.POUCH_DATA_NBT_CURRENCY_TAG, key.getCurrencyType().toString());
-            compound.setDouble(PouchConf.POUCH_DATA_VALUE_TAG, key.getValue());
+            pouchables.add(key);
+            quantity.put(key.getUniqueID(), value);
         });
 
-        nbtItem.applyNBT(item);
+        // Reset pouched items
+        pdc.set(dataKey, DataType.asList(DataType.CONFIGURATION_SERIALIZABLE), pouchables);
+        pdc.set(quantityKey, DataType.asMap(DataType.STRING, DataType.INTEGER), quantity);
+
     }
 
     public void updateCount() {
@@ -154,26 +152,20 @@ public class Pouch {
         item.setItemMeta(itemMeta);
     }
 
-    private static PouchType getPouchType(NBTItem item) {
-        return PouchType.from(item.getInteger(PouchConf.POUCH_TYPE_NBT_TAG));
+    private static PouchType getPouchType(ItemStack item) {
+        return PouchType.from(item.getItemMeta().getPersistentDataContainer().get(pouchTypeKey, DataType.INTEGER));
     }
 
-    private static Map<DatalessPouchable, Integer> getPouchedItems(NBTItem item) {
-        NBTCompoundList list = item.getCompoundList(PouchConf.POUCH_DATA_TAG);
+    private static Map<DatalessPouchable, Integer> getPouchedItems(ItemStack item) {
+        PersistentDataContainer pdc = item.getItemMeta().getPersistentDataContainer();
 
+        List<ConfigurationSerializable> pouchableList = pdc.getOrDefault(dataKey, DataType.asList(DataType.CONFIGURATION_SERIALIZABLE), new ArrayList<>());
         Map<DatalessPouchable, Integer> pouchedItems = new HashMap<>(10);
+        Map<String, Integer> quantities = pdc.getOrDefault(quantityKey, DataType.asMap(DataType.STRING, DataType.INTEGER), new HashMap<>());
 
-        for (NBTListCompound nbtListCompound : list) {
-
-            double value = nbtListCompound.getDouble(PouchConf.POUCH_DATA_VALUE_TAG);
-            String nbt = nbtListCompound.getString(PouchConf.POUCH_DATA_NBT_VALUE_TAG);
-            String display = nbtListCompound.getString(PouchConf.POUCH_DATA_DISPLAY_TAG);
-            CurrencyType currencyType = CurrencyType.valueOf(nbtListCompound.getString(PouchConf.POUCH_DATA_NBT_CURRENCY_TAG));
-
-            DatalessPouchable pouchable = new DatalessPouchable(nbt, value, currencyType, display);
-
-            int quantity = nbtListCompound.getInteger(PouchConf.POUCH_DATA_QUANTITY_TAG);
-
+        for (ConfigurationSerializable pouchableSerialized : pouchableList) {
+            DatalessPouchable pouchable = (DatalessPouchable) pouchableSerialized;
+            int quantity = quantities.get(pouchable.getUniqueID());
             pouchedItems.put(pouchable, quantity);
         }
 
@@ -181,7 +173,10 @@ public class Pouch {
     }
 
     public static boolean isPouch(ItemStack item) {
-        return item != null && !item.getType().equals(Material.AIR) && new NBTItem(item).hasKey(PouchConf.POUCH_TYPE_NBT_TAG);
+        return item != null && !item.getType().equals(Material.AIR) && item.getItemMeta().getPersistentDataContainer().has(pouchTypeKey, DataType.INTEGER);
     }
 
+    public static NamespacedKey getPouchTypeKey() {
+        return pouchTypeKey;
+    }
 }

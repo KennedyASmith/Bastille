@@ -41,9 +41,11 @@ public class EngineBlockBreak extends Engine {
             // Try and find it in the cache, if it's found restart from the top of this method.
             if (cache.tryCache(event.getBlock())) {
                 this.onBlockBreak(event);
+                Bukkit.broadcastMessage("Call 1");
             }
             if(event.getBlock().getWorld().getName().equals(MinesWorldManager.getWorldName())){
                 event.setCancelled(!event.getPlayer().isOp());
+                Bukkit.broadcastMessage("Block break cancelled 1!");
             }
             return;
         }
@@ -52,6 +54,7 @@ public class EngineBlockBreak extends Engine {
             // No mine region exists there, we'll let something else handle the block breaking.
             if(event.getBlock().getWorld().getName().equals(MinesWorldManager.getWorldName())){
                 event.setCancelled(!event.getPlayer().isOp());
+                Bukkit.broadcastMessage("Block break cancelled 2!");
             }
             return;
         }
@@ -60,6 +63,7 @@ public class EngineBlockBreak extends Engine {
 
         // We'll handle the block break ourselves to prevent lag.
         event.setCancelled(true);
+        Bukkit.broadcastMessage("Block break sent!");
 
         MineBlockBreakEvent customEvent = new MineBlockBreakEvent(event, region, distribution);
         Bukkit.getPluginManager().callEvent(customEvent);

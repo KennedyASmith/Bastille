@@ -1,27 +1,32 @@
 package com.kennedysmithjava.prisoncore.tools;
 
+import com.jeff_media.morepersistentdatatypes.DataType;
+import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.event.AbilityUseEvent;
 import com.kennedysmithjava.prisoncore.tools.ability.Ability;
 import com.kennedysmithjava.prisoncore.tools.ability.AbilityType;
 import com.kennedysmithjava.prisoncore.tools.ability.LeveledAbility;
 import com.kennedysmithjava.prisoncore.util.Glow;
-import com.kennedysmithjava.prisoncore.util.NBTUtil;
 import com.massivecraft.massivecore.util.MUtil;
-import de.tr7zw.nbtapi.NBTCompound;
-import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.ChatColor;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 
 import javax.annotation.Nullable;
 import java.util.*;
 
 public class AbilityItem {
 
-    private static final String IS_ABILITY_ITEM = "isAbilityItem";
-
+    private static final NamespacedKey abilityTypeKey = new NamespacedKey(PrisonCore.get(), "abilityType");
+    private static final NamespacedKey abilityLevelKey = new NamespacedKey(PrisonCore.get(), "abilityLevel");
+    private static final NamespacedKey abilityUUIDKey = new NamespacedKey(PrisonCore.get(), "abilityUUID");
+    private static final NamespacedKey buffersKey = new NamespacedKey(PrisonCore.get(), "abilityBuffers");
     private final LeveledAbility leveledAbility;
-    private final NBTItem nbtItem;
+    private final ItemStack item;
+
+    private final ItemMeta meta;
     private final UUID uuid;
 
     /**
@@ -41,21 +46,26 @@ public class AbilityItem {
     public AbilityItem(AbilityType abilityType, int level, Map<Buffer, Integer> bufferLevels) {
         this.uuid = UUID.randomUUID();
         this.leveledAbility = new LeveledAbility(abilityType, level, bufferLevels);
-        this.nbtItem = new NBTItem(new ItemStack(getAbility().getItemMaterial(), 1));
-        writeNBT(this.nbtItem);
+        this.item = new ItemStack(getAbility().getItemMaterial(), 1);
+        this.meta = item.getItemMeta();
+        meta.getPersistentDataContainer().set(abilityTypeKey, DataType.STRING, abilityType.getId());
+        meta.getPersistentDataContainer().set(buffersKey, DataType.asMap(DataType.STRING, DataType.INTEGER), Buffer.serialize(bufferLevels));
+        meta.getPersistentDataContainer().set(abilityLevelKey, DataType.INTEGER, level);
+        meta.getPersistentDataContainer().set(abilityUUIDKey, DataType.UUID, uuid);
     }
 
     /**
      * Get ability information from a pre-existing ability item
      * @param itemStack the ability ItemStack
-     * @throws Exception if the ItemStack is not an ability item
      */
-    public AbilityItem(ItemStack itemStack) throws Exception {
-        this.nbtItem = new NBTItem(itemStack);
-        this.leveledAbility = new LeveledAbility(this.nbtItem);
-        Boolean isAbilityItem = this.nbtItem.getBoolean(IS_ABILITY_ITEM);
-        if(isAbilityItem == null || !isAbilityItem) throw new Exception("ItemStack is not AbilityItem");
-        this.uuid = NBTUtil.readUUID(this.nbtItem, "uuid");
+    public AbilityItem(ItemStack itemStack){
+        this.item = itemStack;
+        this.meta = itemStack.getItemMeta();
+        AbilityType abilityType = AbilityType.getFromId(meta.getPersistentDataContainer().get(abilityTypeKey, DataType.STRING));
+        Map<Buffer, Integer> buffers = Buffer.deserialize(meta.getPersistentDataContainer().get(buffersKey, DataType.asMap(DataType.STRING, DataType.INTEGER)));
+        int level = meta.getPersistentDataContainer().get(abilityLevelKey, DataType.INTEGER);
+        this.leveledAbility = new LeveledAbility(abilityType, level, buffers);
+        this.uuid = meta.getPersistentDataContainer().get(abilityUUIDKey, DataType.UUID);
     }
 
     /**
@@ -63,16 +73,7 @@ public class AbilityItem {
      * @param leveledAbility ability with corresponding buffer levels
      */
     public AbilityItem(LeveledAbility leveledAbility) {
-        this.leveledAbility = leveledAbility;
-        this.nbtItem = new NBTItem(new ItemStack(getAbility().getItemMaterial(), 1));
-        this.uuid = UUID.randomUUID();
-        writeNBT(this.nbtItem);
-    }
-
-    private void writeNBT(NBTCompound nbtCompound) {
-        nbtCompound.setBoolean(IS_ABILITY_ITEM, true);
-        NBTUtil.writeUUID(nbtCompound, "uuid", this.uuid);
-        this.leveledAbility.writeNBT(nbtCompound);
+        this(leveledAbility.getAbilityType(), leveledAbility.getLevel(), leveledAbility.getBufferLevels());
     }
 
     public AbilityType getAbilityType() {
@@ -127,10 +128,6 @@ public class AbilityItem {
         return this.leveledAbility.getAbility();
     }
 
-    public NBTItem getNBTItem() {
-        return nbtItem;
-    }
-
     public void perform(AbilityUseEvent event) {
         this.leveledAbility.perform(event);
     }
@@ -141,7 +138,7 @@ public class AbilityItem {
 
     public ItemStack getItemStack() {
         Ability<?> ability = getAbility();
-        ItemStack result = this.nbtItem.getItem();
+        ItemStack result = this.item;
         ItemMeta itemMeta = result.getItemMeta();
         itemMeta.setDisplayName("" + ChatColor.RESET + ChatColor.BOLD
                 + ChatColor.translateAlternateColorCodes('&', ability.getDisplayName())
@@ -169,9 +166,9 @@ public class AbilityItem {
     }
 
     public static boolean isAbilityItem(ItemStack itemStack) {
-        NBTItem nbtItem = new NBTItem(itemStack);
-        Boolean isAbilityItem = nbtItem.getBoolean(IS_ABILITY_ITEM);
-        return isAbilityItem != null && isAbilityItem;
+        ItemMeta meta = itemStack.getItemMeta();
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        return !pdc.isEmpty() && pdc.has(abilityTypeKey, DataType.STRING);
     }
 
     public LeveledAbility getLeveledAbility() {

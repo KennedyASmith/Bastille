@@ -2,6 +2,7 @@ package com.kennedysmithjava.prisoncore.entity.mines;
 
 import com.kennedysmithjava.prisoncore.blockhandler.BlockWrapper;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.PrisonBlock;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 
@@ -32,10 +33,12 @@ public class Distribution {
             this.initRates();
         }
 
-        final Map<Integer, PrisonBlock> blocks = BlocksConf.get().blocks;
+        Bukkit.broadcastMessage("PBM: " + blockPrisonBlockMap);
 
         Integer prisonBlockId = this.blockPrisonBlockMap.get(new BlockWrapper(material, blockData));
-        return blocks.getOrDefault(prisonBlockId, null);
+
+
+        return BlocksConf.get().blocks.getOrDefault(prisonBlockId, null);
     }
 
     private void initRates() {

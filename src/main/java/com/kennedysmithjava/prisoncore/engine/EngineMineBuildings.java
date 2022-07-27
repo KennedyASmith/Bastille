@@ -4,11 +4,10 @@ import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.entity.MConf;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.mines.MineColl;
+import com.kennedysmithjava.prisoncore.tools.Pickaxe;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.regions.LazyRegion;
 import com.kennedysmithjava.prisoncore.tools.enchantment.Enchant;
-import com.kennedysmithjava.prisoncore.tools.Pickaxe;
-import com.kennedysmithjava.prisoncore.tools.Tool;
 import com.kennedysmithjava.prisoncore.util.Glow;
 import com.massivecraft.massivecore.Engine;
 import com.massivecraft.massivecore.chestgui.ChestGui;
@@ -153,12 +152,11 @@ public class EngineMineBuildings extends Engine {
 
     public void enchantMenu(Player player){
 
-        ItemStack item = player.getItemInHand();
+        ItemStack item = player.getInventory().getItemInMainHand();
 
-        if(!Tool.isTool(item)){ player.sendMessage(Color.get("You are not holding an enchantable item.")); return; }
+        if(!Pickaxe.isPickaxe(item)){ player.sendMessage(Color.get("You are not holding an enchantable item.")); return; }
 
-        Tool tool = Tool.get(item);
-        Pickaxe pickaxe = (Pickaxe) tool;
+        Pickaxe pickaxe = Pickaxe.get(item);
 
         Inventory enchantInv= Bukkit.createInventory(null, 6*9, Color.get("&8&lPickaxe Enchantments"));
         ChestGui gui = ChestGui.getCreative(enchantInv);

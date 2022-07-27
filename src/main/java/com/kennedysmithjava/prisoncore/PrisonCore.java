@@ -2,7 +2,6 @@ package com.kennedysmithjava.prisoncore;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.fastasyncworldedit.core.util.task.RunnableVal;
 import com.kennedysmithjava.prisoncore.cmd.PouchCommand;
 import com.kennedysmithjava.prisoncore.eco.MineCurrencyPlaceholder;
 import com.kennedysmithjava.prisoncore.engine.EngineTools;
@@ -12,6 +11,7 @@ import com.kennedysmithjava.prisoncore.entity.mines.objects.Floor;
 import com.kennedysmithjava.prisoncore.entity.npcs.FarmerConfColl;
 import com.kennedysmithjava.prisoncore.entity.npcs.FarmerGuiConfColl;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
+import com.kennedysmithjava.prisoncore.entity.player.MPlayerColl;
 import com.kennedysmithjava.prisoncore.entity.tools.BufferConfColl;
 import com.kennedysmithjava.prisoncore.entity.tools.EnchantConfColl;
 import com.kennedysmithjava.prisoncore.entity.tools.PickaxeTypeColl;
@@ -24,6 +24,7 @@ import com.kennedysmithjava.prisoncore.quest.QuestManager;
 import com.kennedysmithjava.prisoncore.quest.QuestProfile;
 import com.kennedysmithjava.prisoncore.tools.ability.*;
 import com.kennedysmithjava.prisoncore.tools.enchantment.*;
+import com.kennedysmithjava.prisoncore.tools.pouch.DatalessPouchable;
 import com.kennedysmithjava.prisoncore.util.*;
 import com.massivecraft.massivecore.MassivePlugin;
 import com.massivecraft.massivecore.collections.MassiveList;
@@ -35,6 +36,7 @@ import net.citizensnpcs.api.npc.NPCRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.generator.ChunkGenerator;
 
 import java.io.File;
@@ -99,6 +101,8 @@ public class PrisonCore extends MassivePlugin {
         new MineCountdownPlaceholder(this).register();
         new MineCurrencyPlaceholder(this).register();
 
+        ConfigurationSerialization.registerClass(DatalessPouchable.class);
+
         Pickaxe.LORE_UPDATER.runTaskTimerAsynchronously(this, 20L, 5 * 20L);
         getServer().getPluginManager().registerEvents(new EngineTools(), this);
         this.questManager = new QuestManager();
@@ -130,6 +134,7 @@ public class PrisonCore extends MassivePlugin {
 
         return new MassiveList<>(
                 MConfColl.class,
+                MPlayerColl.class,
                 MinesConfColl.class,
                 BlocksConfColl.class,
                 DistributionConfColl.class,

@@ -2,7 +2,6 @@ package com.kennedysmithjava.prisoncore.cmd;
 
 import com.massivecraft.massivecore.MassiveException;
 import com.massivecraft.massivecore.command.MassiveCommand;
-import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -23,11 +22,7 @@ public class PouchCommand extends MassiveCommand {
 
     @Override
     public void perform() throws MassiveException {
-        ItemStack itemStack = new ItemStack(Material.APPLE);
 
-        ItemStack itemInHand = me.getItemInHand();
-        NBTItem nbtItem = new NBTItem(itemInHand);
-        me.sendMessage(nbtItem.toString());
     }
 
 

@@ -1,7 +1,7 @@
 package com.kennedysmithjava.prisoncore.tools.pouch;
 
+import com.jeff_media.morepersistentdatatypes.DataType;
 import com.kennedysmithjava.prisoncore.entity.tools.PouchConf;
-import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -72,14 +72,9 @@ public final class PouchType {
         itemMeta.setDisplayName(this.name);
         itemStack.setItemMeta(itemMeta);
 
-        NBTItem nbtItem = new NBTItem(itemStack);
+        PouchManager.get().generateUUID(itemStack);
+        itemMeta.getPersistentDataContainer().set(Pouch.getPouchTypeKey(), DataType.INTEGER, PouchConf.get().getPouchTypeID(this));
 
-        PouchManager.get().generateUUID(nbtItem);
-
-        nbtItem.setInteger(PouchConf.POUCH_TYPE_NBT_TAG, PouchConf.get().getPouchTypeID(this));
-        nbtItem.getCompoundList(PouchConf.POUCH_DATA_TAG);
-
-        nbtItem.applyNBT(itemStack);
         return itemStack;
     }
 

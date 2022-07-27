@@ -6,7 +6,6 @@ import com.kennedysmithjava.prisoncore.event.AbilityUseEvent;
 import com.kennedysmithjava.prisoncore.event.BlockEventFulfiller;
 import com.kennedysmithjava.prisoncore.event.MineBlockBreakEvent;
 import com.kennedysmithjava.prisoncore.tools.Pickaxe;
-import com.kennedysmithjava.prisoncore.tools.Tool;
 import com.kennedysmithjava.prisoncore.tools.enchantment.BlockBreakEnchant;
 import com.kennedysmithjava.prisoncore.tools.enchantment.HandEquipEnchant;
 import com.kennedysmithjava.prisoncore.util.regions.LazyRegion;
@@ -28,7 +27,6 @@ import java.util.Set;
 import java.util.UUID;
 
 public class EngineTools implements Listener {
-
     private static final BlockEventFulfiller fulfiller = BlockEventFulfiller.get();
     private static final MineRegionCache cache = MineRegionCache.get();
     private static final Set<UUID> usingAbilityCache = new HashSet<>();
@@ -36,14 +34,14 @@ public class EngineTools implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerUse(PlayerInteractEvent event) {
         if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
-        Player p = event.getPlayer();
-        if (!p.isSneaking()) return;
-        ItemStack i = p.getItemInHand();
+        Player player = event.getPlayer();
+        if (!player.isSneaking()) return;
+        ItemStack i = player.getInventory().getItemInMainHand();
         Block block = event.getClickedBlock();
         if(block.getType() == null) return;
         //Ensure that the player isn't already using an ability.
-        if(usingAbilityCache.contains(p.getUniqueId())){
-            p.sendMessage("You're already using an ability.");
+        if(usingAbilityCache.contains(player.getUniqueId())){
+            player.sendMessage("You're already using an ability.");
             return;
         }
 
@@ -65,23 +63,20 @@ public class EngineTools implements Listener {
         }
 
         //Ensure that the item used to break a block is a Tool
-        if (!Tool.isTool(i)) return;
-        Tool t = Tool.get(i);
+        if (!Pickaxe.isPickaxe(i)) return;
+        Pickaxe pick = Pickaxe.get(i);
         //If the item is a pickaxe
-        if (t instanceof Pickaxe) {
-            Pickaxe pickaxe = (Pickaxe) t;
-            if (pickaxe.hasLeveledAbility()){
+            if (pick.hasLeveledAbility()){
                 Distribution distribution = cache.getDistribution(block);
                 AbilityUseEvent abilityUseEvent = new AbilityUseEvent(event, region, distribution);
-                pickaxe.runAbility(abilityUseEvent);
+                pick.runAbility(abilityUseEvent);
                 Bukkit.getServer().getPluginManager().callEvent(abilityUseEvent);
-                usingAbilityCache.add(p.getUniqueId());
+                usingAbilityCache.add(player.getUniqueId());
             }else{
-                p.sendMessage("Your pickaxe doesn't have any abilities.");
+                player.sendMessage("Your pickaxe doesn't have any abilities.");
             }
-            if (pickaxe.getOriginalUser() == null)
-                pickaxe.setOriginalUser(p.getUniqueId().toString());
-        }
+            if (pick.getOriginalUser() == null)
+                pick.setOriginalUser(player.getUniqueId().toString());
     }
 
     public static void fulfillAbility(AbilityUseEvent event){
@@ -100,19 +95,18 @@ public class EngineTools implements Listener {
         handleEquipEnchants(p, oldSlot, false);
     }
 
-    public void handleEquipEnchants(Player p, int slot, boolean thisIsNewItem){
-        ItemStack item = p.getInventory().getItem(slot);
+    public void handleEquipEnchants(Player player, int slot, boolean thisIsNewItem){
+        ItemStack item = player.getInventory().getItem(slot);
         if(item == null) return;
-        if(!Tool.isTool(item)) return;
-        Pickaxe pickaxe = (Pickaxe) Tool.get(item);
-        pickaxe.getEnchants().forEach((enchant, level) -> {
-            if(enchant instanceof HandEquipEnchant){
+        if (!Pickaxe.isPickaxe(item)) return;
+        Pickaxe p = Pickaxe.get(item);
+        p.getEnchants().forEach((enchant, level) -> {
+            if(enchant instanceof HandEquipEnchant<?> handEquipEnchant){
                 Bukkit.broadcastMessage("Enchant: " + enchant.getName() + " Level: " + level);
-                HandEquipEnchant<?> handEquipEnchant = (HandEquipEnchant<?>) enchant;
                 if(thisIsNewItem){
-                    handEquipEnchant.onEquip(p, level);
+                    handEquipEnchant.onEquip(player, level);
                 }else{
-                    handEquipEnchant.onDequip(p, level);
+                    handEquipEnchant.onDequip(player, level);
                 }
             }
         });
@@ -120,20 +114,17 @@ public class EngineTools implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreak(MineBlockBreakEvent event) {
-        ItemStack i = event.getPlayer().getItemInHand();
-        if (!Tool.isTool(i)) return;
-        Tool t = Tool.get(i);
+        ItemStack i = event.getPlayer().getInventory().getItemInMainHand();
+        if (!Pickaxe.isPickaxe(i)) return;
+        Pickaxe p = Pickaxe.get(i);
         //If the item is a pickaxe
-        if (t instanceof Pickaxe) {
-            Pickaxe p = (Pickaxe) t;
-            if (p.hasBlockBreakEnchantments()) {
-                Map<BlockBreakEnchant<?>, Integer> enchants = p.getBlockBreakEnchantments();
-                enchants.forEach((enchant, level) -> enchant.onBreak(event, level));
-            }
-            if (p.getOriginalUser() == null) p.setOriginalUser(event.getPlayer().getUniqueId().toString());
-            p.setDurability(p.getDurability()-1);
-            Pickaxe.addToLoreUpdateQueue(p, i);
+        if (p.hasBlockBreakEnchantments()) {
+            Map<BlockBreakEnchant<?>, Integer> enchants = p.getBlockBreakEnchantments();
+            enchants.forEach((enchant, level) -> enchant.onBreak(event, level));
         }
+        if (p.getOriginalUser() == null) p.setOriginalUser(event.getPlayer().getUniqueId().toString());
+        p.setDurability(p.getDurability()-1);
+        Pickaxe.addToLoreUpdateQueue(p, p.getItem());
         fulfiller.handleEventReturn(event);
     }
 

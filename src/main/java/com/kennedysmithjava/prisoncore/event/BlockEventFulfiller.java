@@ -7,6 +7,7 @@ import com.kennedysmithjava.prisoncore.tools.pouch.Pouch;
 import com.kennedysmithjava.prisoncore.tools.pouch.PouchFullException;
 import com.kennedysmithjava.prisoncore.tools.pouch.PouchManager;
 import com.kennedysmithjava.prisoncore.tools.pouch.Pouchable;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -56,6 +57,7 @@ public class BlockEventFulfiller {
             block.setType(Material.AIR);
         }
 
+        Bukkit.broadcastMessage("Handing out reward!");
         this.rewardPlayer(finishedEvent.getPlayer(), finishedEvent.getRewards(), finishedEvent.getBlockMultiplier(), finishedEvent.getAwardMultiplier());
         rpEngine.addBlockCount(finishedEvent.getPlayer());
     }

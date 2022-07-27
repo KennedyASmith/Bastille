@@ -1,8 +1,5 @@
 package com.kennedysmithjava.prisoncore.entity.mines;
 
-import com.fastasyncworldedit.core.util.task.RunnableVal;
-import com.gmail.filoghost.holographicdisplays.api.Hologram;
-import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import com.kennedysmithjava.prisoncore.util.MineRegenCountdown;
 import com.kennedysmithjava.prisoncore.util.MinesWorldManager;
 import com.kennedysmithjava.prisoncore.PrisonCore;
@@ -27,6 +24,10 @@ import com.sk89q.worldedit.function.pattern.RandomPattern;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
+import me.filoghost.holographicdisplays.api.beta.HolographicDisplaysAPI;
+import me.filoghost.holographicdisplays.api.beta.hologram.Hologram;
+import me.filoghost.holographicdisplays.api.beta.hologram.ResolvePlaceholders;
+import me.filoghost.holographicdisplays.api.beta.hologram.line.TextHologramLine;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.npc.NPCRegistry;
 import org.bukkit.Bukkit;
@@ -34,6 +35,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.FaceAttachable;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -319,12 +322,14 @@ public class Mine extends Entity<Mine> implements Named {
         if(!autoRegenEnabled) removeLever();
 
         pasteFloor(getPathID(), w, () -> {
+            setWidthVar(w);
             regen();
             spawnNPCs();
             if(!autoRegenEnabled) placeLever();
             pauseRegenCountdown(false);
             onFinish.run();
         });
+
     }
 
     public void rebuildSchematics(int floorID, int wallID, Runnable onFinish){
@@ -364,7 +369,7 @@ public class Mine extends Entity<Mine> implements Named {
     private void pasteFloor(int floorID, int width, Runnable onFinish){
         Mine mine = this;
         String world = getWorld().getName();
-        String oldSchematic = this.getFloor().getSchematic(width);
+        String oldSchematic = this.getFloor().getSchematic(this.getWidth());
         String newSchematic = LayoutConf.get().getPath(floorID).getSchematic(width);
         BlockVector3 origin = BlockVector3.at(this.origin.getLocationX(), this.origin.getLocationY(), this.origin.getLocationZ());
         //Clear the previous schematic
@@ -386,12 +391,7 @@ public class Mine extends Entity<Mine> implements Named {
     }
 
     private void clearFloor(String schematic, String world, BlockVector3 origin, Runnable onFinish){
-        FAWEPaster.paste(schematic,
-                world,
-                origin,
-                true,
-                onFinish
-        );
+        FAWEPaster.paste(schematic, world, origin, true, onFinish);
     }
 
     /**
@@ -1109,26 +1109,31 @@ public class Mine extends Entity<Mine> implements Named {
     }
 
     public Location getLeverLocation(){
-        return getMineMax().clone().add(-2, 2, -2);
+        return getMineMax().clone().add(-1, 3, -1);
     }
 
     public void placeLever(){
         World world = MinesWorldManager.get().getWorld();
 
         Block tempStand = world.getBlockAt(getLeverLocation().clone().add(0, -1,0));
-        tempStand.setType(Material.SMOOTH_STONE_SLAB);
+        tempStand.setType(Material.POLISHED_ANDESITE);
 
         Block lever = world.getBlockAt(getLeverLocation());
         lever.setType(Material.LEVER);
+        FaceAttachable attachable = (FaceAttachable) lever.getBlockData();
+        attachable.setAttachedFace(FaceAttachable.AttachedFace.FLOOR);
+        lever.setBlockData(attachable);
 
         createRegenHologram();
     }
 
     public void createRegenHologram(){
-        Hologram hologram = HologramsAPI.createHologram(PrisonCore.get(), getLeverLocation().clone().add(0.5, 1.5, 0.5));
-        hologram.setAllowPlaceholders(true);
-        hologram.appendTextLine("&a&lREGEN MINE");
-        hologram.appendTextLine("{fast}&a%countdown_" + this.getId() + "% &r");
+
+        HolographicDisplaysAPI api = HolographicDisplaysAPI.get(PrisonCore.get()); // The API instance for your plugin
+        Hologram hologram = api.createHologram(getLeverLocation().clone().add(0.5, 1.5, 0.5));
+        hologram.setResolvePlaceholders(ResolvePlaceholders.ALL);
+        hologram.getLines().appendText(Color.get("&a&lREGEN MINE"));
+        hologram.getLines().appendText(Color.get("&a{papi: countdown_" + this.getId() + "}"));
         setRegenHologram(hologram);
     }
 

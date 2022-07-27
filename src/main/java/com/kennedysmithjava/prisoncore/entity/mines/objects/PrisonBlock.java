@@ -1,14 +1,17 @@
 package com.kennedysmithjava.prisoncore.entity.mines.objects;
 
+import com.jeff_media.morepersistentdatatypes.DataType;
+import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.blockhandler.BlockWrapper;
 import com.kennedysmithjava.prisoncore.blockhandler.Product;
 import com.kennedysmithjava.prisoncore.blockhandler.ValueModifiedPrisonBlock;
 import com.kennedysmithjava.prisoncore.eco.CurrencyType;
 import com.kennedysmithjava.prisoncore.entity.mines.BlocksConf;
+import com.kennedysmithjava.prisoncore.tools.pouch.DatalessPouchable;
 import com.kennedysmithjava.prisoncore.tools.pouch.Pouchable;
 import com.kennedysmithjava.prisoncore.util.Color;
-import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -56,7 +59,7 @@ public class PrisonBlock implements Pouchable {
     }
 
     @Override
-    public String getUniqueNbt() {
+    public String getUniqueID() {
         return String.valueOf(BlocksConf.get().getId(this));
     }
 
@@ -92,11 +95,7 @@ public class PrisonBlock implements Pouchable {
         meta.setDisplayName(Color.get(getName()));
         meta.setLore(getLore());
         base.setItemMeta(meta);
-
-        NBTItem item = new NBTItem(base);
-        item.setDouble("VALUE", value);
-        item.applyNBT(base);
-
+        base.getItemMeta().getPersistentDataContainer().set(valueKey, DataType.DOUBLE, value);
         return base;
     }
 

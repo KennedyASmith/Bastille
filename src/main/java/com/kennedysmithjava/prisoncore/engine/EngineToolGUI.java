@@ -1,7 +1,6 @@
 package com.kennedysmithjava.prisoncore.engine;
 
 import com.kennedysmithjava.prisoncore.tools.Pickaxe;
-import com.kennedysmithjava.prisoncore.tools.Tool;
 import com.kennedysmithjava.prisoncore.tools.enchantment.Enchant;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.Glow;
@@ -40,17 +39,13 @@ public class EngineToolGUI extends Engine {
         if(!event.getAction().equals(Action.RIGHT_CLICK_AIR)) return;
         Player p = event.getPlayer();
         if(!p.isSneaking()) return;
-        ItemStack item = p.getItemInHand();
-        if(!Tool.isTool(item)) return;
-
-        Tool tool = Tool.get(item);
-
-        if(tool instanceof Pickaxe){
-            openPickaxeGUI(p, (Pickaxe) tool, item);
-        }
+        ItemStack item = p.getInventory().getItemInMainHand();
+        if(!Pickaxe.isPickaxe(item)) return;
+        Pickaxe tool = Pickaxe.get(item);
+        openPickaxeGUI(p, tool, item);
     }
 
-    public void openPickaxeGUI(Player p, Pickaxe pickaxe, ItemStack item){
+    public void openPickaxeGUI(Player p, Pickaxe pickaxeLegacy, ItemStack item){
 
         Inventory pickaxeInv= Bukkit.createInventory(null, InventoryType.HOPPER, color("&8&lPickaxe Upgrades"));
 
@@ -86,10 +81,9 @@ public class EngineToolGUI extends Engine {
     }
 
     public static void enchantMenu(Player player, ItemStack item){
-        if(!Tool.isTool(item)){ player.sendMessage(Color.get("You are not holding a tool."));return; }
+        if(!Pickaxe.isPickaxe(item)){ player.sendMessage(Color.get("You are not holding a pickaxe.")); return; }
 
-        Tool tool = Tool.get(item);
-        Pickaxe pickaxe = (Pickaxe) tool;
+        Pickaxe pickaxe = Pickaxe.get(item);
 
         Inventory enchantInv= Bukkit.createInventory(null, 6*9, Color.get("&8&lPickaxe Enchantments"));
         ChestGui gui = ChestGui.getCreative(enchantInv);
@@ -123,13 +117,13 @@ public class EngineToolGUI extends Engine {
     }
 
 
-    private static ChestAction upgradeChestAction(Enchant<?> enchant, int currentLevel, Pickaxe pickaxe, Player player){
+    private static ChestAction upgradeChestAction(Enchant<?> enchant, int currentLevel, Pickaxe pickaxeLegacy, Player player){
         return event -> {
-            pickaxe.addEnchant(enchant, enchant.incrementLevel(currentLevel));
+            pickaxeLegacy.addEnchant(enchant, enchant.incrementLevel(currentLevel));
             player.sendMessage(Color.get("&aYou have upgraded your " + enchant.getDisplayName().replaceAll("%name%", enchant.getName()) + " &aenchant!"));
-            ItemStack item = pickaxe.getItem();
+            ItemStack item = pickaxeLegacy.getItem();
             ItemMeta meta = item.getItemMeta();
-            meta.setLore(pickaxe.getType().getLore(pickaxe.getEnchants(), pickaxe.getLeveledAbility(), pickaxe.getDurability(), pickaxe.getMaxDurability()));
+            meta.setLore(pickaxeLegacy.getType().getLore(pickaxeLegacy.getEnchants(), pickaxeLegacy.getLeveledAbility(), pickaxeLegacy.getDurability(), pickaxeLegacy.getMaxDurability()));
             item.setItemMeta(meta);
             player.setItemInHand(item);
             player.closeInventory();
@@ -137,13 +131,13 @@ public class EngineToolGUI extends Engine {
         };
     }
 
-    private static ChestAction buyChestAction(Enchant<?> enchant, Pickaxe pickaxe, Player player, ChestGui gui){
+    private static ChestAction buyChestAction(Enchant<?> enchant, Pickaxe pickaxeLegacy, Player player, ChestGui gui){
         return inventoryClickEvent -> {
-            pickaxe.addEnchant(enchant, 1);
+            pickaxeLegacy.addEnchant(enchant, 1);
 
-            ItemStack item = pickaxe.getItem();
+            ItemStack item = pickaxeLegacy.getItem();
             ItemMeta meta = item.getItemMeta();
-            meta.setLore(pickaxe.getType().getLore(pickaxe.getEnchants(), pickaxe.getLeveledAbility(), pickaxe.getDurability(), pickaxe.getMaxDurability()));
+            meta.setLore(pickaxeLegacy.getType().getLore(pickaxeLegacy.getEnchants(), pickaxeLegacy.getLeveledAbility(), pickaxeLegacy.getDurability(), pickaxeLegacy.getMaxDurability()));
             item.setItemMeta(meta);
 
             player.setItemInHand(item);

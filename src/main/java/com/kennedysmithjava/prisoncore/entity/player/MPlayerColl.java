@@ -1,5 +1,6 @@
 package com.kennedysmithjava.prisoncore.entity.player;
 
+import com.massivecraft.massivecore.MassiveCore;
 import com.massivecraft.massivecore.store.SenderColl;
 import org.bukkit.entity.Player;
 
@@ -33,7 +34,6 @@ public class MPlayerColl extends SenderColl<MPlayer> {
     public void setActive(boolean active) {
         super.setActive(active);
         if (!active) return;
-
     }
 
     public MPlayer getByUUID(UUID uuid) {

@@ -4,7 +4,9 @@ import com.kennedysmithjava.prisoncore.entity.tools.BufferConf;
 import com.massivecraft.massivecore.store.EntityInternal;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Buffer extends EntityInternal<Buffer> {
 
@@ -70,5 +72,13 @@ public class Buffer extends EntityInternal<Buffer> {
                 ", lore=" + lore +
                 ", infoLore='" + infoLore + '\'' +
                 '}';
+    }
+
+    public static Map<String, Integer> serialize(Map<Buffer, Integer> entry){
+        return entry.entrySet().stream().collect(Collectors.toMap(k -> k.getKey().getName(), Map.Entry::getValue));
+    }
+
+    public static Map<Buffer, Integer> deserialize(Map<String, Integer> entry){
+        return entry.entrySet().stream().collect(Collectors.toMap(k -> Buffer.get(k.getKey()), Map.Entry::getValue));
     }
 }

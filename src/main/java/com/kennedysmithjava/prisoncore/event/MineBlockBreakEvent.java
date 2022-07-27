@@ -7,6 +7,7 @@ import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.mines.MineColl;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.PrisonBlock;
 import com.kennedysmithjava.prisoncore.util.regions.LazyRegion;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -45,8 +46,10 @@ public class MineBlockBreakEvent extends Event implements Cancellable {
 
         this.rewards = new ArrayList<>();
         this.rewards.add(distribution.generatePrisonBlock(block.getType(), block.getBlockData()));
-
         this.breakAnimations = new ArrayList<>();
+
+        Bukkit.broadcastMessage("Distribution: " + distribution.getRates().toString());
+        Bukkit.broadcastMessage("Rewards: " + rewards.toString());
     }
 
 
