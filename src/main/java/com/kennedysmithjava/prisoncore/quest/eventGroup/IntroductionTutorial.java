@@ -2,15 +2,20 @@ package com.kennedysmithjava.prisoncore.quest.eventGroup;
 
 import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.entity.MConf;
+import com.kennedysmithjava.prisoncore.entity.mines.ArchitectConf;
+import com.kennedysmithjava.prisoncore.entity.mines.WarrenConf;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
+import com.kennedysmithjava.prisoncore.npc.SkinManager;
 import com.kennedysmithjava.prisoncore.quest.QuestPhase;
 import com.kennedysmithjava.prisoncore.quest.QuestPhaseGroup;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.regions.Offset;
+import com.massivecraft.massivecore.util.MUtil;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.ai.Navigator;
 import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.trait.HologramTrait;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -27,6 +32,36 @@ import java.util.Map;
 public class IntroductionTutorial extends QuestPhaseGroup {
 
     public static IntroductionTutorial i = new IntroductionTutorial();
+
+    private static String prefix = " \n \n \n &7&m-------------------------------------------------- \n &r&7&o[NPC] &r&e&lWarren the Warden:&7\n";
+    private static String suffix = "\n &7&m-------------------------------------------------- \n";
+
+    private static final List<String> messages = MUtil.list(
+            prefix + "&r&fWelcome to your new home. You do the crime, you do the time." + "\n" +
+                    "&r&fFollow me, I'll show you around. " + suffix,
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            "\n \n &r&7&o[NPC] &r&e&lWarren the Warden: &fThis area here is your &eMine&f!"  + "\n" +
+            "You're expected to mine blocks here."  + "\n" +
+            "You can give me those blocks for &a ⛁Cash&f!",
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            "&r&7&o[NPC] &r&e&lWarren the Warden: &fIt's not much yet... but maybe for some &a⛁Cash &fI can fix your &eMine &fup." + "\n" +
+            "Talk to me later, I can improve the &eWidth, Height&f, &fand the &eMaterials &f (and much more) of your &eMine&f." + "\n" +
+            "With good behavior (and for a price), I can even improve your &eMine&f's &eScenery&f. So no sassing!",
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            "&r&7&o[NPC] &r&e&lWarren the Warden: &fI'll be watching you from here. No funny business!" + "\n" +
+            "Don't bother asking me if you have any questions... " + "\n" +
+            "...but the command &e/help&f might be useful."  + "\n" +
+            "You'll probably need a &ePickaxe&f. Here, I'll give you one." + "\n" +
+            "Now get working! No funny business." + "\n \n" +
+            "&7You've been given &e+1 &6Old Rusty Pickaxe&7!"
+    );
+
+    private static final List<Offset> locations = MUtil.list(
+            new Offset(-51, 50, -60), //In front of the mine
+            new Offset(-41, 50, -50), //To the west of the mine
+            new Offset(-51, 50, -30) //In front of NPC stands
+    );
+
 
     IntroductionTutorial() {
 
@@ -57,27 +92,21 @@ public class IntroductionTutorial extends QuestPhaseGroup {
                 spawned = false;
 
                 Location spawnLocation = getLocation(new Offset(-51, 51, -66, 0, 180));
-
-                npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.VILLAGER, "");
-
+                npc = PrisonCore.getNonPersistNPCRegistry().createNPC(EntityType.PLAYER,Color.get("&eWarren the Warden"));
+                if(npc.getId() == 0) npc = PrisonCore.getNonPersistNPCRegistry().createNPC(EntityType.PLAYER,Color.get("&eWarren the Warden"));
+                SkinManager.skin(npc, "WarrenTutorial-" + npc.hashCode() + "-" + Math.random(), WarrenConf.get().warrenSkin, 15);
+                npc.setProtected(true);
                 npc.spawn(spawnLocation);
-                Villager villager = (Villager) npc.getEntity();
-                villager.addPotionEffect(PotionEffectType.SLOW.createEffect(999999, 1));
 
                 this.navigator = npc.getNavigator();
+                player.sendMessage(Color.get(messages.get(0)));
 
-                player.sendMessage(Color.get((MConf.get().introductionTutorialTourMessage)));
-
-                mine.spawnNPCs();
-
-                /*
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        startDialogue(iterator.next());
+                        startDialogue();
                     }
-                }.runTaskLater(PrisonCore.get(), 5L*20);
-                */
+                }.runTaskLater(PrisonCore.get(), 7L*20);
 
             }
 
@@ -86,11 +115,8 @@ public class IntroductionTutorial extends QuestPhaseGroup {
                 npc.destroy();
             }
 
-            public void startDialogue(Offset offset) {
+            public void startDialogue() {
 
-                List<String> messages = tour.get(offset);
-                Location target = getLocation(offset);
-                navigator.setTarget(target);
 
                 new BukkitRunnable() {
 
@@ -99,8 +125,11 @@ public class IntroductionTutorial extends QuestPhaseGroup {
                     boolean npcReachedDestination = false;
                     boolean finished = false;
 
+                    Location target = player.getLocation().add(0, -10, 0);
+
                     @Override
                     public void run() {
+
                         if (npcSpeaking) return;
                         if (navigator.isNavigating()) return;
                         if (player == null) {
@@ -109,40 +138,30 @@ public class IntroductionTutorial extends QuestPhaseGroup {
                             return;
                         }
 
-                        if (!npcReachedDestination && npc.getStoredLocation() == target) npcReachedDestination = true;
+                        if (!npcReachedDestination && locationsEqual(npc.getEntity().getLocation(), target)) npcReachedDestination = true;
+                        finished = (messages.size() - 1 == finishedMessages) && npcReachedDestination;
 
                         if (finished) {
-                            if (iterator.hasNext()) {
-                                startDialogue(iterator.next());
-                            }else{
-                                Location location = npc.getEntity().getLocation();
-                                Bukkit.broadcastMessage("Todo: Explosion here");
-                                npc.destroy();
-                                mine.spawnResearcherNPC();
-                                completed(true);
-                            }
+                            Location location = npc.getEntity().getLocation();
+                            npc.destroy();
+                            mine.spawnResearcherNPC();
+                            completed(true);
                             this.cancel();
-                            return;
-                        }
-
-                        String firstMessage = messages.get(0);
-                        sendMessage(firstMessage, player);
-
-                        for (String message : messages) {
-                            if (message.equals(firstMessage)) continue;
-                            npcSpeaking = true;
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    if (player == null) this.cancel();
-                                    sendMessage(message, player);
-                                    finishedMessages = finishedMessages + 1;
-                                    if (finishedMessages == messages.size() - 1) {
+                        }else{
+                            target = getLocation(locations.get(finishedMessages));
+                            navigator.setTarget(target);
+                            if(npcReachedDestination){
+                                sendMessage(messages.get(finishedMessages), player);
+                                npcSpeaking = true;
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
                                         npcSpeaking = false;
-                                        finished = true;
+                                        npcReachedDestination = false;
+                                        finishedMessages++;
                                     }
-                                }
-                            }.runTaskLater(PrisonCore.get(), (100 * messages.indexOf(message)) + (20L * 5L));
+                                }.runTaskLater(PrisonCore.get(), 100L);
+                            }
                         }
                     }
                 }.runTaskTimer(PrisonCore.get(), 0L, 10L);
@@ -159,18 +178,6 @@ public class IntroductionTutorial extends QuestPhaseGroup {
 
         });
 
-        addEvent(new QuestPhase(this) {
-            @Override
-            public void initialize() {
-
-            }
-
-            @Override
-            public void interrupted() {
-
-            }
-        });
-
     }
 
     public static IntroductionTutorial get() {
@@ -180,6 +187,11 @@ public class IntroductionTutorial extends QuestPhaseGroup {
     @Override
     public String getName() {
         return "IntroductionTutorial";
+    }
+
+
+    private boolean locationsEqual(Location loc1, Location loc2){
+        return loc1.distance(loc2) < 2;
     }
 
     @Override

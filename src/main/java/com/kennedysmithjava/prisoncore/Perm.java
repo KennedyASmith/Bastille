@@ -15,6 +15,7 @@ public enum Perm implements Identified
     BASECOMMAND,
     DELETE,
     REGEN,
+    OFFSET,
     POSONE,
     POSTWO,
     WAND,

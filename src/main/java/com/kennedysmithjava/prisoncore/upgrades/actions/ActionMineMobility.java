@@ -16,6 +16,6 @@ public class ActionMineMobility extends AbstractAction {
     public void apply(MPlayer player) {
         Mine mine = player.getMine();
         mine.setSelectedMobility(mobility);
-        mine.generateMobilityArea();
+        mine.generateMobilityArea(mine.getWidth(), mine.getHeight());
     }
 }

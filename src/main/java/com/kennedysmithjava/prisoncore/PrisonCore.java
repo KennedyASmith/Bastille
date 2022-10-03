@@ -37,6 +37,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
 
 import java.io.File;
@@ -246,7 +247,7 @@ public class PrisonCore extends MassivePlugin {
 
         //GENERATE UNBREAKABLE BORDER & GENERATE MINE BLOCKS
         mine.generateBorder(mine.getWidth(), mine.getWidth(), MinesConf.get().minesBorderMaterial);
-        mine.generateMobilityArea();
+        mine.generateMobilityArea(mine.getWidth(), mine.getWidth());
 
         //FIRST PASTE FLOOR
         FAWEPaster.paste(floor.getSchematic(mine.getWidth()), world.getName(), minCorner, false, new Runnable() {

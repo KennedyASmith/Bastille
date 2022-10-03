@@ -120,7 +120,7 @@ public class NPCLimboTrait extends Trait {
 
     }
 
-    public void concludeLimbo(MPlayer mPlayer){
+    public static void concludeLimbo(MPlayer mPlayer){
         Player player = mPlayer.getPlayer();
         if (player == null) return;
         int tpDelay = 3 * 20;

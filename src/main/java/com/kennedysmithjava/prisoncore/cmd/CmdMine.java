@@ -25,6 +25,7 @@ public class CmdMine extends CoreCommand
     public CmdMineRegen cmdMineRegen = new CmdMineRegen();
     public CmdMineSetSpawn cmdMineSetSpawn = new CmdMineSetSpawn();
     public CmdMineSize cmdMineSize = new CmdMineSize();
+    public CmdMineOffset cmdMineOffset = new CmdMineOffset();
     public CmdMineTeleport cmdMineTeleport = new CmdMineTeleport();
 
     public CmdMine() {

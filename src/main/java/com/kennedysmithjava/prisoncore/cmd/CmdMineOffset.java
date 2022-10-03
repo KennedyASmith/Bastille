@@ -2,6 +2,7 @@ package com.kennedysmithjava.prisoncore.cmd;
 
 import com.kennedysmithjava.prisoncore.Perm;
 import com.kennedysmithjava.prisoncore.PrisonCore;
+import com.kennedysmithjava.prisoncore.cmd.requirement.RequirementHasMine;
 import com.kennedysmithjava.prisoncore.cmd.type.TypeMPlayer;
 import com.kennedysmithjava.prisoncore.engine.EngineLimbo;
 import com.kennedysmithjava.prisoncore.engine.EngineLoadingScreen;
@@ -16,21 +17,21 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class CmdMineCreate extends CoreCommand {
+public class CmdMineOffset extends CoreCommand {
     // -------------------------------------------- //
     // CONSTRUCT
     // -------------------------------------------- //
 
-    public CmdMineCreate() {
+    public CmdMineOffset() {
 
         //Requirement
-        this.addRequirements(RequirementIsPlayer.get(), RequirementHasPerm.get(Perm.ADMIN));
+        this.addRequirements(RequirementIsPlayer.get(), RequirementHasPerm.get(Perm.ADMIN), RequirementHasMine.get());
 
         // Parameters
         this.addParameter(TypeMPlayer.get(), "player");
 
         //Description
-        this.setDesc("Create a new personal mine");
+        this.setDesc("Find the Mine origin offset location of where you are standing. Only works in your own mine.");
     }
 
     // -------------------------------------------- //
@@ -42,32 +43,6 @@ public class CmdMineCreate extends CoreCommand {
         if (!(sender instanceof Player)) return;
         MPlayer mPlayer = readArg();
         Player player = mPlayer.getPlayer();
-
-        if(mPlayer.hasMine()){
-            msg(mPlayer.getName() + " already has a mine.");
-            return;
-        }
-
-        AtomicBoolean mineFinished = new AtomicBoolean(false);
-        EngineLimbo.get().removeFromLimbo(player);
-        EngineLoadingScreen.addLoadingScreen(player, player.getLocation());
-
-        PrisonCore.createMine(mPlayer, () ->{
-            Mine mine = mPlayer.getMine();
-            mine.spawnNPCs();
-            mineFinished.set(true);
-        });
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (mineFinished.get()) {
-                    NPCLimboTrait.concludeLimbo(mPlayer);
-                    this.cancel();
-                }
-            }
-        }.runTaskTimer(PrisonCore.get(), 0, 20 * 2);
-
-        msg("Mine successfully created.");
+        CmdOffset.sendOffsetInfo(player, mPlayer.getMine().getOrigin(), player.getLocation());
     }
 }
