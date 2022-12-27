@@ -19,6 +19,7 @@ import com.kennedysmithjava.prisoncore.entity.tools.PouchConfColl;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.Wall;
 import com.kennedysmithjava.prisoncore.entity.mines.*;
 import com.kennedysmithjava.prisoncore.event.EventNewMine;
+import com.kennedysmithjava.prisoncore.npc.spawn.NPCLimboTrait;
 import com.kennedysmithjava.prisoncore.tools.Pickaxe;
 import com.kennedysmithjava.prisoncore.quest.QuestManager;
 import com.kennedysmithjava.prisoncore.quest.QuestProfile;
@@ -33,15 +34,19 @@ import com.sk89q.worldedit.math.BlockVector3;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.MemoryNPCDataStore;
 import net.citizensnpcs.api.npc.NPCRegistry;
+import net.citizensnpcs.api.trait.TraitInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -99,10 +104,14 @@ public class PrisonCore extends MassivePlugin {
         Ability.register(AbilityTetris.get());
         Ability.register(AbilityBlackhole.get());
 
+        this.registerGlow(); //Register glow enchantment
+
         new MineCountdownPlaceholder(this).register();
         new MineCurrencyPlaceholder(this).register();
 
         ConfigurationSerialization.registerClass(DatalessPouchable.class);
+
+        CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(NPCLimboTrait.class));
 
         Pickaxe.LORE_UPDATER.runTaskTimerAsynchronously(this, 20L, 5 * 20L);
         getServer().getPluginManager().registerEvents(new EngineTools(), this);
@@ -126,6 +135,27 @@ public class PrisonCore extends MassivePlugin {
             }
         }
         return file;
+    }
+
+    public void registerGlow() {
+        try {
+            Field f = Enchantment.class.getDeclaredField("acceptingNew");
+            f.setAccessible(true);
+            f.set(null, true);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            NamespacedKey key = new NamespacedKey(this, "glowKey");
+            Glow glow = new Glow(key);
+            Enchantment.registerEnchantment(glow);
+        }
+        catch (IllegalArgumentException e){
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -25,6 +25,7 @@ public enum Perm implements Identified
     ADMIN,
     ADD,
     BALANCE,
+    REMOVE,
     TREE
 
 

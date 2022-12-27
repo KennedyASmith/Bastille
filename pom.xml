@@ -122,7 +122,7 @@
             <artifactId>citizensapi</artifactId>
             <version>LATEST</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/Citizens-2.0.29-b2548.jar</systemPath>
+            <systemPath>${project.basedir}/libs/Citizens.jar</systemPath>
         </dependency>
             <dependency>
                 <groupId>xyz.xenondevs</groupId>

@@ -51,7 +51,7 @@ public class MineCountdownPlaceholder extends PlaceholderExpansion {
 
 
         /**
-         * %PrisonMines_countdown_mineID%
+         * %PrisonCore_countdown_mineID%
          */
         @Override
         public String onPlaceholderRequest(Player player, String mineID) {

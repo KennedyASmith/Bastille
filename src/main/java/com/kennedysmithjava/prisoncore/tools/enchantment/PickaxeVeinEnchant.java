@@ -3,7 +3,7 @@ package com.kennedysmithjava.prisoncore.tools.enchantment;
 import com.kennedysmithjava.prisoncore.entity.mines.Distribution;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.PrisonBlock;
 import com.kennedysmithjava.prisoncore.entity.tools.EnchantConf;
-import com.kennedysmithjava.prisoncore.event.MineBlockBreakEvent;
+import com.kennedysmithjava.prisoncore.event.EventMineBlockBreak;
 import com.kennedysmithjava.prisoncore.util.regions.LazyRegion;
 import com.kennedysmithjava.prisoncore.util.regions.VBlockFace;
 import org.bukkit.Material;
@@ -29,7 +29,7 @@ public class PickaxeVeinEnchant extends BlockBreakEnchant<PickaxeVeinEnchant> {
     private static final int maxVeinSize = 25;
 
     @Override
-    public void onBreak(MineBlockBreakEvent event, int enchantLevel) {
+    public void onBreak(EventMineBlockBreak event, int enchantLevel) {
         Block origin = event.getBlock();
         Player player = event.getPlayer();
         LazyRegion region = event.getMineRegion();

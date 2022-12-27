@@ -50,7 +50,7 @@ public class MinesConf extends Entity<MinesConf>
     public String mineDefaultName = "%player%'s Mine";
     public Material minesBorderMaterial = Material.BEDROCK;
     public boolean weatherEnabled = false;
-    public Map<String, String> minesWorldDefaultGamerules = MUtil.map("doMobSpawning", "false", "doDaylightCycle", "true", "doMobLoot", "false", "doTileDrops", "false", "keepInventory", "true", "mobGriefing", "false");
+    public Map<String, String> minesWorldDefaultGamerules = MUtil.map("doMobSpawning", "false", "doWeatherCycle", "false", "doDaylightCycle", "true", "doMobLoot", "false", "doTileDrops", "false", "keepInventory", "true", "mobGriefing", "false");
 
     // -------------------------------------------- //
     // MISC

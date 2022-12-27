@@ -16,6 +16,7 @@ public class CmdEconomy extends CoreCommand {
     // -------------------------------------------- //
     public CmdEconomyAdd CmdEconomyAdd = new CmdEconomyAdd();
     public CmdEconomyBalance CmdEconomyBalance = new CmdEconomyBalance();
+    public CmdEconomyRemove CmdEconomyRemove= new CmdEconomyRemove();
 
     // -------------------------------------------- //
     // CONSTRUCT

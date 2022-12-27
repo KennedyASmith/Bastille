@@ -2,7 +2,7 @@ package com.kennedysmithjava.prisoncore.tools;
 
 import com.jeff_media.morepersistentdatatypes.DataType;
 import com.kennedysmithjava.prisoncore.PrisonCore;
-import com.kennedysmithjava.prisoncore.event.AbilityUseEvent;
+import com.kennedysmithjava.prisoncore.event.EventAbilityUse;
 import com.kennedysmithjava.prisoncore.tools.ability.Ability;
 import com.kennedysmithjava.prisoncore.tools.ability.AbilityType;
 import com.kennedysmithjava.prisoncore.tools.ability.LeveledAbility;
@@ -128,7 +128,7 @@ public class AbilityItem {
         return this.leveledAbility.getAbility();
     }
 
-    public void perform(AbilityUseEvent event) {
+    public void perform(EventAbilityUse event) {
         this.leveledAbility.perform(event);
     }
 

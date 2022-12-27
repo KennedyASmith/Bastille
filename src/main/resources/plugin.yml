@@ -3,6 +3,6 @@ version: ${project.version}
 main: com.kennedysmithjava.prisoncore.PrisonCore
 api-version: 1.18
 authors: [ "KennedySmithJava" ]
-description: im the best
+description: its a plugin
 website: MCRivals.com
 depend: [Citizens, MassiveCore,FastAsyncWorldEdit, HolographicDisplays, ProtocolLib, WorldGuard, PlaceholderAPI]

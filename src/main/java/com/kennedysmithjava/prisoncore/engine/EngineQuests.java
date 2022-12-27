@@ -3,9 +3,9 @@ package com.kennedysmithjava.prisoncore.engine;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayerColl;
 import com.kennedysmithjava.prisoncore.event.EventNewMine;
-import com.kennedysmithjava.prisoncore.event.NewPlayerJoinEvent;
-import com.kennedysmithjava.prisoncore.event.ReturningPlayerJoinEvent;
-import com.kennedysmithjava.prisoncore.event.TutorialEventGroupComplete;
+import com.kennedysmithjava.prisoncore.event.EventNewPlayerJoin;
+import com.kennedysmithjava.prisoncore.event.EventReturningPlayerJoin;
+import com.kennedysmithjava.prisoncore.event.EventTutorialGroupComplete;
 import com.massivecraft.massivecore.Engine;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,18 +35,18 @@ public class EngineQuests extends Engine {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onNewPlayerJoin(NewPlayerJoinEvent event) {
+    public void onNewPlayerJoin(EventNewPlayerJoin event) {
 
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onReturningPlayerJoin(ReturningPlayerJoinEvent event) {
+    public void onReturningPlayerJoin(EventReturningPlayerJoin event) {
         MPlayer player = event.getPlayer();
 
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onTutorialComplete(TutorialEventGroupComplete event) {
+    public void onTutorialComplete(EventTutorialGroupComplete event) {
         MPlayer player = event.getPlayer();
 
 

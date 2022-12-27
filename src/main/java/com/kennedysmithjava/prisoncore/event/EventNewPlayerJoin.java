@@ -4,11 +4,11 @@ import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public final class NewPlayerJoinEvent extends Event {
+public final class EventNewPlayerJoin extends Event {
     private static final HandlerList handlers = new HandlerList();
     private MPlayer player;
 
-    public NewPlayerJoinEvent(MPlayer player) {
+    public EventNewPlayerJoin(MPlayer player) {
         this.player = player;
     }
 

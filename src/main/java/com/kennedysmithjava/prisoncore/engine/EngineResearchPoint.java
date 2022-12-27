@@ -12,16 +12,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class ResearchPointEngine extends Engine {
+public class EngineResearchPoint extends Engine {
 
     // -------------------------------------------- //
     // INSTANCE & CONSTRUCT
     // -------------------------------------------- //
 
 
-    private static final ResearchPointEngine i = new ResearchPointEngine();
+    private static final EngineResearchPoint i = new EngineResearchPoint();
 
-    public static ResearchPointEngine get() {
+    public static EngineResearchPoint get() {
         return i;
     }
 
@@ -30,7 +30,7 @@ public class ResearchPointEngine extends Engine {
     public static Random random = new java.util.Random();
     public static int globalMultiplier = 1;
 
-    public ResearchPointEngine() {
+    public EngineResearchPoint() {
         BukkitScheduler scheduler = PrisonCore.get().getServer().getScheduler();
         scheduler.scheduleSyncRepeatingTask(PrisonCore.get(), () -> {
             oweList.forEach((player, count) -> {

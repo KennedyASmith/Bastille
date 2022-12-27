@@ -10,6 +10,7 @@ import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.Trait;
+import net.citizensnpcs.api.trait.TraitName;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -19,6 +20,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @SuppressWarnings("ConstantConditions")
+
+@TraitName("limbowarrentrait")
 public class NPCLimboTrait extends Trait {
 
     public static List<Player> activeUsers = new ArrayList<>();

@@ -2,7 +2,7 @@ package com.kennedysmithjava.prisoncore.quest;
 
 import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
-import com.kennedysmithjava.prisoncore.event.TutorialEventGroupComplete;
+import com.kennedysmithjava.prisoncore.event.EventTutorialGroupComplete;
 import org.bukkit.Bukkit;
 
 import java.util.HashMap;
@@ -56,7 +56,7 @@ public class QuestProfile {
             nextPhase.startThisPhase(this);
             player.setActiveQuest(group.getName(), group.indexOf(nextPhase));
         }else{
-            Bukkit.getServer().getPluginManager().callEvent(new TutorialEventGroupComplete(player, group));
+            Bukkit.getServer().getPluginManager().callEvent(new EventTutorialGroupComplete(player, group));
             removeQuest(group);
         }
     }

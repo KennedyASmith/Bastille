@@ -2,9 +2,9 @@ package com.kennedysmithjava.prisoncore.engine;
 
 import com.kennedysmithjava.prisoncore.blockhandler.MineRegionCache;
 import com.kennedysmithjava.prisoncore.entity.mines.Distribution;
-import com.kennedysmithjava.prisoncore.event.AbilityUseEvent;
+import com.kennedysmithjava.prisoncore.event.EventAbilityUse;
 import com.kennedysmithjava.prisoncore.event.BlockEventFulfiller;
-import com.kennedysmithjava.prisoncore.event.MineBlockBreakEvent;
+import com.kennedysmithjava.prisoncore.event.EventMineBlockBreak;
 import com.kennedysmithjava.prisoncore.tools.Pickaxe;
 import com.kennedysmithjava.prisoncore.tools.enchantment.BlockBreakEnchant;
 import com.kennedysmithjava.prisoncore.tools.enchantment.HandEquipEnchant;
@@ -68,9 +68,9 @@ public class EngineTools implements Listener {
         //If the item is a pickaxe
             if (pick.hasLeveledAbility()){
                 Distribution distribution = cache.getDistribution(block);
-                AbilityUseEvent abilityUseEvent = new AbilityUseEvent(event, region, distribution);
-                pick.runAbility(abilityUseEvent);
-                Bukkit.getServer().getPluginManager().callEvent(abilityUseEvent);
+                EventAbilityUse eventAbilityUse = new EventAbilityUse(event, region, distribution);
+                pick.runAbility(eventAbilityUse);
+                Bukkit.getServer().getPluginManager().callEvent(eventAbilityUse);
                 usingAbilityCache.add(player.getUniqueId());
             }else{
                 player.sendMessage("Your pickaxe doesn't have any abilities.");
@@ -79,7 +79,7 @@ public class EngineTools implements Listener {
                 pick.setOriginalUser(player.getUniqueId().toString());
     }
 
-    public static void fulfillAbility(AbilityUseEvent event){
+    public static void fulfillAbility(EventAbilityUse event){
         if(event.getPlayer() != null){
             usingAbilityCache.remove(event.getPlayer().getUniqueId());
             fulfiller.handleEventReturn(event);
@@ -113,7 +113,7 @@ public class EngineTools implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onBlockBreak(MineBlockBreakEvent event) {
+    public void onBlockBreak(EventMineBlockBreak event) {
         ItemStack i = event.getPlayer().getInventory().getItemInMainHand();
         if (!Pickaxe.isPickaxe(i)) return;
         Pickaxe p = Pickaxe.get(i);

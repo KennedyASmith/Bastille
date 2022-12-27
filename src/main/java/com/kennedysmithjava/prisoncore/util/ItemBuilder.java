@@ -128,7 +128,7 @@ public class ItemBuilder
     }
 
     public ItemBuilder addGlow() {
-        this.item.addUnsafeEnchantment(new Glow(), 1);
+        this.item.addUnsafeEnchantment(Glow.getGlow(), 1);
         return this;
     }
 

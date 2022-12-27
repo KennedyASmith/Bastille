@@ -3,7 +3,7 @@ package com.kennedysmithjava.prisoncore.tools.enchantment;
 import com.kennedysmithjava.prisoncore.entity.mines.Distribution;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.PrisonBlock;
 import com.kennedysmithjava.prisoncore.entity.tools.EnchantConf;
-import com.kennedysmithjava.prisoncore.event.MineBlockBreakEvent;
+import com.kennedysmithjava.prisoncore.event.EventMineBlockBreak;
 import com.kennedysmithjava.prisoncore.util.regions.LazyRegion;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -20,7 +20,7 @@ public class PickaxeExplosiveEnchant extends BlockBreakEnchant<PickaxeExplosiveE
     }
 
     @Override
-    public void onBreak(MineBlockBreakEvent event, int enchantLevel) {
+    public void onBreak(EventMineBlockBreak event, int enchantLevel) {
         Location sL = event.getBlock().getLocation();
         LazyRegion region = event.getMineRegion();
         String worldName = sL.getWorld().getName();

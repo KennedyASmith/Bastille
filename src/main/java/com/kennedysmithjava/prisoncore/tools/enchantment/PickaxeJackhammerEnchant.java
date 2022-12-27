@@ -3,7 +3,7 @@ package com.kennedysmithjava.prisoncore.tools.enchantment;
 import com.kennedysmithjava.prisoncore.entity.mines.Distribution;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.PrisonBlock;
 import com.kennedysmithjava.prisoncore.entity.tools.EnchantConf;
-import com.kennedysmithjava.prisoncore.event.MineBlockBreakEvent;
+import com.kennedysmithjava.prisoncore.event.EventMineBlockBreak;
 import com.kennedysmithjava.prisoncore.util.regions.LazyRegion;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -22,7 +22,7 @@ public class PickaxeJackhammerEnchant extends BlockBreakEnchant<PickaxeJackhamme
     public static double SLOPE = (-1D/65D); //38.5% chance at level 25
 
     @Override
-    public void onBreak(MineBlockBreakEvent event, int enchantLevel) {
+    public void onBreak(EventMineBlockBreak event, int enchantLevel) {
         double r = random.nextDouble();
         double chance = (SLOPE * enchantLevel) + 1;
         boolean noRewards = r < chance;

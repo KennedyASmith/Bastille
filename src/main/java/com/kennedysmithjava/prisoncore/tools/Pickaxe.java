@@ -5,7 +5,7 @@ import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.engine.EngineTools;
 import com.kennedysmithjava.prisoncore.entity.tools.PickaxeType;
 import com.kennedysmithjava.prisoncore.entity.tools.PickaxeTypeColl;
-import com.kennedysmithjava.prisoncore.event.AbilityUseEvent;
+import com.kennedysmithjava.prisoncore.event.EventAbilityUse;
 import com.kennedysmithjava.prisoncore.tools.ability.Ability;
 import com.kennedysmithjava.prisoncore.tools.ability.AbilityType;
 import com.kennedysmithjava.prisoncore.tools.ability.LeveledAbility;
@@ -342,7 +342,7 @@ public class Pickaxe  implements Tool {
     }
 
 
-    public void runAbility(AbilityUseEvent event) {
+    public void runAbility(EventAbilityUse event) {
         if(this.leveledAbility != null)
             this.leveledAbility.perform(event);
     }

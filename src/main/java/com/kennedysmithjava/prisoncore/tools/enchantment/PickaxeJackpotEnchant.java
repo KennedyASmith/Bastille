@@ -1,7 +1,7 @@
 package com.kennedysmithjava.prisoncore.tools.enchantment;
 
 import com.kennedysmithjava.prisoncore.entity.tools.EnchantConf;
-import com.kennedysmithjava.prisoncore.event.MineBlockBreakEvent;
+import com.kennedysmithjava.prisoncore.event.EventMineBlockBreak;
 import org.bukkit.Material;
 
 import java.util.Collection;
@@ -18,7 +18,7 @@ public class PickaxeJackpotEnchant extends BlockBreakEnchant<PickaxeJackpotEncha
     public static double SLOPE = (-1D/20D);
 
     @Override
-    public void onBreak(MineBlockBreakEvent event, int enchantLevel) {
+    public void onBreak(EventMineBlockBreak event, int enchantLevel) {
         double r = random.nextDouble();
         double chance = (SLOPE * enchantLevel) + 1;
         boolean noRewards = r < chance;

@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +74,10 @@ public final class PouchType {
         itemStack.setItemMeta(itemMeta);
 
         PouchManager.get().generateUUID(itemStack);
-        itemMeta.getPersistentDataContainer().set(Pouch.getPouchTypeKey(), DataType.INTEGER, PouchConf.get().getPouchTypeID(this));
+
+        PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
+        pdc.set(Pouch.getPouchTypeKey(), DataType.INTEGER, PouchConf.get().getPouchTypeID(this));
+        itemStack.setItemMeta(itemMeta);
 
         return itemStack;
     }

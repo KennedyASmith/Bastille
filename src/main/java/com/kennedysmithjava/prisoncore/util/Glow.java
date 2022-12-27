@@ -1,73 +1,66 @@
 package com.kennedysmithjava.prisoncore.util;
 
+import com.kennedysmithjava.prisoncore.PrisonCore;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
-import org.bukkit.enchantments.EnchantmentWrapper;
 import org.bukkit.inventory.ItemStack;
 
-import java.lang.reflect.Field;
+public class Glow extends Enchantment {
 
-public class Glow extends EnchantmentWrapper
-{
-	private static Enchantment glow;
-	
-	public Glow()
-	{
-		super("Glow");
+	public Glow(NamespacedKey i) {
+		super(i);
+		// TODO Auto-generated constructor stub
 	}
-	
-	public static Enchantment getGlow()
-	{
-		if (glow != null)
-		{
-			return glow;
-		}
-		try
-		{
-			Field f = Enchantment.class.getDeclaredField("acceptingNew");
-			f.setAccessible(true);
-			f.set(null, Boolean.TRUE);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		glow = new Glow();
-		
-		if (Enchantment.getByName("Glow") == null)
-		{
-			Enchantment.registerEnchantment(glow);
-		}
-		return glow;
+
+	@Override
+	public boolean canEnchantItem(ItemStack arg0) {
+		// TODO Auto-generated method stub
+		return false;
 	}
-	
-	public int getMaxLevel()
-	{
-		return 10;
+
+	@Override
+	public boolean conflictsWith(Enchantment arg0) {
+		// TODO Auto-generated method stub
+		return false;
 	}
-	
-	public int getStartLevel()
-	{
-		return 1;
-	}
-	
-	public EnchantmentTarget getItemTarget()
-	{
+
+	@Override
+	public EnchantmentTarget getItemTarget() {
+		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	public boolean canEnchantItem(ItemStack item)
-	{
-		return true;
+
+	@Override
+	public int getMaxLevel() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
-	
-	public String getName()
-	{
-		return "Glow";
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
-	public boolean conflictsWith(Enchantment other)
-	{
+
+	@Override
+	public int getStartLevel() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean isCursed() {
+		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public boolean isTreasure() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	public static Glow getGlow() {
+		return new Glow(new NamespacedKey(PrisonCore.get(), "glowKey"));
 	}
 }

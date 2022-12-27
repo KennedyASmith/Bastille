@@ -5,12 +5,12 @@ import com.kennedysmithjava.prisoncore.quest.QuestPhaseGroup;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public final class TutorialEventGroupComplete extends Event {
+public final class EventTutorialGroupComplete extends Event {
     private static final HandlerList handlers = new HandlerList();
     private MPlayer player;
     private QuestPhaseGroup eventGroup;
 
-    public TutorialEventGroupComplete(MPlayer player, QuestPhaseGroup eventGroup) {
+    public EventTutorialGroupComplete(MPlayer player, QuestPhaseGroup eventGroup) {
         this.player = player;
         this.eventGroup = eventGroup;
     }

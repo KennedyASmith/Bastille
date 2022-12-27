@@ -1,6 +1,5 @@
 package com.kennedysmithjava.prisoncore.util;
 
-import com.kennedysmithjava.prisoncore.util.regions.Pair;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;

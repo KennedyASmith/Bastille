@@ -1,7 +1,7 @@
 package com.kennedysmithjava.prisoncore.event;
 
 import com.kennedysmithjava.prisoncore.blockhandler.Reward;
-import com.kennedysmithjava.prisoncore.engine.ResearchPointEngine;
+import com.kennedysmithjava.prisoncore.engine.EngineResearchPoint;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.PrisonBlock;
 import com.kennedysmithjava.prisoncore.tools.pouch.Pouch;
 import com.kennedysmithjava.prisoncore.tools.pouch.PouchFullException;
@@ -24,7 +24,7 @@ public class BlockEventFulfiller {
     // -------------------------------------------- //
 
     private static final BlockEventFulfiller i = new BlockEventFulfiller();
-    private static final ResearchPointEngine rpEngine = ResearchPointEngine.get();
+    private static final EngineResearchPoint rpEngine = EngineResearchPoint.get();
 
     private BlockEventFulfiller() {
     }
@@ -44,7 +44,7 @@ public class BlockEventFulfiller {
      * - Deleting Blocks
      * - Item Rewards
      */
-    public void handleEventReturn(MineBlockBreakEvent finishedEvent) {
+    public void handleEventReturn(EventMineBlockBreak finishedEvent) {
         if (finishedEvent.isCancelled()) {
             return;
         }
@@ -62,7 +62,7 @@ public class BlockEventFulfiller {
         rpEngine.addBlockCount(finishedEvent.getPlayer());
     }
 
-    public void handleEventReturn(AbilityUseEvent finishedEvent) {
+    public void handleEventReturn(EventAbilityUse finishedEvent) {
         if (finishedEvent.isCancelled()) {
             return;
         }
@@ -77,6 +77,8 @@ public class BlockEventFulfiller {
 
 
         Map<Integer, Pouch> pouches = this.getPouches(player.getInventory());
+        Bukkit.broadcastMessage("Pouches: " + pouches.toString());
+
         pouches.forEach((index, pouch) -> {
             ItemStack item = player.getInventory().getItem(index);
 

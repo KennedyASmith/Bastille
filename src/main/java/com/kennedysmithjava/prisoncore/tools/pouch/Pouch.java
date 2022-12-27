@@ -63,7 +63,7 @@ public class Pouch {
         // Reset pouched items
         pdc.set(dataKey, DataType.asList(DataType.CONFIGURATION_SERIALIZABLE), pouchables);
         pdc.set(quantityKey, DataType.asMap(DataType.STRING, DataType.INTEGER), quantity);
-
+        item.setItemMeta(meta);
     }
 
     public void updateCount() {

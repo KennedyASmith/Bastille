@@ -3,7 +3,7 @@ package com.kennedysmithjava.prisoncore.tools.enchantment;
 import com.kennedysmithjava.prisoncore.blockhandler.BlockWrapper;
 import com.kennedysmithjava.prisoncore.entity.mines.Distribution;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.PrisonBlock;
-import com.kennedysmithjava.prisoncore.event.MineBlockBreakEvent;
+import com.kennedysmithjava.prisoncore.event.EventMineBlockBreak;
 import com.kennedysmithjava.prisoncore.entity.tools.EnchantConf;
 import org.bukkit.Material;
 
@@ -21,7 +21,7 @@ public class PickaxeLuckEnchant extends BlockBreakEnchant<PickaxeLuckEnchant> {
     public static Random random = new Random();
 
     @Override
-    public void onBreak(MineBlockBreakEvent event, int enchantLevel) {
+    public void onBreak(EventMineBlockBreak event, int enchantLevel) {
         Distribution distribution = event.getDistribution();
         double r = random.nextDouble();
         double chance = 0.02 + (enchantLevel * 0.02);

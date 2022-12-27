@@ -5,7 +5,7 @@ import com.fastasyncworldedit.core.util.MathMan;
 import com.kennedysmithjava.prisoncore.entity.mines.Distribution;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.PrisonBlock;
 import com.kennedysmithjava.prisoncore.entity.tools.EnchantConf;
-import com.kennedysmithjava.prisoncore.event.MineBlockBreakEvent;
+import com.kennedysmithjava.prisoncore.event.EventMineBlockBreak;
 import com.kennedysmithjava.prisoncore.util.regions.LazyRegion;
 import com.sk89q.worldedit.math.BlockVector3;
 import org.bukkit.Location;
@@ -23,7 +23,7 @@ public class PickaxeLaserEnchant extends BlockBreakEnchant<PickaxeLaserEnchant> 
     }
 
     @Override
-    public void onBreak(MineBlockBreakEvent event, int enchantLevel) {
+    public void onBreak(EventMineBlockBreak event, int enchantLevel) {
         Player player = event.getPlayer();
         Location start = event.getBlock().getLocation();
         Distribution distribution = event.getDistribution();

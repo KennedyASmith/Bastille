@@ -2,7 +2,7 @@ package com.kennedysmithjava.prisoncore.engine;
 
 import com.kennedysmithjava.prisoncore.blockhandler.MineRegionCache;
 import com.kennedysmithjava.prisoncore.util.MinesWorldManager;
-import com.kennedysmithjava.prisoncore.event.MineBlockBreakEvent;
+import com.kennedysmithjava.prisoncore.event.EventMineBlockBreak;
 import com.kennedysmithjava.prisoncore.entity.mines.Distribution;
 import com.kennedysmithjava.prisoncore.util.regions.LazyRegion;
 import com.massivecraft.massivecore.Engine;
@@ -65,7 +65,7 @@ public class EngineBlockBreak extends Engine {
         event.setCancelled(true);
         Bukkit.broadcastMessage("Block break sent!");
 
-        MineBlockBreakEvent customEvent = new MineBlockBreakEvent(event, region, distribution);
+        EventMineBlockBreak customEvent = new EventMineBlockBreak(event, region, distribution);
         Bukkit.getPluginManager().callEvent(customEvent);
 
     }
