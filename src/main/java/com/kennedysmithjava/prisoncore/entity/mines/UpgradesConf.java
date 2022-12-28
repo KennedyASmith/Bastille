@@ -162,7 +162,7 @@ public class UpgradesConf extends Entity<UpgradesConf>
                     new GUIButton(
                             "&6BACK",
                             45, MUtil.list("", "&7Main Menu"),
-                            MUtil.list("&7[&cLOCKED&7]"),
+                            MUtil.list(),
                             Material.ARROW,
                             MUtil.list(new ActionOpenGUI("MAIN")), MUtil.list()
                     )
@@ -241,7 +241,7 @@ public class UpgradesConf extends Entity<UpgradesConf>
                     new GUIButton(
                             "&6BACK",
                             36, MUtil.list("", "&7Main Menu"),
-                            MUtil.list("&7[&cLOCKED&7]"),
+                            MUtil.list(),
                             Material.ARROW,
                             MUtil.list(new ActionOpenGUI("MAIN")), MUtil.list())
             )),
@@ -249,7 +249,7 @@ public class UpgradesConf extends Entity<UpgradesConf>
                     new GUIButton(
                             "&6BACK",
                             36, MUtil.list("", "&7Main Menu"),
-                            MUtil.list("&7[&cLOCKED&7]"),
+                            MUtil.list(),
                             Material.ARROW,
                             MUtil.list(new ActionOpenGUI("MAIN")), MUtil.list())
             )),
@@ -262,7 +262,7 @@ public class UpgradesConf extends Entity<UpgradesConf>
                             Material.LADDER,
                             MUtil.list(), MUtil.list(), MUtil.list(),
                             MUtil.list(new ActionMineToggleUpgradeOn(UpgradeName.MOBILITY_LADDER_1.get())),
-                            MUtil.list(new ActionMineMobility(TypeMobility.LADDER_1), new ActionMineToggleUpgradeOff(MUtil.list(UpgradeName.MOBILITY_JUMP_PAD.get(), UpgradeName.MOBILITY_LADDER_2.get(), UpgradeName.MOBILITY_LADDER_3.get(), UpgradeName.MOBILITY_FLIGHT.get()))),
+                            MUtil.list(new ActionMineSetMobility(TypeMobility.LADDER_1), new ActionMineToggleUpgradeOff(MUtil.list(UpgradeName.MOBILITY_JUMP_PAD.get(), UpgradeName.MOBILITY_LADDER_2.get(), UpgradeName.MOBILITY_LADDER_3.get(), UpgradeName.MOBILITY_FLIGHT.get()))),
                             MUtil.list()),
                     new GUIButtonPurchasableToggleable(
                             "&6Ladders 2",
@@ -272,7 +272,7 @@ public class UpgradesConf extends Entity<UpgradesConf>
                             Material.LADDER,
                             MUtil.list(), MUtil.list(), MUtil.list(),
                             MUtil.list(new ActionMineToggleUpgradeOn(UpgradeName.MOBILITY_LADDER_2.get())),
-                            MUtil.list(new ActionMineMobility(TypeMobility.LADDER_2), new ActionMineToggleUpgradeOff(MUtil.list(UpgradeName.MOBILITY_JUMP_PAD.get(), UpgradeName.MOBILITY_LADDER_1.get(), UpgradeName.MOBILITY_LADDER_3.get(), UpgradeName.MOBILITY_FLIGHT.get()))),
+                            MUtil.list(new ActionMineSetMobility(TypeMobility.LADDER_2), new ActionMineToggleUpgradeOff(MUtil.list(UpgradeName.MOBILITY_JUMP_PAD.get(), UpgradeName.MOBILITY_LADDER_1.get(), UpgradeName.MOBILITY_LADDER_3.get(), UpgradeName.MOBILITY_FLIGHT.get()))),
                             MUtil.list()),
                     new GUIButtonPurchasableToggleable(
                             "&6Ladders 3",
@@ -282,7 +282,7 @@ public class UpgradesConf extends Entity<UpgradesConf>
                             Material.LADDER,
                             MUtil.list(), MUtil.list(), MUtil.list(),
                             MUtil.list(new ActionMineToggleUpgradeOn(UpgradeName.MOBILITY_LADDER_3.get())),
-                            MUtil.list(new ActionMineMobility(TypeMobility.FULL_LADDER), new ActionMineToggleUpgradeOff(MUtil.list(UpgradeName.MOBILITY_JUMP_PAD.get(), UpgradeName.MOBILITY_LADDER_1.get(), UpgradeName.MOBILITY_LADDER_2.get(),  UpgradeName.MOBILITY_FLIGHT.get()))),
+                            MUtil.list(new ActionMineSetMobility(TypeMobility.FULL_LADDER), new ActionMineToggleUpgradeOff(MUtil.list(UpgradeName.MOBILITY_JUMP_PAD.get(), UpgradeName.MOBILITY_LADDER_1.get(), UpgradeName.MOBILITY_LADDER_2.get(),  UpgradeName.MOBILITY_FLIGHT.get()))),
                             MUtil.list()),
                     new GUIButtonPurchasableToggleable(
                             "&6Jump Pad",
@@ -292,7 +292,7 @@ public class UpgradesConf extends Entity<UpgradesConf>
                             Material.HEAVY_WEIGHTED_PRESSURE_PLATE,
                             MUtil.list(), MUtil.list(), MUtil.list(),
                             MUtil.list(new ActionMineToggleUpgradeOn(UpgradeName.MOBILITY_JUMP_PAD.get())),
-                            MUtil.list(new ActionMineMobility(TypeMobility.LADDER_1), new ActionMineToggleUpgradeOff(MUtil.list(UpgradeName.MOBILITY_LADDER_1.get(), UpgradeName.MOBILITY_LADDER_2.get(), UpgradeName.MOBILITY_LADDER_3.get(), UpgradeName.MOBILITY_FLIGHT.get()))),
+                            MUtil.list(new ActionMineSetMobility(TypeMobility.JUMP_PAD), new ActionMineToggleUpgradeOff(MUtil.list(UpgradeName.MOBILITY_LADDER_1.get(), UpgradeName.MOBILITY_LADDER_2.get(), UpgradeName.MOBILITY_LADDER_3.get(), UpgradeName.MOBILITY_FLIGHT.get()))),
                             MUtil.list()),
                     new GUIButtonPurchasableToggleable(
                             "&6Flight",
@@ -302,7 +302,7 @@ public class UpgradesConf extends Entity<UpgradesConf>
                             Material.LADDER,
                             MUtil.list(), MUtil.list(), MUtil.list(),
                             MUtil.list(new ActionMineToggleUpgradeOn(UpgradeName.MOBILITY_FLIGHT.get())),
-                            MUtil.list(new ActionMineMobility(TypeMobility.LADDER_1), new ActionMineToggleUpgradeOff(MUtil.list(UpgradeName.MOBILITY_JUMP_PAD.get(), UpgradeName.MOBILITY_LADDER_1.get(), UpgradeName.MOBILITY_LADDER_2.get(), UpgradeName.MOBILITY_LADDER_3.get()))),
+                            MUtil.list(new ActionMineSetMobility(TypeMobility.LADDER_1), new ActionMineToggleUpgradeOff(MUtil.list(UpgradeName.MOBILITY_JUMP_PAD.get(), UpgradeName.MOBILITY_LADDER_1.get(), UpgradeName.MOBILITY_LADDER_2.get(), UpgradeName.MOBILITY_LADDER_3.get()))),
                             MUtil.list()),
                     new GUIButton(
                             "&6BACK",
@@ -339,7 +339,7 @@ public class UpgradesConf extends Entity<UpgradesConf>
                             14, MUtil.list("&e&lCOST", "&a⛃1.0M", "&b✪200", "&7Build an anvil to edit your tools."),
                             MUtil.list("&7[&cLOCKED&7]", "", "&7&lREQUIREMENTS","&7- &eCell &7level &a4", "&7- Player Life &b5"),
                             Material.ANVIL,
-                            MUtil.list(new ActionMessage("&7You have unlocked an anvil!"), new ActionBuildingUnlock(BuildingType.PORTAL)),
+                            MUtil.list(new ActionMessage("&7You have unlocked an anvil!"), new ActionBuildingUnlock(BuildingType.CHEST)),
                             MUtil.list(UpgradeName.BUILDING_ANVIL.get())),
                     new GUIButton(
                             "&6Beacon",

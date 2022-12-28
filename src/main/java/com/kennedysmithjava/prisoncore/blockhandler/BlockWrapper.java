@@ -55,35 +55,18 @@ public class BlockWrapper extends EntityInternal<BlockWrapper>{
 
     @Override
     public int hashCode() {
-
-        Bukkit.broadcastMessage("Material name: " + this.material.name());
-        Bukkit.broadcastMessage("BlockData: " + this.blockData);
-
-        Bukkit.broadcastMessage("Material hashCode: " + this.material.name().hashCode());
-        Bukkit.broadcastMessage("BlockData hashCode: " + this.blockData.hashCode());
-
         int result = 17;
         result = 31 * result + this.material.name().hashCode();
         result = 31 * result + this.blockData.hashCode();
 
-        Bukkit.broadcastMessage("Checking hash: " + result);
         return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-        Bukkit.broadcastMessage("Checking if blockwrapper is equal 1");
         if (obj == this) return true;
-        Bukkit.broadcastMessage("Checking if blockwrapper is equal 2");
         if (!(obj instanceof BlockWrapper wrapper)) return false;
-        Bukkit.broadcastMessage("Checking if blockwrapper is equal 3");
-        Bukkit.broadcastMessage("Hashcode 1: " + obj.hashCode() + " Hashcode 2: " + obj.hashCode());
         boolean isTrue = (this.material.name().equals(wrapper.getMaterial().name()) && this.blockData.equals(wrapper.getBlockDataString()));
-        if(!isTrue){
-            Bukkit.broadcastMessage("Something's not true here!");
-            Bukkit.broadcastMessage("1: " + this.material.name().equals(wrapper.getMaterial().name()));
-            Bukkit.broadcastMessage("1: " + this.blockData.equals(wrapper.getBlockDataString()));
-        }
         return isTrue;
     }
 }

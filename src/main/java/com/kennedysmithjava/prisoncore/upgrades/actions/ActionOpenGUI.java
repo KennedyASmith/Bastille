@@ -14,6 +14,7 @@ import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.Glow;
 import com.massivecraft.massivecore.chestgui.ChestGui;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -67,14 +68,15 @@ public class ActionOpenGUI extends AbstractAction {
                 }
 
                 if(!unlocked){
-                    meta.setLore(Color.get(button.getLockedLore()));
                     item.setType(Material.IRON_BARS);
+                    meta = item.getItemMeta();
+                    meta.setLore(Color.get(button.getLockedLore()));
+                    meta.setDisplayName(Color.get("&c" + ChatColor.stripColor(button.getName())));
                 }else{
                     for (ButtonType buttonType : button.getButtonTypeList()) {
                         switch(buttonType){
                             case TOGGLEABLE:
                             {
-                                if(!unlocked) continue;
 
                                 String toggleableUpgrade = "";
                                 boolean purchased = true;
@@ -112,9 +114,8 @@ public class ActionOpenGUI extends AbstractAction {
                             }
                             case PURCHASABLE:
                             {
-                                if(!(button instanceof GUIButtonPurchasable)) continue;
+                                if(!(button instanceof GUIButtonPurchasable buttonPurchasable)) continue;
                                 List<Cost> costs = ((GUIButtonPurchasable) button).getCosts();
-                                GUIButtonPurchasable buttonPurchasable = (GUIButtonPurchasable) button;
                                 if(!mine.isUpgradePurchased(buttonPurchasable.getAssociatedUpgrade())){
                                     List<AbstractAction> onPurchase = buttonPurchasable.getOnPurchase();
                                     onPurchase.add(new ActionUnlockUpgrade(buttonPurchasable.getAssociatedUpgrade(), true, true));

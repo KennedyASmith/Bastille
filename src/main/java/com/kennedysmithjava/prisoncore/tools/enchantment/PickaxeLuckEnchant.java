@@ -22,7 +22,7 @@ public class PickaxeLuckEnchant extends BlockBreakEnchant<PickaxeLuckEnchant> {
 
     @Override
     public void onBreak(EventMineBlockBreak event, int enchantLevel) {
-        Distribution distribution = event.getDistribution();
+        /*Distribution distribution = event.getDistribution();
         double r = random.nextDouble();
         double chance = 0.02 + (enchantLevel * 0.02);
         if(r < chance){
@@ -31,7 +31,7 @@ public class PickaxeLuckEnchant extends BlockBreakEnchant<PickaxeLuckEnchant> {
             BlockWrapper material = (BlockWrapper) values[random.nextInt(values.length)];
             PrisonBlock pb = distribution.generatePrisonBlock(material.getMaterial(), material.getBlockData());
             event.addReward(pb);
-        }
+        }*/
     }
 
     @Override

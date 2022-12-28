@@ -139,6 +139,7 @@ public class Mine extends Entity<Mine> implements Named {
     public void regen() {
         try {
             RandomPattern pat = new RandomPattern();
+            Bukkit.broadcastMessage(getBlockDistribution().toString());
             this.getBlockDistribution().forEach((material, aDouble) ->
                     pat.add(BukkitAdapter.asBlockType(material.getMaterial()), (aDouble / 100)));
             World world = getWorld();
@@ -406,7 +407,6 @@ public class Mine extends Entity<Mine> implements Named {
 
         clearWall(oldSchematic, world, origin, () -> {
             setWallID(wallID);
-            Bukkit.broadcastMessage("Wall cleared. Now pasting new one.");
             FAWEPaster.paste(newSchematic, world, origin, false, onFinish);
         });
     }
@@ -1172,7 +1172,6 @@ public class Mine extends Entity<Mine> implements Named {
 
     public boolean tryManualRegen(){
         if(!isRegenCountdownActive()){
-            Bukkit.broadcastMessage("Regen countdown not active");
             return false;
         }
         if(autoRegenEnabled) return false;

@@ -63,8 +63,7 @@ public class Pickaxe  implements Tool {
         public void run() {
             List<Pickaxe> removable = new ArrayList<>();
             updateQueue.forEach((pickaxe, pickItem) -> {
-                Bukkit.broadcastMessage("Attempting update of lore!");
-                if(pickItem != null && pickaxe.getType() != null){
+                 if(pickItem != null && pickaxe.getType() != null){
                     ItemMeta meta = pickItem.getItemMeta();
                     meta.setLore(pickaxe.getType().getLore(
                             pickaxe.getEnchants(),
@@ -73,14 +72,6 @@ public class Pickaxe  implements Tool {
                             pickaxe.getMaxDurability()));
                     pickItem.setItemMeta(meta);
                     pickaxe.setItem(pickItem);
-                    Bukkit.broadcastMessage("Updated lore!");
-                }else{
-                    if(pickaxe.getType() == null){
-                        Bukkit.broadcastMessage("Lore updater: Type was null!");
-                    }
-                    if(pickItem == null){
-                        Bukkit.broadcastMessage("Lore updater: ItemStack was null!");
-                    }
                 }
                 removable.add(pickaxe);
             });
@@ -174,7 +165,6 @@ public class Pickaxe  implements Tool {
             map.forEach((enchant, level) -> {
                 if(!Enchant.exists(enchant)) return;
                 Enchant<?> e = Enchant.getByName(enchant);
-                Bukkit.broadcastMessage("En: " + e.getName() + " Lvl: " + level);
                 enchants.put(e, level);
             });
         }
@@ -416,22 +406,13 @@ public class Pickaxe  implements Tool {
         throw new NullPointerException();
     }
     public static boolean isPickaxe(ItemStack i) {
-        Bukkit.broadcastMessage("Checking if it is a pickaxe.");
         if (i == null || i.getType() == Material.AIR) return false;
-        Bukkit.broadcastMessage("1");
         if(!isPickaxeType(i.getType())) return false;
-        Bukkit.broadcastMessage("2");
 
         ItemMeta meta = i.getItemMeta();
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
-        Bukkit.broadcastMessage("Pdc: ");
-        pdc.getKeys().forEach(namespacedKey -> {
-            Bukkit.broadcastMessage("Key: " + namespacedKey.getKey());
-        });
         if(pdc.isEmpty()) return false;
-        Bukkit.broadcastMessage("3");
         if(!pdc.has(uuidKey, DataType.UUID)) return false;
-        Bukkit.broadcastMessage("It is a pickaxe!");
         return true;
     }
     static boolean isPickaxeType(Material material){
@@ -475,7 +456,6 @@ public class Pickaxe  implements Tool {
 
         Pickaxe pickaxe = new Pickaxe(type, item, uuid.toString());
         pickaxe.addEnchants(type.getEnchantsRaw());
-        Bukkit.broadcastMessage("Creating new pickaxe with the ability: " + leveledAbility);
 
         return pickaxe;
     }

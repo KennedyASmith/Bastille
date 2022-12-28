@@ -4,11 +4,11 @@ import com.kennedysmithjava.prisoncore.cmd.type.TypeMobility;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 
-public class ActionMineMobility extends AbstractAction {
+public class ActionMineSetMobility extends AbstractAction {
 
     TypeMobility mobility;
 
-    public ActionMineMobility(TypeMobility mobility) {
+    public ActionMineSetMobility(TypeMobility mobility) {
         this.mobility = mobility;
     }
 

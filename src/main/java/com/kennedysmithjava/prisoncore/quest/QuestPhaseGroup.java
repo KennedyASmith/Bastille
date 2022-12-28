@@ -26,8 +26,11 @@ public abstract class QuestPhaseGroup {
     public abstract QuestPhaseGroup getNextTutorialGroup();
 
     public boolean hasNextPhase(QuestPhase currentPhase){
-        boolean value = phases.get(phases.indexOf(currentPhase) + 1) != null;;
-        if(!value) Bukkit.broadcastMessage("There's not a next phase for this quest group.");
+        boolean value = false;
+        try {
+            value = phases.get(phases.indexOf(currentPhase) + 1) != null;
+        }
+        catch(IndexOutOfBoundsException ignored) {}
         return value;
     }
 

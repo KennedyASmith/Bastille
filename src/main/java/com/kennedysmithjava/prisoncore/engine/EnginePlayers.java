@@ -59,7 +59,6 @@ public class EnginePlayers extends Engine {
         MPlayer mPlayer = MPlayer.get(player);
         if(mPlayer.hasMine()){
             if(mPlayer.inCooldown(CooldownReason.LOG_OFF)){
-                Bukkit.broadcastMessage("Player is in log off cooldown.");
                 return;
             }
             EngineCooldown.add(player, 20 * 15, CooldownReason.LOG_OFF);

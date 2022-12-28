@@ -37,13 +37,13 @@ public class DistributionConf extends Entity<DistributionConf> {
 
     public Map<Integer, Distribution> distribution = MUtil.map(
 
-            1, new Distribution("&7Old Hole", Material.GRAVEL, MUtil.map(4, 15.0, 2, 35.0, 3, 50.0), MUtil.list("&7Common", "", "&fBlocks:", "&7S. Pebbles 35% &a$0.10", "&7Lg. Pebbles 15% &a$0.20", "&7Cobweb 50% &a$0.00")),
-            2, new Distribution("&7Old Pebbles", Material.STONE, MUtil.map(1, 15.0, 2, 35.0, 3, 50.0), MUtil.list("&7Common", "", "&fBlocks:", "&7S. Pebbles 50% &a$0.10", "&7Lg. Pebbles 50% &a$0.20", "&7Cobweb 50% &a$0.00")),
-            3, new Distribution("&7Plentiful Pebbles", Material.STONE, MUtil.map(1, 15.0, 2, 35.0, 3, 50.0), MUtil.list("&7Common", "", "&fBlocks:", "&7S. Pebbles 50% &a$0.10", "&7Lg. Pebbles 50% &a$0.20", "&7Cobweb 50% &a$0.00")),
-            4, new Distribution("&7Driveway Gravel", Material.STONE, MUtil.map(1, 15.0, 2, 35.0, 3, 50.0), MUtil.list("&7Common", "", "&fBlocks:", "&7S. Pebbles 50% &a$0.10", "&7Lg. Pebbles 50% &a$0.20", "&7Cobweb 50% &a$0.00")),
-            5, new Distribution("&7Quarry Leftovers", Material.STONE, MUtil.map(1, 15.0, 2, 35.0, 3, 50.0), MUtil.list("&7Common", "", "&fBlocks:", "&7S. Pebbles 50% &a$0.10", "&7Lg. Pebbles 50% &a$0.20", "&7Cobweb 50% &a$0.00")),
-            6, new Distribution("&7New Pebbles", Material.STONE, MUtil.map(1, 15.0, 2, 35.0, 3, 50.0), MUtil.list("&7Common", "", "&fBlocks:", "&7S. Pebbles 50% &a$0.10", "&7Lg. Pebbles 50% &a$0.20", "&7Cobweb 50% &a$0.00")),
-            7, new Distribution("&7New Pebbles", Material.STONE, MUtil.map(1, 15.0, 2, 35.0, 3, 50.0), MUtil.list("&7Common", "", "&7Block Prices:", "&7- Diamond &a$6"))
+            1, new Distribution("&7Dusty Cobweb Pit", Material.GRAVEL,
+                    MUtil.map(  3, 3,
+                            2, 8,
+                                    1, 10), MUtil.list("&7Common", "", "&fBlocks:", "&740% - &7✦✧✧ &7Pebble &a$0.10", "&710% - &e✦✦✧ &7Pebble &a$0.20", "&750% - &e✦ &7Cobweb &a$0.00")),
+            2, new Distribution("&7Dusty Pit", Material.STONE,
+                    MUtil.map(  3, 1,
+                            2, 10), MUtil.list("&7Common", "", "&fBlocks:", "&790% - &7✦✧✧ &7Pebble &a$0.10", "&710% - &e✦✦✧ &7Pebble &a$0.20"))
     );
 
     public Map<Integer, DistributionPage> pages = MUtil.map(

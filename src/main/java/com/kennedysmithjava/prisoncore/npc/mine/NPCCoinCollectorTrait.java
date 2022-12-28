@@ -7,13 +7,19 @@ import com.kennedysmithjava.prisoncore.entity.mines.CoinCollectorConf;
 import com.kennedysmithjava.prisoncore.entity.mines.CoinCollectorGuiConf;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.mines.MineColl;
+import com.kennedysmithjava.prisoncore.entity.mines.objects.PrisonBlock;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayerColl;
+import com.kennedysmithjava.prisoncore.tools.pouch.DatalessPouchable;
+import com.kennedysmithjava.prisoncore.tools.pouch.Pouch;
+import com.kennedysmithjava.prisoncore.tools.pouch.PouchFullException;
+import com.kennedysmithjava.prisoncore.tools.pouch.PouchManager;
 import com.kennedysmithjava.prisoncore.upgrades.UpgradeName;
 import com.kennedysmithjava.prisoncore.util.ClickHandler;
 import com.kennedysmithjava.prisoncore.util.ClickItem;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.massivecraft.massivecore.chestgui.ChestGui;
+import com.massivecraft.massivecore.util.MUtil;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.Trait;
@@ -25,11 +31,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
+
+import static com.kennedysmithjava.prisoncore.eco.WorthUtil.fromName;
 
 public class NPCCoinCollectorTrait extends Trait {
 
@@ -73,15 +82,46 @@ public class NPCCoinCollectorTrait extends Trait {
         return true;
     };
 
+    public static List<ItemStack> recursivePouchCollector(DatalessPouchable dItem, Integer quantity) {
+        if(quantity > 64){
+            List<ItemStack> list = MUtil.list(dItem.getProductItem(64));
+            list.addAll(recursivePouchCollector(dItem, quantity - 64));
+            return list;
+        }else {
+            return MUtil.list(dItem.getProductItem(quantity));
+        }
+    }
+
     private static final ClickHandler onSelect = (p, i) -> {
         ChestGui gui = ChestGui.getInventoryToGui().get(i.getClickedInventory());
-        Map<Integer, ItemStack> sellable = WorthUtil.getSellable.apply(p.getInventory());
+        Inventory inv = p.getInventory();
+        Map<Integer, ItemStack> sellable = WorthUtil.getSellable.apply(inv);
+        Map<Integer, Map<DatalessPouchable, Integer>> pouches = WorthUtil.getPouched.apply(inv);
         sellable.forEach((slot, itemStack) -> {
-            p.getInventory().remove(itemStack);
+            inv.remove(itemStack);
             RemovableItem removableItem = new RemovableItem(itemStack);
             int index = gui.getInventory().addItem(removableItem).keySet().stream().findFirst().orElse(-1);
             gui.setAction(index, ClickHandler.toChestAction(removableItem.getClickHandler()));
         });
+
+        final PouchManager pouchManager = PouchManager.get();
+        pouches.forEach((slot, pouchableMap) -> {
+            ItemStack item = inv.getItem(slot);
+            if (Pouch.isPouch(item)){
+                Pouch pouch = pouchManager.getPouch(item);
+                pouch.getPouched().forEach((datalessPouchable, integer) -> {
+                    List<ItemStack> items = recursivePouchCollector(datalessPouchable, integer);
+                    items.forEach(itemStack -> {
+                        pouch.removePouched(item, datalessPouchable, itemStack.getAmount());
+                        PouchedItem pouchedItem = new PouchedItem(itemStack, datalessPouchable, pouch);
+                        int index = gui.getInventory().addItem(pouchedItem).keySet().stream().findFirst().orElse(-1);
+                        gui.setAction(index, ClickHandler.toChestAction(pouchedItem.getClickHandler()));
+                    });
+                });
+
+            }
+        });
+
         p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
         return true;
     };
@@ -91,6 +131,21 @@ public class NPCCoinCollectorTrait extends Trait {
             super(stack, (player, clickEvent) -> {
                 player.getInventory().addItem(clickEvent.getCurrentItem());
                 clickEvent.setCurrentItem(null);
+                player.playSound(player.getLocation(), Sound.BLOCK_LAVA_POP, 1, 1);
+                return true;
+            });
+        }
+    }
+
+    public static final class PouchedItem extends ClickItem {
+        public PouchedItem(ItemStack stack, DatalessPouchable pouchable, Pouch pouch) throws IllegalArgumentException {
+            super(stack, (player, clickEvent) -> {
+                clickEvent.setCurrentItem(null);
+                try {
+                    pouch.pouch(pouchable, stack);
+                } catch (PouchFullException e) {
+                    player.getWorld().dropItem(player.getLocation(), stack);
+                }
                 player.playSound(player.getLocation(), Sound.BLOCK_LAVA_POP, 1, 1);
                 return true;
             });

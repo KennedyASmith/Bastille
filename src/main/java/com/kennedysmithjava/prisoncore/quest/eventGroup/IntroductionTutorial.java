@@ -142,7 +142,6 @@ public class IntroductionTutorial extends QuestPhaseGroup {
                         finished = (messages.size() - 1 == finishedMessages) && npcReachedDestination;
 
                         if (finished) {
-                            Location location = npc.getEntity().getLocation();
                             npc.destroy();
                             mine.spawnResearcherNPC();
                             completed(true);

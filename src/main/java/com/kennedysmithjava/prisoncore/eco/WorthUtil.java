@@ -4,12 +4,18 @@ import com.kennedysmithjava.prisoncore.entity.mines.BlocksConf;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.PrisonBlock;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayerColl;
+import com.kennedysmithjava.prisoncore.tools.pouch.DatalessPouchable;
+import com.kennedysmithjava.prisoncore.tools.pouch.Pouch;
+import com.kennedysmithjava.prisoncore.tools.pouch.PouchManager;
 import com.kennedysmithjava.prisoncore.util.Color;
+import com.massivecraft.massivecore.util.MUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.*;
 
@@ -34,6 +40,23 @@ public class WorthUtil {
             ItemStack item = contents[i];
             if (isSellable.test(item)) {
                 result.put(i, item);
+            }
+        }
+
+        return result;
+    };
+
+
+    public static Function<Inventory, Map<Integer, Map<DatalessPouchable, Integer>>> getPouched = inv -> {
+        Map<Integer, Map<DatalessPouchable, Integer>> result = new HashMap<>();
+        ItemStack[] contents = inv.getContents();
+        final PouchManager pouchManager = PouchManager.get();
+
+        for (int i = 0; i < contents.length; i++) {
+            ItemStack item = contents[i];
+            if (Pouch.isPouch(item)) {
+                Pouch pouch = pouchManager.getPouch(item);
+                result.put(i, pouch.getPouched());
             }
         }
 

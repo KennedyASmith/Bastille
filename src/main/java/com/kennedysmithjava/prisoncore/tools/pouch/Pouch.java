@@ -133,7 +133,6 @@ public class Pouch {
 
         DatalessPouchable key = pouchable.toDataless();
         int newAmount = pouched.getOrDefault(key, 0) + 1;
-        Bukkit.broadcastMessage(newAmount + " blocks");
         pouched.put(key, newAmount);
         count++;
 

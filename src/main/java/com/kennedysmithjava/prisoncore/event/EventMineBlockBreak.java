@@ -48,8 +48,6 @@ public class EventMineBlockBreak extends Event implements Cancellable {
         this.rewards.add(distribution.generatePrisonBlock(block.getType(), block.getBlockData()));
         this.breakAnimations = new ArrayList<>();
 
-        Bukkit.broadcastMessage("Distribution: " + distribution.getRates().toString());
-        Bukkit.broadcastMessage("Rewards: " + rewards.toString());
     }
 
 

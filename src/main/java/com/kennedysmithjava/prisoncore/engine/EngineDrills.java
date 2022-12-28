@@ -81,7 +81,6 @@ public class EngineDrills extends Engine {
                     if(angle >180)
                         angle -= 360;
 
-                    Bukkit.broadcastMessage("Angle: " + angle);
                     entityLook.setYaw(angle);
                     id = entityLook.getEntityID();
                     entityLook.sendPacket(player);

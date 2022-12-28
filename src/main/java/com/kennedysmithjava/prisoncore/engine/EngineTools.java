@@ -102,7 +102,6 @@ public class EngineTools implements Listener {
         Pickaxe p = Pickaxe.get(item);
         p.getEnchants().forEach((enchant, level) -> {
             if(enchant instanceof HandEquipEnchant<?> handEquipEnchant){
-                Bukkit.broadcastMessage("Enchant: " + enchant.getName() + " Level: " + level);
                 if(thisIsNewItem){
                     handEquipEnchant.onEquip(player, level);
                 }else{

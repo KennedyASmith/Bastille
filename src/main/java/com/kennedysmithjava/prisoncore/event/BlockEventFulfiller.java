@@ -57,7 +57,6 @@ public class BlockEventFulfiller {
             block.setType(Material.AIR);
         }
 
-        Bukkit.broadcastMessage("Handing out reward!");
         this.rewardPlayer(finishedEvent.getPlayer(), finishedEvent.getRewards(), finishedEvent.getBlockMultiplier(), finishedEvent.getAwardMultiplier());
         rpEngine.addBlockCount(finishedEvent.getPlayer());
     }
@@ -77,8 +76,6 @@ public class BlockEventFulfiller {
 
 
         Map<Integer, Pouch> pouches = this.getPouches(player.getInventory());
-        Bukkit.broadcastMessage("Pouches: " + pouches.toString());
-
         pouches.forEach((index, pouch) -> {
             ItemStack item = player.getInventory().getItem(index);
 

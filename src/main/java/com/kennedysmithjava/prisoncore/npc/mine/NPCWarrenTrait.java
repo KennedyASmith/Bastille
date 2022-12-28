@@ -141,7 +141,7 @@ public class NPCWarrenTrait extends Trait {
 
         Mine mine = player.getMine();
 
-        buttons.forEach(button -> {
+        for (GUIButton button : buttons) {
 
             Material material = button.getMaterial();
             ItemStack item = new ItemStack(material, 1);
@@ -171,21 +171,22 @@ public class NPCWarrenTrait extends Trait {
 
             for (String requiredUpgrade : button.getRequiredUnlockedUpgrades()) {
                 if(!mine.isUpgradeUnlocked(requiredUpgrade)){
+                    item.setType(Material.IRON_BARS);
                     List<String> lore = Color.get(button.getLockedLore());
                     lore.set(0, Color.get("&7[&cLOCKED&7]"));
-                    item.setType(Material.IRON_BARS);
                     meta.setLore(lore);
                     meta.setDisplayName(Color.get("&c" + ChatColor.stripColor(meta.getDisplayName())));
-                    break;
+                    item.setItemMeta(meta);
                 }
             }
 
             item.setItemMeta(meta);
             inv.setItem(button.getSlot(), item);
+
             gui.setAction(button.getSlot(), inventoryClickEvent -> {
                 button.getOnClick().forEach(abstractAction -> abstractAction.apply(player)); return false;
             });
-        });
+        }
 
         player.getPlayer().openInventory(gui.getInventory());
     }
@@ -388,12 +389,6 @@ public class NPCWarrenTrait extends Trait {
 
 
 }
-
-
-
-
-
-
 
 @FunctionalInterface
 interface ClickEvent<A>{
