@@ -19,4 +19,7 @@ public class Tree extends EntityInternal<TreesConf> {
     // Position where the tree will respond
     private PS spawnPoint;
 
+    // Regeneration time
+    private transient long regenerationTime;
+
 }

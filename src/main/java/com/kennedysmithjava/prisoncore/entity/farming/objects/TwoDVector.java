@@ -3,18 +3,16 @@ package com.kennedysmithjava.prisoncore.entity.farming.objects;
 import com.massivecraft.massivecore.store.EntityInternal;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class TwoDVector extends EntityInternal<TwoDVector> {
 
     private String world;
     private int x;
     private int z;
-
-    public TwoDVector() {
-
-    }
 
     public void pasrseFromString(String n) {
         String[] array = n.split(":");

@@ -27,11 +27,12 @@ public class FarmingConf extends Entity<FarmingConf> {
 
     protected static transient FarmingConf i;
 
-    public static FarmingConf get() { return i; }
+    public static FarmingConf get() {
+        return i;
+    }
 
     @Override
-    public FarmingConf load(FarmingConf that)
-    {
+    public FarmingConf load(FarmingConf that) {
         super.load(that);
         return this;
     }
@@ -46,6 +47,7 @@ public class FarmingConf extends Entity<FarmingConf> {
 
     /**
      * Called when wheat is broken
+     *
      * @param block
      */
     private void addSeed(Block block) {
@@ -60,7 +62,7 @@ public class FarmingConf extends Entity<FarmingConf> {
 
         // Adds the seed to the seeds list
         seeds.add(new Seed(PS.valueOf(block.getLocation()),
-                System.currentTimeMillis() + 60000 + (ThreadLocalRandom.current().nextLong(1000, (maxAmountOfMilisForASeedToGrow-60000)))));
+                System.currentTimeMillis() + 60000 + (ThreadLocalRandom.current().nextLong(1000, (maxAmountOfMilisForASeedToGrow - 60000)))));
 
         // Updates the config entity
         save();
@@ -68,6 +70,7 @@ public class FarmingConf extends Entity<FarmingConf> {
 
     /**
      * Called when a seed spawns back
+     *
      * @param seed
      */
     public void addWheat(Seed seed) {
@@ -100,29 +103,30 @@ public class FarmingConf extends Entity<FarmingConf> {
 
     /**
      * Called when a block is broken
+     *
      * @param evt
      */
     public void onWheatBreak(BlockBreakEvent evt) {
 
         // Must be material wheat
-        if(evt.getBlock().getType() != Material.WHEAT_SEEDS)
+        if (evt.getBlock().getType() != Material.WHEAT_SEEDS)
             return;
 
         // Objects
         Block block = evt.getBlock();
         Location loc = block.getLocation();
 
-        if(!(block.getState().getData() instanceof Crops)) {
+        if (!(block.getState().getData() instanceof Crops)) {
             System.out.println("This crop is not a crop. issue.");
             return;
         }
 
         // If the crop is not ripe, don't do this
-        if(((Crops) block.getState().getData()).getState() != CropState.RIPE)
+        if (((Crops) block.getState().getData()).getState() != CropState.RIPE)
             return;
 
         // Must be in spawn world
-        if(!loc.getWorld().getName().equals(world))
+        if (!loc.getWorld().getName().equals(world))
             return;
 
         // Clears the drops and removes the event

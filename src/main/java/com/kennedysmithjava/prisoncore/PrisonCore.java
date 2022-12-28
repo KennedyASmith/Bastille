@@ -5,6 +5,7 @@ import com.comphenix.protocol.ProtocolManager;
 import com.kennedysmithjava.prisoncore.cmd.PouchCommand;
 import com.kennedysmithjava.prisoncore.eco.MineCurrencyPlaceholder;
 import com.kennedysmithjava.prisoncore.engine.EngineTools;
+import com.kennedysmithjava.prisoncore.engine.EngineTrees;
 import com.kennedysmithjava.prisoncore.entity.MConfColl;
 import com.kennedysmithjava.prisoncore.entity.farming.FarmingConfColl;
 import com.kennedysmithjava.prisoncore.entity.farming.TreesConf;
@@ -126,6 +127,11 @@ public class PrisonCore extends MassivePlugin {
     @Override
     public void onEnablePost() {
         nonPersistNPCRegistry = CitizensAPI.createAnonymousNPCRegistry(new MemoryNPCDataStore());
+        try {
+            EngineTrees.get().loadTreeMaterialCache();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private File createFile(File parent, String name) {

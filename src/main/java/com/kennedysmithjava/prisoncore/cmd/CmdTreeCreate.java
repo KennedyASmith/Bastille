@@ -2,6 +2,7 @@ package com.kennedysmithjava.prisoncore.cmd;
 
 import com.kennedysmithjava.prisoncore.Perm;
 import com.kennedysmithjava.prisoncore.cmd.type.TypeTree;
+import com.kennedysmithjava.prisoncore.engine.EngineTrees;
 import com.kennedysmithjava.prisoncore.entity.farming.TreesConf;
 import com.kennedysmithjava.prisoncore.entity.farming.objects.TreeTemplate;
 import com.massivecraft.massivecore.MassiveException;
@@ -31,7 +32,7 @@ public class CmdTreeCreate extends CoreCommand {
         TreeTemplate treeTemplate = this.readArg();
         Block block = me.getLocation().getBlock();
         block.setType(treeTemplate.getSaplingBlock().getMaterial());
-        TreesConf.get().spawnNewTree(treeTemplate, block);
+        EngineTrees.get().spawnNewTree(treeTemplate, block);
         MixinMessage.get().msgOne(me, Txt.parse("&eA tree has been created."));
     }
 

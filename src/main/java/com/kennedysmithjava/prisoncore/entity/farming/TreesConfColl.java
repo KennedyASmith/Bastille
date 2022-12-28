@@ -9,15 +9,17 @@ public class TreesConfColl extends Coll<TreesConf> {
     // -------------------------------------------- //
 
     private static TreesConfColl i = new TreesConfColl();
-    public static TreesConfColl get() { return i; }
+
+    public static TreesConfColl get() {
+        return i;
+    }
 
     // -------------------------------------------- //
     // STACK TRACEABILITY
     // -------------------------------------------- //
 
     @Override
-    public void onTick()
-    {
+    public void onTick() {
         super.onTick();
     }
 
@@ -26,8 +28,7 @@ public class TreesConfColl extends Coll<TreesConf> {
     // -------------------------------------------- //
 
     @Override
-    public void setActive(boolean active)
-    {
+    public void setActive(boolean active) {
         super.setActive(active);
         if (!active) return;
         TreesConf.i = this.get(MassiveCore.INSTANCE, true);
