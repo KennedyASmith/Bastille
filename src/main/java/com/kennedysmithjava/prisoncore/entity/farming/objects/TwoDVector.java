@@ -25,7 +25,7 @@ public class TwoDVector extends EntityInternal<TwoDVector> {
 
     @Override
     public String toString() {
-        return world+":"+x+":"+z;
+        return world + ":" + x + ":" + z;
     }
 
 }

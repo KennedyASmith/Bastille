@@ -27,6 +27,9 @@ public class TreeTemplate extends EntityInternal<TreesConf> {
     // What to replace the tree with when mined
     private BlockWrapper blockToReplaceWhenBroken;
 
+    // The sapling type
+    private BlockWrapper saplingBlock;
+
     // Center block from were the spawn position is
     private Offset offset;
 

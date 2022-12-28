@@ -7,6 +7,8 @@ import com.kennedysmithjava.prisoncore.eco.MineCurrencyPlaceholder;
 import com.kennedysmithjava.prisoncore.engine.EngineTools;
 import com.kennedysmithjava.prisoncore.entity.MConfColl;
 import com.kennedysmithjava.prisoncore.entity.farming.FarmingConfColl;
+import com.kennedysmithjava.prisoncore.entity.farming.TreesConf;
+import com.kennedysmithjava.prisoncore.entity.farming.TreesConfColl;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.Floor;
 import com.kennedysmithjava.prisoncore.entity.npcs.FarmerConfColl;
 import com.kennedysmithjava.prisoncore.entity.npcs.FarmerGuiConfColl;
@@ -59,9 +61,11 @@ public class PrisonCore extends MassivePlugin {
     // INSTANCE & CONSTRUCT
     // -------------------------------------------- //
     private static PrisonCore i;
+
     public PrisonCore() {
         PrisonCore.i = this;
     }
+
     public static Map<MPlayer, QuestProfile> activeTutorials = new HashMap<>();
 
     public static PrisonCore get() {
@@ -124,9 +128,9 @@ public class PrisonCore extends MassivePlugin {
         nonPersistNPCRegistry = CitizensAPI.createAnonymousNPCRegistry(new MemoryNPCDataStore());
     }
 
-    private File createFile(File parent, String name){
+    private File createFile(File parent, String name) {
         File file = new File(parent, name);
-        if(!file.exists()){
+        if (!file.exists()) {
             try {
                 file.getParentFile().mkdirs();
                 file.createNewFile();
@@ -142,18 +146,15 @@ public class PrisonCore extends MassivePlugin {
             Field f = Enchantment.class.getDeclaredField("acceptingNew");
             f.setAccessible(true);
             f.set(null, true);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         try {
             NamespacedKey key = new NamespacedKey(this, "glowKey");
             Glow glow = new Glow(key);
             Enchantment.registerEnchantment(glow);
-        }
-        catch (IllegalArgumentException e){
-        }
-        catch(Exception e){
+        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -183,7 +184,8 @@ public class PrisonCore extends MassivePlugin {
                 CoinCollectorGuiConfColl.class,
                 FarmingConfColl.class,
                 FarmerConfColl.class,
-                FarmerGuiConfColl.class
+                FarmerGuiConfColl.class,
+                TreesConfColl.class
         );
     }
 

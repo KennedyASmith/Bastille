@@ -11,8 +11,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class TypeTree extends TypeAbstract<TreeTemplate>
-{
+public class TypeTree extends TypeAbstract<TreeTemplate> {
     // -------------------------------------------- //
     // INSTANCE & CONSTRUCT
     // -------------------------------------------- //
@@ -23,7 +22,9 @@ public class TypeTree extends TypeAbstract<TreeTemplate>
         super(TreeTemplate.class);
     }
 
-    public static TypeTree get() { return i; }
+    public static TypeTree get() {
+        return i;
+    }
 
     // -------------------------------------------- //
     // OVERRIDE
@@ -31,12 +32,9 @@ public class TypeTree extends TypeAbstract<TreeTemplate>
 
 
     @Override
-    public TreeTemplate read(String str, CommandSender sender) throws MassiveException
-    {
+    public TreeTemplate read(String str, CommandSender sender) throws MassiveException {
         TreeTemplate ret = TreesConf.get().getTreeTemplates().get(str);
-        if(ret != null)
-            return ret;
-
+        if (ret != null) return ret;
         throw new MassiveException().addMsg("<b>No tree matching \"<p>%s<b>\".", str);
     }
 
@@ -47,8 +45,7 @@ public class TypeTree extends TypeAbstract<TreeTemplate>
         Set<String> ret = new TreeSet<>(ComparatorCaseInsensitive.get());
 
         // Fill
-        for (String tree : TreesConf.get().getTreeTemplates().keySet())
-        {
+        for (String tree : TreesConf.get().getTreeTemplates().keySet()) {
             ret.add(tree);
         }
 

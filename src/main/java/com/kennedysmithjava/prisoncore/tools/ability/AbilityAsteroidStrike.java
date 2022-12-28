@@ -80,24 +80,24 @@ public class AbilityAsteroidStrike extends Ability<AbilityAsteroidStrike> {
 
         ArrayList<Block> blownBlocks = new ArrayList<>();
         ArrayList<Block> affectedBlocks = new ArrayList<>();
-        new BukkitRunnable(){
+        new BukkitRunnable() {
             @Override
             public void run() {
-                if(completed.get()){
+                if (completed.get()) {
                     giantEntity.remove();
-                    Location finalLocation = giantEntity.getLocation().add(-xOffset,-yOffset,-zOffset);
+                    Location finalLocation = giantEntity.getLocation().add(-xOffset, -yOffset, -zOffset);
                     ParticleEffect.EXPLOSION_LARGE.display(finalLocation);
                     int radius = 3;
                     int bx = finalLocation.getBlockX();
                     int by = finalLocation.getBlockY();
                     int bz = finalLocation.getBlockZ();
-                    if(player != null){
+                    if (player != null) {
                         for (int x = bx - radius; x <= bx + radius; x++) {
                             for (int y = by - radius; y <= by + radius; y++) {
                                 for (int z = bz - radius; z <= bz + radius; z++) {
                                     double dist = ((bx - x) * (bx - x) + ((bz - z) * (bz - z)) + ((by - y) * (by - y)));
                                     if (dist < radius * radius) {
-                                        if(region.contains(x, y, z, worldName)){
+                                        if (region.contains(x, y, z, worldName)) {
                                             Location location = new Location(start.getWorld(), x, y, z);
                                             Block block = location.getBlock();
                                             PrisonBlock pb = distribution.generatePrisonBlock(block.getType(), block.getBlockData());
@@ -112,12 +112,12 @@ public class AbilityAsteroidStrike extends Ability<AbilityAsteroidStrike> {
 
                         blownBlocks.forEach(blownBlock -> blockFaces.forEach(blockFace -> {
                             Block nearby = blockFace.getRelative(blownBlock);
-                            if(nearby.getType() != Material.AIR && region.contains(nearby)){
+                            if (nearby.getType() != Material.AIR && region.contains(nearby)) {
                                 player.sendBlockChange(nearby.getLocation(), Material.NETHERRACK, (byte) 0);
                                 affectedBlocks.add(nearby);
                                 Block above = VBlockFace.UP.getRelative(nearby);
-                                if(above.getType() == Material.AIR){ //If there is an empty block above
-                                    if(random.nextDouble() < 0.5){ //Randomly decide if there should be fire
+                                if (above.getType() == Material.AIR) { //If there is an empty block above
+                                    if (random.nextDouble() < 0.5) { //Randomly decide if there should be fire
                                         player.sendBlockChange(above.getLocation(), Material.FIRE, (byte) 0); //Set fire
                                         affectedBlocks.add(above); //Add it to blocks effected
                                     }
@@ -125,15 +125,17 @@ public class AbilityAsteroidStrike extends Ability<AbilityAsteroidStrike> {
                             }
                         }));
 
-                        if(affectedBlocks.size() > 0){
+                        if (affectedBlocks.size() > 0) {
                             affectedBlocks.forEach(b -> new BukkitRunnable() {
                                 @Override
                                 public void run() {
                                     // noinspection ConstantConditions
-                                    if(player != null){
+                                    if (player != null) {
                                         player.sendBlockChange(b.getLocation(), b.getType(), b.getData());
                                     }
-                                };
+                                }
+
+                                ;
                             }.runTaskLaterAsynchronously(PrisonCore.get(), (random.nextInt(3) + 2) * 20));
                         }
                     }
@@ -141,38 +143,40 @@ public class AbilityAsteroidStrike extends Ability<AbilityAsteroidStrike> {
                     this.cancel();
                     return;
                 }
-                giantEntity.setVelocity(new Vector(0,0,0));
+                giantEntity.setVelocity(new Vector(0, 0, 0));
             }
         }.runTaskTimer(PrisonCore.get(), 1L, 2L);
 
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (completed.get()){
+                if (completed.get()) {
                     this.cancel();
                     return;
                 }
                 Vector distance = goal.clone().subtract(giantEntity.getLocation()).toVector();
-                if(distance.lengthSquared() <  1.5*3) {
+                if (distance.lengthSquared() < 1.5 * 3) {
                     completed.set(true);
                     return;
-                }else{
+                } else {
                     giantEntity.teleport(giantEntity.getLocation().add(distance.multiply(0.25)));
                 }
-            };
+            }
+
+            ;
         }.runTaskTimer(PrisonCore.get(), 1L, 3L);
 
 
         //Ensure that the magma cube is removed if something goes wrong.
-        new BukkitRunnable(){
+        new BukkitRunnable() {
             @Override
             public void run() {
                 completed.set(true);
             }
-        }.runTaskLater(PrisonCore.get(), 5*20L);
+        }.runTaskLater(PrisonCore.get(), 5 * 20L);
 
     }
-    
+
     @Override
     public String getDisplayName() {
         return "&cAsteroid";

@@ -68,7 +68,7 @@ public class WorthUtil {
             return -1D;
         if (!i.hasItemMeta())
             return -1D;
-        if(i.getAmount() < 0)
+        if (i.getAmount() < 0)
             return -1D;
 
         PrisonBlock prisonBlock = fromName(i.getItemMeta().getDisplayName());

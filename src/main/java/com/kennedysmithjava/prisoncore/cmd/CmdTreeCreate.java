@@ -9,6 +9,8 @@ import com.massivecraft.massivecore.command.requirement.RequirementHasPerm;
 import com.massivecraft.massivecore.command.requirement.RequirementIsPlayer;
 import com.massivecraft.massivecore.mixin.MixinMessage;
 import com.massivecraft.massivecore.util.Txt;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
 
 public class CmdTreeCreate extends CoreCommand {
 
@@ -27,8 +29,9 @@ public class CmdTreeCreate extends CoreCommand {
     @Override
     public void perform() throws MassiveException {
         TreeTemplate treeTemplate = this.readArg();
-        TreesConf.get().spawnNewTree(treeTemplate, me.getLocation().getBlock());
-
+        Block block = me.getLocation().getBlock();
+        block.setType(treeTemplate.getSaplingBlock().getMaterial());
+        TreesConf.get().spawnNewTree(treeTemplate, block);
         MixinMessage.get().msgOne(me, Txt.parse("&eA tree has been created."));
     }
 
