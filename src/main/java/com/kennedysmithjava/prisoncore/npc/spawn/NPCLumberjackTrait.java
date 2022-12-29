@@ -1,5 +1,6 @@
 package com.kennedysmithjava.prisoncore.npc.spawn;
 
+import com.kennedysmithjava.prisoncore.crafting.Recipe;
 import com.kennedysmithjava.prisoncore.entity.mines.CoinCollectorGuiConf;
 import com.kennedysmithjava.prisoncore.entity.npcs.FarmerGuiConf;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
@@ -13,6 +14,7 @@ import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.Trait;
+import net.citizensnpcs.api.trait.TraitName;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -22,9 +24,12 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+@TraitName("lumberjacktrait")
 public class NPCLumberjackTrait extends Trait {
 
     public NPCLumberjackTrait() {
@@ -62,22 +67,22 @@ public class NPCLumberjackTrait extends Trait {
         chestGui.setAutoremoving(false);
         chestGui.setSoundOpen(null);
         chestGui.setSoundClose(null);
+        blockFill(chestGui.getInventory(), Material.WHITE_STAINED_GLASS_PANE);
 
-        //12, 14, 16
         ItemStack sellChest = buildItem(Material.CHEST, "&6Sell Logs", MUtil.list(" &r", "&7Sell your &elogs&7 for &a⛃ Cash&7!"));
-        ItemStack craftCutter = buildItem(Material.STONECUTTER, "&6Craft Items", MUtil.list(" &r", "Craft your &elogs &7into &esticks", "&7and other items!"));
+        ItemStack craftCutter = buildItem(Material.STONECUTTER, "&6Craft Items", MUtil.list(" &r", "&7Craft your &elogs &7into &esticks", "&7and other items!"));
         ItemStack questCompass = buildItem(Material.COMPASS, "&6Quests", MUtil.list(" &r", "&7Access &eWoodcutting &7quests here!"));
 
-        inventory.setItem(12, sellChest);
-        inventory.setItem(14, craftCutter);
-        inventory.setItem(16, questCompass);
+        inventory.setItem(11, sellChest);
+        inventory.setItem(13, craftCutter);
+        inventory.setItem(15, questCompass);
 
-        chestGui.setAction(12, inventoryClickEvent -> false);
-        chestGui.setAction(14, inventoryClickEvent -> false);
-        chestGui.setAction(16, inventoryClickEvent -> false);
-
-
-        blockFill(chestGui.getInventory(), Material.WHITE_STAINED_GLASS_PANE);
+        chestGui.setAction(11, inventoryClickEvent -> false);
+        chestGui.setAction(13, inventoryClickEvent -> {
+            openCraftMenu(player);
+            return false;
+        });
+        chestGui.setAction(15, inventoryClickEvent -> false);
 
         return chestGui;
     }
@@ -95,14 +100,9 @@ public class NPCLumberjackTrait extends Trait {
     }
 
     private void openCraftMenu(Player player){
-        Inventory inventory = Bukkit.createInventory(null, 27, Color.get("&4&lCraft &r&7with &6lLogs"));
-        ChestGui chestGui = ChestGui.getCreative(inventory);
-        chestGui.setAutoclosing(false);
-        chestGui.setAutoremoving(false);
-        chestGui.setSoundOpen(null);
-        chestGui.setSoundClose(null);
-
-        player.openInventory(chestGui.getInventory());
+        ChestGui gui = Recipe.getCraftingMenu(Recipe.STICK, "Craft a stick", new HashMap<>());
+        player.closeInventory();
+        player.openInventory(gui.getInventory());
     }
 
     private void openQuestMenu(Player player){

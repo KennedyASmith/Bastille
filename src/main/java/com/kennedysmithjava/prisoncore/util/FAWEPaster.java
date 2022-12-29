@@ -5,6 +5,7 @@ import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.extension.platform.Actor;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
@@ -48,6 +49,7 @@ public class FAWEPaster {
                 }
             } else {
                 try (EditSession es = WorldEdit.getInstance().newEditSession(FaweAPI.getWorld(world))) {
+
                     Operation operation = new ClipboardHolder(clipboard)
                             .createPaste(es)
                             .to(to)
@@ -61,5 +63,7 @@ public class FAWEPaster {
             e.printStackTrace();
         }
     }
+
+
 
 }

@@ -2,12 +2,12 @@ package com.kennedysmithjava.prisoncore.engine;
 
 import com.kennedysmithjava.prisoncore.eco.WorthUtil;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.PrisonBlock;
-import com.kennedysmithjava.prisoncore.npc.mine.NPCCoinCollectorTrait;
 import com.kennedysmithjava.prisoncore.tools.pouch.DatalessPouchable;
 import com.kennedysmithjava.prisoncore.tools.pouch.Pouch;
 import com.kennedysmithjava.prisoncore.tools.pouch.PouchManager;
 import com.kennedysmithjava.prisoncore.util.ClickHandler;
 import com.kennedysmithjava.prisoncore.util.Color;
+import com.kennedysmithjava.prisoncore.util.RemovableItem;
 import com.massivecraft.massivecore.Engine;
 import com.massivecraft.massivecore.chestgui.ChestGui;
 import org.bukkit.Sound;
@@ -68,7 +68,7 @@ public class EngineCollectorGUI extends Engine {
         }
 
         Inventory inv = chestGui.getInventory();
-        NPCCoinCollectorTrait.RemovableItem removableItem = new NPCCoinCollectorTrait.RemovableItem(item);
+        RemovableItem removableItem = new RemovableItem(item);
         int slot = inv.firstEmpty();
         if(slot == -1)
             return; // The inventory is full

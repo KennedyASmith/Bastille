@@ -11,6 +11,7 @@ import java.util.Map;
 
 public abstract class PrisonObject<P extends PrisonObject<P>> {
 
+
     public abstract ItemStack giveRawItem();
     public static NamespacedKey prisonObjectKey = new NamespacedKey(PrisonCore.get(), "pObj");
 
@@ -19,6 +20,7 @@ public abstract class PrisonObject<P extends PrisonObject<P>> {
     public <Z, T> ItemStack give() {
         ItemStack item = giveRawItem();
         ItemMeta meta = item.getItemMeta();
+
         if (meta != null){
             PersistentDataContainer pdc = meta.getPersistentDataContainer();
             getStoredData().forEach((dataType, objMap) ->
@@ -29,6 +31,8 @@ public abstract class PrisonObject<P extends PrisonObject<P>> {
         item.setItemMeta(meta);
         return item;
     }
+
+    public abstract String getName();
 
     public abstract Map<PersistentDataType<?, ?>, Map <NamespacedKey, ?>>  getStoredData();
 
@@ -46,4 +50,11 @@ public abstract class PrisonObject<P extends PrisonObject<P>> {
         return key.equals(getKey());
     }
 
+    public static boolean isPrisonObj(ItemStack itemStack){
+        ItemMeta meta = itemStack.getItemMeta();
+        if(meta == null) return false;
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        String key = pdc.get(prisonObjectKey, PersistentDataType.STRING);
+        return (key != null);
+    }
 }

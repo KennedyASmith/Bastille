@@ -23,6 +23,7 @@ import com.kennedysmithjava.prisoncore.entity.mines.objects.Wall;
 import com.kennedysmithjava.prisoncore.entity.mines.*;
 import com.kennedysmithjava.prisoncore.event.EventNewMine;
 import com.kennedysmithjava.prisoncore.npc.spawn.NPCLimboTrait;
+import com.kennedysmithjava.prisoncore.npc.spawn.NPCLumberjackTrait;
 import com.kennedysmithjava.prisoncore.tools.Pickaxe;
 import com.kennedysmithjava.prisoncore.quest.QuestManager;
 import com.kennedysmithjava.prisoncore.quest.QuestProfile;
@@ -117,6 +118,7 @@ public class PrisonCore extends MassivePlugin {
         ConfigurationSerialization.registerClass(DatalessPouchable.class);
 
         CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(NPCLimboTrait.class));
+        CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(NPCLumberjackTrait.class));
 
         Pickaxe.LORE_UPDATER.runTaskTimerAsynchronously(this, 20L, 5 * 20L);
         getServer().getPluginManager().registerEvents(new EngineTools(), this);

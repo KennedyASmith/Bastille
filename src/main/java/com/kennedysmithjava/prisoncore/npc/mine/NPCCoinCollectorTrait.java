@@ -7,7 +7,6 @@ import com.kennedysmithjava.prisoncore.entity.mines.CoinCollectorConf;
 import com.kennedysmithjava.prisoncore.entity.mines.CoinCollectorGuiConf;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.mines.MineColl;
-import com.kennedysmithjava.prisoncore.entity.mines.objects.PrisonBlock;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayerColl;
 import com.kennedysmithjava.prisoncore.tools.pouch.DatalessPouchable;
@@ -18,6 +17,7 @@ import com.kennedysmithjava.prisoncore.upgrades.UpgradeName;
 import com.kennedysmithjava.prisoncore.util.ClickHandler;
 import com.kennedysmithjava.prisoncore.util.ClickItem;
 import com.kennedysmithjava.prisoncore.util.Color;
+import com.kennedysmithjava.prisoncore.util.RemovableItem;
 import com.massivecraft.massivecore.chestgui.ChestGui;
 import com.massivecraft.massivecore.util.MUtil;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
@@ -31,14 +31,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
-
-import static com.kennedysmithjava.prisoncore.eco.WorthUtil.fromName;
 
 public class NPCCoinCollectorTrait extends Trait {
 
@@ -125,17 +122,6 @@ public class NPCCoinCollectorTrait extends Trait {
         p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
         return true;
     };
-
-    public static final class RemovableItem extends ClickItem {
-        public RemovableItem(ItemStack stack) throws IllegalArgumentException {
-            super(stack, (player, clickEvent) -> {
-                player.getInventory().addItem(clickEvent.getCurrentItem());
-                clickEvent.setCurrentItem(null);
-                player.playSound(player.getLocation(), Sound.BLOCK_LAVA_POP, 1, 1);
-                return true;
-            });
-        }
-    }
 
     public static final class PouchedItem extends ClickItem {
         public PouchedItem(ItemStack stack, DatalessPouchable pouchable, Pouch pouch) throws IllegalArgumentException {
