@@ -14,14 +14,6 @@ public class TreesConfColl extends Coll<TreesConf> {
         return i;
     }
 
-    // -------------------------------------------- //
-    // STACK TRACEABILITY
-    // -------------------------------------------- //
-
-    @Override
-    public void onTick() {
-        super.onTick();
-    }
 
     // -------------------------------------------- //
     // OVERRIDE

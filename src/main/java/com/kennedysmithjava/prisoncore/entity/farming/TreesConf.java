@@ -21,25 +21,21 @@ public class TreesConf extends Entity<TreesConf> {
     // META
     // -------------------------------------------- //
 
-    protected static transient TreesConf i;
+    protected static TreesConf i;
 
     public static TreesConf get() {
         return i;
     }
 
-    //ToDo Make it so this actually works, right now it DOESNT load in trees, it resets them on reboot.
     @Override
     public TreesConf load(TreesConf that) {
-        super.load(that);
-        this.trees = that.trees;
-        this.treeTemplates = that.treeTemplates;
+        this.setTrees(that.trees);
+        this.setTreeTemplates(that.treeTemplates);
         return this;
     }
 
-    @Getter
     public Map<TwoDVector, Tree> trees = new MassiveMap<>();
 
-    @Getter
     public Map<String, TreeTemplate> treeTemplates = MUtil.map(
             "acacia", new TreeTemplate("acacia", "acacaia_schematic.schematic",
                     3,
@@ -50,18 +46,31 @@ public class TreesConf extends Entity<TreesConf> {
                     new Offset(2, 0, 2))
     );
 
-
-    public void respawnTree() {
-
-    }
-
-    public void removeTree() {
-
-    }
-
     private TreeTemplate getTreeTemplate(String name) {
         return treeTemplates.get(name);
     }
 
 
+    public Map<String, TreeTemplate> getTreeTemplates() {
+        return treeTemplates;
+    }
+
+    public void setTreeTemplates(Map<String, TreeTemplate> treeTemplates) {
+        this.treeTemplates = treeTemplates;
+        this.changed();
+    }
+
+    public Map<TwoDVector, Tree> getTrees() {
+        return trees;
+    }
+
+    public void addTree(TwoDVector vector, Tree tree){
+        trees.put(vector, tree);
+        this.changed();
+    }
+
+    public void setTrees(Map<TwoDVector, Tree> trees) {
+        this.trees = trees;
+        this.changed();
+    }
 }

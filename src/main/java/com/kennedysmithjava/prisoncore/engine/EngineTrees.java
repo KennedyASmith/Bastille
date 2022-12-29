@@ -1,6 +1,7 @@
 package com.kennedysmithjava.prisoncore.engine;
 
 import com.kennedysmithjava.prisoncore.PrisonCore;
+import com.kennedysmithjava.prisoncore.crafting.objects.PrisonLog;
 import com.kennedysmithjava.prisoncore.entity.farming.TreesConf;
 import com.kennedysmithjava.prisoncore.entity.farming.objects.Tree;
 import com.kennedysmithjava.prisoncore.entity.farming.objects.TreeTemplate;
@@ -48,14 +49,15 @@ public class EngineTrees extends Engine {
      */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent e) {
-        if (Material.STONE.equals(e.getBlock().getType())) return;
+        if (!e.getBlock().getType().isBurnable()) return;
+
         Tree tree = getTree(e.getBlock());
         if (tree == null) return;
         e.setCancelled(true);
         TreeTemplate template = TreesConf.get().getTreeTemplates().get(tree.getName());
         if (template.getBlockToReplaceWhenBroken().getMaterial().equals(e.getBlock().getType())) return;
         tree.setBlocksHit(tree.getBlocksHit() + 1);
-        MiscUtil.givePlayerItem(e.getPlayer(), new ItemStack(e.getBlock().getType()), 1);
+        MiscUtil.givePlayerItem(e.getPlayer(), PrisonLog.giveFromMaterial(e.getBlock().getType()), 1);
         e.getBlock().setType(template.getBlockToReplaceWhenBroken().getMaterial());
         tree.changed();
         if (tree.getBlocksHit() >= template.getTimesNeededToReset())
@@ -117,7 +119,6 @@ public class EngineTrees extends Engine {
         // Creates the tree object
         TwoDVector twoDVector = new TwoDVector(storedLocation.getWorld().getName(), storedLocation.getBlockX(), storedLocation.getBlockZ());
         Tree tree = new Tree(template.getName(), 0, PS.valueOf(storedLocation), 0);
-        TreesConf.get().getTrees().put(twoDVector, tree);
 
         Offset offset = template.getOffset();
         Location offsetLocation = offset.get(block.getLocation());
@@ -130,7 +131,7 @@ public class EngineTrees extends Engine {
                 () -> {
                 }
         );
-        TreesConf.get().changed();
+        TreesConf.get().addTree(twoDVector, tree);
 
         try {
             loadTreeMaterialCache();
