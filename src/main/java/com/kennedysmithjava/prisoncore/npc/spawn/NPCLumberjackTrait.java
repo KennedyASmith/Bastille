@@ -69,20 +69,20 @@ public class NPCLumberjackTrait extends Trait {
         chestGui.setSoundClose(null);
         blockFill(chestGui.getInventory(), Material.WHITE_STAINED_GLASS_PANE);
 
-        ItemStack sellChest = buildItem(Material.CHEST, "&6Sell Logs", MUtil.list(" &r", "&7Sell your &elogs&7 for &a⛃ Cash&7!"));
+        //ItemStack sellChest = buildItem(Material.CHEST, "&6Sell Logs", MUtil.list(" &r", "&7Sell your &elogs&7 for &a⛃ Cash&7!"));
         ItemStack craftCutter = buildItem(Material.STONECUTTER, "&6Craft Items", MUtil.list(" &r", "&7Craft your &elogs &7into &esticks", "&7and other items!"));
         ItemStack questCompass = buildItem(Material.COMPASS, "&6Quests", MUtil.list(" &r", "&7Access &eWoodcutting &7quests here!"));
 
-        inventory.setItem(11, sellChest);
-        inventory.setItem(13, craftCutter);
-        inventory.setItem(15, questCompass);
+        //inventory.setItem(11, sellChest);
+        inventory.setItem(12, craftCutter);
+        inventory.setItem(14, questCompass);
 
-        chestGui.setAction(11, inventoryClickEvent -> false);
-        chestGui.setAction(13, inventoryClickEvent -> {
+        //chestGui.setAction(11, inventoryClickEvent -> false);
+        chestGui.setAction(12, inventoryClickEvent -> {
             openCraftMenu(player);
             return false;
         });
-        chestGui.setAction(15, inventoryClickEvent -> false);
+        chestGui.setAction(14, inventoryClickEvent -> false);
 
         return chestGui;
     }

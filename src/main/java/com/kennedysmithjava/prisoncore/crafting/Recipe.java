@@ -18,26 +18,33 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public enum Recipe {
 
-    STICK(MUtil.map(22, new PrisonLog(LogType.ANY)), new ProductItem(craftingRequest -> {
-        MiscUtil.givePlayerItem(craftingRequest.player(), PrisonStick.get(StickType.WOOD), 1);}));
+    STICK(MUtil.map(22, new PrisonLog(LogType.ANY)),
+            () -> new ProductItem(craftingRequest -> MiscUtil.givePlayerItem(craftingRequest.player(), PrisonStick.get(StickType.WOOD), 1))
+    );
 
     //Key: GUI Slot ||| Value: Ingredient for that slot
     private final Map<Integer, PrisonObject<?>> ingredients;
 
-    private final ProductItem product;
+    private final Supplier<ProductItem> product;
 
-    Recipe(Map<Integer, PrisonObject<?>> ingredients, ProductItem product) {
+    Recipe(Map<Integer, PrisonObject<?>> ingredients, Supplier<ProductItem> product) {
         this.ingredients = ingredients;
         this.product = product;
+
     }
 
     public Map<Integer, PrisonObject<?>> getIngredients() {
         return ingredients;
+    }
+
+    public ProductItem getProduct() {
+        return product.get();
     }
 
     public static ChestGui getCraftingMenu(Recipe recipe, String menuName, Map<Integer, ItemStack> givenIngredients) {
@@ -51,22 +58,58 @@ public enum Recipe {
         chestGui.getMeta().put("craftingmenu", 1);
         blockFill(inventory, Material.BLACK_STAINED_GLASS_PANE);
 
-        boolean allIngredientsEntered = true;
+        List<PrisonObject<?>> ingredientsNotMet = new ArrayList<>();
+
         for (Integer s : ingredients.keySet()) {
             if (!givenIngredients.containsKey(s)) {
-                allIngredientsEntered = false;
-                break;
+                ingredientsNotMet.add(ingredients.get(s));
             }
         }
+
+        boolean allIngredientsEntered = (ingredientsNotMet.size() == 0);
 
         if(allIngredientsEntered){
             blockFillCenter(inventory, Material.LIME_STAINED_GLASS_PANE);
         }else {
             blockFillCenter(inventory, Material.RED_STAINED_GLASS_PANE);
+
         }
 
-        ingredients.forEach((slot, ingredient) -> {
+        // ** Logic for ConfirmItem ** //
+        ItemStack confirmItem = new ItemBuilder(Material.LIME_CONCRETE).name("&a&lFinish Crafting").lore(" &r").build();
 
+        if(allIngredientsEntered){
+            inventory.setItem(50, new ItemBuilder(confirmItem).clearLore().lore(MUtil.list("&7Ready to craft!")).build());
+            chestGui.setAction(50, inventoryClickEvent -> {
+                Player player = (Player) inventoryClickEvent.getWhoClicked();
+                givenIngredients.forEach((slot, itemStack) -> {
+                    inventory.setItem(slot, new ItemStack(Material.AIR));
+                });
+                EngineCraftingMenu.removeFromCache(player);
+                player.closeInventory();
+                recipe.getProduct().get(new CraftingRequest(player, givenIngredients));
+                return false;
+            });
+        }else {
+            ItemStack unreadyItem = new ItemBuilder(Material.ORANGE_CONCRETE).name("&6&lNot ready to craft").build();
+            inventory.setItem(50, unreadyItem);
+            Set<String> loreSet = new HashSet<>();
+            ingredientsNotMet.forEach(prisonObject ->
+                    loreSet.add("&7- " + ChatColor.stripColor(Color.get(prisonObject.getName()))));
+            List<String> lore = new ArrayList<>(loreSet);
+            lore.add(0, "&7Ingredient requirement(s) not met:");
+            inventory.setItem(50, new ItemBuilder(unreadyItem).clearLore().lore(lore).build());
+        }
+
+        // ** Logic for CancelItem ** //
+        ItemStack cancelItem = new ItemBuilder(Material.RED_CONCRETE).name("&c&lCancel").lore("&7Return all items").build();
+        inventory.setItem(48, cancelItem);
+        chestGui.setAction(48, inventoryClickEvent -> {
+            inventoryClickEvent.getWhoClicked().closeInventory();
+            return false;
+        });
+
+        ingredients.forEach((slot, ingredient) -> {
             ItemStack slotted = new ItemStack(Material.AIR);
             if(!givenIngredients.containsKey(slot)){ //If this ingredient isn't already provided
                 ItemStack ingredientItem = new ItemBuilder(Material.WHITE_STAINED_GLASS_PANE)

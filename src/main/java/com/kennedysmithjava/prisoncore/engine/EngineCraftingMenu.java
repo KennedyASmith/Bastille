@@ -61,14 +61,22 @@ public class EngineCraftingMenu extends Engine {
             return;
 
         Inventory inv = chestGui.getInventory();
-        RemovableItem removableItem = new RemovableItem(item);
+        ItemStack clonedCopy = item.clone();
+        clonedCopy.setAmount(1);
+        RemovableItem removableItem = new RemovableItem(clonedCopy);
         int slot = inv.firstEmpty();
         if(slot == -1)
             return; // The inventory is full
 
+
         inv.addItem(removableItem);
         chestGui.setAction(slot, ClickHandler.toChestAction(removableItem.getClickHandler()));
-        player.getInventory().removeItem(item);
+        int amt = item.getAmount();
+        if(amt >= 2){
+            item.setAmount(amt - 1);
+        } else {
+            player.getInventory().removeItem(item);
+        }
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
     }
 

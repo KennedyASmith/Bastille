@@ -3,11 +3,14 @@ package com.kennedysmithjava.prisoncore.crafting.objects;
 import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.crafting.PrisonObject;
 import com.kennedysmithjava.prisoncore.crafting.objects.type.StickType;
+import com.kennedysmithjava.prisoncore.util.ItemBuilder;
 import com.massivecraft.massivecore.util.MUtil;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class PrisonStick extends PrisonObject<PrisonStick> {
@@ -27,9 +30,15 @@ public class PrisonStick extends PrisonObject<PrisonStick> {
 
     @Override
     public ItemStack giveRawItem() {
-        return null;
+        return new ItemBuilder(type.getMaterial())
+                .lore(placeholderReplacer("%durability%", durability.toString(), type.getLore()))
+                .build();
     }
 
+    private static List<String> placeholderReplacer(String placeholder, String value, List<String> lore) {
+       lore.replaceAll(s -> s.replaceFirst(placeholder, value));
+       return lore;
+    }
     @Override
     public String getKey() {
         return "stickKey";
@@ -43,11 +52,6 @@ public class PrisonStick extends PrisonObject<PrisonStick> {
     @Override
     public Map<PersistentDataType<?, ?>, Map<NamespacedKey, ?>> getStoredData() {
         return MUtil.map(PersistentDataType.INTEGER, MUtil.map(durabilityKey, durability));
-    }
-
-    @Override
-    public ItemStack give() {
-        return null;
     }
 
     public static ItemStack get(StickType type){

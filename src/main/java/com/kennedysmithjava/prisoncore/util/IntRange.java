@@ -4,6 +4,7 @@ import java.util.Random;
 
 public class IntRange {
 
+    public static Random random = new Random();
     int min;
     int max;
     public IntRange(int min, int max) {
@@ -12,7 +13,6 @@ public class IntRange {
     }
 
     public int getRandom(){
-        Random random = new Random();
         return random.nextInt(max - min) + min;
     }
 
