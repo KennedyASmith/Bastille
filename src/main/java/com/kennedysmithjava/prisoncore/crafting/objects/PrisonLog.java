@@ -12,7 +12,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Map;
 
-public class PrisonLog extends PrisonObject<PrisonLog> {
+public class PrisonLog extends PrisonObject {
 
     private static final NamespacedKey logKey = new NamespacedKey(PrisonCore.get(), "logKey");
 

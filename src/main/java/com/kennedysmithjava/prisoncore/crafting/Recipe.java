@@ -25,21 +25,23 @@ import java.util.function.Supplier;
 public enum Recipe {
 
     STICK(MUtil.map(22, new PrisonLog(LogType.ANY)),
-            () -> new ProductItem(craftingRequest -> MiscUtil.givePlayerItem(craftingRequest.player(), PrisonStick.get(StickType.WOOD), 1))
+            () -> new ProductItem(craftingRequest -> {
+                craftingRequest.getPlayer().getInventory().addItem(new PrisonStick(StickType.WOOD).give());
+            })
     );
 
     //Key: GUI Slot ||| Value: Ingredient for that slot
-    private final Map<Integer, PrisonObject<?>> ingredients;
+    private Map<Integer, PrisonObject> ingredients;
 
-    private final Supplier<ProductItem> product;
+    private Supplier<ProductItem> product;
 
-    Recipe(Map<Integer, PrisonObject<?>> ingredients, Supplier<ProductItem> product) {
+    Recipe(Map<Integer, PrisonObject> ingredients, Supplier<ProductItem> product) {
         this.ingredients = ingredients;
         this.product = product;
 
     }
 
-    public Map<Integer, PrisonObject<?>> getIngredients() {
+    public Map<Integer, PrisonObject> getIngredients() {
         return ingredients;
     }
 
@@ -49,7 +51,7 @@ public enum Recipe {
 
     public static ChestGui getCraftingMenu(Recipe recipe, String menuName, Map<Integer, ItemStack> givenIngredients) {
         Inventory inventory = Bukkit.createInventory(null, 54, Color.get(menuName));
-        Map<Integer, PrisonObject<?>> ingredients = recipe.getIngredients();
+        Map<Integer, PrisonObject> ingredients = recipe.getIngredients();
         ChestGui chestGui = ChestGui.getCreative(inventory);
         chestGui.setAutoclosing(false);
         chestGui.setAutoremoving(false);
@@ -58,7 +60,7 @@ public enum Recipe {
         chestGui.getMeta().put("craftingmenu", 1);
         blockFill(inventory, Material.BLACK_STAINED_GLASS_PANE);
 
-        List<PrisonObject<?>> ingredientsNotMet = new ArrayList<>();
+        List<PrisonObject> ingredientsNotMet = new ArrayList<>();
 
         for (Integer s : ingredients.keySet()) {
             if (!givenIngredients.containsKey(s)) {
@@ -87,6 +89,7 @@ public enum Recipe {
                 });
                 EngineCraftingMenu.removeFromCache(player);
                 player.closeInventory();
+                chestGui.remove();
                 recipe.getProduct().get(new CraftingRequest(player, givenIngredients));
                 return false;
             });
@@ -136,7 +139,7 @@ public enum Recipe {
     private static void openIngredientDepositMenu(Player player,
                                                   Recipe recipe,
                                                   Map<Integer, ItemStack> givenIngredients,
-                                                  PrisonObject<?> requiredIngredient,
+                                                  PrisonObject requiredIngredient,
                                                   Integer reqIngredientSlot,
                                                   String menuName){
         openIngredientDepositMenu(player, recipe, givenIngredients,
@@ -146,7 +149,7 @@ public enum Recipe {
     private static void openIngredientDepositMenu(Player player,
                                                   Recipe recipe,
                                                   Map<Integer, ItemStack> givenIngredients,
-                                                  PrisonObject<?> requiredIngredient,
+                                                  PrisonObject requiredIngredient,
                                                   Integer reqIngredientSlot,
                                                   String menuName,
                                                   ItemStack slotted){

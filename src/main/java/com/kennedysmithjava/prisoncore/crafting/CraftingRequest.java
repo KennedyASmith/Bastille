@@ -5,7 +5,21 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
 
-public record CraftingRequest(Player player, Map<Integer, ItemStack> ingredients) {
+public class CraftingRequest {
+    Player player;
+    Map<Integer, ItemStack> ingredients;
+    public CraftingRequest(Player player, Map<Integer, ItemStack> ingredients) {
+        this.player = player;
+        this.ingredients = ingredients;
+    }
 
+    public Map<Integer, ItemStack> getIngredients() {
+        return ingredients;
+    }
 
+    public Player getPlayer() {
+        return player;
+    }
 }
+
+

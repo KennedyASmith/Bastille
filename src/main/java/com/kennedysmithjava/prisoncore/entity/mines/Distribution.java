@@ -67,12 +67,9 @@ public class Distribution {
 
     //TODO: Include blockdata
     public PrisonBlock generatePrisonBlock(Material material, BlockData blockData) {
-        Bukkit.broadcastMessage("Materials: " + materials);
-        Bukkit.broadcastMessage("Matching: " + matchingMaterialRates);
 
         if (Collections.frequency(materials, material) > 1){
             List<Integer> rts = matchingMaterialRates.get(material);
-            Bukkit.broadcastMessage("RTS: " + rts);
             int id = rts.get(random.nextInt(rts.size() - 1));
             return blocksPB.get(id);
         }else {

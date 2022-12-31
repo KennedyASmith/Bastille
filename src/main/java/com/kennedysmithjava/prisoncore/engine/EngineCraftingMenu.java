@@ -119,6 +119,7 @@ public class EngineCraftingMenu extends Engine {
         }
 
         removeFromCache(player);
+        chestGui.remove();
     }
 
 

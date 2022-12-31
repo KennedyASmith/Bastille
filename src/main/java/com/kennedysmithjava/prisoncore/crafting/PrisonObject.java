@@ -9,7 +9,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Map;
 
-public abstract class PrisonObject<P extends PrisonObject<P>> {
+public abstract class PrisonObject {
 
 
     public abstract ItemStack giveRawItem();
@@ -18,7 +18,7 @@ public abstract class PrisonObject<P extends PrisonObject<P>> {
     public abstract String getKey();
 
     public <Z, T> ItemStack give() {
-        ItemStack item = giveRawItem();
+        ItemStack item = this.giveRawItem();
         ItemMeta meta = item.getItemMeta();
 
         if (meta != null){

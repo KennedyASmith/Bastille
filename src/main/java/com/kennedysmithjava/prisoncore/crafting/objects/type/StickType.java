@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import java.util.List;
 
 public enum StickType {
-    WOOD(Material.STICK, "&c&lWooden Stick", MUtil.list("&7Crafting Material", " &r", "&7Durability: %durability%", "&7Common material used for", "&7crafting &etools&7!"), new IntRange(100, 500)),
+    WOOD(Material.STICK, "&c&lWooden Stick", MUtil.list("&7Crafting Material", " &r", "&7Durability: &e%durability%", "&7Common material used for", "&7crafting &etools&7!"), new IntRange(100, 500)),
     BAMBOO(Material.BAMBOO, "&a&lBamboo Stick", MUtil.list("&7Crafting Material", " &r", "&aUncommon &7material used for", "&7crafting &etools&7!"), new IntRange(500, 1000)),
     BONE(Material.BONE, "&f&lBone Stick", MUtil.list("&7Crafting Material", " &r", "&bRare &7material used for", "&7crafting &etools&7!"), new IntRange(1000, 2000)),
     BLAZE(Material.BLAZE_ROD, "&6&lSoul Stick", MUtil.list("&7Crafting Material", " &r", "&dEpic &7material used for", "&7crafting &etools&7!"), new IntRange(1500, 5000));
@@ -30,7 +30,7 @@ public enum StickType {
 
 
     public int getDurability() {
-        return this.durabilityRange.getRandom();
+        return this.getDurabilityRange().getRandom();
     }
 
     public List<String> getLore() {

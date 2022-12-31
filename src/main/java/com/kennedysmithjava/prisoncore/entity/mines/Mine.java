@@ -139,7 +139,6 @@ public class Mine extends Entity<Mine> implements Named {
     public void regen() {
         try {
             RandomPattern pat = new RandomPattern();
-            Bukkit.broadcastMessage(getBlockDistribution().toString());
             this.getBlockDistribution().forEach((material, aDouble) ->
                     pat.add(BukkitAdapter.asBlockType(material.getMaterial()), (aDouble / 100)));
             World world = getWorld();
