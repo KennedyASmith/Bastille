@@ -70,7 +70,7 @@ public class PrisonStick extends PrisonObject {
     }
 
     public static ItemStack get(StickType type){
-        return new PrisonStick(type).give();
+        return new PrisonStick(type).give(1);
     }
 }
 

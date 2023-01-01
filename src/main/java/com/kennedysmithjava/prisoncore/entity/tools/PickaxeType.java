@@ -44,6 +44,8 @@ public class PickaxeType extends Entity<PickaxeType> {
     private int maxDurability = 1000;
     private int startDurability = 1000;
 
+    private int rarity = 0;
+
     public static PickaxeType get(Object oid) {
         return PickaxeTypeColl.get().get(oid);
     }
@@ -59,6 +61,7 @@ public class PickaxeType extends Entity<PickaxeType> {
         this.setBuffers(that.buffers);
         this.setMaxDurability(that.maxDurability);
         this.setStartDurability(that.startDurability);
+        this.setRarity(that.rarity);
 
         return this;
     }
@@ -298,5 +301,13 @@ public class PickaxeType extends Entity<PickaxeType> {
 
     public void setStartDurability(int startDurability) {
         this.startDurability = startDurability;
+    }
+
+    public int getRarity() {
+        return rarity;
+    }
+
+    public void setRarity(int rarity) {
+        this.rarity = rarity;
     }
 }

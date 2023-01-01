@@ -43,7 +43,7 @@ public class PrisonLog extends PrisonObject {
     }
 
     public static ItemStack giveFromMaterial(Material material) {
-        return new PrisonLog(LogType.getFromMaterial(material)).give();
+        return new PrisonLog(LogType.getFromMaterial(material)).give(1);
     }
 
     @Override

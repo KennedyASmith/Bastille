@@ -6,6 +6,7 @@ import com.kennedysmithjava.prisoncore.entity.npcs.FarmerGuiConf;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayerColl;
 import com.kennedysmithjava.prisoncore.util.Color;
+import com.kennedysmithjava.prisoncore.util.ItemBuilder;
 import com.massivecraft.massivecore.chestgui.ChestAction;
 import com.massivecraft.massivecore.chestgui.ChestGui;
 import com.massivecraft.massivecore.util.MUtil;
@@ -16,6 +17,7 @@ import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.trait.TraitName;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -100,11 +102,60 @@ public class NPCLumberjackTrait extends Trait {
     }
 
     private void openCraftMenu(Player player){
-        ChestGui gui = Recipe.getCraftingMenu(Recipe.STICK, "Craft a stick", new HashMap<>());
+        Inventory inventory = Bukkit.createInventory(null, 36, Color.get("&4&lChoose a recipe"));
+        ChestGui chestGui = ChestGui.getCreative(inventory);
+        chestGui.setAutoclosing(false);
+        chestGui.setAutoremoving(false);
+        chestGui.setSoundOpen(null);
+        chestGui.setSoundClose(null);
+        blockFill(inventory, Material.WHITE_STAINED_GLASS_PANE);
+
+        ItemStack planksItem = new ItemBuilder(Material.OAK_PLANKS).name("&74x &6Wooden Planks").lore(MUtil.list(" &r", "&7Used for crafting!", " &r", "&cRequired Ingredients: ", "&7- 1x Any log")).build();
+        ItemStack stickItem = new ItemBuilder(Material.STICK).name("&71x &6Stick").lore(MUtil.list(" &r", "&7Used for crafting &ePickaxes&7!", "&7Durability: 100 to 500", " &r", "&cRequired Ingredients: ", "&7- 1x Wooden Planks")).build();
+        ItemStack axeItem = new ItemBuilder(Material.WOODEN_AXE).name("&6Wooden Axe").lore(MUtil.list(" &r", "&7Not the best tool for", "&7woodcutting, but gets the job done.", " &r", "&cRequired Ingredients: ", "&7- 3x Wooden Planks", "&7- 3x Sticks")).build();
+        //ItemStack fishingRod = new ItemBuilder(Material.FISHING_ROD).name("&6Fishing Rod").lore(MUtil.list(" &r", "&7 Not the best tool for", "&7fishing, but gets the job done.", " &r", "&cRequired Ingredients: ", "&7- 3x Sticks", "&7- 1x Any metal ingot")).build();
+        ItemStack hoeItem = new ItemBuilder(Material.WOODEN_HOE).name("&6Wooden Scythe").lore(MUtil.list(" &r", "&7Not the best tool for", "&7farming, but gets the job done.", " &r", "&cRequired Ingredients: ", "&7- 2x Wooden Planks", "&7- 3x Sticks")).build();
+        ItemStack bowlItem = new ItemBuilder(Material.BOWL).name("&6Wooden Bowl").lore(MUtil.list(" &r", "&7Great for holding soup!", " &r", "&cRequired Ingredients: ", "&7- 3x Wooden Planks")).build();
+        ItemStack woodenHelmet = new ItemBuilder(Material.LEATHER_HELMET).name("&6Wooden Helmet").lore(MUtil.list(" &r", "&7Not the best armor,", "&7but gets the job done.", " &r", "&cRequired Ingredients: ", "&7- 12x Wooden Planks")).build();
+        ItemStack woodenChestplate = new ItemBuilder(Material.LEATHER_CHESTPLATE).name("&6Wooden Chestplate").lore(MUtil.list(" &r", "&7Not the best armor,", "&7but gets the job done.", " &r", "&cRequired Ingredients: ", "&7- 15x Wooden Planks")).build();
+        ItemStack woodenLeggings = new ItemBuilder(Material.LEATHER_LEGGINGS).name("&6Wooden Leggings").lore(MUtil.list(" &r", "&7Not the best armor,", "&7but gets the job done.", " &r", "&cRequired Ingredients: ", "&7- 17x Wooden Planks")).build();
+        ItemStack woodenBoots = new ItemBuilder(Material.LEATHER_BOOTS).name("&6Wooden Boots").lore(MUtil.list(" &r", "&7Not the best armor,", "&7but gets the job done.", " &r", "&cRequired Ingredients: ", "&7- 14x Wooden Planks")).build();
+        ItemStack sawDustItem = new ItemBuilder(Material.BEETROOT_SEEDS).name("&73x &6Sawdust").lore(MUtil.list(" &r", "&7Used for crafting!", " &r", "&cRequired Ingredients: ", "&7- 1x Any log")).build();
+
+        setCraftable(chestGui, inventory, Recipe.WOODEN_PLANK_4X, 11, planksItem);
+        setCraftable(chestGui, inventory, Recipe.STICK, 12, stickItem);
+        setCraftable(chestGui, inventory, Recipe.WOODEN_AXE, 13, axeItem);
+        setCraftable(chestGui, inventory, Recipe.WOODEN_SCYTHE, 14, hoeItem);
+        setCraftable(chestGui, inventory, Recipe.SAWDUST, 15, sawDustItem);
+        inventory.setItem(20, woodenHelmet);
+        inventory.setItem(21, woodenChestplate);
+        inventory.setItem(22, woodenLeggings);
+        inventory.setItem(23, woodenBoots);
+        setCraftable(chestGui, inventory,  Recipe.BOWL, 24, bowlItem);
+        //setCraftable(chestGui, inventory, Recipe.WOODEN_HELMET, 20, woodenHelmet);
+        //setCraftable(chestGui, inventory, Recipe.WOODEN_CEHSTPLATE, 21, woodenChestplate);
+        //setCraftable(chestGui, inventory, Recipe.WOODEN_LEGGINGS, 22, woodenLeggings);
+        //setCraftable(chestGui, inventory, Recipe.WOODEN_BOOTS, 23, woodenBoots);
+
         player.closeInventory();
-        player.openInventory(gui.getInventory());
+        player.openInventory(chestGui.getInventory());
+
     }
 
+    private static void setCraftable(ChestGui gui, Inventory inventory, Recipe recipe, Integer slot, ItemStack item){
+        inventory.setItem(slot, item);
+        gui.setAction(slot, inventoryClickEvent -> {
+            Player player = (Player) inventoryClickEvent.getWhoClicked();
+            ChestGui gui1 = Recipe.getCraftingMenu(gui, recipe, "Crafting: &4" + ChatColor.stripColor(Color.get(item.getItemMeta().getDisplayName())));
+            player.closeInventory();
+            player.openInventory(gui1.getInventory());
+            return false;
+        });
+    }
+
+    private void openInv(Player player, ChestGui gui){
+
+    }
     private void openQuestMenu(Player player){
         Inventory inventory = Bukkit.createInventory(null, 27, Color.get("&4&lSell Logs"));
         ChestGui chestGui = ChestGui.getCreative(inventory);

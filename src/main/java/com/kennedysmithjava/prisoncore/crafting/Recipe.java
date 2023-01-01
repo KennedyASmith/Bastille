@@ -1,8 +1,7 @@
 package com.kennedysmithjava.prisoncore.crafting;
 
+import com.kennedysmithjava.prisoncore.crafting.objects.*;
 import com.kennedysmithjava.prisoncore.crafting.objects.type.LogType;
-import com.kennedysmithjava.prisoncore.crafting.objects.PrisonLog;
-import com.kennedysmithjava.prisoncore.crafting.objects.PrisonStick;
 import com.kennedysmithjava.prisoncore.crafting.objects.type.StickType;
 import com.kennedysmithjava.prisoncore.engine.EngineCraftingMenu;
 import com.kennedysmithjava.prisoncore.util.*;
@@ -24,11 +23,39 @@ import java.util.function.Supplier;
 
 public enum Recipe {
 
-    STICK(MUtil.map(22, new PrisonLog(LogType.ANY)),
-            () -> new ProductItem(craftingRequest -> {
-                craftingRequest.getPlayer().getInventory().addItem(new PrisonStick(StickType.WOOD).give());
-            })
-    );
+
+
+    STICK(MUtil.map(22, new PrisonWoodenPlank()), () -> giveItem(new PrisonStick(StickType.WOOD), 1)),
+    WOODEN_PLANK_4X(MUtil.map(22, new PrisonLog(LogType.ANY)), () -> giveItem(new PrisonWoodenPlank(), 4)),
+    WOODEN_AXE(MUtil.map(
+            12, new PrisonWoodenPlank(),
+            13, new PrisonWoodenPlank(),
+            21, new PrisonWoodenPlank(),
+            22, new PrisonStick(StickType.WOOD),
+            31, new PrisonStick(StickType.WOOD),
+            40, new PrisonStick(StickType.WOOD)
+    ), () -> new ProductItem(craftingRequest -> craftingRequest.getPlayer().getInventory().addItem(new PrisonWoodenAxe().give(1)))),
+    WOODEN_SCYTHE(MUtil.map(
+            12, new PrisonWoodenPlank(),
+            13, new PrisonWoodenPlank(),
+            21, new PrisonWoodenPlank(),
+            22, new PrisonStick(StickType.WOOD),
+            31, new PrisonStick(StickType.WOOD),
+            40, new PrisonStick(StickType.WOOD)
+    ), () -> new ProductItem(craftingRequest -> craftingRequest.getPlayer().getInventory().addItem(new PrisonWoodenScythe().give(1)))),
+    FISHING_ROD(MUtil.map(
+            30, new PrisonStick(StickType.WOOD),
+            22, new PrisonStick(StickType.WOOD),
+            14, new PrisonStick(StickType.WOOD),
+            38, new PrisonWoodenPlank()
+    ), () -> new ProductItem(craftingRequest -> craftingRequest.getPlayer().getInventory().addItem(new PrisonWoodenScythe().give(1)))),
+    SAWDUST(MUtil.map(22, new PrisonLog(LogType.ANY)), () -> giveItem(new PrisonSawdust(), 3)),
+    BOWL(MUtil.map(
+            21, new PrisonWoodenPlank(),
+            23, new PrisonWoodenPlank(),
+            31, new PrisonWoodenPlank()
+    ), () -> giveItem(new PrisonBowl(), 1)),
+    ;
 
     //Key: GUI Slot ||| Value: Ingredient for that slot
     private Map<Integer, PrisonObject> ingredients;
@@ -41,6 +68,9 @@ public enum Recipe {
 
     }
 
+    private static ProductItem giveItem(PrisonObject obj, int amount){
+        return new ProductItem(craftingRequest -> craftingRequest.getPlayer().getInventory().addItem(obj.give(amount)));
+    }
     public Map<Integer, PrisonObject> getIngredients() {
         return ingredients;
     }
@@ -48,8 +78,11 @@ public enum Recipe {
     public ProductItem getProduct() {
         return product.get();
     }
+    public static ChestGui getCraftingMenu(ChestGui returningMenu, Recipe recipe, String menuName) {
+        return getCraftingMenu(returningMenu, recipe, menuName, new HashMap<>());
+    }
 
-    public static ChestGui getCraftingMenu(Recipe recipe, String menuName, Map<Integer, ItemStack> givenIngredients) {
+    public static ChestGui getCraftingMenu(ChestGui returningMenu, Recipe recipe, String menuName, Map<Integer, ItemStack> givenIngredients) {
         Inventory inventory = Bukkit.createInventory(null, 54, Color.get(menuName));
         Map<Integer, PrisonObject> ingredients = recipe.getIngredients();
         ChestGui chestGui = ChestGui.getCreative(inventory);
@@ -89,6 +122,9 @@ public enum Recipe {
                 });
                 EngineCraftingMenu.removeFromCache(player);
                 player.closeInventory();
+                if(returningMenu != null){
+                    inventoryClickEvent.getWhoClicked().openInventory(returningMenu.getInventory());
+                }
                 chestGui.remove();
                 recipe.getProduct().get(new CraftingRequest(player, givenIngredients));
                 return false;
@@ -109,6 +145,9 @@ public enum Recipe {
         inventory.setItem(48, cancelItem);
         chestGui.setAction(48, inventoryClickEvent -> {
             inventoryClickEvent.getWhoClicked().closeInventory();
+            if(returningMenu != null){
+                inventoryClickEvent.getWhoClicked().openInventory(returningMenu.getInventory());
+            }
             return false;
         });
 
@@ -128,7 +167,7 @@ public enum Recipe {
             ItemStack finalSlotted = slotted;
             chestGui.setAction(slot, inventoryClickEvent -> {
                 Player player = (Player) inventoryClickEvent.getWhoClicked();
-                openIngredientDepositMenu(player, recipe, givenIngredients, ingredient, slot, menuName, finalSlotted);
+                openIngredientDepositMenu(returningMenu, player, recipe, givenIngredients, ingredient, slot, menuName, finalSlotted);
                 return false;
             });
         });
@@ -136,17 +175,17 @@ public enum Recipe {
         return chestGui;
     }
 
-    private static void openIngredientDepositMenu(Player player,
+    private static void openIngredientDepositMenu(ChestGui returningMenu, Player player,
                                                   Recipe recipe,
                                                   Map<Integer, ItemStack> givenIngredients,
                                                   PrisonObject requiredIngredient,
                                                   Integer reqIngredientSlot,
                                                   String menuName){
-        openIngredientDepositMenu(player, recipe, givenIngredients,
+        openIngredientDepositMenu(returningMenu, player, recipe, givenIngredients,
                 requiredIngredient, reqIngredientSlot, menuName, new ItemStack(Material.AIR));
     }
 
-    private static void openIngredientDepositMenu(Player player,
+    private static void openIngredientDepositMenu(ChestGui returningMenu, Player player,
                                                   Recipe recipe,
                                                   Map<Integer, ItemStack> givenIngredients,
                                                   PrisonObject requiredIngredient,
@@ -178,34 +217,34 @@ public enum Recipe {
         inventory.setItem(23, confirmItem);
         inventory.setItem(21, cancelItem);
 
-        chestGui.setAction(23, new ChestAction() {
-            @Override
-            public boolean onClick(InventoryClickEvent inventoryClickEvent) {
-                ItemStack slotted = inventory.getItem(13);
-                if(slotted == null) {
-                    inventory.setItem(23, new
-                            ItemBuilder(confirmItem).clearLore().lore("&cPlease select an item first.").build());
-                    return false;
-                }
-                if(!requiredIngredient.is(slotted)){
-                    inventory.setItem(23, new
-                            ItemBuilder(confirmItem).clearLore().lore(
-                                    MUtil.list(
-                                            "&cPlease select the ingredient matching: ",
-                                            "&7- " + ChatColor.stripColor(Color.get(requiredIngredient.getName()))))
-                            .build());
-                }else {
-                    givenIngredients.put(reqIngredientSlot, slotted);
-                    ChestGui newInv = getCraftingMenu(recipe, menuName, givenIngredients);
-                    inventory.setItem(13, new ItemStack(Material.AIR));
-                    player.openInventory(newInv.getInventory());
-                    EngineCraftingMenu.addToCache(player, givenIngredients.values());
-                }
+        chestGui.setAction(23, inventoryClickEvent -> {
+            ItemStack slotted1 = inventory.getItem(13);
+            if(slotted1 == null) {
+                inventory.setItem(23, new
+                        ItemBuilder(confirmItem).clearLore().lore("&cPlease select an item first.").build());
                 return false;
             }
+            if(!requiredIngredient.is(slotted1)){
+                inventory.setItem(23, new
+                        ItemBuilder(confirmItem).clearLore().lore(
+                                MUtil.list(
+                                        "&cPlease select the ingredient matching: ",
+                                        "&7- " + ChatColor.stripColor(Color.get(requiredIngredient.getName()))))
+                        .build());
+            }else {
+                givenIngredients.put(reqIngredientSlot, slotted1);
+                ChestGui newInv = getCraftingMenu(returningMenu, recipe, menuName, givenIngredients);
+                inventory.setItem(13, new ItemStack(Material.AIR));
+                EngineCraftingMenu.removeFromCache(player);
+                player.openInventory(newInv.getInventory());
+                EngineCraftingMenu.addToCache(player, givenIngredients.values());
+            }
+            return false;
         });
 
+        EngineCraftingMenu.removeFromCache(player);
         player.openInventory(chestGui.getInventory());
+        EngineCraftingMenu.addToCache(player, givenIngredients.values());
     }
 
 

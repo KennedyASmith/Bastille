@@ -7,6 +7,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public abstract class PrisonObject {
@@ -17,8 +18,9 @@ public abstract class PrisonObject {
 
     public abstract String getKey();
 
-    public <Z, T> ItemStack give() {
+    public <Z, T> ItemStack give(int amount) {
         ItemStack item = this.giveRawItem();
+        item.setAmount(amount);
         ItemMeta meta = item.getItemMeta();
 
         if (meta != null){
@@ -34,7 +36,9 @@ public abstract class PrisonObject {
 
     public abstract String getName();
 
-    public abstract Map<PersistentDataType<?, ?>, Map <NamespacedKey, ?>>  getStoredData();
+    public Map<PersistentDataType<?, ?>, Map <NamespacedKey, ?>>  getStoredData() {
+        return new HashMap<>();
+    };
 
     /**
      * Checks if this ItemStack is a PrisonObject of this type.
