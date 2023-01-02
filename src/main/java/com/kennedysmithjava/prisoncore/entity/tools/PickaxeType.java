@@ -269,6 +269,10 @@ public class PickaxeType extends Entity<PickaxeType> {
         this.changed();
     }
 
+    public String getAbilityString(){
+        return this.ability;
+    }
+
     public Ability<?> getAbility() {
         return Ability.getByName(ability);
     }

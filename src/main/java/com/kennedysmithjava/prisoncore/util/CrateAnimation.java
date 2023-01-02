@@ -1,6 +1,7 @@
 package com.kennedysmithjava.prisoncore.util;
 
 import com.massivecraft.massivecore.util.MUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -22,6 +23,7 @@ public class CrateAnimation {
 
         //Sum of entries in the prizes, i.e larger than the largest possible rarity.
         int totalEntries = prizeOptions.values().stream().mapToInt(Integer::intValue).sum();
+        Bukkit.broadcastMessage("Total entries: " + totalEntries);
 
         //All prizes mapped to a unique ID
         Map<Integer, ItemStack> idMappedPool = new HashMap<>();
@@ -34,12 +36,16 @@ public class CrateAnimation {
             id.getAndIncrement();
         });
 
+        Bukkit.broadcastMessage("Prize pool: " + prizePool);
+        Bukkit.broadcastMessage("Draw: " + draws);
+
         List<ItemStack> prizes = new ArrayList<>();
         Random random = new Random();
-        for (int draw = 0; draw == draws; draw++) {
+        for (int draw = 0; draw < (draws + 1); draw++) {
             int randomItemId = prizePool.get(random.nextInt(prizePool.size()));
             ItemStack potentialPrize = idMappedPool.get(randomItemId);
             prizes.add(potentialPrize);
+            Bukkit.broadcastMessage("Added prize: " + potentialPrize.getItemMeta().getDisplayName());
         }
 
         ItemStack rarestItem = new ItemStack(Material.AIR);
@@ -47,7 +53,8 @@ public class CrateAnimation {
 
         for (ItemStack prize : prizes) {
             int rarity = prizeOptions.get(prize);
-            if(rarity < rarestRarity){ //Terminology doesn't make sense here, but trust it works
+            Bukkit.broadcastMessage("Checking rarity: " + rarity);
+            if(rarity <= rarestRarity){ //Terminology doesn't make sense here, but trust it works
                 rarestItem = prize;
                 rarestRarity = rarity;
             }

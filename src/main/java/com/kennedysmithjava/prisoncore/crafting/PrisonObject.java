@@ -1,6 +1,7 @@
 package com.kennedysmithjava.prisoncore.crafting;
 
 import com.kennedysmithjava.prisoncore.PrisonCore;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -22,13 +23,15 @@ public abstract class PrisonObject {
         ItemStack item = this.giveRawItem();
         item.setAmount(amount);
         ItemMeta meta = item.getItemMeta();
-
         if (meta != null){
             PersistentDataContainer pdc = meta.getPersistentDataContainer();
             getStoredData().forEach((dataType, objMap) ->
                     objMap.forEach((namespacedKey, o) ->
                             pdc.set(namespacedKey, (PersistentDataType<T, Z>) dataType, (Z) o)));
             pdc.set(prisonObjectKey, PersistentDataType.STRING, getKey());
+            for (NamespacedKey key : pdc.getKeys()) {
+                Bukkit.broadcastMessage("PDC 1: " + key.getKey());
+            }
         }
         item.setItemMeta(meta);
         return item;

@@ -26,7 +26,9 @@ public enum Perm implements Identified
     ADD,
     BALANCE,
     REMOVE,
-    TREE
+    TREE,
+     PITEM,
+    GIVE
 
 
     // END OF LIST

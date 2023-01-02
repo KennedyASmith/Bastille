@@ -22,6 +22,7 @@ import com.kennedysmithjava.prisoncore.entity.tools.PouchConfColl;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.Wall;
 import com.kennedysmithjava.prisoncore.entity.mines.*;
 import com.kennedysmithjava.prisoncore.event.EventNewMine;
+import com.kennedysmithjava.prisoncore.npc.spawn.NPCBlacksmithTrait;
 import com.kennedysmithjava.prisoncore.npc.spawn.NPCLimboTrait;
 import com.kennedysmithjava.prisoncore.npc.spawn.NPCLumberjackTrait;
 import com.kennedysmithjava.prisoncore.tools.Pickaxe;
@@ -119,6 +120,7 @@ public class PrisonCore extends MassivePlugin {
 
         CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(NPCLimboTrait.class));
         CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(NPCLumberjackTrait.class));
+        CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(NPCBlacksmithTrait.class));
 
         Pickaxe.LORE_UPDATER.runTaskTimerAsynchronously(this, 20L, 5 * 20L);
         getServer().getPluginManager().registerEvents(new EngineTools(), this);
@@ -134,19 +136,6 @@ public class PrisonCore extends MassivePlugin {
         }catch (Exception e){
             e.printStackTrace();
         }
-    }
-
-    private File createFile(File parent, String name) {
-        File file = new File(parent, name);
-        if (!file.exists()) {
-            try {
-                file.getParentFile().mkdirs();
-                file.createNewFile();
-            } catch (IOException ex) {
-                Bukkit.getLogger().log(Level.SEVERE, "[PrisonTools] Could not create file: " + file.getName());
-            }
-        }
-        return file;
     }
 
     public void registerGlow() {

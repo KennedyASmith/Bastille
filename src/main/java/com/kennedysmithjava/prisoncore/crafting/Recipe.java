@@ -1,18 +1,16 @@
 package com.kennedysmithjava.prisoncore.crafting;
 
 import com.kennedysmithjava.prisoncore.crafting.objects.*;
-import com.kennedysmithjava.prisoncore.crafting.objects.type.LogType;
-import com.kennedysmithjava.prisoncore.crafting.objects.type.StickType;
+import com.kennedysmithjava.prisoncore.crafting.objects.type.*;
+import com.kennedysmithjava.prisoncore.engine.EngineBlacksmith;
 import com.kennedysmithjava.prisoncore.engine.EngineCraftingMenu;
 import com.kennedysmithjava.prisoncore.util.*;
-import com.massivecraft.massivecore.chestgui.ChestAction;
 import com.massivecraft.massivecore.chestgui.ChestGui;
 import com.massivecraft.massivecore.util.MUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -23,7 +21,15 @@ import java.util.function.Supplier;
 
 public enum Recipe {
 
-
+    PICKAXE(MUtil.map(
+            12, new PrisonMetal(MetalType.ANY),
+            13, new PrisonMetal(MetalType.ANY),
+            14, new PrisonMetal(MetalType.ANY),
+            20, new PrisonMetal(MetalType.ANY),
+            24, new PrisonMetal(MetalType.ANY),
+            22, new PrisonStick(StickType.WOOD),
+            31, new PrisonStick(StickType.WOOD),
+            40, new PrisonStick(StickType.WOOD)), () -> new ProductItem(EngineBlacksmith::beginCrafting)),
 
     STICK(MUtil.map(22, new PrisonWoodenPlank()), () -> giveItem(new PrisonStick(StickType.WOOD), 1)),
     WOODEN_PLANK_4X(MUtil.map(22, new PrisonLog(LogType.ANY)), () -> giveItem(new PrisonWoodenPlank(), 4)),

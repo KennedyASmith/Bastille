@@ -8,6 +8,9 @@ import java.util.List;
 
 public enum MetalType {
 
+    //Used for crafting and comparison
+    ANY(Material.IRON_INGOT, "&7Metal or Gem", 0, 0),
+
     // Common
     IRON_INGOT(Material.IRON_INGOT, "&7Iron Ingot", 1, 4),
     COAL(Material.COAL, "&0Coal", 1, 1),
@@ -82,8 +85,7 @@ public enum MetalType {
                 " &r",
                 "&7Hardness: &f%hardness%",
                 "&7Rarity: &f%rarity%",
-                "",
-                "%rarityDisplay% &7material used for crafting &etools&7!"
+                ""
         );
     }
 
@@ -96,4 +98,28 @@ public enum MetalType {
         this.rarityClass = rarityClass;
     }
 
+
+    public Material getMaterial() {
+        return material;
+    }
+
+    public List<String> getLore() {
+        return lore;
+    }
+
+    public int getRarity() {
+        return rarity;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public int getHardness() {
+        return hardness;
+    }
+
+    public Rarity getRarityClass() {
+        return rarityClass;
+    }
 }

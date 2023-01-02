@@ -5,7 +5,6 @@ import com.kennedysmithjava.prisoncore.crafting.PrisonObject;
 import com.kennedysmithjava.prisoncore.crafting.objects.type.StickType;
 import com.kennedysmithjava.prisoncore.util.ItemBuilder;
 import com.massivecraft.massivecore.util.MUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -15,7 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 public class PrisonStick extends PrisonObject {
-    private static final NamespacedKey durabilityKey = new NamespacedKey(PrisonCore.get(), "stickDurability");
+    public static final NamespacedKey durabilityKey = new NamespacedKey(PrisonCore.get(), "stickDurability");
+    //private static final NamespacedKey typeKey = new NamespacedKey(PrisonCore.get(), "stickType");
 
     private Integer durability;
     private StickType type;

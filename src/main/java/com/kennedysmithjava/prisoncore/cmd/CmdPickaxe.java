@@ -55,6 +55,7 @@ public class CmdPickaxe extends ToolsCommand {
         pickaxeType.setMaterial(Material.DIAMOND_PICKAXE);
         pickaxeType.setStartDurability(1000);
         pickaxeType.setMaxDurability(1000);
+        pickaxeType.setRarity(5);
         pickaxeType.setLore(MUtil.list(
                 "&7This pickaxe was smelted",
                 "&7in the flames of our Sun!",

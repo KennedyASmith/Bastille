@@ -435,7 +435,8 @@ public class Pickaxe  implements Tool {
 
         UUID uuid = UUID.randomUUID();
 
-        LeveledAbility leveledAbility = new LeveledAbility(type.getAbility().getAbilityType(), 1, type.getBuffers());
+        LeveledAbility leveledAbility = null;
+
         ItemStack item = new ItemStack(type.getMaterial(), 1);
         ItemMeta meta = item.getItemMeta();
 
@@ -443,13 +444,17 @@ public class Pickaxe  implements Tool {
         pdc.set(uuidKey, DataType.UUID, uuid);
         pdc.set(durabilityKey, DataType.INTEGER, type.getStartDurability());
         pdc.set(maxDurabilityKey, DataType.INTEGER, type.getMaxDurability());
-        pdc.set(abilityKey, DataType.asMap(DataType.STRING, DataType.STRING),
-                MUtil.map("type", leveledAbility.getAbilityType().getId(), "level", String.valueOf(leveledAbility.getLevel())));
-        pdc.set(bufferKey, DataType.asMap(DataType.STRING, DataType.INTEGER), Buffer.serialize(leveledAbility.getBufferLevels()));
         pdc.set(typeKey, DataType.STRING, type.getId());
 
+        if(!Objects.equals(type.getAbilityString(), "none") && type.getAbilityString() != null){
+            leveledAbility = new LeveledAbility(type.getAbility().getAbilityType(), 1, type.getBuffers());
+            pdc.set(abilityKey, DataType.asMap(DataType.STRING, DataType.STRING),
+                    MUtil.map("type", leveledAbility.getAbilityType().getId(), "level", String.valueOf(leveledAbility.getLevel())));
+            pdc.set(bufferKey, DataType.asMap(DataType.STRING, DataType.INTEGER), Buffer.serialize(leveledAbility.getBufferLevels()));
+        }
+
         meta.setDisplayName(type.getDisplayName());
-        meta.setLore(Color.get(type.getLore(type.getEnchants(), leveledAbility,type.getStartDurability(), type.getMaxDurability())));
+        meta.setLore(Color.get(type.getLore(type.getEnchants(), leveledAbility, type.getStartDurability(), type.getMaxDurability())));
         meta.setUnbreakable(true);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
         item.setItemMeta(meta);
