@@ -14,6 +14,7 @@ import com.kennedysmithjava.prisoncore.upgrades.actions.ActionMineDistribution;
 import com.kennedysmithjava.prisoncore.upgrades.buttons.GUIButton;
 import com.kennedysmithjava.prisoncore.upgrades.buttons.GUIButtonMainUpgrade;
 import com.kennedysmithjava.prisoncore.util.Color;
+import com.kennedysmithjava.prisoncore.util.GuiCell;
 import com.massivecraft.massivecore.chestgui.ChestGui;
 import com.massivecraft.massivecore.util.MUtil;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
@@ -237,11 +238,11 @@ public class NPCWarrenTrait extends Trait {
 
         Inventory inv = gui.getInventory();
 
-        List<Cell> leftCells = new ArrayList<>();
-        List<Cell> leftDarkGreyCells = new ArrayList<>();
-        List<Cell> rightCells = new ArrayList<>();
-        List<Cell> rightDarkGreyCells = new ArrayList<>();
-        List<Cell> centeredCells = new ArrayList<>();
+        List<GuiCell> leftGuiCells = new ArrayList<>();
+        List<GuiCell> leftDarkGreyGuiCells = new ArrayList<>();
+        List<GuiCell> rightGuiCells = new ArrayList<>();
+        List<GuiCell> rightDarkGreyGuiCells = new ArrayList<>();
+        List<GuiCell> centeredGuiCells = new ArrayList<>();
 
         buttons.forEach(button -> {
             ItemStack item = new ItemStack(button.getMaterial());
@@ -250,42 +251,42 @@ public class NPCWarrenTrait extends Trait {
             meta.setLore(Color.get(button.getLore()));
             item.setItemMeta(meta);
 
-            Cell cell = new Cell(item, button.getSlot());
-            if(cell.col > 4){
-                cell.moveCol(5);
-                rightCells.add(cell);
-            } else if (cell.col == 4){
-                cell.moveRow(5);
-                centeredCells.add(cell);
+            GuiCell guiCell = new GuiCell(item, button.getSlot());
+            if(guiCell.getCol() > 4){
+                guiCell.moveCol(5);
+                rightGuiCells.add(guiCell);
+            } else if (guiCell.getCol() == 4){
+                guiCell.moveRow(5);
+                centeredGuiCells.add(guiCell);
             }
             else{
-                cell.moveCol(-5);
-                leftCells.add(cell);
+                guiCell.moveCol(-5);
+                leftGuiCells.add(guiCell);
             }
         });
 
         fillerGlassLeft.forEach(slot -> {
-            Cell cell = new Cell(lightGreyItem.clone(), slot);
-            cell.moveCol(-5);
-            leftCells.add(cell);
+            GuiCell guiCell = new GuiCell(lightGreyItem.clone(), slot);
+            guiCell.moveCol(-5);
+            leftGuiCells.add(guiCell);
         });
 
         edgeGlassLeft.forEach(slot -> {
-            Cell cell = new Cell(darkGreyItem.clone(), slot);
-            cell.moveCol(-2);
-            leftDarkGreyCells.add(cell);
+            GuiCell guiCell = new GuiCell(darkGreyItem.clone(), slot);
+            guiCell.moveCol(-2);
+            leftDarkGreyGuiCells.add(guiCell);
         });
 
         fillerGlassRight.forEach(slot -> {
-            Cell cell = new Cell(lightGreyItem.clone(), slot);
-            cell.moveCol(5);
-            rightCells.add(cell);
+            GuiCell guiCell = new GuiCell(lightGreyItem.clone(), slot);
+            guiCell.moveCol(5);
+            rightGuiCells.add(guiCell);
         });
 
         edgeGlassRight.forEach(slot -> {
-            Cell cell = new Cell(darkGreyItem.clone(), slot);
-            cell.moveCol(2);
-            rightDarkGreyCells.add(cell);
+            GuiCell guiCell = new GuiCell(darkGreyItem.clone(), slot);
+            guiCell.moveCol(2);
+            rightDarkGreyGuiCells.add(guiCell);
         });
 
 
@@ -305,14 +306,14 @@ public class NPCWarrenTrait extends Trait {
                  * Portion of the animation where all buttons and gray glass cover GUI
                  */
                 if (frame <= 4 && counter == 6) {
-                    rightCells.forEach(cell -> {
-                        cell.moveCol(-1);
-                        if (cell.displayable()) inv.setItem(cell.getSlot(), cell.getItem());
+                    rightGuiCells.forEach(guiCell -> {
+                        guiCell.moveCol(-1);
+                        if (guiCell.displayable()) inv.setItem(guiCell.getSlot(), guiCell.getItem());
                     });
 
-                    leftCells.forEach(cell -> {
-                        cell.moveCol(1);
-                        if (cell.displayable()) inv.setItem(cell.getSlot(), cell.getItem());
+                    leftGuiCells.forEach(guiCell -> {
+                        guiCell.moveCol(1);
+                        if (guiCell.displayable()) inv.setItem(guiCell.getSlot(), guiCell.getItem());
                     });
 
                     counter = 0;
@@ -324,14 +325,14 @@ public class NPCWarrenTrait extends Trait {
                  * Portion of the animation where black stained glass cover the corners of the GUI
                  */
                 else if (frame > 4 && frame < 7 && counter == 6) {
-                    rightDarkGreyCells.forEach(cell -> {
-                        cell.moveCol(-1);
-                        if (cell.displayable()) inv.setItem(cell.getSlot(), cell.getItem());
+                    rightDarkGreyGuiCells.forEach(guiCell -> {
+                        guiCell.moveCol(-1);
+                        if (guiCell.displayable()) inv.setItem(guiCell.getSlot(), guiCell.getItem());
                     });
 
-                    leftDarkGreyCells.forEach(cell -> {
-                        cell.moveCol(1);
-                        if (cell.displayable()) inv.setItem(cell.getSlot(), cell.getItem());
+                    leftDarkGreyGuiCells.forEach(guiCell -> {
+                        guiCell.moveCol(1);
+                        if (guiCell.displayable()) inv.setItem(guiCell.getSlot(), guiCell.getItem());
                     });
 
                     counter = 0;
@@ -344,10 +345,10 @@ public class NPCWarrenTrait extends Trait {
                      * Portion of the animation where the main Cell upgrade icon moves towards the center of the GUI
                      */
                     if(frame <= 11){
-                        centeredCells.forEach(cell -> {
-                            int previousSlot = cell.getSlot();
-                            cell.moveRow(-1);
-                            if (cell.displayable()) inv.setItem(cell.getSlot(), cell.getItem());
+                        centeredGuiCells.forEach(guiCell -> {
+                            int previousSlot = guiCell.getSlot();
+                            guiCell.moveRow(-1);
+                            if (guiCell.displayable()) inv.setItem(guiCell.getSlot(), guiCell.getItem());
 
                             ItemStack previousItem;
                             if (centerGlass.contains(previousSlot)) {
@@ -356,8 +357,8 @@ public class NPCWarrenTrait extends Trait {
                                 previousItem = lightGreyItem.clone();
                             }
 
-                            Cell previousCell = new Cell(previousItem, previousSlot);
-                            if (previousCell.displayable()) inv.setItem(previousCell.getSlot(), previousCell.getItem());
+                            GuiCell previousGuiCell = new GuiCell(previousItem, previousSlot);
+                            if (previousGuiCell.displayable()) inv.setItem(previousGuiCell.getSlot(), previousGuiCell.getItem());
 
                         });
                     }
@@ -395,68 +396,3 @@ interface ClickEvent<A>{
      void run(A a);
 }
 
-class Cell {
-
-    int row;
-    int col;
-    int invSize = WarrenGUIConf.get().guiSize;
-    ItemStack item;
-
-    Cell(ItemStack item, int slot) {
-
-        row = Math.floorDiv(slot, 9);
-
-        col = (slot - (9 * row));
-        this.item = item;
-    }
-
-    Cell(ItemStack item, int row, int col) {
-        this.row = row;
-        this.col = col;
-        this.item = item;
-    }
-
-    /**
-     * Moves the object in vertical virtual space
-     *
-     * @param offset
-     */
-    public void moveRow(int offset) {
-        this.row = row + offset;
-    }
-
-    /**
-     * Moves the object in horizontal virtual space
-     *
-     * @param offset
-     */
-    public void moveCol(int offset) {
-        this.col = col + offset;
-    }
-
-    public boolean displayable() {
-        boolean isTrueOne = row >= 0 && row <= ((invSize / 9) - 1);
-        boolean isTrueTwo = (col >= 0 && col <= 8);
-        return isTrueOne && isTrueTwo;
-    }
-
-    public int getSlot() {
-        return (9 * row) + (col);
-    }
-
-    public ItemStack getItem() {
-        return item;
-    }
-
-    public int getCol() {
-        return col;
-    }
-
-    public int getRow() {
-        return row;
-    }
-
-    public void setItem(ItemStack item) {
-        this.item = item;
-    }
-}

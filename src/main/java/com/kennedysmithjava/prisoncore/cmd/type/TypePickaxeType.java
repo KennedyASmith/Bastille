@@ -46,10 +46,6 @@ public class TypePickaxeType extends TypeAbstract<PickaxeType> {
             if (ret != null) return ret;
         }
 
-        // Faction Name Exact
-        ret = PickaxeTypeColl.get().getByName(str);
-        if (ret != null) return ret;
-
         throw new MassiveException().addMsg("<b>No pickaxe type matching \"<p>%s<b>\".", str);
     }
 
@@ -59,8 +55,8 @@ public class TypePickaxeType extends TypeAbstract<PickaxeType> {
         Set<String> ret = new TreeSet<>(ComparatorCaseInsensitive.get());
 
         // Fill
-        for (PickaxeType player : PickaxeTypeColl.get().getAll()) {
-            ret.add(ChatColor.stripColor(player.getName()));
+        for (PickaxeType type : PickaxeTypeColl.get().getAll()) {
+            ret.add(type.getId());
         }
 
         // Return

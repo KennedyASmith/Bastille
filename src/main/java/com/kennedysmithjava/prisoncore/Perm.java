@@ -28,7 +28,8 @@ public enum Perm implements Identified
     REMOVE,
     TREE,
      PITEM,
-    GIVE
+    GIVE,
+    MAP
 
 
     // END OF LIST

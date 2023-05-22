@@ -4,14 +4,12 @@ import com.kennedysmithjava.prisoncore.crafting.CraftingRequest;
 import com.kennedysmithjava.prisoncore.crafting.objects.PrisonMetal;
 import com.kennedysmithjava.prisoncore.crafting.objects.PrisonStick;
 import com.kennedysmithjava.prisoncore.crafting.objects.type.MetalType;
-import com.kennedysmithjava.prisoncore.crafting.objects.type.StickType;
 import com.kennedysmithjava.prisoncore.entity.tools.PickaxeType;
 import com.kennedysmithjava.prisoncore.entity.tools.PickaxeTypeColl;
-import com.kennedysmithjava.prisoncore.util.CrateAnimation;
+import com.kennedysmithjava.prisoncore.crates.CrateRoulette;
+import com.kennedysmithjava.prisoncore.crates.CratePrize;
 import com.massivecraft.massivecore.Engine;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -32,42 +30,40 @@ public class EngineBlacksmith extends Engine {
         Map<Integer, ItemStack> ingredientsMap = craftingRequest.getIngredients();
         int durability = 0;
         int hardness = 0;
-        int rarity = 0;
+        int luck = 0;
 
         Collection<ItemStack> ingredients = ingredientsMap.values();
         for (ItemStack itemStack : ingredients) {
             PersistentDataContainer pdc = itemStack.getItemMeta().getPersistentDataContainer();
-            for (NamespacedKey key : pdc.getKeys()) {
-                Bukkit.broadcastMessage("PDC: " + key.getKey());
-            }
-
             if(anyMetal.is(itemStack)){ //We know it's a metal
-                rarity += pdc.get(PrisonMetal.metalRarityKey, PersistentDataType.INTEGER);
+                luck += pdc.get(PrisonMetal.metalRarityKey, PersistentDataType.INTEGER);
                 hardness += pdc.get(PrisonMetal.metalHardnessKey, PersistentDataType.INTEGER);
             } else { //We can know it's a stick
                 durability += pdc.get(PrisonStick.durabilityKey, PersistentDataType.INTEGER);
             }
         }
 
-        Bukkit.broadcastMessage("Hardness: " + hardness);
-        Bukkit.broadcastMessage("Durability: " + durability);
-        Bukkit.broadcastMessage("Rarity: " + rarity);
-
         //Build the list of prizes
-        //TODO: Do this on startup to save processing time
-        Map<ItemStack, Integer> prizes = new HashMap<>();
+        List<CratePrize> prizes = new ArrayList<>();
+
         for (PickaxeType pickaxeType : PickaxeTypeColl.get().getAll()) {
             if(pickaxeType.getRarity() > 0){
                 pickaxeType.setStartDurability(durability);
-                pickaxeType.setMaterial(getMaterialFromHardness(hardness));
-                pickaxeType.setAbility("none");
                 ItemStack prize = pickaxeType.getItemStack();
-                prizes.put(prize, pickaxeType.getRarity());
-                Bukkit.broadcastMessage("Put prize: " + pickaxeType.getDisplayName());
+                ItemStack icon = prize.clone();
+                prize.setType(getMaterialFromHardness(hardness));
+                CratePrize cratePrize = new CratePrize(
+                                prize,
+                                icon,
+                                pickaxeType.getRarityName().getGlassMaterial(),
+                                pickaxeType.getRarity()
+                );
+                prizes.add(cratePrize);
             }
         }
 
-        CrateAnimation.givePrizeItem(craftingRequest.getPlayer(), prizes, rarity);
+        //Show the crate animation to the player
+        CrateRoulette.animate(craftingRequest.getPlayer(), prizes, 1.0);
     }
 
     //Max "hardness" is 6, 6 * 5 = 30 possible hardness values

@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 public class MiscUtil {
@@ -164,6 +165,23 @@ public class MiscUtil {
                 player.getInventory().addItem(item);
             }
         }
+    }
+
+    /**
+     * Picks a random element from the given list.
+     *
+     * @param list The list of elements to choose from.
+     * @param <T>  The type of elements in the list.
+     * @return A randomly selected element from the list, or null if the list is empty.
+     */
+    public static <T> T pickRandomElement(List<T> list) {
+        if (list.isEmpty()) {
+            return null;
+        }
+
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        int randomIndex = random.nextInt(list.size());
+        return list.get(randomIndex);
     }
 
     public static boolean parseBoolean(ItemStack item, String identifier) {

@@ -26,8 +26,8 @@ import com.kennedysmithjava.prisoncore.npc.spawn.NPCBlacksmithTrait;
 import com.kennedysmithjava.prisoncore.npc.spawn.NPCLimboTrait;
 import com.kennedysmithjava.prisoncore.npc.spawn.NPCLumberjackTrait;
 import com.kennedysmithjava.prisoncore.tools.Pickaxe;
-import com.kennedysmithjava.prisoncore.quest.QuestManager;
-import com.kennedysmithjava.prisoncore.quest.QuestProfile;
+//import com.kennedysmithjava.prisoncore.quest.QuestManager;
+//import com.kennedysmithjava.prisoncore.quest.QuestProfile;
 import com.kennedysmithjava.prisoncore.tools.ability.*;
 import com.kennedysmithjava.prisoncore.tools.enchantment.*;
 import com.kennedysmithjava.prisoncore.tools.pouch.DatalessPouchable;
@@ -69,13 +69,13 @@ public class PrisonCore extends MassivePlugin {
         PrisonCore.i = this;
     }
 
-    public static Map<MPlayer, QuestProfile> activeTutorials = new HashMap<>();
+    //public static Map<MPlayer, QuestProfile> activeTutorials = new HashMap<>();
 
     public static PrisonCore get() {
         return i;
     }
 
-    QuestManager questManager;
+    //QuestManager questManager;
     private ProtocolManager protocolManager = null;
     public static NPCRegistry nonPersistNPCRegistry;
     private final static String registryName = "MinesNPC";
@@ -124,7 +124,7 @@ public class PrisonCore extends MassivePlugin {
 
         Pickaxe.LORE_UPDATER.runTaskTimerAsynchronously(this, 20L, 5 * 20L);
         getServer().getPluginManager().registerEvents(new EngineTools(), this);
-        this.questManager = new QuestManager();
+        //this.questManager = new QuestManager();
         this.protocolManager = ProtocolLibrary.getProtocolManager();
     }
 
@@ -207,9 +207,9 @@ public class PrisonCore extends MassivePlugin {
     // -------------------------------------------- //
 
 
-    public QuestManager getQuestManager() {
+    /*public QuestManager getQuestManager() {
         return questManager;
-    }
+    }*/
 
     public static NPCRegistry getNonPersistNPCRegistry() {
         return nonPersistNPCRegistry;

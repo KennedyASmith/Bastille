@@ -7,8 +7,8 @@ import com.kennedysmithjava.prisoncore.CooldownReason;
 import com.kennedysmithjava.prisoncore.engine.EngineCooldown;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.mines.MineColl;
-import com.kennedysmithjava.prisoncore.quest.QuestPhaseGroup;
-import com.kennedysmithjava.prisoncore.quest.QuestProfile;
+//import com.kennedysmithjava.prisoncore.quest.QuestPhaseGroup;
+//import com.kennedysmithjava.prisoncore.quest.QuestProfile;
 import com.massivecraft.massivecore.collections.MassiveMap;
 import com.massivecraft.massivecore.store.SenderEntity;
 import com.massivecraft.massivecore.util.MUtil;
@@ -26,7 +26,7 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
     private int level = 1;
     private String gangID = null;
     private String mineID = "none";
-    private transient QuestProfile questProfile;
+    //private transient QuestProfile questProfile;
     private Map<String, Integer> activeQuests = new MassiveMap<>("IntroductionTutorial", 0);
     private String clanName = "";
 
@@ -38,9 +38,9 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
     public MPlayer load(MPlayer that) {
         this.setLevel(that.level);
         this.setMineID(that.mineID);
-        this.setQuestProfile(that.questProfile);
+        /*this.setQuestProfile(that.questProfile);
         this.setActiveQuests(that.activeQuests);
-
+*/
         return this;
     }
 
@@ -190,7 +190,7 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
         this.changed();
     }
 
-    public QuestProfile getQuestProfile() {
+    /*public QuestProfile getQuestProfile() {
         if(questProfile == null){
             questProfile = new QuestProfile(this);
             getActiveQuests().forEach((s, phase) -> {
@@ -221,7 +221,7 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
         activeQuests.remove(name);
         this.changed();
     }
-
+*/
     public boolean inCooldown(CooldownReason reason){
         return EngineCooldown.inCooldown(this.getPlayer(), reason);
     }

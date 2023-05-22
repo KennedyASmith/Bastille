@@ -8,6 +8,7 @@ import com.kennedysmithjava.prisoncore.tools.ability.LeveledAbility;
 import com.kennedysmithjava.prisoncore.tools.enchantment.Enchant;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.MiscUtil;
+import com.kennedysmithjava.prisoncore.util.RarityName;
 import com.massivecraft.massivecore.collections.MassiveMap;
 import com.massivecraft.massivecore.store.Entity;
 import org.bukkit.Material;
@@ -44,7 +45,8 @@ public class PickaxeType extends Entity<PickaxeType> {
     private int maxDurability = 1000;
     private int startDurability = 1000;
 
-    private int rarity = 0;
+    private RarityName rarityName = RarityName.COMMON;
+    private double rarity = 0.5;
 
     public static PickaxeType get(Object oid) {
         return PickaxeTypeColl.get().get(oid);
@@ -53,6 +55,7 @@ public class PickaxeType extends Entity<PickaxeType> {
     @Override
     public PickaxeType load(PickaxeType that) {
 
+        this.setDisplayName(that.displayName);
         this.setLore(that.lore);
         this.setMaterial(that.material);
         this.setDescription(that.description);
@@ -61,6 +64,7 @@ public class PickaxeType extends Entity<PickaxeType> {
         this.setBuffers(that.buffers);
         this.setMaxDurability(that.maxDurability);
         this.setStartDurability(that.startDurability);
+        this.setRarityName(that.rarityName);
         this.setRarity(that.rarity);
 
         return this;
@@ -307,11 +311,19 @@ public class PickaxeType extends Entity<PickaxeType> {
         this.startDurability = startDurability;
     }
 
-    public int getRarity() {
+    public double getRarity() {
         return rarity;
     }
 
-    public void setRarity(int rarity) {
+    public void setRarity(double rarity) {
         this.rarity = rarity;
+    }
+
+    public RarityName getRarityName() {
+        return rarityName;
+    }
+
+    public void setRarityName(RarityName rarityName) {
+        this.rarityName = rarityName;
     }
 }

@@ -39,11 +39,11 @@ public class PickaxeTypeColl extends Coll<PickaxeType>
     public PickaxeType getByName(String name)
     {
         String compStr = MiscUtil.getComparisonString(name);
-        for (PickaxeType player : this.getAll())
+        for (PickaxeType type : this.getAll())
         {
-            if (player.getComparisonName().equals(compStr))
+            if (type.getComparisonName().equals(compStr))
             {
-                return player;
+                return type;
             }
         }
         return null;

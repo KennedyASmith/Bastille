@@ -1,5 +1,6 @@
 package com.kennedysmithjava.prisoncore.cmd;
 
+import com.kennedysmithjava.prisoncore.cmd.type.TypePickaxeType;
 import com.kennedysmithjava.prisoncore.entity.MConf;
 import com.kennedysmithjava.prisoncore.entity.tools.BufferConf;
 import com.kennedysmithjava.prisoncore.entity.tools.PickaxeType;
@@ -9,6 +10,7 @@ import com.kennedysmithjava.prisoncore.tools.enchantment.PickaxeExplosiveEnchant
 import com.kennedysmithjava.prisoncore.tools.enchantment.PickaxeNightVisionEnchant;
 import com.kennedysmithjava.prisoncore.tools.enchantment.PickaxeVeinEnchant;
 import com.massivecraft.massivecore.MassiveException;
+import com.massivecraft.massivecore.command.type.enumeration.TypeMaterial;
 import com.massivecraft.massivecore.command.type.primitive.TypeInteger;
 import com.massivecraft.massivecore.command.type.primitive.TypeString;
 import com.massivecraft.massivecore.store.MStore;
@@ -17,6 +19,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class CmdPickaxe extends ToolsCommand {
@@ -26,10 +29,10 @@ public class CmdPickaxe extends ToolsCommand {
 
     private static final CmdPickaxe i = new CmdPickaxe();
 
+
     // -------------------------------------------- //
     // FIELDS
     // -------------------------------------------- //
-
 
     //public MassiveCommandVersion cmdFactionsVersion = new MassiveCommandVersion(PrisonTools.get()).setAliases("v", "version");
 
@@ -37,14 +40,34 @@ public class CmdPickaxe extends ToolsCommand {
 
         //addParameter(TypeEnchantType.get(), "enchant");
         setDesc("Get a pickaxe");
-        addParameter(AbilityType.BLACKHOLE.getId(), new TypeString(), "ability", "set ability (astr, pulv...)");
-        addParameter(1, new TypeInteger(), "power", "set power buffer");
-        addParameter(1, new TypeInteger(), "speed", "set speed buffer");
-        addParameter(1, new TypeInteger(), "efficiency", "set efficiency buffer");
+        addParameter(new TypePickaxeType(), "name");
     }
 
     @Override
     public void perform() throws MassiveException {
+        PickaxeType pickaxeType = this.readArg();
+        me.getInventory().addItem(pickaxeType.getItemStack());
+    }
+
+    // -------------------------------------------- //
+    // CONSTRUCT
+    // -------------------------------------------- //
+
+    public static CmdPickaxe get() {
+        return i;
+    }
+
+    // -------------------------------------------- //
+    // OVERRIDE
+    // -------------------------------------------- //
+
+    @Override
+    public List<String> getAliases() {
+        return MConf.get().aliasesP;
+    }
+}
+
+/*    public static void testCode(){
         String ability = this.readArg();
         int power = this.readArg();
         int speed = this.readArg();
@@ -77,31 +100,12 @@ public class CmdPickaxe extends ToolsCommand {
         pickaxeType.addEnchant(PickaxeNightVisionEnchant.get(), 1);
 
         pickaxeType.setBuffers(MUtil.map(
-                    BufferConf.SPEED.getName(), speed,
-                    BufferConf.POWER.getName(), power,
-                            BufferConf.EFFICIENCY.getName(), efficiency));
+                BufferConf.SPEED.getName(), speed,
+                BufferConf.POWER.getName(), power,
+                BufferConf.EFFICIENCY.getName(), efficiency));
         pickaxeType.setAbility(ability);
 
         Player player = (Player) sender;
         ItemStack item = pickaxeType.getItemStack();
         player.getInventory().addItem(item);
-    }
-
-    // -------------------------------------------- //
-    // CONSTRUCT
-    // -------------------------------------------- //
-
-    public static CmdPickaxe get() {
-        return i;
-    }
-
-    // -------------------------------------------- //
-    // OVERRIDE
-    // -------------------------------------------- //
-
-    @Override
-    public List<String> getAliases() {
-        return MConf.get().aliasesP;
-    }
-
-}
+    }*/

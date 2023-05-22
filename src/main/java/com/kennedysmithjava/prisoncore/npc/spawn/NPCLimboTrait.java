@@ -5,7 +5,7 @@ import com.kennedysmithjava.prisoncore.engine.EngineLimbo;
 import com.kennedysmithjava.prisoncore.engine.EngineLoadingScreen;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayerColl;
-import com.kennedysmithjava.prisoncore.quest.eventGroup.IntroductionTutorial;
+//import com.kennedysmithjava.prisoncore.quest.eventGroup.IntroductionTutorial;
 import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.npc.NPC;
@@ -134,7 +134,7 @@ public class NPCLimboTrait extends Trait {
                 if(player == null) return;
                 player.teleport(mPlayer.getMine().getSpawnPoint());
                 EngineLoadingScreen.removeLoadingScreen(player.getPlayer(), 0);
-                mPlayer.getQuestProfile().startQuest(IntroductionTutorial.get());
+                //mPlayer.getQuestProfile().startQuest(IntroductionTutorial.get());
             }
         }.runTaskLater(PrisonCore.get(), tpDelay);
     }
