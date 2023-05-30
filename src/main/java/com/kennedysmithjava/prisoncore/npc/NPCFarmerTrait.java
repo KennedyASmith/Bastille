@@ -1,4 +1,4 @@
-package com.kennedysmithjava.prisoncore.npc.spawn;
+package com.kennedysmithjava.prisoncore.npc;
 
 import com.kennedysmithjava.prisoncore.entity.mines.CoinCollectorGuiConf;
 import com.kennedysmithjava.prisoncore.entity.npcs.FarmerGuiConf;

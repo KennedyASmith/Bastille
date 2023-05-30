@@ -8,13 +8,13 @@ import com.kennedysmithjava.prisoncore.engine.EngineTools;
 import com.kennedysmithjava.prisoncore.engine.EngineTrees;
 import com.kennedysmithjava.prisoncore.entity.MConfColl;
 import com.kennedysmithjava.prisoncore.entity.farming.FarmingConfColl;
-import com.kennedysmithjava.prisoncore.entity.farming.TreesConf;
 import com.kennedysmithjava.prisoncore.entity.farming.TreesConfColl;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.Floor;
 import com.kennedysmithjava.prisoncore.entity.npcs.FarmerConfColl;
 import com.kennedysmithjava.prisoncore.entity.npcs.FarmerGuiConfColl;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayerColl;
+import com.kennedysmithjava.prisoncore.entity.player.QuestProfileColl;
 import com.kennedysmithjava.prisoncore.entity.tools.BufferConfColl;
 import com.kennedysmithjava.prisoncore.entity.tools.EnchantConfColl;
 import com.kennedysmithjava.prisoncore.entity.tools.PickaxeTypeColl;
@@ -22,9 +22,9 @@ import com.kennedysmithjava.prisoncore.entity.tools.PouchConfColl;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.Wall;
 import com.kennedysmithjava.prisoncore.entity.mines.*;
 import com.kennedysmithjava.prisoncore.event.EventNewMine;
-import com.kennedysmithjava.prisoncore.npc.spawn.NPCBlacksmithTrait;
-import com.kennedysmithjava.prisoncore.npc.spawn.NPCLimboTrait;
-import com.kennedysmithjava.prisoncore.npc.spawn.NPCLumberjackTrait;
+import com.kennedysmithjava.prisoncore.npc.NPCBlacksmithTrait;
+import com.kennedysmithjava.prisoncore.npc.NPCLimboTrait;
+import com.kennedysmithjava.prisoncore.npc.NPCLumberjackTrait;
 import com.kennedysmithjava.prisoncore.tools.Pickaxe;
 //import com.kennedysmithjava.prisoncore.quest.QuestManager;
 //import com.kennedysmithjava.prisoncore.quest.QuestProfile;
@@ -32,6 +32,7 @@ import com.kennedysmithjava.prisoncore.tools.ability.*;
 import com.kennedysmithjava.prisoncore.tools.enchantment.*;
 import com.kennedysmithjava.prisoncore.tools.pouch.DatalessPouchable;
 import com.kennedysmithjava.prisoncore.util.*;
+import com.kennedysmithjava.prisoncore.util.regions.MinesWorldManager;
 import com.massivecraft.massivecore.MassivePlugin;
 import com.massivecraft.massivecore.collections.MassiveList;
 import com.massivecraft.massivecore.util.MUtil;
@@ -46,17 +47,11 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
 
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Level;
 
 public class PrisonCore extends MassivePlugin {
 
@@ -164,6 +159,7 @@ public class PrisonCore extends MassivePlugin {
         return new MassiveList<>(
                 MConfColl.class,
                 MPlayerColl.class,
+                QuestProfileColl.class,
                 MinesConfColl.class,
                 BlocksConfColl.class,
                 DistributionConfColl.class,
@@ -239,11 +235,11 @@ public class PrisonCore extends MassivePlugin {
         BlockVector3 minCorner = worldManager.getUniqueLocation();
 
         Location origin = new Location(world, minCorner.getBlockX(), minCorner.getBlockY(), minCorner.getBlockZ());
-        Location mineCenter = floor.getMineCenter().get(origin);
-        Location spawn = floor.getSpawn().get(origin);
-        Location architectLocation = floor.getArchitectNPC().get(origin);
-        Location researcherLocation = floor.getResearcherNPC().get(origin);
-        Location collectorLocation = floor.getCollectorNPC().get(origin);
+        Location mineCenter = floor.getMineCenter().getFrom(origin);
+        Location spawn = floor.getSpawn().getFrom(origin);
+        Location architectLocation = floor.getArchitectNPC().getFrom(origin);
+        Location researcherLocation = floor.getResearcherNPC().getFrom(origin);
+        Location collectorLocation = floor.getCollectorNPC().getFrom(origin);
 
         Location maxMine = mineCenter.clone().add(-(width - 2), 0, -(width - 2));
         Location minMine = maxMine.clone().add(width - 1, -(height - 1), width - 1);
@@ -256,11 +252,11 @@ public class PrisonCore extends MassivePlugin {
         mine.setArchitectLocation(architectLocation);
         mine.setResearcherLocation(researcherLocation);
         mine.setCollectorLocation(collectorLocation);
-        mine.setPortalMinLocation(floor.getPortalMin().get(origin));
-        mine.setPortalMaxLocation(floor.getPortalMax().get(origin));
-        mine.setBeaconLocation(floor.getBeacon().get(origin));
-        mine.setChestLocation(floor.getChest().get(origin));
-        mine.setEnchantTableLocation(floor.getEnchantTable().get(origin));
+        mine.setPortalMinLocation(floor.getPortalMin().getFrom(origin));
+        mine.setPortalMaxLocation(floor.getPortalMax().getFrom(origin));
+        mine.setBeaconLocation(floor.getBeacon().getFrom(origin));
+        mine.setChestLocation(floor.getChest().getFrom(origin));
+        mine.setEnchantTableLocation(floor.getEnchantTable().getFrom(origin));
         mine.setOrigin(origin);
         mine.setMineCenter(mineCenter);
         mine.setRegenTimer(MinesConf.get().defaultResetTimer);

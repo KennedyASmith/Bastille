@@ -1,5 +1,6 @@
-package com.kennedysmithjava.prisoncore.util;
+package com.kennedysmithjava.prisoncore.util.regions;
 
+import com.kennedysmithjava.prisoncore.util.XYPair;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;

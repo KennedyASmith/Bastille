@@ -43,7 +43,7 @@ public class Offset {
         return yaw;
     }
 
-    public Location get(Location origin){
+    public Location getFrom(Location origin){
         if(yaw != 0F && pitch != 0F){
             return origin.clone().add(getX(), getY(), getZ());
         }else{

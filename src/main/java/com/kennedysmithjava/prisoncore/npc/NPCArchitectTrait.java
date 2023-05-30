@@ -1,7 +1,6 @@
-package com.kennedysmithjava.prisoncore.npc.mine;
+package com.kennedysmithjava.prisoncore.npc;
 
 import com.kennedysmithjava.prisoncore.CooldownReason;
-import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.engine.EngineCooldown;
 import com.kennedysmithjava.prisoncore.engine.EngineLoadingScreen;
 import com.kennedysmithjava.prisoncore.entity.mines.*;
@@ -21,7 +20,6 @@ import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.Trait;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

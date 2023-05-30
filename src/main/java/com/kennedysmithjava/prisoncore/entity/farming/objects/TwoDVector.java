@@ -14,7 +14,7 @@ public class TwoDVector extends EntityInternal<TwoDVector> {
     private int x;
     private int z;
 
-    public void pasrseFromString(String n) {
+    public void parseFromString(String n) {
         String[] array = n.split(":");
         world = array[0];
         x = Integer.parseInt(array[1]);

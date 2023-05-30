@@ -5,8 +5,8 @@ import com.kennedysmithjava.prisoncore.entity.mines.Distribution;
 import com.kennedysmithjava.prisoncore.entity.tools.BufferConf;
 import com.kennedysmithjava.prisoncore.event.EventAbilityUse;
 import com.kennedysmithjava.prisoncore.tools.Buffer;
-import com.kennedysmithjava.prisoncore.util.BlockArea;
-import com.kennedysmithjava.prisoncore.util.BlockPos;
+import com.kennedysmithjava.prisoncore.util.regions.BlockArea;
+import com.kennedysmithjava.prisoncore.util.regions.BlockPos;
 import com.kennedysmithjava.prisoncore.util.regions.LazyRegion;
 import com.kennedysmithjava.prisoncore.util.regions.Scaling;
 import com.kennedysmithjava.prisoncore.util.vfx.CuboidSequence;
@@ -30,7 +30,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import xyz.xenondevs.particle.ParticleEffect;
-import xyz.xenondevs.particle.data.color.ParticleColor;
 
 import java.awt.*;
 import java.util.*;

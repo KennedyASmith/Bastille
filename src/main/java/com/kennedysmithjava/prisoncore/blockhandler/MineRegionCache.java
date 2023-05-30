@@ -1,6 +1,6 @@
 package com.kennedysmithjava.prisoncore.blockhandler;
 
-import com.kennedysmithjava.prisoncore.util.MinesWorldManager;
+import com.kennedysmithjava.prisoncore.util.regions.MinesWorldManager;
 import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.entity.mines.Distribution;
 import com.kennedysmithjava.prisoncore.entity.mines.DistributionConf;

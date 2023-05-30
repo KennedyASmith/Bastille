@@ -1,6 +1,5 @@
 package com.kennedysmithjava.prisoncore.engine;
 
-import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.crafting.objects.PrisonLog;
 import com.kennedysmithjava.prisoncore.entity.farming.TreesConf;
 import com.kennedysmithjava.prisoncore.entity.farming.objects.Tree;
@@ -11,28 +10,18 @@ import com.kennedysmithjava.prisoncore.util.MiscUtil;
 import com.kennedysmithjava.prisoncore.util.regions.Offset;
 import com.massivecraft.massivecore.Engine;
 import com.massivecraft.massivecore.ps.PS;
-import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
-import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
-import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
 import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldedit.math.BlockVector3Imp;
-import com.sk89q.worldedit.world.registry.BlockMaterial;
-import lombok.ConfigurationKeys;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class EngineTrees extends Engine {
 
@@ -67,7 +56,7 @@ public class EngineTrees extends Engine {
     public void pasteTree(Tree tree) {
         TreeTemplate template = TreesConf.get().getTreeTemplates().get(tree.getName());
         Offset offset = template.getOffset();
-        Location offsetLocation = offset.get(tree.getSpawnPoint().asBukkitLocation());
+        Location offsetLocation = offset.getFrom(tree.getSpawnPoint().asBukkitLocation());
 
         FAWEPaster.paste("Schematics" + File.separator + "Trees" + File.separator + template.getSchematicName(),
                 offsetLocation.getWorld().getName(),
@@ -83,7 +72,7 @@ public class EngineTrees extends Engine {
 
     public void fallTree(Tree tree, TreeTemplate template) {
         Offset offset = template.getOffset();
-        Location offsetLocation = offset.get(tree.getSpawnPoint().asBukkitLocation());
+        Location offsetLocation = offset.getFrom(tree.getSpawnPoint().asBukkitLocation());
         FAWEPaster.paste("Schematics" + File.separator + "Trees" + File.separator + template.getSchematicName(),
                 tree.getSpawnPoint().getWorld(),
                 BlockVector3.at(offsetLocation.getX(), offsetLocation.getY(), offsetLocation.getZ()),
@@ -121,7 +110,7 @@ public class EngineTrees extends Engine {
         Tree tree = new Tree(template.getName(), 0, PS.valueOf(storedLocation), 0);
 
         Offset offset = template.getOffset();
-        Location offsetLocation = offset.get(block.getLocation());
+        Location offsetLocation = offset.getFrom(block.getLocation());
 
         // Spawns the schematic
         FAWEPaster.paste("Schematics" + File.separator + "Trees" + File.separator + template.getSchematicName(),

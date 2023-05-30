@@ -7,7 +7,7 @@ import com.kennedysmithjava.prisoncore.engine.EngineLimbo;
 import com.kennedysmithjava.prisoncore.engine.EngineLoadingScreen;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
-import com.kennedysmithjava.prisoncore.npc.spawn.NPCLimboTrait;
+import com.kennedysmithjava.prisoncore.npc.NPCLimboTrait;
 import com.massivecraft.massivecore.MassiveException;
 import com.massivecraft.massivecore.command.requirement.RequirementHasPerm;
 import com.massivecraft.massivecore.command.requirement.RequirementIsPlayer;

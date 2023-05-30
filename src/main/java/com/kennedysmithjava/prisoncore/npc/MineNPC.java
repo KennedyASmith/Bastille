@@ -1,4 +1,4 @@
-package com.kennedysmithjava.prisoncore.npc.mine;
+package com.kennedysmithjava.prisoncore.npc;
 
 import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.npc.Skin;

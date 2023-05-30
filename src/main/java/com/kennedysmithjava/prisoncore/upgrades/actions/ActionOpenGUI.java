@@ -4,7 +4,7 @@ import com.kennedysmithjava.prisoncore.eco.Cost;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.mines.UpgradesConf;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
-import com.kennedysmithjava.prisoncore.npc.mine.NPCWarrenTrait;
+import com.kennedysmithjava.prisoncore.npc.NPCWarrenTrait;
 import com.kennedysmithjava.prisoncore.upgrades.UpgradeGUI;
 import com.kennedysmithjava.prisoncore.upgrades.buttons.ButtonType;
 import com.kennedysmithjava.prisoncore.upgrades.buttons.GUIButtonPurchasable;

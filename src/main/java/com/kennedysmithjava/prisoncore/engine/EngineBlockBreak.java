@@ -1,7 +1,7 @@
 package com.kennedysmithjava.prisoncore.engine;
 
 import com.kennedysmithjava.prisoncore.blockhandler.MineRegionCache;
-import com.kennedysmithjava.prisoncore.util.MinesWorldManager;
+import com.kennedysmithjava.prisoncore.util.regions.MinesWorldManager;
 import com.kennedysmithjava.prisoncore.event.EventMineBlockBreak;
 import com.kennedysmithjava.prisoncore.entity.mines.Distribution;
 import com.kennedysmithjava.prisoncore.util.regions.LazyRegion;

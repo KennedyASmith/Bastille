@@ -1,10 +1,9 @@
-package com.kennedysmithjava.prisoncore.npc.spawn;
+package com.kennedysmithjava.prisoncore.npc;
 
 import com.kennedysmithjava.prisoncore.crafting.Recipe;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayerColl;
 import com.kennedysmithjava.prisoncore.util.Color;
-import com.kennedysmithjava.prisoncore.util.ItemBuilder;
 import com.massivecraft.massivecore.chestgui.ChestGui;
 import com.massivecraft.massivecore.util.MUtil;
 import net.citizensnpcs.api.event.NPCLeftClickEvent;
@@ -13,7 +12,6 @@ import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.trait.TraitName;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

@@ -29,7 +29,8 @@ public enum Perm implements Identified
     TREE,
      PITEM,
     GIVE,
-    MAP
+    MAP,
+    HELP
 
 
     // END OF LIST

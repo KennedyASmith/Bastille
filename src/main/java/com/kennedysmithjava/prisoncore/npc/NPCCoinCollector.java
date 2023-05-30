@@ -1,8 +1,7 @@
-package com.kennedysmithjava.prisoncore.npc.mine;
+package com.kennedysmithjava.prisoncore.npc;
 
 import com.kennedysmithjava.prisoncore.PrisonCore;
-import com.kennedysmithjava.prisoncore.entity.mines.WarrenConf;
-import com.kennedysmithjava.prisoncore.npc.Skin;
+import com.kennedysmithjava.prisoncore.entity.mines.CoinCollectorConf;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.massivecraft.massivecore.util.MUtil;
 import net.citizensnpcs.api.npc.NPC;
@@ -12,7 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 
-public class NPCWarren extends MineNPC {
+public class NPCCoinCollector extends MineNPC {
 
     @Override
     public void onSpawn(NPC npc) {
@@ -38,16 +37,16 @@ public class NPCWarren extends MineNPC {
 
     @Override
     public Skin getSkin() {
-        return WarrenConf.get().warrenSkin;
+        return CoinCollectorConf.get().collectorSkin;
     }
 
     @Override
     public List<Trait> getTraits() {
-        return MUtil.list(new NPCWarrenTrait());
+        return MUtil.list(new NPCCoinCollectorTrait());
     }
 
     public List<String> getHologramLines(){
-        return WarrenConf.get().warrenHologram;
+        return CoinCollectorConf.get().collectorHologram;
     }
 
 

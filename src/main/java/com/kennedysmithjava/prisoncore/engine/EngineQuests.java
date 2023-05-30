@@ -1,13 +1,15 @@
 package com.kennedysmithjava.prisoncore.engine;
 
-/*
+
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayerColl;
 import com.kennedysmithjava.prisoncore.event.EventNewMine;
 import com.kennedysmithjava.prisoncore.event.EventNewPlayerJoin;
 import com.kennedysmithjava.prisoncore.event.EventReturningPlayerJoin;
-import com.kennedysmithjava.prisoncore.event.EventTutorialGroupComplete;
+import com.kennedysmithjava.prisoncore.quest.QuestPath;
+import com.kennedysmithjava.prisoncore.quest.paths._QPIntroduction;
 import com.massivecraft.massivecore.Engine;
+import com.massivecraft.massivecore.ps.PS;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -24,15 +26,10 @@ public class EngineQuests extends Engine {
     public static EngineQuests get() {
         return i;
     }
-
-    public static List<MPlayer> interruptQuestQueue = new ArrayList<>();
-
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onNewMine(EventNewMine event) {
         MPlayer mPlayer = event.getPlayer();
-        Player player = mPlayer.getPlayer();
-        if(player == null) return;
-
+        if(mPlayer == null) return;
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -46,34 +43,18 @@ public class EngineQuests extends Engine {
 
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onTutorialComplete(EventTutorialGroupComplete event) {
-        MPlayer player = event.getPlayer();
-
-
-    }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent event) {
         MPlayer player = MPlayerColl.get().getByPlayer(event.getPlayer());
-        if(!interruptQuestQueue.contains(player)){
-            interruptQuestQueue.add(player);
-            interruptQuests();
-        }
+        player.interruptAnyActiveQuest();
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerKick(PlayerKickEvent event) {
         MPlayer player = MPlayerColl.get().getByPlayer(event.getPlayer());
-        if(!interruptQuestQueue.contains(player)){
-            interruptQuestQueue.add(player);
-            interruptQuests();
-        }
+        player.interruptAnyActiveQuest();
     }
 
-    void interruptQuests(){
-        interruptQuestQueue.forEach(player -> player.getQuestProfile().getActiveQuests().forEach((questPhaseGroup, questPhase) -> questPhase.interrupted()));
-    }
 
 }
-*/

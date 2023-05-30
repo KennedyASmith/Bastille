@@ -1,4 +1,4 @@
-package com.kennedysmithjava.prisoncore.npc.mine;
+package com.kennedysmithjava.prisoncore.npc;
 
 import com.kennedysmithjava.prisoncore.CooldownReason;
 import com.kennedysmithjava.prisoncore.eco.WorthUtil;

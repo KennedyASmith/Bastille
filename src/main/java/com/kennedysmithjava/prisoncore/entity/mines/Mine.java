@@ -1,15 +1,16 @@
 package com.kennedysmithjava.prisoncore.entity.mines;
 
+import com.kennedysmithjava.prisoncore.entity.mines.objects.UpgradeStatus;
 import com.kennedysmithjava.prisoncore.util.MineRegenCountdown;
-import com.kennedysmithjava.prisoncore.util.MinesWorldManager;
+import com.kennedysmithjava.prisoncore.util.regions.MinesWorldManager;
 import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.cmd.type.TypeMobility;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.Floor;
 import com.kennedysmithjava.prisoncore.event.EventMineChanged;
 import com.kennedysmithjava.prisoncore.blockhandler.BlockWrapper;
-import com.kennedysmithjava.prisoncore.npc.mine.NPCArchitect;
-import com.kennedysmithjava.prisoncore.npc.mine.NPCCoinCollector;
-import com.kennedysmithjava.prisoncore.npc.mine.NPCWarren;
+import com.kennedysmithjava.prisoncore.npc.NPCArchitect;
+import com.kennedysmithjava.prisoncore.npc.NPCCoinCollector;
+import com.kennedysmithjava.prisoncore.npc.NPCWarren;
 import com.kennedysmithjava.prisoncore.util.*;
 import com.kennedysmithjava.prisoncore.util.regions.LazyRegion;
 import com.massivecraft.massivecore.Named;
@@ -27,7 +28,6 @@ import com.sk89q.worldedit.regions.Region;
 import me.filoghost.holographicdisplays.api.beta.HolographicDisplaysAPI;
 import me.filoghost.holographicdisplays.api.beta.hologram.Hologram;
 import me.filoghost.holographicdisplays.api.beta.hologram.ResolvePlaceholders;
-import me.filoghost.holographicdisplays.api.beta.hologram.line.TextHologramLine;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.npc.NPCRegistry;
 import org.bukkit.Bukkit;
@@ -35,14 +35,13 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.FaceAttachable;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 
-public class Mine extends Entity<Mine> implements Named {
+public class  Mine extends Entity<Mine> implements Named {
 
     // -------------------------------------------- //
     //  CONSTRUCTION & VARIABLES
@@ -418,15 +417,15 @@ public class Mine extends Entity<Mine> implements Named {
 
     public void setLocations(Floor floor){
         //TODO: Set building locations
-        this.setSpawnPoint(floor.getSpawn().get(getOrigin()));
-        this.setArchitectLocation(floor.getArchitectNPC().get(getOrigin()));
-        this.setResearcherLocation(floor.getResearcherNPC().get(getOrigin()));
-        this.setCollectorLocation(floor.getCollectorNPC().get(getOrigin()));
-        this.setEnchantTableLocation(floor.getEnchantTable().get(getOrigin()));
-        this.setBeaconLocation(floor.getBeacon().get(getOrigin()));
-        this.setChestLocation(floor.getChest().get(getOrigin()));
-        this.setPortalMaxLocation(floor.getPortalMax().get(getOrigin()));
-        this.setPortalMinLocation(floor.getPortalMin().get(getOrigin()));
+        this.setSpawnPoint(floor.getSpawn().getFrom(getOrigin()));
+        this.setArchitectLocation(floor.getArchitectNPC().getFrom(getOrigin()));
+        this.setResearcherLocation(floor.getResearcherNPC().getFrom(getOrigin()));
+        this.setCollectorLocation(floor.getCollectorNPC().getFrom(getOrigin()));
+        this.setEnchantTableLocation(floor.getEnchantTable().getFrom(getOrigin()));
+        this.setBeaconLocation(floor.getBeacon().getFrom(getOrigin()));
+        this.setChestLocation(floor.getChest().getFrom(getOrigin()));
+        this.setPortalMaxLocation(floor.getPortalMax().getFrom(getOrigin()));
+        this.setPortalMinLocation(floor.getPortalMin().getFrom(getOrigin()));
     }
 
     /**
@@ -454,40 +453,41 @@ public class Mine extends Entity<Mine> implements Named {
 
         clearMobilityArea(w, h);
 
-        Location westTop = mineCenter.clone().add(-widthV, 0, -widthV);
-        Location westBottom = westTop.clone().add(0, -heightV, widthV * 2);
-        Location northTop = westBottom.clone().add(0, heightV, 0);
-        Location northBottom = northTop.clone().add(widthV * 2, -heightV, 0);
-        Location eastTop = northBottom.clone().add(0, heightV, 0);
-        Location eastBottom = eastTop.clone().add(0, -heightV, -widthV * 2);
-        Location southTop = eastBottom.clone().add(0, heightV, 0);
-        Location southBottom = southTop.clone().add(-widthV * 2, -heightV, 0);
+        Location southGapTop = mineCenter.clone().add(-1, 0, widthV);
+        Location southGapBottom = southGapTop.clone().add(2, -heightV, 0);
+
+        Location eastGapTop = mineCenter.clone().add(widthV, 0, 1);
+        Location eastGapBottom = eastGapTop.clone().add(0, -heightV, -2);
+
+        Location northGapTop = mineCenter.clone().add(1, 0, -widthV);
+        Location northGapBottom = northGapTop.clone().add(-2, -heightV, 0);
+
+        Location westGapTop = mineCenter.clone().add(-widthV, 0, -1);
+        Location westGapBottom = westGapTop.clone().add(0, -heightV, 2);
+
 
         switch (selectedMobility) {
             case LADDER_1 -> {
                 MiscUtil.blockFill(mineCenter.clone().add(-widthV, -heightV, 0), mineCenter.clone().add(-widthV, 0, 0), MiscUtil.WEST_LADDER);
-                return;
             }
             case LADDER_2 -> {
                 MiscUtil.blockFill(mineCenter.clone().add(0, -heightV, widthV), mineCenter.clone().add(0, 0, widthV), MiscUtil.SOUTH_LADDER);
                 MiscUtil.blockFill(mineCenter.clone().add(0, -heightV, -widthV), mineCenter.clone().add(0, 0, -widthV), MiscUtil.NORTH_LADDER);
                 MiscUtil.blockFill(mineCenter.clone().add(widthV, -heightV, 0), mineCenter.clone().add(widthV, 0, 0), MiscUtil.EAST_LADDER);
                 MiscUtil.blockFill(mineCenter.clone().add(-widthV, -heightV, 0), mineCenter.clone().add(-widthV, 0, 0), MiscUtil.WEST_LADDER);
-                return;
             }
             case FULL_LADDER -> {
-                MiscUtil.blockFill(westBottom, westTop, MiscUtil.WEST_LADDER);
-                MiscUtil.blockFill(northBottom, northTop, MiscUtil.NORTH_LADDER);
-                MiscUtil.blockFill(eastBottom, eastTop, MiscUtil.EAST_LADDER);
-                MiscUtil.blockFill(southBottom, southTop, MiscUtil.SOUTH_LADDER);
-                return;
+                MiscUtil.blockFill(westGapBottom, westGapTop, MiscUtil.WEST_LADDER);
+                MiscUtil.blockFill(northGapBottom, northGapTop, MiscUtil.NORTH_LADDER);
+                MiscUtil.blockFill(eastGapBottom, eastGapTop, MiscUtil.EAST_LADDER);
+                MiscUtil.blockFill(southGapBottom, southGapTop, MiscUtil.SOUTH_LADDER);
             }
             case JUMP_PAD -> {
                 Material plate = Material.HEAVY_WEIGHTED_PRESSURE_PLATE;
-                MiscUtil.blockFill(southBottom, southTop.clone().add(0, -heightV, 0), plate);
-                MiscUtil.blockFill(westBottom, westTop.clone().add(0, -heightV, 0), plate);
-                MiscUtil.blockFill(eastBottom, eastTop.clone().add(0, -heightV, 0), plate);
-                MiscUtil.blockFill(northBottom, northTop.clone().add(0, -heightV, 0), plate);
+                MiscUtil.blockFill(southGapBottom, southGapTop.clone().add(0, -heightV, 0), plate);
+                MiscUtil.blockFill(westGapBottom, westGapTop.clone().add(0, -heightV, 0), plate);
+                MiscUtil.blockFill(eastGapBottom, eastGapTop.clone().add(0, -heightV, 0), plate);
+                MiscUtil.blockFill(northGapBottom, northGapTop.clone().add(0, -heightV, 0), plate);
             }
         }
 
@@ -1211,29 +1211,3 @@ public class Mine extends Entity<Mine> implements Named {
     }
 }
 
-class UpgradeStatus{
-
-    private boolean purchased;
-    private boolean active;
-
-    public UpgradeStatus(boolean purchased, boolean active) {
-        this.purchased = purchased;
-        this.active = active;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public boolean isPurchased() {
-        return purchased;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public void setPurchased(boolean purchased) {
-        this.purchased = purchased;
-    }
-}

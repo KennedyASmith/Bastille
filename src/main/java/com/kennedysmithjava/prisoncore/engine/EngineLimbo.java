@@ -2,7 +2,7 @@ package com.kennedysmithjava.prisoncore.engine;
 
 import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.entity.MConf;
-import com.kennedysmithjava.prisoncore.npc.spawn.NPCLimboTrait;
+import com.kennedysmithjava.prisoncore.npc.NPCLimboTrait;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.massivecraft.massivecore.Engine;
 import org.bukkit.entity.Player;
@@ -85,8 +85,6 @@ public class EngineLimbo extends Engine {
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
-        if (player == null) return;
-
         if (limbo.containsKey(player)) event.setCancelled(true);
     }
 

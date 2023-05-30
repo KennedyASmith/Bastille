@@ -48,7 +48,6 @@ public class MPlayerColl extends SenderColl<MPlayer> {
 
     public MPlayer getByUUID(String uuid) {
         for (MPlayer player : this.getAll()) {
-
             if (player.getUuid().toString().equals(uuid)) {
                 return player;
             }

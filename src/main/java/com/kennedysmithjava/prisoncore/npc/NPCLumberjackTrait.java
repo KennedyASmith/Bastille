@@ -1,16 +1,12 @@
-package com.kennedysmithjava.prisoncore.npc.spawn;
+package com.kennedysmithjava.prisoncore.npc;
 
 import com.kennedysmithjava.prisoncore.crafting.Recipe;
-import com.kennedysmithjava.prisoncore.entity.mines.CoinCollectorGuiConf;
-import com.kennedysmithjava.prisoncore.entity.npcs.FarmerGuiConf;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayerColl;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.ItemBuilder;
-import com.massivecraft.massivecore.chestgui.ChestAction;
 import com.massivecraft.massivecore.chestgui.ChestGui;
 import com.massivecraft.massivecore.util.MUtil;
-import com.massivecraft.massivecore.util.Txt;
 import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.npc.NPC;
@@ -21,12 +17,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 

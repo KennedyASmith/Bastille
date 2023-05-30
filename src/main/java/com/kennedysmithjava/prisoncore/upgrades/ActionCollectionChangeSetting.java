@@ -3,7 +3,7 @@ package com.kennedysmithjava.prisoncore.upgrades;
 import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
-import com.kennedysmithjava.prisoncore.npc.mine.NPCCoinCollectorTrait;
+import com.kennedysmithjava.prisoncore.npc.NPCCoinCollectorTrait;
 import com.kennedysmithjava.prisoncore.upgrades.actions.AbstractAction;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.npc.NPCRegistry;

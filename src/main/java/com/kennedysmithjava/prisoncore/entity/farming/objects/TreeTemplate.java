@@ -9,7 +9,7 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class TreeTemplate extends EntityInternal<TreesConf> {
+public class TreeTemplate extends EntityInternal<TreeTemplate> {
 
     // Tree info
     private String name;

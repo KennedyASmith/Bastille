@@ -1,6 +1,5 @@
 package com.kennedysmithjava.prisoncore.entity.player;
 
-import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.PrisonParticipator;
 import com.kennedysmithjava.prisoncore.eco.CurrencyType;
 import com.kennedysmithjava.prisoncore.CooldownReason;
@@ -9,10 +8,12 @@ import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.mines.MineColl;
 //import com.kennedysmithjava.prisoncore.quest.QuestPhaseGroup;
 //import com.kennedysmithjava.prisoncore.quest.QuestProfile;
-import com.massivecraft.massivecore.collections.MassiveMap;
+import com.kennedysmithjava.prisoncore.quest.QuestPath;
+import com.kennedysmithjava.prisoncore.quest.quests.enums.CollectibleKey;
 import com.massivecraft.massivecore.store.SenderEntity;
 import com.massivecraft.massivecore.util.MUtil;
 import org.bukkit.ChatColor;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
 
@@ -23,12 +24,15 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
     // -------------------------------------------- //
 
     private final Map<CurrencyType, Double> economy = MUtil.map(CurrencyType.CASH, 0.25, CurrencyType.RESEARCH, 15.0, CurrencyType.GEMS, 50.0);
-    private int level = 1;
     private String gangID = null;
     private String mineID = "none";
-    //private transient QuestProfile questProfile;
-    private Map<String, Integer> activeQuests = new MassiveMap<>("IntroductionTutorial", 0);
     private String clanName = "";
+    private int xp = 0;
+
+    //XP Required to level up your character
+    private int xpRequired = 0;
+
+    private int level = 1;
 
     public static MPlayer get(Object oid) {
         return MPlayerColl.get().get(oid);
@@ -36,11 +40,9 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
 
     @Override
     public MPlayer load(MPlayer that) {
-        this.setLevel(that.level);
         this.setMineID(that.mineID);
-        /*this.setQuestProfile(that.questProfile);
-        this.setActiveQuests(that.activeQuests);
-*/
+        this.setXP(that.xp);
+        this.setXpRequired(that.xpRequired);
         return this;
     }
 
@@ -222,6 +224,7 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
         this.changed();
     }
 */
+
     public boolean inCooldown(CooldownReason reason){
         return EngineCooldown.inCooldown(this.getPlayer(), reason);
     }
@@ -232,6 +235,59 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
 
     public void setClanName(String clanName) {
         this.clanName = clanName;
+    }
+
+    public void setXP(int xp) {
+        this.xp = xp;
+        this.changed();
+    }
+
+    public void addXP(int xpToAdd){
+        int currentXP = this.xp;
+        int xpRequiredForNextLevel = getXpRequired();
+        int sumXP = currentXP + xpToAdd;
+        if(sumXP > xpRequiredForNextLevel){
+            int remainder = sumXP - xpRequiredForNextLevel;
+            setLevel(this.level + 1);
+            setXpRequired(calculateXpRequired());
+            addXP(remainder);
+        }
+    }
+
+    public void setXpRequired(int xpRequired) {
+        this.xpRequired = xpRequired;
+        this.changed();
+    }
+
+    public int getXpRequired() {
+        return xpRequired;
+    }
+
+    private int calculateXP(int level) {
+        return (int) Math.floor(10 * Math.pow(level, 0.2) * Math.pow(level, 2.0) + Math.pow(level - 1, 2.0));
+    }
+
+    public int calculateXpRequired() {
+        int level = this.level;
+        return calculateXP(level + 1) - calculateXP(level);
+    }
+
+    public QuestProfile getQuestProfile(){
+        return QuestProfileColl.get().getByUUID(this.getPlayer().getUniqueId());
+    }
+
+    public void giveCollectible(String itemID, ItemStack itemStack){
+
+    }
+
+    public void giveCollectible(CollectibleKey key, ItemStack itemStack){
+        this.giveCollectible(key.getKey(), itemStack);
+    }
+
+    public void interruptAnyActiveQuest(){
+        QuestPath activeQuest = getQuestProfile().getActiveQuestPath();
+        if(activeQuest == null) return;
+        activeQuest.deactivate(this);
     }
 }
 

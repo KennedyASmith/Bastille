@@ -1,4 +1,4 @@
-package com.kennedysmithjava.prisoncore.npc.mine;
+package com.kennedysmithjava.prisoncore.npc;
 
 import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
@@ -389,10 +389,5 @@ public class NPCWarrenTrait extends Trait {
     }
 
 
-}
-
-@FunctionalInterface
-interface ClickEvent<A>{
-     void run(A a);
 }
 
