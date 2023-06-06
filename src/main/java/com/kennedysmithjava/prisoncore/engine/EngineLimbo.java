@@ -21,6 +21,8 @@ public class EngineLimbo extends Engine {
     private boolean active;
     private static final List<String> limboMessage = MConf.get().limboMessage;
 
+    private long limbo_mesassage_period = 200;     // Delay for how often the limbo message should be sent
+
     public static EngineLimbo get() {
         return i;
     }
@@ -53,11 +55,11 @@ public class EngineLimbo extends Engine {
                     if (NPCLimboTrait.getActiveUsers().contains(player.getPlayer())) return;
 
                     limboMessage.forEach(s -> {
-                        player.sendMessage(Color.get(s));
+                        player.sendMessage(Color.get(s.replaceAll("%player%", player.getName())));
                     });
                 });
             }
-        }.runTaskTimer(PrisonCore.get(), 0L, 5L);
+        }.runTaskTimer(PrisonCore.get(), 0L, limbo_mesassage_period);
     }
 
     public void addToLimbo(Player player) {
