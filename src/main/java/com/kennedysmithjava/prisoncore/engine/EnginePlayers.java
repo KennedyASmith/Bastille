@@ -84,12 +84,12 @@ public class EnginePlayers extends Engine {
             // Get the quest path & assert it is non-null
             QuestPath questPath = mPlayer.getQuestProfile().getActiveQuestPath();
 
-            if(questPath == null) {
-
+            // If a questPath exists for mplayer, then activate
+            if(questPath != null) {
+                questPath.activateCurrentQuest(mPlayer, progress);
             }
 
-            questPath.activateCurrentQuest(mPlayer, progress);
-        }else{
+        } else{
             EngineLimbo.get().addToLimbo(mPlayer.getPlayer());
         }
     }
