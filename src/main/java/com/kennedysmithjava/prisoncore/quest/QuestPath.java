@@ -1,47 +1,29 @@
 package com.kennedysmithjava.prisoncore.quest;
 
+import com.kennedysmithjava.prisoncore.engine.EngineRegions;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
-import com.massivecraft.massivecore.collections.MassiveList;
-import com.massivecraft.massivecore.store.EntityInternal;
+import com.kennedysmithjava.prisoncore.entity.player.QuestProfile;
+import com.kennedysmithjava.prisoncore.quest.region.QuestRegion;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 /**
     This class represents a quest path. A quest path contains a series of quests
     and tracks the player's progress through the path.
 
-    <p>This class extends the EntityInternal class for storability.</p>
     Author: KennedyASmith
-    @see com.massivecraft.massivecore.store.EntityInternal
+    @see com.kennedysmithjava.prisoncore.engine.EngineQuests
  */
 
-public abstract class QuestPath extends EntityInternal<QuestPath> {
-
-    private final List<Quest> quests;
-
-    private int currentProgress;
+public abstract class QuestPath {
 
     /**
-     * Constructs a new QuestPath object with the specified list of quests and current progress.
-     *
-     * @param quests          the list of quests in the path
-     * @param currentProgress the current progress of the player in the path
-     */
-    public QuestPath(List<Quest> quests, int currentProgress) {
-        this.quests = quests;
-        this.currentProgress = currentProgress;
-    }
-
-    /**
-     * Returns the list of quests in the quest path.
+     * Returns the initialized list of quests in the quest path.
      *
      * @return the list of quests
      */
-    public List<Quest> getQuests() {
-        return quests;
-    }
+    public abstract List<Quest> getInitializedQuests(MPlayer player);
 
     /**
      * Returns the rewards associated with the quest path.
@@ -50,14 +32,6 @@ public abstract class QuestPath extends EntityInternal<QuestPath> {
      * @return the list of quest rewards
      */
     public abstract List<QuestReward> getPathRewards();
-
-    /**
-     * Returns the ID of the quest path.
-     * This method should be implemented by subclasses.
-     *
-     * @return the quest path ID
-     */
-    public abstract String getQuestPathID();
 
     /**
      * Returns the display name of the quest path.
@@ -75,74 +49,59 @@ public abstract class QuestPath extends EntityInternal<QuestPath> {
      */
     public abstract ItemStack getPathIcon();
 
-    /**
-     * Returns the current progress of the player in the quest path.
-     *
-     * @return the current progress
-     */
-    public int getCurrentProgress() {
-        return currentProgress;
-    }
-
-    /**
-     * Sets the current progress of the player in the quest path.
-     *
-     * @param currentProgress the current progress to set
-     */
-    public void setCurrentProgress(int currentProgress) {
-        this.currentProgress = currentProgress;
-    }
-
-    /**
-     * Increments the current progress of the player in the quest path by 1.
-     */
-    public void incrementCurrentProgress(){
-        setCurrentProgress(this.currentProgress + 1);
-    }
-
-
-    public abstract Map<Quest, List<Consumer<MPlayer>>> getQuestCompletionLogic();
-
     public abstract void onActivate(MPlayer player);
 
-    public List<Quest> getQuestParts(){
-        return quests;
-    }
-    public boolean hasQuest(Quest quest){
-        return getQuestParts().contains(quest);
+    public boolean hasNext(MPlayer player, List<Quest> questList, int currentProgress){
+        if(questList == null) questList = this.getInitializedQuests(player);
+        return currentProgress < (questList.size() - 1);
     }
 
-    public boolean hasNext(){
-        return currentProgress < (quests.size() - 1);
-    }
-
-    public void activate(MPlayer player){
-        Quest quest = getQuestParts().get(currentProgress);
-        quest.continueQuest(player, this);
+    public void activateCurrentQuest(MPlayer player, int currentPathProgress){
+        QuestProfile profile = player.getQuestProfile();
+        List<Quest> questList = profile.getPathQuestList(player);
+        Quest quest = questList.get(currentPathProgress);
+        int questProgress = player.getQuestProfile().getActiveQuestProgress();
+        quest.continueQuest(questProgress, this);
+        player.getQuestProfile().setActiveQuest(quest);
+        if(quest.hasRegion(questProgress)){
+            QuestRegion region = quest.getRegion(questProgress);
+            EngineRegions.get().addToRegionTracker(player.getUuid(), region);
+        }
         onActivate(player);
     }
+    public abstract void onCompleteQuest(int currentPathProgress);
 
-    public abstract void onCompleteQuest(int questIndex);
-
-    public void deactivate(MPlayer player){
-        Quest quest = getQuestParts().get(currentProgress);
-        quest.onDeactivateQuest(player);
+    public void deactivate(MPlayer player, int currentPathProgress){
+        QuestProfile profile = player.getQuestProfile();
+        Quest quest = profile.getActiveQuest();
+        if(quest == null) return;
+        quest.onDeactivateQuest(profile.getActiveQuestProgress());
     }
 
-    public void completeCurrentQuest(MPlayer player){
-        onCompleteQuest(currentProgress);
-        if(hasNext()){
-            incrementCurrentProgress();
-            activate(player);
+    public void innerCompleteQuest(MPlayer player, int currentPathProgress){
+        QuestProfile profile = player.getQuestProfile();
+        Quest quest = profile.getActiveQuest();
+        if(quest != null && quest.hasRegion(quest.getProgress())){
+            EngineRegions.get().removeFromRegionTracker(player.getUuid());
+        }
+        profile.resetCurrentQuestProgress();
+        onCompleteQuest(currentPathProgress);
+        profile.setActiveQuest(null);
+        if(hasNext(player, profile.getPathQuestList(player), currentPathProgress)){
+            profile.incrementCurrentPathProgress();
+            activateCurrentQuest(player, currentPathProgress + 1);
         } else {
             if(getPathRewards() != null){
                 for (QuestReward pathReward : getPathRewards()) {
                     pathReward.give(player);
                 }
             }
-
             player.getQuestProfile().finalizeQuestPathCompletion(this);
         }
+    }
+
+    public static void register(QuestPath quest){
+        QuestPathRegistry.get().registerQuestClass(quest);
     }
 
 }

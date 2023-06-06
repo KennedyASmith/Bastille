@@ -1,5 +1,7 @@
 package com.kennedysmithjava.prisoncore.engine;
 
+import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
+import com.kennedysmithjava.prisoncore.quest.Quest;
 import com.kennedysmithjava.prisoncore.quest.region.QuestRegion;
 import com.massivecraft.massivecore.Engine;
 import org.bukkit.Bukkit;
@@ -37,13 +39,20 @@ public class EngineRegions extends Engine {
         if(region.has(getTo)) {
             if(inTheirRegion.contains(player.getUniqueId())) return;
             Bukkit.broadcastMessage("You've entered your quest location!");
+            MPlayer p = MPlayer.get(player);
+            Quest q = p.getQuestProfile().getActiveQuest();
+            q.onEnterRegion();
         }else {
             inTheirRegion.remove(player.getUniqueId());
-            Bukkit.broadcastMessage("You've left your quest location!");
         }
     }
 
     public void addToRegionTracker(UUID player, QuestRegion region){
         regionMap.put(player, region);
+    }
+
+    public void removeFromRegionTracker(UUID player){
+        regionMap.remove(player);
+        inTheirRegion.remove(player);
     }
 }

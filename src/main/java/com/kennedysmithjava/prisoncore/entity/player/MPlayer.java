@@ -285,9 +285,10 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
     }
 
     public void interruptAnyActiveQuest(){
-        QuestPath activeQuest = getQuestProfile().getActiveQuestPath();
-        if(activeQuest == null) return;
-        activeQuest.deactivate(this);
+        QuestPath activeQuestPath = getQuestProfile().getActiveQuestPath();
+        if(activeQuestPath == null) return;
+        activeQuestPath.deactivate(this,  getQuestProfile().activeQuestPathProgress);
     }
+
 }
 

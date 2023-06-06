@@ -1,31 +1,37 @@
 package com.kennedysmithjava.prisoncore.engine;
 
-
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayerColl;
 import com.kennedysmithjava.prisoncore.event.EventNewMine;
 import com.kennedysmithjava.prisoncore.event.EventNewPlayerJoin;
-import com.kennedysmithjava.prisoncore.event.EventReturningPlayerJoin;
-import com.kennedysmithjava.prisoncore.quest.QuestPath;
-import com.kennedysmithjava.prisoncore.quest.paths._QPIntroduction;
+import com.kennedysmithjava.prisoncore.quest.quests.QuestBreakBlock;
+import com.kennedysmithjava.prisoncore.quest.quests.QuestInteractBlock;
 import com.massivecraft.massivecore.Engine;
-import com.massivecraft.massivecore.ps.PS;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class EngineQuests extends Engine {
 
     private static final EngineQuests i = new EngineQuests();
 
+    private static final HashMap<UUID, QuestInteractBlock> blockInteractWaitlist = new HashMap<>();
+    private static final HashMap<UUID, QuestBreakBlock> blockBreakWaitlist = new HashMap<>();
+
     public static EngineQuests get() {
         return i;
     }
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onNewMine(EventNewMine event) {
         MPlayer mPlayer = event.getPlayer();
@@ -38,9 +44,7 @@ public class EngineQuests extends Engine {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onReturningPlayerJoin(EventReturningPlayerJoin event) {
-        MPlayer player = event.getPlayer();
-
+    public void onPlayerJoin(PlayerJoinEvent event) {
     }
 
 
@@ -56,5 +60,47 @@ public class EngineQuests extends Engine {
         player.interruptAnyActiveQuest();
     }
 
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerInteract(PlayerInteractEvent event){
+        Player player = event.getPlayer();
+        // Check if the player right-clicked a block
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            if(!blockInteractWaitlist.containsKey(player.getUniqueId())) return;
+            Block clickedBlock = event.getClickedBlock();
+            if(clickedBlock == null) return;
+            QuestInteractBlock quest = blockInteractWaitlist.get(player.getUniqueId());
+            if(!clickedBlock.getLocation().equals(quest.getLocation())) return;
+            quest.completeThisQuest();
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onBlockBreak(BlockBreakEvent event){
+        Player player = event.getPlayer();
+        if(!blockBreakWaitlist.containsKey(player.getUniqueId())) return;
+        QuestBreakBlock quest = blockBreakWaitlist.get(player.getUniqueId());
+        if(quest.materialMatters()){
+            if(quest.getMaterial() != event.getBlock().getType()) return;
+            quest.blockBroken();
+        }else{
+            quest.blockBroken();
+        }
+    }
+
+    public static void addBlockInteractListener(UUID uuid, QuestInteractBlock questInteractBlock){
+        blockInteractWaitlist.put(uuid, questInteractBlock);
+    }
+
+    public static void removeBlockInteractListener(UUID uuid){
+        blockInteractWaitlist.remove(uuid);
+    }
+
+    public static void addBlockBreakListener(UUID uuid, QuestBreakBlock questBreakBlock){
+        blockBreakWaitlist.put(uuid, questBreakBlock);
+    }
+
+    public static void removeBlockBreakListener(UUID uuid){
+        blockBreakWaitlist.remove(uuid);
+    }
 
 }

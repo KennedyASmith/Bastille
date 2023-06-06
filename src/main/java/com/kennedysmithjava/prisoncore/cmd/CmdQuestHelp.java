@@ -18,6 +18,8 @@ public class CmdQuestHelp extends CoreCommand {
         Player player = (Player) sender;
 
         player.sendMessage("You don't deserve help.");
+
+
     }
 
 }

@@ -25,9 +25,9 @@ import com.kennedysmithjava.prisoncore.event.EventNewMine;
 import com.kennedysmithjava.prisoncore.npc.NPCBlacksmithTrait;
 import com.kennedysmithjava.prisoncore.npc.NPCLimboTrait;
 import com.kennedysmithjava.prisoncore.npc.NPCLumberjackTrait;
+import com.kennedysmithjava.prisoncore.quest.*;
+import com.kennedysmithjava.prisoncore.quest.paths.PathIntroduction;
 import com.kennedysmithjava.prisoncore.tools.Pickaxe;
-//import com.kennedysmithjava.prisoncore.quest.QuestManager;
-//import com.kennedysmithjava.prisoncore.quest.QuestProfile;
 import com.kennedysmithjava.prisoncore.tools.ability.*;
 import com.kennedysmithjava.prisoncore.tools.enchantment.*;
 import com.kennedysmithjava.prisoncore.tools.pouch.DatalessPouchable;
@@ -101,6 +101,8 @@ public class PrisonCore extends MassivePlugin {
         Enchant.register(PickaxeSpeedEnchant.get());
         Enchant.register(PickaxeVeinEnchant.get());
 
+        QuestPath.register(PathIntroduction.get());
+
         Ability.register(AbilityAsteroidStrike.get());
         Ability.register(AbilityPulverize.get());
         Ability.register(AbilityTetris.get());
@@ -119,7 +121,6 @@ public class PrisonCore extends MassivePlugin {
 
         Pickaxe.LORE_UPDATER.runTaskTimerAsynchronously(this, 20L, 5 * 20L);
         getServer().getPluginManager().registerEvents(new EngineTools(), this);
-        //this.questManager = new QuestManager();
         this.protocolManager = ProtocolLibrary.getProtocolManager();
     }
 
@@ -145,7 +146,7 @@ public class PrisonCore extends MassivePlugin {
             NamespacedKey key = new NamespacedKey(this, "glowKey");
             Glow glow = new Glow(key);
             Enchantment.registerEnchantment(glow);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException ignored) {
         } catch (Exception e) {
             e.printStackTrace();
         }

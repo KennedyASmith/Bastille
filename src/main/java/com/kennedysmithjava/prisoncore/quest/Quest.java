@@ -1,14 +1,11 @@
 package com.kennedysmithjava.prisoncore.quest;
 
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
+import com.kennedysmithjava.prisoncore.entity.player.QuestProfile;
 import com.kennedysmithjava.prisoncore.quest.region.QuestRegion;
-import com.massivecraft.massivecore.store.EntityInternal;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.function.Consumer;
 
 /**
 
@@ -18,31 +15,24 @@ import java.util.function.Consumer;
  <p>Author: KennedyASmith</p>
  */
 
-public abstract class Quest extends EntityInternal<Quest> {
+public abstract class Quest {
 
-    private int progress;
-    private final List<QuestReward> rewards;
-
+    public final List<QuestReward> rewards;
+    public final MPlayer player;
 
     /**
      * Constructs a new Quest with the specified progress and completion status.
      *
-     * @param progress the progress of the quest
      * @param rewards the rewards given for completing the quest part
      */
-    public Quest(int progress, List<QuestReward> rewards) {
-        this.progress = progress;
+    public Quest(MPlayer player, List<QuestReward> rewards) {
         this.rewards = rewards;
+        this.player = player;
     }
 
-    public Quest(List<QuestReward> rewards) {
-        this.progress = 0;
-        this.rewards = rewards;
-    }
-
-    public Quest() {
-        this.progress = 0;
+    public Quest(MPlayer player) {
         this.rewards = new ArrayList<>();
+        this.player = player;
     }
 
     /**
@@ -65,25 +55,24 @@ public abstract class Quest extends EntityInternal<Quest> {
      * @param player the player continuing the quest
      * @param thisPath the quest path associated with the quest
      */
-    public abstract void continueQuest(MPlayer player, QuestPath thisPath);
+    public abstract void continueQuest(int questProgress, QuestPath thisPath);
 
 
     /**
      * Handles logic for pausing the quest for the specified player.
      *
      * @param player the player pausing the quest
-     * @param thisPath the quest path associated with the quest
      */
-    public abstract void onDeactivateQuest(MPlayer player);
+    public abstract void onDeactivateQuest(int questProgress);
 
 
     /**
      * Handles logic for completing the quest for the specified player.
+     * Runs before rewards are given.
      *
      * @param player the player pausing the quest
-     * @param thisPath the quest path associated with the quest
      */
-    public abstract void onComplete(MPlayer player);
+    public abstract void onComplete();
 
 
     /**
@@ -91,47 +80,36 @@ public abstract class Quest extends EntityInternal<Quest> {
      *
      * @param player the player completing the quest
      */
-    public void completeQuest(MPlayer player){
+    public void completeThisQuest(){
+        onComplete();
         QuestPath path = player.getQuestProfile().getActiveQuestPath();
-        path.completeCurrentQuest(player);
+        path.innerCompleteQuest(player, player.getQuestProfile().activeQuestPathProgress);
         for (QuestReward reward : getRewards()) {
             reward.give(player);
         }
-    }
-
-    /**
-     * Retrieves the progress of the quest.
-     *
-     * @return the progress of the quest
-     */
-    public int getProgress() {
-        return progress;
     }
 
     public List<QuestReward> getRewards() {
         return rewards;
     }
 
-    /**
-     * Sets the progress of the quest.
-     *
-     * @param progress the progress of the quest
-     */
-    public void setProgress(int progress) {
-        this.progress = progress;
+    public abstract QuestRegion getRegion(int questProgress);
+
+    public boolean hasRegion(int questProgress) {
+        return getRegion(questProgress) != null;
     }
 
+    public abstract void onEnterRegion();
 
-    public void incrementProgress() {
-        this.progress = progress + 1;
+    public void incrementProgress(){
+        QuestProfile profile = player.getQuestProfile();
+        profile.incrementCurrentQuestProgress();
     }
 
-    public abstract QuestRegion getRegion();
-
-    public boolean hasRegion() {
-        return getRegion() != null;
+    public int getProgress(){
+        QuestProfile profile = player.getQuestProfile();
+        return profile.getActiveQuestProgress();
     }
 
-    public abstract void onEnterRegion(MPlayer player);
 }
 

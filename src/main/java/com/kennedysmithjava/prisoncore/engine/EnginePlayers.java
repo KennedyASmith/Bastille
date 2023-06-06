@@ -5,7 +5,6 @@ import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.mines.MineColl;
 import com.kennedysmithjava.prisoncore.CooldownReason;
 import com.massivecraft.massivecore.Engine;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -58,15 +57,16 @@ public class EnginePlayers extends Engine {
     private void leaveProtocol(Player player){
         MPlayer mPlayer = MPlayer.get(player);
         if(mPlayer.hasMine()){
-            if(mPlayer.inCooldown(CooldownReason.LOG_OFF)){
-                return;
-            }
-            EngineCooldown.add(player, 20 * 15, CooldownReason.LOG_OFF);
-            Mine mine = mPlayer.getMine();
+            if(!mPlayer.inCooldown(CooldownReason.LOG_OFF)) {
+                EngineCooldown.add(player, 20 * 15, CooldownReason.LOG_OFF);
+                Mine mine = mPlayer.getMine();
 
-            mine.despawnNPCs();
-            mine.removeCountdown();
-            MineColl.get().removeMineFromCache(mine);
+                mine.despawnNPCs();
+                mine.removeCountdown();
+                MineColl.get().removeMineFromCache(mine);
+            }
+            int progress = mPlayer.getQuestProfile().activeQuestPathProgress;
+            mPlayer.getQuestProfile().getActiveQuestPath().deactivate(mPlayer, progress);
         }
     }
 
@@ -78,6 +78,8 @@ public class EnginePlayers extends Engine {
             mine.createRegenCountdown();
             if(!mine.npcsSpawned()) mine.spawnNPCs();
             if(!mine.hologramExists()) mine.createRegenHologram();
+            int progress = mPlayer.getQuestProfile().activeQuestPathProgress;
+            mPlayer.getQuestProfile().getActiveQuestPath().activateCurrentQuest(mPlayer, progress);
         }else{
             EngineLimbo.get().addToLimbo(mPlayer.getPlayer());
         }

@@ -58,6 +58,7 @@ public class BlockEventFulfiller {
         }
 
         this.rewardPlayer(finishedEvent.getPlayer(), finishedEvent.getRewards(), finishedEvent.getBlockMultiplier(), finishedEvent.getAwardMultiplier());
+
         rpEngine.addBlockCount(finishedEvent.getPlayer());
     }
 

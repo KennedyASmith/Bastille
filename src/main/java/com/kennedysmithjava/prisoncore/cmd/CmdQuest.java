@@ -4,8 +4,10 @@ import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.QuestProfile;
 import com.kennedysmithjava.prisoncore.quest.QuestListGUI;
 import com.kennedysmithjava.prisoncore.quest.QuestPath;
+import com.massivecraft.massivecore.MassiveException;
 import com.massivecraft.massivecore.util.MUtil;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -42,16 +44,13 @@ public class CmdQuest extends CoreCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, List<String> args) {
-        super.execute(sender, args);
-        if(senderIsConsole) return;
-        if(sender == null) return;
-        if(args.size() > 1) return;
+    public void perform() throws MassiveException {
+        if (!(sender instanceof Player)) return;
         MPlayer player = MPlayer.get(sender);
         QuestProfile questProfile = player.getQuestProfile();
         List<QuestPath> unlockedQuests = questProfile.getUnlockedQuests();
         List<QuestPath> activeQuests = questProfile.getCurrentQuests();
-        List<String> completedQuests = questProfile.getCompletedQuests();
+        List<String> completedQuests = questProfile.getCompletedQuestsData();
         QuestListGUI questListGUI = new QuestListGUI(player, unlockedQuests, activeQuests, completedQuests);
         questListGUI.open();
     }

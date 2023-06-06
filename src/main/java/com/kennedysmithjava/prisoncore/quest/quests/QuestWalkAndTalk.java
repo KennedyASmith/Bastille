@@ -3,29 +3,28 @@ package com.kennedysmithjava.prisoncore.quest.quests;
 import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.npc.Skin;
+import com.kennedysmithjava.prisoncore.npc.SkinManager;
 import com.kennedysmithjava.prisoncore.quest.Quest;
 import com.kennedysmithjava.prisoncore.quest.QuestPath;
 import com.kennedysmithjava.prisoncore.quest.region.QuestCylindricalRegion;
 import com.kennedysmithjava.prisoncore.quest.region.QuestRegion;
 import com.kennedysmithjava.prisoncore.util.regions.Offset;
-import com.massivecraft.massivecore.ps.PS;
 import net.citizensnpcs.api.ai.Navigator;
-import net.citizensnpcs.api.event.SpawnReason;
 import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.npc.NPCRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class QuestWalkAndTalk extends Quest {
 
-    private final PS origin;
+    private final Location origin;
     private final List<Offset> locations;
     private final List<String> dialogue;
     private final long messageDelay;
@@ -33,36 +32,53 @@ public class QuestWalkAndTalk extends Quest {
     private final Skin npcSkin;
     private boolean deactivated;
 
-    private int npcID;
+    private NPC npc;
+
+    private Entity entity;
+
+    private final boolean despawnAfterDone;
 
 
-    public QuestWalkAndTalk(PS origin,
+    public QuestWalkAndTalk(MPlayer player, Location origin,
                             List<Offset> locations,
                             List<String> dialogue,
+                            boolean despawnAfterDone,
                             long messageDelay,
                             String npcName,
-                            Skin npcSkin,
-                            int npcID
+                            Skin npcSkin
                      ){
-        setProgress(0);
-        this.origin = origin;
+        super(player);
+        this.origin = origin.clone();
         this.locations = locations;
         this.dialogue = dialogue;
+        this.despawnAfterDone = despawnAfterDone;
         this.messageDelay = messageDelay;
         this.npcName = npcName;
         this.npcSkin = npcSkin;
         this.deactivated = false;
-        this.npcID = npcID;
+        this.npc = PrisonCore.getNonPersistNPCRegistry().createNPC(EntityType.PLAYER, npcName);
     }
 
-    public QuestWalkAndTalk(PS origin,
+    public QuestWalkAndTalk(MPlayer player, Location origin,
                             List<Offset> locations,
                             List<String> dialogue,
+                            boolean despawnAfterDone,
                             long messageDelay,
                             String npcName,
-                            Skin npcSkin
+                            Skin npcSkin,
+                            NPC npc
     ){
-        this(origin, locations, dialogue, messageDelay, npcName, npcSkin, getUniqueID());
+        super(player);
+        this.origin = origin.clone();
+        this.locations = locations;
+        this.dialogue = dialogue;
+        this.despawnAfterDone = despawnAfterDone;
+        this.messageDelay = messageDelay;
+        this.npcName = npcName;
+        this.npcSkin = npcSkin;
+        this.deactivated = false;
+        this.npc = npc;
+        this.entity = npc.getEntity();
     }
 
     @Override
@@ -76,42 +92,29 @@ public class QuestWalkAndTalk extends Quest {
     }
 
     @Override
-    public void continueQuest(MPlayer player, QuestPath thisPath) {
+    public void continueQuest(int progress, QuestPath path) {
+        if(npc == null) Bukkit.broadcastMessage("NPC IS NULL");
         deactivated = false;
-        int progress = getProgress();
         if(progress == locations.size()){
-            completeQuest(player);
+            completeThisQuest();
             return;
         }
-        NPC npc;
 
-        NPCRegistry registry = PrisonCore.getNonPersistNPCRegistry();
-
-        if(progress != 0){
-            npc = registry.getById(npcID);
-            if(npc == null) npc = registry.createNPC(EntityType.PLAYER, npcName + "-" + player.getName());
-        }else{
-            npc = registry.createNPC(EntityType.PLAYER, npcName + "-" + player.getName());
+        if(entity == null){
+            spawnNPC(progress);
         }
-
-        npcID = npc.getId();
-
-        if(!npc.isSpawned()) spawnNPC(progress, npc);
-
-        runDialogue(thisPath, player, PS.asBukkitLocation(origin), npc, progress);
+        runDialogue(path, origin, progress);
     }
 
-    private void spawnNPC(int progress, NPC npc){
-        Location origin = PS.asBukkitLocation(this.origin);
+    private void spawnNPC(int progress){
         Location spawn = locations.get(progress).getFrom(origin);
         Location cloned = spawn.clone().add(0.5, 0, 0.5);
-        Bukkit.broadcastMessage("Spawning: " + cloned);
-        npc.spawn(cloned, SpawnReason.CREATE);
+        npc.spawn(cloned);
         npc.setProtected(true);
-        //SkinManager.skin(npc, npcName, npcSkin, 10);
-        Bukkit.broadcastMessage("Spawned NPC");
+        SkinManager.skin(npc, npcName, npcSkin, 10);
+        entity = npc.getEntity();
     }
-    private void runDialogue(QuestPath path, MPlayer player, Location origin, NPC npc, int progress){
+    private void runDialogue(QuestPath path, Location origin, int progress){
         Location target = locations.get(progress).getFrom(origin);
         final AtomicBoolean notBegunNavigating = new AtomicBoolean(true);
         AtomicReference<Navigator> navigator = new AtomicReference<>();
@@ -123,8 +126,6 @@ public class QuestWalkAndTalk extends Quest {
                         navigator.set(npc.getNavigator());
                         navigator.get().setTarget(target);
                         notBegunNavigating.set(false);
-                    }else{
-                        Bukkit.broadcastMessage("NPC Hasn't Spawned Yet");
                     }
                     return;
                 }
@@ -138,8 +139,13 @@ public class QuestWalkAndTalk extends Quest {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        incrementProgress();
-                        continueQuest(player, path);
+                        if(player.getPlayer() != null){
+                            incrementProgress();
+                            continueQuest( progress + 1, path);
+                        }else{
+                            deactivated = true;
+                            this.cancel();
+                        }
                     }
                 }.runTaskLater(PrisonCore.get(), messageDelay);
 
@@ -149,33 +155,32 @@ public class QuestWalkAndTalk extends Quest {
     }
 
     @Override
-    public void onDeactivateQuest(MPlayer player) {
-        NPCRegistry registry = PrisonCore.getNonPersistNPCRegistry();
-        NPC npc = registry.getById(npcID);
+    public void onDeactivateQuest(int questProgress) {
         if(npc == null) return;
-        if(!npc.isSpawned()) return;
-        npc.despawn();
-        registry.deregister(npc);
+        if(npc.isSpawned()) npc.despawn();
+        npc.destroy();
+        deactivated = true;
+        Bukkit.broadcastMessage("Deactivated quest");
+    }
+
+    @Override
+    public void onComplete() {
+        if(despawnAfterDone){
+            if(npc == null) return;
+            if(npc.isSpawned()) npc.despawn();
+            npc.destroy();
+        }
         deactivated = true;
     }
 
     @Override
-    public void onComplete(MPlayer player) {
-        NPCRegistry registry = PrisonCore.getNonPersistNPCRegistry();
-        NPC npc = registry.getById(npcID);
-        if(npc == null) return;
-        if(!npc.isSpawned()) return;
-        npc.despawn();
-        registry.deregister(npc);
-    }
-
-    @Override
-    public QuestRegion getRegion() {
-        Offset offset = locations.get(getProgress());
+    public QuestRegion getRegion(int progress) {
+        if(progress > locations.size() - 1) return null;
+        Offset offset = locations.get(progress);
         QuestCylindricalRegion region = null;
         if(offset != null){
             region = new QuestCylindricalRegion(
-                    offset.getFrom(PS.asBukkitLocation(origin)),
+                    offset.getFrom(origin),
                     3.0,
                     2
             );
@@ -184,14 +189,13 @@ public class QuestWalkAndTalk extends Quest {
     }
 
     @Override
-    public void onEnterRegion(MPlayer player) {
+    public void onEnterRegion() {
 
     }
 
-    private static int getUniqueID(){
-        AtomicInteger count = new AtomicInteger();
-        PrisonCore.getNonPersistNPCRegistry().sorted().forEach(npc -> count.getAndIncrement());
-        return count.get() + 1;
+    public NPC getNpc() {
+        return npc;
     }
+
 }
 

@@ -7,18 +7,12 @@ import com.kennedysmithjava.prisoncore.quest.QuestReward;
 import com.kennedysmithjava.prisoncore.quest.region.QuestRegion;
 
 import java.util.List;
-import java.util.Set;
 
+/*
 public class QuestNavigateArea extends Quest {
 
     QuestRegion region;
 
-    /**
-     * Constructs a new Quest with the specified progress and completion status.
-     *
-     * @param progress       the progress of the quest
-     * @param questCompleted the completion status of the quest
-     */
     public QuestNavigateArea(QuestRegion region, List<QuestReward> rewards, int progress) {
         super(progress, rewards);
         this.region = region;
@@ -60,7 +54,8 @@ public class QuestNavigateArea extends Quest {
 
     @Override
     public void onEnterRegion(MPlayer player) {
-        this.completeQuest(player);
+        this.completeThisQuest(player);
     }
 
 }
+*/

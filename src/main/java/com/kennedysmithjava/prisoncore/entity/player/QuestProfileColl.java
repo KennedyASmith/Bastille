@@ -25,7 +25,7 @@ public class QuestProfileColl extends Coll<QuestProfile> {
                 return profile;
             }
         }
-        QuestProfile questProfile = new QuestProfile(uuid.toString());
+        QuestProfile questProfile = new QuestProfile();
         QuestProfileColl.get().attach(questProfile, uuid.toString());
         return questProfile;
 

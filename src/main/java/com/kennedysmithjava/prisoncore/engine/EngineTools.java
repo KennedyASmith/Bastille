@@ -125,6 +125,7 @@ public class EngineTools implements Listener {
         p.setDurability(p.getDurability()-1);
         Pickaxe.addToLoreUpdateQueue(p, p.getItem());
         fulfiller.handleEventReturn(event);
+
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)

@@ -6,7 +6,7 @@ import com.kennedysmithjava.prisoncore.engine.EngineLoadingScreen;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayerColl;
 //import com.kennedysmithjava.prisoncore.quest.eventGroup.IntroductionTutorial;
-import com.kennedysmithjava.prisoncore.quest.paths._QPIntroduction;
+import com.kennedysmithjava.prisoncore.quest.paths.PathIntroduction;
 import com.massivecraft.massivecore.ps.PS;
 import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
@@ -136,7 +136,7 @@ public class NPCLimboTrait extends Trait {
                 if(player == null) return;
                 player.teleport(mPlayer.getMine().getSpawnPoint());
                 EngineLoadingScreen.removeLoadingScreen(player.getPlayer(), 0);
-                _QPIntroduction introductionQuest = new _QPIntroduction(PS.valueOf(mPlayer.getMine().getOrigin()));
+                PathIntroduction introductionQuest = new PathIntroduction();
                 mPlayer.getQuestProfile().setActiveQuestPath(introductionQuest);
 
             }
