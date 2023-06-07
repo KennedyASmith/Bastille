@@ -1,6 +1,5 @@
 package com.kennedysmithjava.prisoncore.quest.paths;
 
-import com.kennedysmithjava.prisoncore.cmd.type.TypePickaxeType;
 import com.kennedysmithjava.prisoncore.entity.mines.WarrenConf;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.tools.PickaxeType;

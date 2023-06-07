@@ -8,9 +8,9 @@ import com.kennedysmithjava.prisoncore.cmd.type.TypeMobility;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.Floor;
 import com.kennedysmithjava.prisoncore.event.EventMineChanged;
 import com.kennedysmithjava.prisoncore.blockhandler.BlockWrapper;
-import com.kennedysmithjava.prisoncore.npc.NPCArchitect;
-import com.kennedysmithjava.prisoncore.npc.NPCCoinCollector;
-import com.kennedysmithjava.prisoncore.npc.NPCWarren;
+import com.kennedysmithjava.prisoncore.npc.mine.NPCArchitect;
+import com.kennedysmithjava.prisoncore.npc.mine.NPCCoinCollector;
+import com.kennedysmithjava.prisoncore.npc.mine.NPCWarren;
 import com.kennedysmithjava.prisoncore.util.*;
 import com.kennedysmithjava.prisoncore.util.regions.LazyRegion;
 import com.massivecraft.massivecore.Named;
@@ -111,6 +111,7 @@ public class  Mine extends Entity<Mine> implements Named {
     private PS enchantTableLocation;
     private PS beaconLocation;
     private PS chestLocation;
+    private PS anvilLocation;
     private PS portalMaxLocation;
     private PS portalMinLocation;
 
@@ -416,7 +417,6 @@ public class  Mine extends Entity<Mine> implements Named {
     }
 
     public void setLocations(Floor floor){
-        //TODO: Set building locations
         this.setSpawnPoint(floor.getSpawn().getFrom(getOrigin()));
         this.setArchitectLocation(floor.getArchitectNPC().getFrom(getOrigin()));
         this.setResearcherLocation(floor.getResearcherNPC().getFrom(getOrigin()));
@@ -424,8 +424,10 @@ public class  Mine extends Entity<Mine> implements Named {
         this.setEnchantTableLocation(floor.getEnchantTable().getFrom(getOrigin()));
         this.setBeaconLocation(floor.getBeacon().getFrom(getOrigin()));
         this.setChestLocation(floor.getChest().getFrom(getOrigin()));
+        this.setAnvilLocation(floor.getAnvil().getFrom(getOrigin()));
         this.setPortalMaxLocation(floor.getPortalMax().getFrom(getOrigin()));
         this.setPortalMinLocation(floor.getPortalMin().getFrom(getOrigin()));
+        this.changed();
     }
 
     /**
@@ -521,6 +523,7 @@ public class  Mine extends Entity<Mine> implements Named {
         buildChest(true);
         buildEnchantTable(true);
         buildPortal(true);
+        buildAnvil(true);
     }
 
     public void buildBuildings(){
@@ -528,6 +531,7 @@ public class  Mine extends Entity<Mine> implements Named {
         buildChest(false);
         buildEnchantTable(false);
         buildPortal(false);
+        buildAnvil(false);
     }
 
     public boolean hasBuilding(BuildingType buildingType){
@@ -575,6 +579,11 @@ public class  Mine extends Entity<Mine> implements Named {
         Material blockMaterial = Material.LEGACY_STATIONARY_WATER;
         if(destroy) blockMaterial = Material.AIR;
         MiscUtil.blockFill(getPortalMinLocation(), getPortalMaxLocation(), blockMaterial);
+    }
+
+    public void buildAnvil(boolean destroy){
+        if(!hasBuilding(BuildingType.ANVIL)) return;
+        setBlock(getFloor().getAnvilBlock(), getAnvilLocation(), destroy);
     }
 
     private void setBlock(BlockWrapper material, Location location, boolean destroy){
@@ -891,27 +900,26 @@ public class  Mine extends Entity<Mine> implements Named {
 
     public void setBeaconLocation(PS beaconLocation) {
         this.beaconLocation = beaconLocation;
-        this.changed();
     }
 
     public void setChestLocation(PS chestLocation) {
         this.chestLocation = chestLocation;
-        this.changed();
+    }
+
+    public void setAnvilLocation(PS anvilLocation) {
+        this.anvilLocation = anvilLocation;
     }
 
     public void setEnchantTableLocation(PS enchantTableLocation) {
         this.enchantTableLocation = enchantTableLocation;
-        this.changed();
     }
 
     public void setPortalMaxLocation(PS portalMaxLocation) {
         this.portalMaxLocation = portalMaxLocation;
-        this.changed();
     }
 
     public void setPortalMinLocation(PS portalMinLocation) {
         this.portalMinLocation = portalMinLocation;
-        this.changed();
     }
 
     public void setPortalMaxLocation(Location portalMaxLocation) {
@@ -928,6 +936,10 @@ public class  Mine extends Entity<Mine> implements Named {
 
     public void setChestLocation(Location chestLocation) {
         this.setChestLocation(PS.valueOf(chestLocation));
+    }
+
+    public void setAnvilLocation(Location anvilLocation) {
+        this.setAnvilLocation(PS.valueOf(anvilLocation));
     }
 
     public void setEnchantTableLocation(Location enchantTableLocation) {
@@ -951,6 +963,10 @@ public class  Mine extends Entity<Mine> implements Named {
     }
     public Location getPortalMinLocation() {
         return new Location(MinesWorldManager.get().getWorld(), portalMinLocation.getLocationX(), portalMinLocation.getLocationY(), portalMinLocation.getLocationZ());
+    }
+
+    public Location getAnvilLocation() {
+        return new Location(MinesWorldManager.get().getWorld(), anvilLocation.getLocationX(), anvilLocation.getLocationY(), anvilLocation.getLocationZ());
     }
 
     // -------------------------------------------- //

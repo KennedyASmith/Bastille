@@ -5,7 +5,8 @@ public enum BuildingType {
     ENCHANT_TABLE,
     BEACON,
     PORTAL,
-    CHEST
+    CHEST,
+    ANVIL
 
 
 }

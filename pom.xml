@@ -186,5 +186,12 @@
             <version>2.3.1</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.drtshock</groupId>
+            <artifactId>playervaults</artifactId>
+            <version>LATEST</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/libs/PlayerVaultsX.jar</systemPath>
+        </dependency>
     </dependencies>
 </project>

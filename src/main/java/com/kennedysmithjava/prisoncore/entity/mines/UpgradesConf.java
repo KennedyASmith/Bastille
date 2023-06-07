@@ -82,11 +82,11 @@ public class UpgradesConf extends Entity<UpgradesConf>
                             Material.HOPPER,
                             MUtil.list(new ActionOpenGUI("COLLECTION")), MUtil.list(UpgradeName.CATEGORY_COLLECTION.get())),
                     new GUIButton(
-                            "&6Storage",
-                            33, MUtil.list("&7[&eCATEGORY]", "", "&7Unlock personal storage for your mine!"),
+                            "&6Fast Travel",
+                            33, MUtil.list("&7[&eCATEGORY]", "", "&7Unlock new ways to travel!"),
                             MUtil.list("&7[&cLOCKED&7]"),
-                            Material.CHEST,
-                            MUtil.list(new ActionOpenGUI("STORAGE")), MUtil.list(UpgradeName.CATEGORY_STORAGE.get())),
+                            Material.FEATHER,
+                            MUtil.list(new ActionOpenGUI("FAST_TRAVEL")), MUtil.list(UpgradeName.CATEGORY_FAST_TRAVEL.get())),
                     new GUIButton(
                             "&6Robotics",
                             39, MUtil.list("&7[&eCATEGORY]", "", "&7Unlock upgrades for your mine's robots!"),
@@ -329,24 +329,25 @@ public class UpgradesConf extends Entity<UpgradesConf>
                             MUtil.list(new ActionMessage("&7You have unlocked an enchantment table!"), new ActionBuildingUnlock(BuildingType.ENCHANT_TABLE)),
                             MUtil.list(UpgradeName.BUILDING_ENCHANT_TABLE.get())),
                     new GUIButton(
-                            "&6Trash Can",
-                            13, MUtil.list("", "&e&lCOST", "&a⛃100.00", "&b✪10", "", "&7Unlock a trash can for your mine!"),
+                            "&6Storage Vault",
+                            13, MUtil.list("", "&e&lCOST", "&a⛃100.00", "&b✪10", "", "&7Unlock upgradable storage!"),
                             MUtil.list("&7[&cLOCKED&7]", "", "&7&lREQUIREMENTS","&7- &eCell &7level &a1", "&7- Player Life &b2"),
-                            Material.HOPPER,
-                            MUtil.list(), MUtil.list(UpgradeName.BUILDING_TRASH_CAN.get())),
+                            Material.CHEST,
+                            MUtil.list(new ActionMessage("&7You have unlocked storage!"), new ActionBuildingUnlock(BuildingType.CHEST)),
+                            MUtil.list(UpgradeName.BUILDING_STORAGE.get())),
                     new GUIButton(
                             "&6Anvil",
                             14, MUtil.list("&e&lCOST", "&a⛃1.0M", "&b✪200", "&7Build an anvil to edit your tools."),
                             MUtil.list("&7[&cLOCKED&7]", "", "&7&lREQUIREMENTS","&7- &eCell &7level &a4", "&7- Player Life &b5"),
                             Material.ANVIL,
-                            MUtil.list(new ActionMessage("&7You have unlocked an anvil!"), new ActionBuildingUnlock(BuildingType.CHEST)),
+                            MUtil.list(new ActionMessage("&7You have unlocked an anvil!"), new ActionBuildingUnlock(BuildingType.ANVIL)),
                             MUtil.list(UpgradeName.BUILDING_ANVIL.get())),
                     new GUIButton(
                             "&6Beacon",
                             15, MUtil.list("&e&lCOST", "&a⛃1.0B", "&b✪500", "&7Build a beacon to unlock potion boosts."),
-                            MUtil.list("&7[&cLOCKED&7]", "&7&lREQUIREMENTS","&7- &eCell &7level &a10", "&7- Player Life &b10"),
+                            MUtil.list("&7[&cLOCKED&7]", "", "&7&lREQUIREMENTS","&7- &eCell &7level &a10", "&7- Player Life &b10"),
                             Material.BEACON,
-                            MUtil.list(new ActionMessage("&7You have unlocked an anvil!"), new ActionBuildingUnlock(BuildingType.BEACON)),
+                            MUtil.list(new ActionMessage("&7You have unlocked a beacon!"), new ActionBuildingUnlock(BuildingType.BEACON)),
                             MUtil.list(UpgradeName.BUILDING_BEACON.get())),
                     new GUIButton(
                             "&6BACK",
@@ -356,19 +357,13 @@ public class UpgradesConf extends Entity<UpgradesConf>
                             MUtil.list(new ActionOpenGUI("MAIN")), MUtil.list())
             )),
 
-            "STORAGE", new UpgradeGUI("&4Mine Storage", 9 * 3, MUtil.list(
-                    new GUIButton(
-                            "&6Chest",
-                            13, MUtil.list("", "&7Unlock a storage chest"),
-                            MUtil.list("&7[&cLOCKED&7]"),
-                            Material.CHEST,
-                            MUtil.list(), MUtil.list("BUILDINGS_UNLOCKED")),
+            "FAST_TRAVEL", new UpgradeGUI("&4Fast Travel", 9 * 3, MUtil.list(
                     new GUIButton(
                             "&6BACK",
                             18, MUtil.list("", "&7Buildings"),
                             MUtil.list("&7[&cLOCKED&7]"),
                             Material.ARROW,
-                            MUtil.list(new ActionOpenGUI("BUILDINGS")), MUtil.list())
+                            MUtil.list(new ActionOpenGUI("FAST_TRAVEL")), MUtil.list())
             ))
     );
 

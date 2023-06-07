@@ -25,10 +25,11 @@ public class Floor {
     Offset enchantTable;
     Offset beacon;
     Offset chest;
+    Offset anvil;
     Offset portalMax;
     Offset portalMin;
 
-    public Floor(String displayName, Material icon, int materialData, Map<Integer, String> schematics, List<String> lore, List<Integer> compatibleWalls, String directory, Offset spawn, Offset mineCenter, Offset architectNPC, Offset researcherNPC, Offset collectorNPC, Offset enchantTable, Offset beacon, Offset chest, Offset portalMax, Offset portalMin) {
+    public Floor(String displayName, Material icon, int materialData, Map<Integer, String> schematics, List<String> lore, List<Integer> compatibleWalls, String directory, Offset spawn, Offset mineCenter, Offset architectNPC, Offset researcherNPC, Offset collectorNPC, Offset enchantTable, Offset beacon, Offset chest, Offset anvil, Offset portalMax, Offset portalMin) {
         this.displayName = displayName;
         this.icon = icon;
         this.materialData = materialData;
@@ -44,6 +45,7 @@ public class Floor {
         this.enchantTable = enchantTable;
         this.beacon = beacon;
         this.chest = chest;
+        this.anvil = anvil;
         this.portalMax = portalMax;
         this.portalMin = portalMin;
     }
@@ -127,6 +129,10 @@ public class Floor {
         return portalMin;
     }
 
+    public Offset getAnvil() {
+        return anvil;
+    }
+
     public BlockWrapper getEnchantTableBlock(){
         return new BlockWrapper(Material.ENCHANTING_TABLE);
     }
@@ -136,6 +142,9 @@ public class Floor {
     public BlockWrapper getChestBlock(){
         return new BlockWrapper(Material.CHEST);
     }
+    public BlockWrapper getAnvilBlock(){
+        return new BlockWrapper(Material.ANVIL);
+    }
 
     @Override
     public String toString() {
@@ -144,6 +153,9 @@ public class Floor {
                 ", icon=" + icon +
                 ", materialData=" + materialData +
                 ", schematics=" + schematics +
+                ", lore=" + lore +
+                ", compatibleWalls=" + compatibleWalls +
+                ", directory='" + directory + '\'' +
                 ", spawn=" + spawn +
                 ", mineCenter=" + mineCenter +
                 ", architectNPC=" + architectNPC +
@@ -152,11 +164,9 @@ public class Floor {
                 ", enchantTable=" + enchantTable +
                 ", beacon=" + beacon +
                 ", chest=" + chest +
+                ", anvil=" + anvil +
                 ", portalMax=" + portalMax +
                 ", portalMin=" + portalMin +
-                ", lore=" + lore +
-                ", compatibleWalls=" + compatibleWalls +
-                ", directory='" + directory + '\'' +
                 '}';
     }
 }

@@ -25,7 +25,9 @@ public class QuestProfile extends Entity<QuestProfile> {
     public List<String> unlockedQuestsData = new ArrayList<>();
     public List<String> completedQuestsData = new ArrayList<>();
 
+    //TODO: Remove
     public transient List<QuestPath> currentQuests = new ArrayList<>();
+
     public transient List<QuestPath> unlockedQuests = new ArrayList<>();
     public transient QuestPath activeQuestPath;
     public transient Quest activeQuest;

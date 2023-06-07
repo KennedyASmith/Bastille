@@ -1,7 +1,10 @@
-package com.kennedysmithjava.prisoncore.npc;
+package com.kennedysmithjava.prisoncore.npc.mine;
 
 import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.entity.mines.WarrenConf;
+import com.kennedysmithjava.prisoncore.npc.NPCWarrenTrait;
+import com.kennedysmithjava.prisoncore.npc.Skin;
+import com.kennedysmithjava.prisoncore.npc.mine.MineNPC;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.massivecraft.massivecore.util.MUtil;
 import net.citizensnpcs.api.npc.NPC;
