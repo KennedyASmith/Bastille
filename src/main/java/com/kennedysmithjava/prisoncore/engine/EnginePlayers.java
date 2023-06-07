@@ -4,6 +4,7 @@ import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.mines.MineColl;
 import com.kennedysmithjava.prisoncore.CooldownReason;
+import com.kennedysmithjava.prisoncore.quest.QuestPath;
 import com.massivecraft.massivecore.Engine;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -79,8 +80,16 @@ public class EnginePlayers extends Engine {
             if(!mine.npcsSpawned()) mine.spawnNPCs();
             if(!mine.hologramExists()) mine.createRegenHologram();
             int progress = mPlayer.getQuestProfile().activeQuestPathProgress;
-            mPlayer.getQuestProfile().getActiveQuestPath().activateCurrentQuest(mPlayer, progress);
-        }else{
+
+            // Get the quest path & assert it is non-null
+            QuestPath questPath = mPlayer.getQuestProfile().getActiveQuestPath();
+
+            // If a questPath exists for mplayer, then activate
+            if(questPath != null) {
+                questPath.activateCurrentQuest(mPlayer, progress);
+            }
+
+        } else{
             EngineLimbo.get().addToLimbo(mPlayer.getPlayer());
         }
     }
