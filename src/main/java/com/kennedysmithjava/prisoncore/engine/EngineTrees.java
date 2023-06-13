@@ -20,15 +20,36 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
+@SuppressWarnings("DataFlowIssue")
 public class EngineTrees extends Engine {
 
     public static EngineTrees i = new EngineTrees();
 
     public static EngineTrees get() {
         return i;
+    }
+
+
+    @Getter
+    public transient Map<Tree, Long> treeRegenerateTimes = new HashMap<>();
+
+
+    public transient Set<Material> treeCantBlockCache = new HashSet<>();
+
+    public void loadTreeMaterialCache() {
+        TreesConf.get().getTreeTemplates().forEach((s, template) ->
+                treeCantBlockCache.add(template.getBlockToReplaceWhenBroken().getMaterial()));
+
+        TreesConf.get().getTrees().forEach((twoDVector, tree) -> {
+            if(tree.isNeedsRegeneration()){
+                treeRegenerateTimes.put(tree, tree.getRegenerationTime());
+            }
+        });
     }
 
     /**
@@ -50,7 +71,7 @@ public class EngineTrees extends Engine {
         e.getBlock().setType(template.getBlockToReplaceWhenBroken().getMaterial());
         tree.changed();
         if (tree.getBlocksHit() >= template.getTimesNeededToReset())
-            fallTree(tree, template);
+            chopTree(tree, template);
     }
 
     public void pasteTree(Tree tree) {
@@ -70,7 +91,7 @@ public class EngineTrees extends Engine {
         TreesConf.get().changed();
     }
 
-    public void fallTree(Tree tree, TreeTemplate template) {
+    public void chopTree(Tree tree, TreeTemplate template) {
         Offset offset = template.getOffset();
         Location offsetLocation = offset.getFrom(tree.getSpawnPoint().asBukkitLocation());
         FAWEPaster.paste("Schematics" + File.separator + "Trees" + File.separator + template.getSchematicName(),
@@ -85,21 +106,11 @@ public class EngineTrees extends Engine {
         tree.getSpawnPoint().asBukkitLocation().getBlock().setType(template.getSaplingBlock().getMaterial());
         //ToDo Make this random number!
         tree.setRegenerationTime(25 * 1000);
+        tree.setNeedsRegeneration(true);
         treeRegenerateTimes.put(tree, System.currentTimeMillis());
     }
 
-    @Getter
-    public transient Map<Tree, Long> treeRegenerateTimes = new HashMap<>();
 
-
-    public transient Set<Material> treeCantBlockCache = new HashSet<>();
-
-    public void loadTreeMaterialCache() throws IOException {
-        TreesConf.get().getTreeTemplates().forEach((s, template) -> {
-            treeCantBlockCache.add(template.getBlockToReplaceWhenBroken().getMaterial());
-        });
-
-    }
 
 
     public void spawnNewTree(TreeTemplate template, Block block) {
@@ -107,7 +118,7 @@ public class EngineTrees extends Engine {
 
         // Creates the tree object
         TwoDVector twoDVector = new TwoDVector(storedLocation.getWorld().getName(), storedLocation.getBlockX(), storedLocation.getBlockZ());
-        Tree tree = new Tree(template.getName(), 0, PS.valueOf(storedLocation), 0);
+        Tree tree = new Tree(template.getName(), 0, PS.valueOf(storedLocation), 0, false);
 
         Offset offset = template.getOffset();
         Location offsetLocation = offset.getFrom(block.getLocation());
@@ -131,9 +142,11 @@ public class EngineTrees extends Engine {
 
     public Tree getTree(Block block) {
         TwoDVector twoDVector = new TwoDVector(block.getWorld().getName(), block.getLocation().getBlockX(), block.getLocation().getBlockZ());
-
-        for (TwoDVector n : TreesConf.get().getTrees().keySet()) {
-            if (n.equals(twoDVector)) return TreesConf.get().getTrees().get(n);
+        Map<TwoDVector, Tree> trees = TreesConf.get().getTrees();
+        for (TwoDVector n : trees.keySet()) {
+            if (n.equals(twoDVector)){
+                return trees.get(n);
+            }
         }
 
         return null;

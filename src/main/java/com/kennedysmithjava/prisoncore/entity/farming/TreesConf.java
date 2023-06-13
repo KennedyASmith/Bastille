@@ -9,9 +9,9 @@ import com.massivecraft.massivecore.collections.MassiveMap;
 import com.massivecraft.massivecore.command.editor.annotation.EditorName;
 import com.massivecraft.massivecore.store.Entity;
 import com.massivecraft.massivecore.util.MUtil;
-import lombok.Getter;
 import org.bukkit.Material;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @EditorName("config")
@@ -34,7 +34,9 @@ public class TreesConf extends Entity<TreesConf> {
         return this;
     }
 
-    public Map<TwoDVector, Tree> trees = new MassiveMap<>();
+    public Map<String, Tree> trees = new MassiveMap<>();
+
+    public transient Map<TwoDVector, Tree> keyTrees = new HashMap<>();
 
     public Map<String, TreeTemplate> treeTemplates = MUtil.map(
             "acacia", new TreeTemplate("acacia", "acacaia_schematic.schematic",
@@ -45,10 +47,6 @@ public class TreesConf extends Entity<TreesConf> {
                     new BlockWrapper(Material.ACACIA_SAPLING),
                     new Offset(2, 0, 2))
     );
-
-    private TreeTemplate getTreeTemplate(String name) {
-        return treeTemplates.get(name);
-    }
 
 
     public Map<String, TreeTemplate> getTreeTemplates() {
@@ -61,15 +59,23 @@ public class TreesConf extends Entity<TreesConf> {
     }
 
     public Map<TwoDVector, Tree> getTrees() {
+        if(keyTrees.isEmpty()){
+            trees.forEach((s, tree) -> keyTrees.put(TwoDVector.parseFromString(s), tree));
+        }
+        return keyTrees;
+    }
+
+    public Map<String, Tree> getTreesRaw() {
         return trees;
     }
 
     public void addTree(TwoDVector vector, Tree tree){
-        trees.put(vector, tree);
+        trees.put(vector.toString(), tree);
+        keyTrees.put(vector, tree);
         this.changed();
     }
 
-    public void setTrees(Map<TwoDVector, Tree> trees) {
+    public void setTrees(Map<String, Tree> trees) {
         this.trees = trees;
         this.changed();
     }

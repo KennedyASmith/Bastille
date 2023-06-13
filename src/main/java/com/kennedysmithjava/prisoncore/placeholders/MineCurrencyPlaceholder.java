@@ -1,17 +1,18 @@
-package com.kennedysmithjava.prisoncore.eco;
+package com.kennedysmithjava.prisoncore.placeholders;
 
 import com.kennedysmithjava.prisoncore.PrisonCore;
+import com.kennedysmithjava.prisoncore.eco.CurrencyType;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.util.Color;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
 
+@SuppressWarnings("NullableProblems")
 public class MineCurrencyPlaceholder extends PlaceholderExpansion {
 
-    private PrisonCore plugin;
+    private final PrisonCore plugin;
 
     /**
      * Since we register the expansion inside our own plugin, we
@@ -63,13 +64,10 @@ public class MineCurrencyPlaceholder extends PlaceholderExpansion {
             MPlayer mPlayer = MPlayer.get(player);
             if(mPlayer == null) return Color.get("&7--/--");
 
-            switch(type){
-                case GEMS:
-                case RESEARCH:
-                    return String.valueOf(mPlayer.getBalance(type).intValue());
-                default:
-                    return new DecimalFormat("#.##").format(mPlayer.getBalance(type));
-            }
+            return switch (type) {
+                case GEMS, RESEARCH -> String.valueOf(mPlayer.getBalance(type).intValue());
+                default -> new DecimalFormat("#.##").format(mPlayer.getBalance(type));
+            };
 
         }catch (IllegalArgumentException e){
             return "Unknown CurrencyType '+" + currencyType + "'";

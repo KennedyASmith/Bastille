@@ -3,7 +3,7 @@ package com.kennedysmithjava.prisoncore;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.kennedysmithjava.prisoncore.cmd.PouchCommand;
-import com.kennedysmithjava.prisoncore.eco.MineCurrencyPlaceholder;
+import com.kennedysmithjava.prisoncore.placeholders.MineCurrencyPlaceholder;
 import com.kennedysmithjava.prisoncore.engine.EngineTools;
 import com.kennedysmithjava.prisoncore.engine.EngineTrees;
 import com.kennedysmithjava.prisoncore.entity.MConfColl;
@@ -26,6 +26,7 @@ import com.kennedysmithjava.prisoncore.event.EventNewMine;
 import com.kennedysmithjava.prisoncore.npc.NPCBlacksmithTrait;
 import com.kennedysmithjava.prisoncore.npc.NPCLimboTrait;
 import com.kennedysmithjava.prisoncore.npc.NPCLumberjackTrait;
+import com.kennedysmithjava.prisoncore.placeholders.TreeHologramPlaceholder;
 import com.kennedysmithjava.prisoncore.quest.*;
 import com.kennedysmithjava.prisoncore.quest.paths.PathIntroduction;
 import com.kennedysmithjava.prisoncore.tools.Pickaxe;
@@ -33,6 +34,7 @@ import com.kennedysmithjava.prisoncore.tools.ability.*;
 import com.kennedysmithjava.prisoncore.tools.enchantment.*;
 import com.kennedysmithjava.prisoncore.tools.pouch.DatalessPouchable;
 import com.kennedysmithjava.prisoncore.util.*;
+import com.kennedysmithjava.prisoncore.placeholders.MineCountdownPlaceholder;
 import com.kennedysmithjava.prisoncore.util.regions.MinesWorldManager;
 import com.kennedysmithjava.prisoncore.util.regions.VoidGenerator;
 import com.massivecraft.massivecore.MassivePlugin;
@@ -113,6 +115,7 @@ public class PrisonCore extends MassivePlugin {
         this.registerGlow(); //Register glow enchantment
 
         new MineCountdownPlaceholder(this).register();
+        new TreeHologramPlaceholder(this).register();
         new MineCurrencyPlaceholder(this).register();
 
         ConfigurationSerialization.registerClass(DatalessPouchable.class);

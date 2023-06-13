@@ -7,9 +7,10 @@ import com.massivecraft.massivecore.ModuloRepeatTask;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class TaskRegrowTrees extends ModuloRepeatTask {
 
-    private static TaskRegrowTrees i = new TaskRegrowTrees();
+    private static final TaskRegrowTrees i = new TaskRegrowTrees();
 
     public static TaskRegrowTrees get() {
         return i;
@@ -27,6 +28,7 @@ public class TaskRegrowTrees extends ModuloRepeatTask {
             if (tree.getRegenerationTime() == 0) return;
             if (System.currentTimeMillis() > tree.getRegenerationTime() + time) {
                 EngineTrees.get().pasteTree(tree);
+                tree.setNeedsRegeneration(false);
                 toRemove.add(tree);
             }
         });

@@ -6,6 +6,7 @@ import com.massivecraft.massivecore.store.EntityInternal;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+@SuppressWarnings("Lombok")
 @AllArgsConstructor
 @Data
 public class Tree extends EntityInternal<TreesConf> {
@@ -21,5 +22,7 @@ public class Tree extends EntityInternal<TreesConf> {
 
     // Regeneration time
     private transient long regenerationTime;
+
+    private boolean needsRegeneration;
 
 }
