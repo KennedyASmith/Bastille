@@ -2,7 +2,7 @@ package com.kennedysmithjava.prisoncore.entity.player;
 
 import com.kennedysmithjava.prisoncore.PrisonParticipator;
 import com.kennedysmithjava.prisoncore.eco.CurrencyType;
-import com.kennedysmithjava.prisoncore.CooldownReason;
+import com.kennedysmithjava.prisoncore.util.CooldownReason;
 import com.kennedysmithjava.prisoncore.engine.EngineCooldown;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.mines.MineColl;
@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator {
 
     // -------------------------------------------- //
@@ -63,7 +64,7 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
      * This method is used to display how
      * a player has of each currency.
      *
-     * @return list of currencies.
+     * @return map of currencies.
      */
     public Map<CurrencyType, Double> getEconomy() {
         return economy;
@@ -155,7 +156,6 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
      * <p>
      * Not sure how this will be applicable but...
      *
-     * @param times
      */
     public void downgrade(int times) {
         setLevel(level - times);

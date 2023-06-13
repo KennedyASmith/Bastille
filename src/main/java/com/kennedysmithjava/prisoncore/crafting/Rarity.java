@@ -1,31 +1,44 @@
 package com.kennedysmithjava.prisoncore.crafting;
 
-import lombok.Getter;
-
 public enum Rarity {
-    COMMON("&fCommon", 1),
-    UNCOMMON("&aUnCommon", 2),
-    RARE("&9Rare", 3),
-    EPIC("&5Epic", 4),
-    LEGENDARY("&6Legendary", 5),
+    COMMON("&fCommon", 1, 0.8),
+    UNCOMMON("&aUncommon",2,  0.4),
+    RARE("&9Rare", 3, 0.2),
+    EPIC("&5Epic", 4, 0.01),
+    LEGENDARY("&6Legendary", 5, 0.001),
 
-    MYTHIC("&b&lMYTHIC", 10);
+    MYTHIC("&b&lMythic", 10, 0.025);
 
 
     final String displayName;
-    @Getter
-    final int rarity;
 
-    Rarity(String displayName, int rarity) {
+    final int rarityInt;
+
+    final double rarityDouble;
+
+    Rarity(String displayName, int rarity, double doubleRarity) {
         this.displayName = displayName;
-        this.rarity = rarity;
+        this.rarityInt = rarity;
+        this.rarityDouble = doubleRarity;
     }
 
     public static Rarity getFromRarityInt(int rarity) {
         for (Rarity value : Rarity.values()) {
-            if (value.getRarity() == rarity) return value;
+            if (value.getRarityInt() == rarity) return value;
         }
         return Rarity.COMMON;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public double getRarityInt() {
+        return rarityInt;
+    }
+
+    public double getRarityDouble() {
+        return rarityDouble;
     }
 
     @Override

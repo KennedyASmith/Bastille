@@ -8,6 +8,7 @@ import com.kennedysmithjava.prisoncore.engine.EngineTools;
 import com.kennedysmithjava.prisoncore.engine.EngineTrees;
 import com.kennedysmithjava.prisoncore.entity.MConfColl;
 import com.kennedysmithjava.prisoncore.entity.farming.FarmingConfColl;
+import com.kennedysmithjava.prisoncore.entity.farming.FishingConfColl;
 import com.kennedysmithjava.prisoncore.entity.farming.TreesConfColl;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.Floor;
 import com.kennedysmithjava.prisoncore.entity.npcs.FarmerConfColl;
@@ -33,6 +34,7 @@ import com.kennedysmithjava.prisoncore.tools.enchantment.*;
 import com.kennedysmithjava.prisoncore.tools.pouch.DatalessPouchable;
 import com.kennedysmithjava.prisoncore.util.*;
 import com.kennedysmithjava.prisoncore.util.regions.MinesWorldManager;
+import com.kennedysmithjava.prisoncore.util.regions.VoidGenerator;
 import com.massivecraft.massivecore.MassivePlugin;
 import com.massivecraft.massivecore.collections.MassiveList;
 import com.massivecraft.massivecore.util.MUtil;
@@ -53,6 +55,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.UUID;
 
+@SuppressWarnings("unused")
 public class PrisonCore extends MassivePlugin {
 
     // -------------------------------------------- //
@@ -73,7 +76,6 @@ public class PrisonCore extends MassivePlugin {
     //QuestManager questManager;
     private ProtocolManager protocolManager = null;
     public static NPCRegistry nonPersistNPCRegistry;
-    private final static String registryName = "MinesNPC";
 
     // -------------------------------------------- //
     // OVERRIDE
@@ -179,7 +181,8 @@ public class PrisonCore extends MassivePlugin {
                 FarmingConfColl.class,
                 FarmerConfColl.class,
                 FarmerGuiConfColl.class,
-                TreesConfColl.class
+                TreesConfColl.class,
+                FishingConfColl.class
         );
     }
 
@@ -194,6 +197,7 @@ public class PrisonCore extends MassivePlugin {
     }
 
 
+    @SuppressWarnings("NullableProblems")
     @Override
     public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
         return new VoidGenerator();
@@ -202,11 +206,6 @@ public class PrisonCore extends MassivePlugin {
     // -------------------------------------------- //
     // STATIC METHODS
     // -------------------------------------------- //
-
-
-    /*public QuestManager getQuestManager() {
-        return questManager;
-    }*/
 
     public static NPCRegistry getNonPersistNPCRegistry() {
         return nonPersistNPCRegistry;
@@ -276,21 +275,15 @@ public class PrisonCore extends MassivePlugin {
         mine.generateMobilityArea(mine.getWidth(), mine.getWidth());
 
         //FIRST PASTE FLOOR
-        FAWEPaster.paste(floor.getSchematic(mine.getWidth()), world.getName(), minCorner, false, new Runnable() {
-            @Override
-            public void run() {
-                //THEN PLACE WALL
-                FAWEPaster.paste(wall.getSchematic(), world.getName(), minCorner, false, new Runnable() {
-                    @Override
-                    public void run() {
-                        onComplete.run();
-                        mine.createRegenCountdown();
-                        mine.regen();
-                        mine.placeLever();
-                        Bukkit.getServer().getPluginManager().callEvent(new EventNewMine(player, mine));
-                    }
-                });
-            }
+        FAWEPaster.paste(floor.getSchematic(mine.getWidth()), world.getName(), minCorner, false, () -> {
+            //THEN PLACE WALL
+            FAWEPaster.paste(wall.getSchematic(), world.getName(), minCorner, false, () -> {
+                onComplete.run();
+                mine.createRegenCountdown();
+                mine.regen();
+                mine.placeLever();
+                Bukkit.getServer().getPluginManager().callEvent(new EventNewMine(player, mine));
+            });
         });
     }
 

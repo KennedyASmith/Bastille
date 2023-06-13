@@ -3,7 +3,7 @@ package com.kennedysmithjava.prisoncore.engine;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.mines.MineColl;
-import com.kennedysmithjava.prisoncore.CooldownReason;
+import com.kennedysmithjava.prisoncore.util.CooldownReason;
 import com.kennedysmithjava.prisoncore.quest.QuestPath;
 import com.massivecraft.massivecore.Engine;
 import org.bukkit.Material;
@@ -46,6 +46,7 @@ public class EnginePlayers extends Engine {
     public void onPlayerLeverClick(PlayerInteractEvent event) {
         if(!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
         Block block = event.getClickedBlock();
+        if(block == null) return;
         if(!block.getType().equals(Material.LEVER)) return;
         Mine mine = MineColl.get().getByLocation(block);
         if(mine != null) {

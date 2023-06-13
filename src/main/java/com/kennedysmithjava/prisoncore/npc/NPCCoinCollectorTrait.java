@@ -1,6 +1,6 @@
 package com.kennedysmithjava.prisoncore.npc;
 
-import com.kennedysmithjava.prisoncore.CooldownReason;
+import com.kennedysmithjava.prisoncore.util.CooldownReason;
 import com.kennedysmithjava.prisoncore.eco.WorthUtil;
 import com.kennedysmithjava.prisoncore.engine.EngineCooldown;
 import com.kennedysmithjava.prisoncore.entity.mines.CoinCollectorConf;
@@ -295,8 +295,10 @@ public class NPCCoinCollectorTrait extends Trait {
 
     private void doAutoSell() {
         Location mineCenter = mine.getMineCenter();
-        mineCenter.getWorld().getPlayers()
-                .stream()
+        World world = mineCenter.getWorld();
+        if(world == null) return;
+        List<Player> players = mineCenter.getWorld().getPlayers();
+        players.stream()
                 .filter(p -> p.getLocation().distanceSquared(mineCenter) < MINE_SELL_DISTANCE)
                 .forEach(p -> {
                     Inventory inv = p.getInventory();
@@ -384,6 +386,8 @@ public class NPCCoinCollectorTrait extends Trait {
 
     }
 
+
+    @SuppressWarnings("DataFlowIssue")
     public ItemStack buildItem(Material material, String unformattedName, List<String> unformattedLore) {
         ItemStack itemStack = new ItemStack(material, 1);
         ItemMeta itemMeta = itemStack.getItemMeta();

@@ -1,6 +1,6 @@
 package com.kennedysmithjava.prisoncore.engine;
 
-import com.kennedysmithjava.prisoncore.CooldownReason;
+import com.kennedysmithjava.prisoncore.util.CooldownReason;
 import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.massivecraft.massivecore.util.MUtil;
 import org.bukkit.entity.Player;

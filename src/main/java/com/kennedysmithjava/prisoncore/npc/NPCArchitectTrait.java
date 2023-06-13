@@ -1,6 +1,6 @@
 package com.kennedysmithjava.prisoncore.npc;
 
-import com.kennedysmithjava.prisoncore.CooldownReason;
+import com.kennedysmithjava.prisoncore.util.CooldownReason;
 import com.kennedysmithjava.prisoncore.engine.EngineCooldown;
 import com.kennedysmithjava.prisoncore.engine.EngineLoadingScreen;
 import com.kennedysmithjava.prisoncore.entity.mines.*;
@@ -29,6 +29,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 
+@SuppressWarnings("deprecation")
 public class NPCArchitectTrait extends Trait {
 
     public NPCArchitectTrait() {
@@ -41,7 +42,6 @@ public class NPCArchitectTrait extends Trait {
         //Be sure to check event.getNPC() == this.getNPC() so you only handle clicks on this NPC!
         if(event.getNPC() != this.getNPC()) return;
         if(!event.getNPC().hasTrait(NPCArchitectTrait.class)) return;
-        NPC npc = event.getNPC();
         Player player = event.getClicker();
         MPlayer mPlayer = MPlayerColl.get().getByPlayer(player);
         if(mPlayer == null) return;
@@ -58,6 +58,7 @@ public class NPCArchitectTrait extends Trait {
         openMenuGUI(mPlayer);
     }
 
+    @SuppressWarnings("DataFlowIssue")
     public void openMenuGUI(MPlayer player){
 
         ChestGui gui = ChestGui.getCreative(Bukkit.createInventory(null, 9 * 3, "Architect"));
@@ -193,6 +194,7 @@ public class NPCArchitectTrait extends Trait {
         player.getPlayer().openInventory(gui.getInventory());
     }
 
+    @SuppressWarnings("DataFlowIssue")
     public void openDecorMenu(MPlayer player, int pageNum, int selectedFloor, int selectedWall){
         ChestGui gui = ChestGui.getCreative(Bukkit.createInventory(null, 9 * 6, Color.get("&4&lMine Decoration &r&7| Page " + pageNum)));
         Inventory inv = gui.getInventory();
@@ -351,6 +353,8 @@ public class NPCArchitectTrait extends Trait {
         player.getPlayer().openInventory(gui.getInventory());
     }
 
+
+    @SuppressWarnings("DataFlowIssue")
     public void openDistributionMenu(MPlayer player, int pageNum){
         Mine mine = player.getMine();
         List<Integer> unlockedDistributions = mine.getUnlockedDistributions();
@@ -390,8 +394,7 @@ public class NPCArchitectTrait extends Trait {
                     gui.setAction(slot, inventoryClickEvent -> {
 
                         HumanEntity whoClicked = inventoryClickEvent.getWhoClicked();
-                        if(!(whoClicked instanceof Player)) return false;
-                        Player player1 = (Player) whoClicked;
+                        if(!(whoClicked instanceof Player player1)) return false;
 
                         if(EngineCooldown.inCooldown(player1, CooldownReason.DECOR)){
                             player1.sendMessage(Color.get("&7[&fServer&7] &cThis action is on a cooldown for " + EngineCooldown.getTime(player1, CooldownReason.SIZE_UPGRADE) + " seconds."));
@@ -419,8 +422,7 @@ public class NPCArchitectTrait extends Trait {
                     gui.setAction(slot, inventoryClickEvent -> {
 
                         HumanEntity whoClicked = inventoryClickEvent.getWhoClicked();
-                        if(!(whoClicked instanceof Player)) return false;
-                        Player player1 = (Player) whoClicked;
+                        if(!(whoClicked instanceof Player player1)) return false;
 
                         if(EngineCooldown.inCooldown(player1, CooldownReason.DECOR)){
                             player1.sendMessage(Color.get("&7[&fServer&7] &cThis action is on a cooldown for " + EngineCooldown.getTime(player1, CooldownReason.DECOR) + " seconds."));
@@ -453,8 +455,7 @@ public class NPCArchitectTrait extends Trait {
             inv.setItem(slot, nextArrow);
             gui.setAction(slot, inventoryClickEvent -> {
                 HumanEntity whoClicked = inventoryClickEvent.getWhoClicked();
-                if(!(whoClicked instanceof Player)) return false;
-                Player player12 = (Player) whoClicked;
+                if(!(whoClicked instanceof Player player12)) return false;
 
                 openDistributionMenu(MPlayerColl.get().getByPlayer(player12), pageNum + 1);
                 return false;
@@ -466,15 +467,11 @@ public class NPCArchitectTrait extends Trait {
             backArrow.setItemMeta(meta2);
             int slot2 = 39;
             inv.setItem(slot2, backArrow);
-            if(pages.containsKey(pageNum - 1)){
-
-            }
-            gui.setAction(slot2, inventoryClickEvent -> {
+        gui.setAction(slot2, inventoryClickEvent -> {
                 HumanEntity whoClicked = inventoryClickEvent.getWhoClicked();
-                if(!(whoClicked instanceof Player)) return false;
-                Player player12 = (Player) whoClicked;
+                if(!(whoClicked instanceof Player player12)) return false;
 
-                openDistributionMenu(MPlayerColl.get().getByPlayer(player12), pageNum - 1);
+            openDistributionMenu(MPlayerColl.get().getByPlayer(player12), pageNum - 1);
                 return false;
             });
 
@@ -486,6 +483,7 @@ public class NPCArchitectTrait extends Trait {
         for (int b = 0; b < inv.getSize(); b++) {
             ItemStack p = new ItemStack(material, 1);
             ItemMeta itemMeta = p.getItemMeta();
+            assert itemMeta != null;
             itemMeta.setDisplayName(" ");
             p.setItemMeta(itemMeta);
             inv.setItem(b, p);
@@ -495,8 +493,7 @@ public class NPCArchitectTrait extends Trait {
     public ChestAction sizeAction(MPlayer mPlayer, int height, int width){
         return inventoryClickEvent -> {
             HumanEntity whoClicked = inventoryClickEvent.getWhoClicked();
-            if(!(whoClicked instanceof Player)) return false;
-            Player player = (Player) whoClicked;
+            if(!(whoClicked instanceof Player player)) return false;
 
             if(EngineCooldown.inCooldown(player, CooldownReason.SIZE_UPGRADE)){
                 player.sendMessage(Color.get("&7[&fServer&7] &cThis action is on a cooldown for " + EngineCooldown.getTime(player, CooldownReason.SIZE_UPGRADE) + " seconds."));
@@ -517,6 +514,7 @@ public class NPCArchitectTrait extends Trait {
     public ItemStack itemBuild(Material material, String name, List<String> lore){
         ItemStack item = new ItemStack(material, 1);
         ItemMeta itemMeta = item.getItemMeta();
+        assert itemMeta != null;
         itemMeta.setDisplayName(Color.get(name));
         itemMeta.setLore(Color.get(lore));
         item.setItemMeta(itemMeta);

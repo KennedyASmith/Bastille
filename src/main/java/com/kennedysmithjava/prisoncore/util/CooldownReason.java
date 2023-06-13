@@ -1,4 +1,4 @@
-package com.kennedysmithjava.prisoncore;
+package com.kennedysmithjava.prisoncore.util;
 
 public enum CooldownReason {
     SIZE_UPGRADE,

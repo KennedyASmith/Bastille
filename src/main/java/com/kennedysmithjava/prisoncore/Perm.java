@@ -30,7 +30,11 @@ public enum Perm implements Identified
      PITEM,
     GIVE,
     MAP,
-    HELP
+    HELP,
+    FISH_POS_ONE,
+    FISH_POS_TWO,
+    FISH_CREATE,
+    FISHING
 
 
     // END OF LIST

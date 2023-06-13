@@ -14,7 +14,7 @@ public class DistributionConf extends Entity<DistributionConf> {
     // META
     // -------------------------------------------- //
 
-    protected static transient DistributionConf i;
+    protected static DistributionConf i;
 
 
     public static DistributionConf get() {
@@ -25,6 +25,7 @@ public class DistributionConf extends Entity<DistributionConf> {
 
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     public DistributionConf load(DistributionConf that) {
         super.load(that);
@@ -38,9 +39,28 @@ public class DistributionConf extends Entity<DistributionConf> {
     public Map<Integer, Distribution> distribution = MUtil.map(
 
             1, new Distribution("&7Dusty Cobweb Pit", Material.GRAVEL,
-                    MUtil.map(  3, 3,
+                    MUtil.map(  
+                            
+                            3, 3,
+                            
                             2, 8,
-                                    1, 10), MUtil.list("&7Common", "", "&fBlocks:", "&740% - &7✦✧✧ &7Pebble &a$0.10", "&710% - &e✦✦✧ &7Pebble &a$0.20", "&750% - &e✦ &7Cobweb &a$0.00")),
+                                    1, 10),
+                    MUtil.list("&7Common", "", "&fBlocks:", "&740% - &7Pebble &a$0.10", "&710% - &7Pebble &a$0.20", "&750% - &7Cobweb &a$0.00")),
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             2, new Distribution("&7Dusty Pit", Material.STONE,
                     MUtil.map(  3, 1,
                             2, 10), MUtil.list("&7Common", "", "&fBlocks:", "&790% - &7✦✧✧ &7Pebble &a$0.10", "&710% - &e✦✦✧ &7Pebble &a$0.20"))
