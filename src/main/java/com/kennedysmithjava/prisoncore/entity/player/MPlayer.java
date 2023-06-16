@@ -276,6 +276,10 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
         return QuestProfileColl.get().getByUUID(this.getPlayer().getUniqueId());
     }
 
+    public SkillProfile getSkillProfile(){
+        return SkillProfileColl.get().getByUUID(this.getPlayer().getUniqueId());
+    }
+
     public void giveCollectible(String itemID, ItemStack itemStack){
 
     }

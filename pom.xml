@@ -45,6 +45,8 @@
                             <filters>
                                 <filter>
                                     <artifact>org.apache.commons:commons-math3</artifact>
+                                    <artifact>net.objecthunter:exp4j</artifact>
+                                    <artifact>commons-codec:commons-codec</artifact>
                                     <includes>
                                         <include>**</include>
                                     </includes>
@@ -176,15 +178,15 @@
             <systemPath>${basedir}/libs/MapManager_v1.8.8-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-math3</artifactId>
-            <version>3.6.1</version>
-        </dependency>
-        <dependency>
             <groupId>com.jeff_media</groupId>
             <artifactId>MorePersistentDataTypes</artifactId>
             <version>2.3.1</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.15</version>
         </dependency>
         <dependency>
             <groupId>com.drtshock</groupId>
@@ -192,6 +194,16 @@
             <version>LATEST</version>
             <scope>system</scope>
             <systemPath>${basedir}/libs/PlayerVaultsX.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>3.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>net.objecthunter</groupId>
+            <artifactId>exp4j</artifactId>
+            <version>0.4.8</version>
         </dependency>
     </dependencies>
 </project>

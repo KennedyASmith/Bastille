@@ -34,7 +34,9 @@ public enum Perm implements Identified
     FISH_POS_ONE,
     FISH_POS_TWO,
     FISH_CREATE,
-    FISHING
+    FISHING,
+    SKILL_GUI,
+    SKILL_GIVE
 
 
     // END OF LIST

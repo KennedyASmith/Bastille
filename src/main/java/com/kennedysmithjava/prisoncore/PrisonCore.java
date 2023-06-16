@@ -3,38 +3,38 @@ package com.kennedysmithjava.prisoncore;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.kennedysmithjava.prisoncore.cmd.PouchCommand;
-import com.kennedysmithjava.prisoncore.placeholders.MineCurrencyPlaceholder;
 import com.kennedysmithjava.prisoncore.engine.EngineTools;
 import com.kennedysmithjava.prisoncore.engine.EngineTrees;
 import com.kennedysmithjava.prisoncore.entity.MConfColl;
 import com.kennedysmithjava.prisoncore.entity.farming.FarmingConfColl;
 import com.kennedysmithjava.prisoncore.entity.farming.FishingConfColl;
 import com.kennedysmithjava.prisoncore.entity.farming.TreesConfColl;
+import com.kennedysmithjava.prisoncore.entity.mines.*;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.Floor;
+import com.kennedysmithjava.prisoncore.entity.mines.objects.Wall;
 import com.kennedysmithjava.prisoncore.entity.npcs.FarmerConfColl;
 import com.kennedysmithjava.prisoncore.entity.npcs.FarmerGuiConfColl;
-import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
-import com.kennedysmithjava.prisoncore.entity.player.MPlayerColl;
-import com.kennedysmithjava.prisoncore.entity.player.QuestProfileColl;
+import com.kennedysmithjava.prisoncore.entity.player.*;
 import com.kennedysmithjava.prisoncore.entity.tools.BufferConfColl;
 import com.kennedysmithjava.prisoncore.entity.tools.EnchantConfColl;
 import com.kennedysmithjava.prisoncore.entity.tools.PickaxeTypeColl;
 import com.kennedysmithjava.prisoncore.entity.tools.PouchConfColl;
-import com.kennedysmithjava.prisoncore.entity.mines.objects.Wall;
-import com.kennedysmithjava.prisoncore.entity.mines.*;
 import com.kennedysmithjava.prisoncore.event.EventNewMine;
 import com.kennedysmithjava.prisoncore.npc.NPCBlacksmithTrait;
 import com.kennedysmithjava.prisoncore.npc.NPCLimboTrait;
 import com.kennedysmithjava.prisoncore.npc.NPCLumberjackTrait;
+import com.kennedysmithjava.prisoncore.placeholders.MineCountdownPlaceholder;
+import com.kennedysmithjava.prisoncore.placeholders.MineCurrencyPlaceholder;
+import com.kennedysmithjava.prisoncore.placeholders.SkillPlaceholder;
 import com.kennedysmithjava.prisoncore.placeholders.TreeHologramPlaceholder;
-import com.kennedysmithjava.prisoncore.quest.*;
+import com.kennedysmithjava.prisoncore.quest.QuestPath;
 import com.kennedysmithjava.prisoncore.quest.paths.PathIntroduction;
 import com.kennedysmithjava.prisoncore.tools.Pickaxe;
 import com.kennedysmithjava.prisoncore.tools.ability.*;
 import com.kennedysmithjava.prisoncore.tools.enchantment.*;
 import com.kennedysmithjava.prisoncore.tools.pouch.DatalessPouchable;
-import com.kennedysmithjava.prisoncore.util.*;
-import com.kennedysmithjava.prisoncore.placeholders.MineCountdownPlaceholder;
+import com.kennedysmithjava.prisoncore.util.FAWEPaster;
+import com.kennedysmithjava.prisoncore.util.Glow;
 import com.kennedysmithjava.prisoncore.util.regions.MinesWorldManager;
 import com.kennedysmithjava.prisoncore.util.regions.VoidGenerator;
 import com.massivecraft.massivecore.MassivePlugin;
@@ -117,6 +117,7 @@ public class PrisonCore extends MassivePlugin {
         new MineCountdownPlaceholder(this).register();
         new TreeHologramPlaceholder(this).register();
         new MineCurrencyPlaceholder(this).register();
+        new SkillPlaceholder(this).register();
 
         ConfigurationSerialization.registerClass(DatalessPouchable.class);
 
@@ -185,7 +186,9 @@ public class PrisonCore extends MassivePlugin {
                 FarmerConfColl.class,
                 FarmerGuiConfColl.class,
                 TreesConfColl.class,
-                FishingConfColl.class
+                FishingConfColl.class,
+                SkillsConfColl.class,
+                SkillProfileColl.class
         );
     }
 

@@ -1,11 +1,13 @@
 package com.kennedysmithjava.prisoncore.engine;
 
 import com.kennedysmithjava.prisoncore.PrisonCore;
-import com.kennedysmithjava.prisoncore.eco.CurrencyType;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
+import com.kennedysmithjava.prisoncore.entity.player.Skill;
+import com.kennedysmithjava.prisoncore.entity.player.SkillProfile;
+import com.kennedysmithjava.prisoncore.entity.player.SkillsConf;
+import com.kennedysmithjava.prisoncore.skill.SkillType;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.massivecraft.massivecore.Engine;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.HashMap;
@@ -19,77 +21,53 @@ public class EngineXP extends Engine {
     // -------------------------------------------- //
 
 
-    /**
-     *
-     * Using:
-     * XP = 10 * Math.pow(level, 0.2) * Math.pow(level, 2.0) + Math.pow(level - 1, 2.0)
-     * yanfly.moe/tools/expcalculator/
-     *
-     */
-
-
     private static final EngineXP i = new EngineXP();
 
     public static EngineXP get() {
         return i;
     }
 
-    private static final Map<Player, Integer> oweList = new HashMap<>();
-    private static final long delay = 10*20L;
+    private static final Map<MPlayer, Map<SkillType, Integer>> oweList = new HashMap<>();
+    private static final long delay = 3*20L;
     public static Random random = new Random();
-    public static int globalMultiplier = 1;
 
     public EngineXP() {
         BukkitScheduler scheduler = PrisonCore.get().getServer().getScheduler();
         scheduler.scheduleSyncRepeatingTask(PrisonCore.get(), () -> {
-            oweList.forEach((player, count) -> {
-                int total = 0;
-                for (int i = 0; i < count; i++) {
-                    double r = random.nextDouble();
-                    double chance = 0.25;
-                    if(r < chance){
-                        total += globalMultiplier /* x localMultiplier */;
+            oweList.forEach((player, skillMap) -> {
+                SkillProfile profile = player.getSkillProfile();
+                skillMap.forEach((type, xp) -> {
+                    Skill skill = profile.getSkill(type);
+                    boolean leveledUp = skill.addXP(xp);
+                    int neededXP = SkillsConf.getXpRequired(type, skill.getCurrentLevel());
+                    if(leveledUp){
+                        String colorCoded = Color.getGradient(
+                                " ※ You have reached " +
+                                        Color.strip(type.getDisplayName()) +
+                                        " level " +
+                                        skill.getCurrentLevel() + "! ※"
+                                , "43EF20", "24FDF7");
+                        player.msg("&7[&fSkills&7]"+ colorCoded);
+                    } else {
+                        player.msg("&7[&fSkills&7] &aYou have gained &e" + xp + " " + type.getDisplayName() + " &axp!");
+                        player.msg("&7XP Remaining for next level: "
+                                + skill.getXPBar(neededXP)
+                                + " &7(&e" + skill.getCurrentXP() + "&7/&e" + neededXP + "&7)");
                     }
-                }
-                if(total > 0){
-                    MPlayer mPlayer = MPlayer.get(player);
-                    player.sendMessage(Color.get("&aYou have gained &a" + total + "xp."));
-                }
+                });
             });
             oweList.clear();
-        }, 20*60L, delay);
+        }, 20*10L, delay);
     }
 
-    public static void setPlayerXPLevel(Player player, int level, int extra) {
-        /*if(level % 1 == 0){
 
-        }
+    public static void giveXP(SkillType type, MPlayer player, int xpAmount){
+        Map<SkillType, Integer> skillXpMap = oweList.get(player);
+        if(skillXpMap == null) skillXpMap = new HashMap<>();
 
-        int currentLevel = player.getLevel();
-
-        if (level > currentLevel) {
-            for (int i = currentLevel; i < level; i++) {
-                requiredXP += getRequiredXP(i);
-            }
-        } else if (level < currentLevel) {
-            for (int i = currentLevel - 1; i >= level; i--) {
-                requiredXP -= getRequiredXP(i);
-            }
-        }
-
-        player.setLevel((int) level);
-        player.setExp(0.0f);
-        player.giveExp(requiredXP);*/
+        Integer xpAlreadyOwed = skillXpMap.get(type);
+        if(xpAlreadyOwed == null) xpAlreadyOwed = 0;
+        skillXpMap.put(type, xpAmount + xpAlreadyOwed);
+        oweList.put(player, skillXpMap);
     }
-
-    public static int getRequiredVanillaXP(double level) {
-        if (level >= 30) {
-            return (int) (112 + (level - 30) * 9);
-        } else if (level >= 15) {
-            return (int) (37 + (level - 15) * 5);
-        } else {
-            return (int) (7 + level * 2);
-        }
-    }
-
 }

@@ -4,7 +4,6 @@ import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.quest.Quest;
 import com.kennedysmithjava.prisoncore.quest.region.QuestRegion;
 import com.massivecraft.massivecore.Engine;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -38,7 +37,6 @@ public class EngineRegions extends Engine {
         if(region == null) return;
         if(region.has(getTo)) {
             if(inTheirRegion.contains(player.getUniqueId())) return;
-            Bukkit.broadcastMessage("You've entered your quest location!");
             MPlayer p = MPlayer.get(player);
             Quest q = p.getQuestProfile().getActiveQuest();
             q.onEnterRegion();
