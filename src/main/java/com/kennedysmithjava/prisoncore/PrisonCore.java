@@ -23,10 +23,7 @@ import com.kennedysmithjava.prisoncore.event.EventNewMine;
 import com.kennedysmithjava.prisoncore.npc.NPCBlacksmithTrait;
 import com.kennedysmithjava.prisoncore.npc.NPCLimboTrait;
 import com.kennedysmithjava.prisoncore.npc.NPCLumberjackTrait;
-import com.kennedysmithjava.prisoncore.placeholders.MineCountdownPlaceholder;
-import com.kennedysmithjava.prisoncore.placeholders.MineCurrencyPlaceholder;
-import com.kennedysmithjava.prisoncore.placeholders.SkillPlaceholder;
-import com.kennedysmithjava.prisoncore.placeholders.TreeHologramPlaceholder;
+import com.kennedysmithjava.prisoncore.placeholders.*;
 import com.kennedysmithjava.prisoncore.quest.QuestPath;
 import com.kennedysmithjava.prisoncore.quest.paths.PathIntroduction;
 import com.kennedysmithjava.prisoncore.tools.Pickaxe;
@@ -118,6 +115,7 @@ public class PrisonCore extends MassivePlugin {
         new TreeHologramPlaceholder(this).register();
         new MineCurrencyPlaceholder(this).register();
         new SkillPlaceholder(this).register();
+        new QuestPlaceholder(this).register();
 
         ConfigurationSerialization.registerClass(DatalessPouchable.class);
 

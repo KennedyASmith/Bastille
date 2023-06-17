@@ -18,6 +18,7 @@ public class QuestBreakBlock extends Quest {
     private final boolean materialMatters;
     private final int count;
     private final boolean showMessage;
+    private String materialString;
 
 
     public QuestBreakBlock(MPlayer player, Material material, int count, boolean showMessage){
@@ -35,6 +36,7 @@ public class QuestBreakBlock extends Quest {
         this.count = count;
         this.material = null;
         this.showMessage = showMessage;
+        this.materialString = "any block.";
     }
 
     @Override
@@ -92,6 +94,11 @@ public class QuestBreakBlock extends Quest {
 
     public Material getMaterial(){
         return material;
+    }
+
+    @Override
+    public String getShortProgressString() {
+        return "&eBreak &a" + materialString + " &a(" + getProgress() + "/" + count + ")";
     }
 }
 

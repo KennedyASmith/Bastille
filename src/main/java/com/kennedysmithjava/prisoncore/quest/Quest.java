@@ -111,5 +111,7 @@ public abstract class Quest {
         return profile.getActiveQuestProgress();
     }
 
+    public abstract String getShortProgressString();
+
 }
 

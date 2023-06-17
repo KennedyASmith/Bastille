@@ -192,5 +192,9 @@ public class QuestWalkAndTalk extends Quest {
         return npc;
     }
 
+    @Override
+    public String getShortProgressString() {
+        return "&aFollow " + npcName  + " &a(" + getProgress() + "/" + locations.size() + ")";
+    }
 }
 

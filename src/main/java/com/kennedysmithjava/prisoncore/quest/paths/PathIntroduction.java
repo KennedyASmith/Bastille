@@ -31,8 +31,7 @@ public class PathIntroduction extends QuestPath {
     private static final Offset PART_1_POS_2_OFFSET = new Offset(-51, 50, -63, 1F, 180F); //Walk up to player
     private static final Offset PART_1_POS_3_OFFSET = new Offset(-49, 51, -52, 47F,46F ); // Looking into mine
     private static final Offset PART_1_POS_4_OFFSET = new Offset(-49, 51, -52, 47F,-130F ); // Looking at pickaxe
-
-    private static final Offset PICKAXE_OFFSET = new Offset(-48, 51, -53); // Pickaxe
+    private static final Offset PICKAXE_OFFSET = new Offset(-48, 50, -53); // Pickaxe
     private static final Offset PART_2_POS_1_OFFSET = new Offset(-54, 51, -54, 12F, -89F); //Stand in front of lever
     private static final Offset PART_2_POS_2_OFFSET = new Offset(-54, 51, -54, 23F, -35F); //Looking at lever
     private static final Offset PART_3_POS_1_OFFSET = new Offset(-51, 50, -29, 9F, -179F); //In front of Stands
@@ -107,7 +106,7 @@ public class PathIntroduction extends QuestPath {
                 npc);
 
         /* Part 5: Flip the lever */
-        QuestInteractBlock part_5 = new QuestInteractBlock(player, leverLocation, true);
+        QuestInteractBlock part_5 = new QuestInteractBlock(player, leverLocation, true, "the lever.");
 
         /* Part 5: Walk over to NPC stands */
         QuestWalkAndTalk part_6 = new QuestWalkAndTalk(player, origin,

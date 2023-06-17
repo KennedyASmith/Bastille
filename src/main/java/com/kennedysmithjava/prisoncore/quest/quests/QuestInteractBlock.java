@@ -7,7 +7,6 @@ import com.kennedysmithjava.prisoncore.quest.Quest;
 import com.kennedysmithjava.prisoncore.quest.QuestPath;
 import com.kennedysmithjava.prisoncore.quest.region.QuestExactRegion;
 import com.kennedysmithjava.prisoncore.quest.region.QuestRegion;
-import com.kennedysmithjava.prisoncore.util.regions.Offset;
 import com.kennedysmithjava.prisoncore.util.vfx.CircleSequence;
 import com.kennedysmithjava.prisoncore.util.vfx.ParticleFn;
 import org.bukkit.Location;
@@ -32,26 +31,18 @@ public class QuestInteractBlock extends Quest {
 
     private BukkitRunnable particles;
 
+    private String blockName;
 
-    public QuestInteractBlock(MPlayer player, Location origin,
-                              Offset offset,
-                              boolean hasParticles){
-        super(player);
-        this.location = offset.getFrom(origin).getBlock().getLocation();
-        this.hasParticles = hasParticles;
-        this.PARTICLE_FN = (location, p) -> ParticleEffect.REDSTONE.display(location, Color.GREEN, p);
-        this.PARTICLE_SEQUENCE = new CircleSequence(1, 8);
-        this.PARTICLE_SEQUENCE.setParticleFn(PARTICLE_FN);
-    }
 
     public QuestInteractBlock(MPlayer player, Location location,
-                              boolean hasParticles){
+                              boolean hasParticles, String blockName){
         super(player);
         this.location = location;
         this.hasParticles = hasParticles;
         this.PARTICLE_FN = (loc, p) -> ParticleEffect.REDSTONE.display(loc, Color.GREEN, p);
         this.PARTICLE_SEQUENCE = new CircleSequence(1, 8);
         this.PARTICLE_SEQUENCE.setParticleFn(PARTICLE_FN);
+        this.blockName = blockName;
     }
 
     @Override
@@ -98,6 +89,11 @@ public class QuestInteractBlock extends Quest {
     @Override
     public void onEnterRegion() {
 
+    }
+
+    @Override
+    public String getShortProgressString() {
+        return "&eClick &a" + blockName;
     }
 
     public Location getLocation() {

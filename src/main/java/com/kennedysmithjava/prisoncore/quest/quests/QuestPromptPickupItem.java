@@ -108,5 +108,9 @@ public class QuestPromptPickupItem extends Quest {
         this.completeThisQuest();
     }
 
+    @Override
+    public String getShortProgressString() {
+        return "&ePickup &aitem (" + getProgress() + "/1)";
+    }
 }
 

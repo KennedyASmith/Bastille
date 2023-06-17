@@ -4,8 +4,6 @@ import com.kennedysmithjava.prisoncore.quest.Quest;
 import com.kennedysmithjava.prisoncore.quest.QuestPath;
 import com.kennedysmithjava.prisoncore.quest.QuestPathRegistry;
 import com.massivecraft.massivecore.store.Entity;
-import org.bukkit.Bukkit;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -128,7 +126,7 @@ public class QuestProfile extends Entity<QuestProfile> {
     }
 
     public QuestPath getActiveQuestPath() {
-        if(activeQuestPathData != null && activeQuestPath == null)
+        if(!activeQuestPathData.equals("") && activeQuestPath == null)
                 setActiveQuestPath(QuestPathRegistry.get()
                         .getQuest(activeQuestPathData));
         return activeQuestPath;
@@ -140,8 +138,9 @@ public class QuestProfile extends Entity<QuestProfile> {
 
     public void finalizeQuestPathCompletion(QuestPath questPath){
         if(activeQuestPath.equals(questPath)){
-            setActiveQuestPathData(null);
-            Bukkit.broadcastMessage("You've completed a quest path. Activate a new one!");
+            this.activeQuestPathData = "";
+            this.activeQuestPath = null;
+            this.activeQuestPathProgress = 0;
         } else removeUnlockedQuest(questPath.getClass().getSimpleName(), questPath);
         completedQuestsData.add(questPath.getQuestPathDisplayName());
         this.changed();
