@@ -3,6 +3,7 @@ package com.kennedysmithjava.prisoncore.quest;
 import com.kennedysmithjava.prisoncore.engine.EngineRegions;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.QuestProfile;
+import com.kennedysmithjava.prisoncore.maps.PrisonMapRenderer;
 import com.kennedysmithjava.prisoncore.quest.region.QuestRegion;
 import org.bukkit.inventory.ItemStack;
 
@@ -66,16 +67,20 @@ public abstract class QuestPath {
         if(quest.hasRegion(questProgress)){
             QuestRegion region = quest.getRegion(questProgress);
             EngineRegions.get().addToRegionTracker(player.getUuid(), region);
+            if(PrisonMapRenderer.mappedPlayers.containsKey(player.getUuid())){
+                PrisonMapRenderer.reRenderQuest.add(player.getUuid());
+            }
         }
         onActivate(player);
     }
     public abstract void onCompleteQuest(int currentPathProgress);
 
-    public void deactivate(MPlayer player, int currentPathProgress){
+    public void deactivate(MPlayer player){
         QuestProfile profile = player.getQuestProfile();
         Quest quest = profile.getActiveQuest();
         if(quest == null) return;
         quest.onDeactivateQuest(profile.getActiveQuestProgress());
+
     }
 
     public void innerCompleteQuest(MPlayer player, int currentPathProgress){
@@ -83,6 +88,7 @@ public abstract class QuestPath {
         Quest quest = profile.getActiveQuest();
         if(quest != null && quest.hasRegion(quest.getProgress())){
             EngineRegions.get().removeFromRegionTracker(player.getUuid());
+            PrisonMapRenderer.reRenderQuest.remove(player.getUuid());
         }
         profile.resetCurrentQuestProgress();
         onCompleteQuest(currentPathProgress);

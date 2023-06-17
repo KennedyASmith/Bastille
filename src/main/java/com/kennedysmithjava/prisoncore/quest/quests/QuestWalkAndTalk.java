@@ -6,7 +6,7 @@ import com.kennedysmithjava.prisoncore.npc.Skin;
 import com.kennedysmithjava.prisoncore.npc.SkinManager;
 import com.kennedysmithjava.prisoncore.quest.Quest;
 import com.kennedysmithjava.prisoncore.quest.QuestPath;
-import com.kennedysmithjava.prisoncore.quest.region.QuestCylindricalRegion;
+import com.kennedysmithjava.prisoncore.quest.region.QuestExactRegion;
 import com.kennedysmithjava.prisoncore.quest.region.QuestRegion;
 import com.kennedysmithjava.prisoncore.util.regions.Offset;
 import net.citizensnpcs.api.ai.Navigator;
@@ -18,7 +18,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -177,13 +176,9 @@ public class QuestWalkAndTalk extends Quest {
     public QuestRegion getRegion(int progress) {
         if(progress > locations.size() - 1) return null;
         Offset offset = locations.get(progress);
-        QuestCylindricalRegion region = null;
+        QuestExactRegion region = null;
         if(offset != null){
-            region = new QuestCylindricalRegion(
-                    offset.getFrom(origin),
-                    3.0,
-                    2
-            );
+            region = new QuestExactRegion(offset.getFrom(origin));
         }
         return region;
     }

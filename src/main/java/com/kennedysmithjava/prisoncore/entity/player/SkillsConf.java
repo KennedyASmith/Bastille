@@ -98,7 +98,6 @@ public class SkillsConf extends Entity<SkillsConf> {
             Expression e = new ExpressionBuilder(s)
                     .variables(LEVEL_VARIABLE)
                     .build();
-            //TODO: Max level for skills
             Map<Integer, Integer> xpNeed = new HashMap<>();
             for (int level = 0; level <= maxLevels.get(skillType); level++) {
                 e.setVariable("level", level);

@@ -2,6 +2,7 @@ package com.kennedysmithjava.prisoncore.quest.region;
 
 
 import org.bukkit.Location;
+import org.bukkit.map.MapCanvas;
 
 public class QuestCuboidRegion implements QuestRegion {
     private final int minX;
@@ -29,5 +30,20 @@ public class QuestCuboidRegion implements QuestRegion {
         return locX >= minX && locX <= maxX &&
                 locY >= minY && locY <= maxY &&
                 locZ >= minZ && locZ <= maxZ;
+    }
+
+    @Override
+    public boolean has(int x, int z) {
+        return false;
+    }
+
+    @Override
+    public boolean displayOnMap(int mapOriginX, int mapOriginZ, MapCanvas canvas) {
+        return false;
+    }
+
+    @Override
+    public Location getCenterPosition() {
+        return null;
     }
 }

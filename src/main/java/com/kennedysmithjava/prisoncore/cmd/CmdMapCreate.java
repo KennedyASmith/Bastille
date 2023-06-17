@@ -1,5 +1,6 @@
 package com.kennedysmithjava.prisoncore.cmd;
 
+import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
@@ -7,14 +8,9 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.Pair;
 import com.kennedysmithjava.prisoncore.Perm;
 import com.kennedysmithjava.prisoncore.PrisonCore;
-
-import com.comphenix.protocol.PacketType;
-import com.kennedysmithjava.prisoncore.cmd.type.TypeMPlayer;
-import com.kennedysmithjava.prisoncore.crates.CratePrize;
-import com.kennedysmithjava.prisoncore.crates.CrateRoulette;
-import com.kennedysmithjava.prisoncore.entity.tools.PickaxeType;
-import com.kennedysmithjava.prisoncore.entity.tools.PickaxeTypeColl;
+import com.kennedysmithjava.prisoncore.maps.PrisonMapRenderer;
 import com.kennedysmithjava.prisoncore.util.MapRendererUtil;
+import com.kennedysmithjava.prisoncore.util.MiscUtil;
 import com.massivecraft.massivecore.MassiveException;
 import com.massivecraft.massivecore.command.requirement.RequirementHasPerm;
 import com.massivecraft.massivecore.command.requirement.RequirementIsPlayer;
@@ -59,35 +55,9 @@ public class CmdMapCreate extends CoreCommand {
     @Override
     public void perform() throws MassiveException {
         if (!(sender instanceof Player)) return;
-
-        double luck = readArg();
-
-
-        //Build the list of prizes
-        List<CratePrize> prizes = new ArrayList<>();
-
-        for (PickaxeType pickaxeType : PickaxeTypeColl.get().getAll()) {
-            if(pickaxeType.getRarity() > 0){
-                pickaxeType.setStartDurability(1000);
-                ItemStack prize = pickaxeType.getItemStack();
-                ItemStack icon = prize.clone();
-                prize.setType(Material.DIAMOND_PICKAXE);
-                CratePrize cratePrize = new CratePrize(
-                        prize,
-                        icon,
-                        pickaxeType.getRarityName().getGlassMaterial(),
-                        pickaxeType.getRarity()
-                );
-                prizes.add(cratePrize);
-            }
-        }
-
-        //Show the crate animation to the player
-        CrateRoulette.animate((Player) sender, prizes, luck);
-
-
-
-        //setItemInHand(me);
+        // Create a new map item
+        ItemStack map = PrisonMapRenderer.mapPlayer(me, me.getLocation());
+        MiscUtil.givePlayerItem(me, map, 1);
     }
 
     public void setItemInHand(Player player) {

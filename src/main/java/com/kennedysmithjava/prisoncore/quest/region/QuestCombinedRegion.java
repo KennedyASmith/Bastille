@@ -1,6 +1,7 @@
 package com.kennedysmithjava.prisoncore.quest.region;
 
 import org.bukkit.Location;
+import org.bukkit.map.MapCanvas;
 
 import java.util.Set;
 
@@ -17,5 +18,20 @@ public class QuestCombinedRegion implements QuestRegion {
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean has(int x, int z) {
+        return false;
+    }
+
+    @Override
+    public boolean displayOnMap(int mapOriginX, int mapOriginZ, MapCanvas canvas) {
+        return false;
+    }
+
+    @Override
+    public Location getCenterPosition() {
+        return null;
     }
 }

@@ -1,6 +1,8 @@
 package com.kennedysmithjava.prisoncore.engine;
 
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
+import com.kennedysmithjava.prisoncore.maps.MapUtil;
+import com.kennedysmithjava.prisoncore.maps.PrisonMapRenderer;
 import com.kennedysmithjava.prisoncore.quest.Quest;
 import com.kennedysmithjava.prisoncore.quest.region.QuestRegion;
 import com.massivecraft.massivecore.Engine;
@@ -9,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.*;
 
@@ -33,6 +36,12 @@ public class EngineRegions extends Engine {
         if (getFrom.getBlockX() == getTo.getBlockX() && getFrom.getBlockZ() == getTo.getBlockZ())
             return; //The player hasn't moved an entire block, end here
         Player player = event.getPlayer();
+
+        //Handle map updating
+        if(PrisonMapRenderer.mappedPlayers.containsKey(player.getUniqueId())){
+            PrisonMapRenderer.mappedPlayers.put(player.getUniqueId(), true);
+        }
+
         QuestRegion region = regionMap.get(player.getUniqueId());
         if(region == null) return;
         if(region.has(getTo)) {
@@ -45,6 +54,11 @@ public class EngineRegions extends Engine {
         }
     }
 
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerTeleport(PlayerTeleportEvent event){
+        MapUtil.replaceAnyMaps(event.getPlayer(), event.getTo());
+    }
+
     public void addToRegionTracker(UUID player, QuestRegion region){
         regionMap.put(player, region);
     }
@@ -53,4 +67,5 @@ public class EngineRegions extends Engine {
         regionMap.remove(player);
         inTheirRegion.remove(player);
     }
+
 }
