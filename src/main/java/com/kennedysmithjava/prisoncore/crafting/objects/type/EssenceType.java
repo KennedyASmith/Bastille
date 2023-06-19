@@ -6,6 +6,9 @@ import org.bukkit.Material;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Used for enchanting
+ */
 public enum EssenceType {
     //USED FOR CRAFTING
     ANY(Material.GLOWSTONE_DUST, "&7Any Essence", new ArrayList<>()),
