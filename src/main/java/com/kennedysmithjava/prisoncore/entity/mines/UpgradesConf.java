@@ -2,9 +2,9 @@ package com.kennedysmithjava.prisoncore.entity.mines;
 
 import com.kennedysmithjava.prisoncore.cmd.type.TypeMobility;
 import com.kennedysmithjava.prisoncore.util.BuildingType;
-import com.kennedysmithjava.prisoncore.upgrades.*;
-import com.kennedysmithjava.prisoncore.upgrades.actions.*;
-import com.kennedysmithjava.prisoncore.upgrades.buttons.*;
+import com.kennedysmithjava.prisoncore.entity.mines.upgrades.*;
+import com.kennedysmithjava.prisoncore.entity.mines.upgrades.actions.*;
+import com.kennedysmithjava.prisoncore.entity.mines.upgrades.buttons.*;
 import com.massivecraft.massivecore.command.editor.annotation.EditorName;
 import com.massivecraft.massivecore.store.Entity;
 import com.massivecraft.massivecore.util.MUtil;

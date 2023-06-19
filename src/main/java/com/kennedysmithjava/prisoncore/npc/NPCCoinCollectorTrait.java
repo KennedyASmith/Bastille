@@ -13,7 +13,7 @@ import com.kennedysmithjava.prisoncore.tools.pouch.DatalessPouchable;
 import com.kennedysmithjava.prisoncore.tools.pouch.Pouch;
 import com.kennedysmithjava.prisoncore.tools.pouch.PouchFullException;
 import com.kennedysmithjava.prisoncore.tools.pouch.PouchManager;
-import com.kennedysmithjava.prisoncore.upgrades.UpgradeName;
+import com.kennedysmithjava.prisoncore.entity.mines.upgrades.UpgradeName;
 import com.kennedysmithjava.prisoncore.util.ClickHandler;
 import com.kennedysmithjava.prisoncore.util.ClickItem;
 import com.kennedysmithjava.prisoncore.util.Color;

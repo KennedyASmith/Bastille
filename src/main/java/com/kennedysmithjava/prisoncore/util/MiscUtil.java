@@ -158,7 +158,7 @@ public class MiscUtil {
     public static void givePlayerItem(Player player, ItemStack item, int amount) {
         if(player.getInventory().firstEmpty() == - 1) {
             for(int i = 0; i < amount; i++) {
-                player.getWorld().dropItem(player.getLocation(),item);
+                player.getWorld().dropItem(player.getLocation(), item);
             }
         } else {
             for(int i = 0; i < amount; i++) {

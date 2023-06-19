@@ -72,7 +72,7 @@ public class PathIntroduction extends QuestPath {
                         "Hey you!",
                         "I'm Warren, the Warden around here.",
                         "This here is your mine",
-                        "Take this pickaxe and mine 10 blocks."
+                        "Take this pickaxe and mine 10 blocks. With an anvil, and the right blocks, you can make your own!"
                 ),
                 false,
                 3*20,

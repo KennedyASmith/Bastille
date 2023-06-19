@@ -8,7 +8,7 @@ import com.kennedysmithjava.prisoncore.entity.mines.objects.Floor;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.Wall;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayerColl;
-import com.kennedysmithjava.prisoncore.upgrades.actions.ActionMineSize;
+import com.kennedysmithjava.prisoncore.entity.mines.upgrades.actions.ActionMineSize;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.DistributionPage;
 import com.kennedysmithjava.prisoncore.util.Glow;

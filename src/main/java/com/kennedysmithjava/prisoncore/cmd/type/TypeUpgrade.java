@@ -1,6 +1,6 @@
 package com.kennedysmithjava.prisoncore.cmd.type;
 
-import com.kennedysmithjava.prisoncore.upgrades.UpgradeName;
+import com.kennedysmithjava.prisoncore.entity.mines.upgrades.UpgradeName;
 import com.massivecraft.massivecore.MassiveException;
 import com.massivecraft.massivecore.command.type.TypeAbstract;
 import com.massivecraft.massivecore.comparator.ComparatorCaseInsensitive;

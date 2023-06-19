@@ -75,7 +75,6 @@ public class EngineMineBuildings extends Engine {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerPortalUse(PlayerMoveEvent event){
         Player player = event.getPlayer();
-        if(player == null) return;
         Material m = player.getLocation().getBlock().getType();
         Material a = player.getLocation().clone().add(0,1,0).getBlock().getType();
         if ((m != Material.WATER) || (a != Material.WATER)) return;
