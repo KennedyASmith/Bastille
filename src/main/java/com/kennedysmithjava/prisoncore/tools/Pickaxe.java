@@ -14,7 +14,6 @@ import com.kennedysmithjava.prisoncore.tools.enchantment.DynamicEnchant;
 import com.kennedysmithjava.prisoncore.tools.enchantment.Enchant;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.massivecraft.massivecore.util.MUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemFlag;
@@ -25,6 +24,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -247,7 +247,16 @@ public class Pickaxe  implements Tool {
     }
 
     public Map<Enchant<?>, Integer> getEnchants() {
-        return enchants;
+        return this.enchants;
+    }
+
+    public void setEnchants(Map<Enchant<?>, Integer> enchants) {
+        this.enchants = new HashMap<>();
+        this.addEnchants(enchants.entrySet().stream()
+                .collect(Collectors.toMap(
+                        entry -> entry.getKey().getID(),
+                        Map.Entry::getValue
+                )));
     }
 
     public Map<String, Integer> getEnchantsRaw(){
@@ -405,6 +414,19 @@ public class Pickaxe  implements Tool {
         if(item != null) return item;
         throw new NullPointerException();
     }
+
+    public void forceLoreUpdate(){
+        if(item != null && this.getType() != null){
+            ItemMeta meta = item.getItemMeta();
+            meta.setLore(this.getType().getLore(
+                    this.getEnchants(),
+                    this.getLeveledAbility(),
+                    this.getDurability(),
+                    this.getMaxDurability()));
+            item.setItemMeta(meta);
+            this.setItem(item);
+        }
+    }
     public static boolean isPickaxe(ItemStack i) {
         if (i == null || i.getType() == Material.AIR) return false;
         if(!isPickaxeType(i.getType())) return false;
@@ -464,4 +486,6 @@ public class Pickaxe  implements Tool {
 
         return pickaxe;
     }
+
+
 }

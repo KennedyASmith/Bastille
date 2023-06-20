@@ -3,6 +3,7 @@ package com.kennedysmithjava.prisoncore.npc;
 import com.kennedysmithjava.prisoncore.crafting.Recipe;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayerColl;
+import com.kennedysmithjava.prisoncore.gui.CraftingMenuGui;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.ItemBuilder;
 import com.massivecraft.massivecore.chestgui.ChestGui;
@@ -13,7 +14,6 @@ import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.trait.TraitName;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,6 +21,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -140,9 +141,8 @@ public class NPCLumberjackTrait extends Trait {
         inventory.setItem(slot, item);
         gui.setAction(slot, inventoryClickEvent -> {
             Player player = (Player) inventoryClickEvent.getWhoClicked();
-            ChestGui gui1 = Recipe.getCraftingMenu(gui, recipe, "Crafting: &4" + ChatColor.stripColor(Color.get(item.getItemMeta().getDisplayName())));
-            player.closeInventory();
-            player.openInventory(gui1.getInventory());
+            CraftingMenuGui menuGui = new CraftingMenuGui(player, "Crafting: &4" + Color.strip(item.getItemMeta().getDisplayName()), new HashMap<>(), recipe, null);
+            menuGui.open();
             return false;
         });
     }

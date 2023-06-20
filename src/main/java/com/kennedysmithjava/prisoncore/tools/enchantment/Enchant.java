@@ -1,5 +1,7 @@
 package com.kennedysmithjava.prisoncore.tools.enchantment;
 
+import com.kennedysmithjava.prisoncore.crafting.Recipe;
+import com.kennedysmithjava.prisoncore.eco.Cost;
 import org.bukkit.Material;
 
 import java.util.*;
@@ -52,7 +54,8 @@ public abstract class Enchant<E extends Enchant<E>> {
 
     public abstract int getEnchantGUISlot();
 
-    protected abstract List<String> getUnformattedGUILore();
+    public abstract List<String> getUnformattedGUILore();
+
     //Used for placeholders. How much is this enchant effected by its level?
     //Ex. For a level 1 ExplosiveEnchant it might return "Radius: 4" (Radius = 3 + level)
     public abstract String getMagnitudeString(int level);
@@ -63,20 +66,12 @@ public abstract class Enchant<E extends Enchant<E>> {
 
     public abstract Material getIcon();
 
+    public abstract Recipe getEnchantBookRecipe();
+    public abstract List<Cost> getCraftCosts();
+    public abstract List<Cost> getApplyCosts();
+
     public String getSimpleName(){
         return getClass().getSimpleName();
-    }
-
-    public List<String> getGUILore(int level){
-        List<String> lore = new ArrayList<>();
-        getUnformattedGUILore().forEach(s ->
-                lore.add(s
-                        .replaceAll("%level%", String.valueOf(level))
-                        .replaceAll("%max_level%", String.valueOf(getMaxLevel()))
-                        .replaceAll("%min_level%", String.valueOf(getMinLevel()))
-                        .replaceAll("%magnitude%", getMagnitudeString(level))
-                ));
-        return lore;
     }
 
     public int incrementLevel(int level){

@@ -63,7 +63,7 @@ public class CrateRoulette {
         LoopIterator<CratePrize> prizeLoopIterator = new LoopIterator<>(prizePool);
         HashMap<GuiCell, CratePrize> currentlyDisplayed = new HashMap<>();
         List<GuiCell> currentlyDisplayedGlass = new ArrayList<>();
-        ItemStack spinnerItem = new ItemBuilder(Material.HOPPER).name(Color.get("&7Spinner")).build();
+        ItemStack spinnerItem = new ItemBuilder(Material.HOPPER).name("&7Spinner").build();
 
         // Display initial prizes in the inventory
         for (int i = 0; i < 9; i++) {

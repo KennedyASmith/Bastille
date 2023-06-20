@@ -1,7 +1,6 @@
 package com.kennedysmithjava.prisoncore.crafting;
 
 import com.kennedysmithjava.prisoncore.PrisonCore;
-import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -10,12 +9,14 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public abstract class PrisonObject {
 
 
     public abstract ItemStack giveRawItem();
     public static NamespacedKey prisonObjectKey = new NamespacedKey(PrisonCore.get(), "pObj");
+    public static NamespacedKey antiStackableKey = new NamespacedKey(PrisonCore.get(), "stackableKey");
 
     public abstract String getKey();
 
@@ -28,9 +29,9 @@ public abstract class PrisonObject {
             getStoredData().forEach((dataType, objMap) ->
                     objMap.forEach((namespacedKey, o) ->
                             pdc.set(namespacedKey, (PersistentDataType<T, Z>) dataType, (Z) o)));
-            pdc.set(prisonObjectKey, PersistentDataType.STRING, getKey());
-            for (NamespacedKey key : pdc.getKeys()) {
-                Bukkit.broadcastMessage("PDC 1: " + key.getKey());
+            pdc.set(prisonObjectKey, PersistentDataType.STRING, this.getKey());
+            if(!this.isStackable()){
+                pdc.set(antiStackableKey, PersistentDataType.STRING, UUID.randomUUID().toString());
             }
         }
         item.setItemMeta(meta);
@@ -55,6 +56,14 @@ public abstract class PrisonObject {
         String key = pdc.get(prisonObjectKey, PersistentDataType.STRING);
         if(key == null) return false;
         return key.equals(getKey());
+    }
+
+    /**
+     * By default, prison objects are stackable.
+     * @return
+     */
+    public boolean isStackable(){
+        return true;
     }
 
     public static boolean isPrisonObj(ItemStack itemStack){

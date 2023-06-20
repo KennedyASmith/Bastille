@@ -1,10 +1,17 @@
 package com.kennedysmithjava.prisoncore.tools.enchantment;
 
+import com.kennedysmithjava.prisoncore.crafting.Recipe;
+import com.kennedysmithjava.prisoncore.eco.Cost;
+import com.kennedysmithjava.prisoncore.eco.CostCurrency;
+import com.kennedysmithjava.prisoncore.eco.CostSkillLevel;
+import com.kennedysmithjava.prisoncore.eco.CurrencyType;
 import com.kennedysmithjava.prisoncore.entity.mines.Distribution;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.PrisonBlock;
 import com.kennedysmithjava.prisoncore.entity.tools.EnchantConf;
 import com.kennedysmithjava.prisoncore.event.EventMineBlockBreak;
+import com.kennedysmithjava.prisoncore.skill.SkillType;
 import com.kennedysmithjava.prisoncore.util.regions.LazyRegion;
+import com.massivecraft.massivecore.util.MUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
@@ -73,7 +80,7 @@ public class PickaxeJackhammerEnchant extends BlockBreakEnchant<PickaxeJackhamme
     }
 
     @Override
-    protected List<String> getUnformattedGUILore() {
+    public List<String> getUnformattedGUILore() {
         return EnchantConf.get().PickaxeJackhammerEnchantGUILore;
     }
 
@@ -95,6 +102,29 @@ public class PickaxeJackhammerEnchant extends BlockBreakEnchant<PickaxeJackhamme
     @Override
     public Material getIcon() {
         return EnchantConf.get().PickaxeJackhammerEnchantIcon;
+    }
+
+    @Override
+    public Recipe getEnchantBookRecipe() {
+        return Recipe.ENCHANT_BOOK_EFFICIENCY;
+    }
+
+
+    @Override
+    public List<Cost> getCraftCosts() {
+        return MUtil.list(
+                new CostCurrency(CurrencyType.CASH, 1000),
+                new CostSkillLevel(SkillType.ENCHANTING, 2),
+                new CostSkillLevel(SkillType.CRAFTING, 2)
+        );
+    }
+
+    @Override
+    public List<Cost> getApplyCosts() {
+        return MUtil.list(
+                new CostCurrency(CurrencyType.CASH, 500),
+                new CostSkillLevel(SkillType.ENCHANTING, 2)
+        );
     }
 
 }

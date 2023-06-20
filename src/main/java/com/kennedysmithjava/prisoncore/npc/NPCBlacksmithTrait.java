@@ -3,6 +3,7 @@ package com.kennedysmithjava.prisoncore.npc;
 import com.kennedysmithjava.prisoncore.crafting.Recipe;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayerColl;
+import com.kennedysmithjava.prisoncore.gui.CraftingMenuGui;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.massivecraft.massivecore.chestgui.ChestGui;
 import com.massivecraft.massivecore.util.MUtil;
@@ -19,6 +20,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -79,11 +81,8 @@ public class NPCBlacksmithTrait extends Trait {
     }
 
     private void openCraftMenu(ChestGui home, Player player){
-        ChestGui chestGui = Recipe.getCraftingMenu(home, Recipe.PICKAXE, "&4Enter Pickaxe Ingredients");
-
-        player.closeInventory();
-        player.openInventory(chestGui.getInventory());
-
+        CraftingMenuGui pickaxeCraftMenu = new CraftingMenuGui(player, "&4Enter Pickaxe Ingredients", new HashMap<>(), Recipe.PICKAXE, null);
+        pickaxeCraftMenu.open();
     }
     @EventHandler
     public void click(NPCLeftClickEvent event) {

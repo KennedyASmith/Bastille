@@ -83,12 +83,6 @@ public class PrisonCore extends MassivePlugin {
     @Override
     public void onEnableInner() {
 
-
-        this.activate(PouchCommand.class);
-
-        // ACTIVATE ENGINES/COLLECTORS
-        this.activateAuto();
-
         Enchant.register(PickaxeConeEnchant.get());
         Enchant.register(PickaxeEfficiencyEnchant.get());
         Enchant.register(PickaxeExplosiveEnchant.get());
@@ -101,6 +95,11 @@ public class PrisonCore extends MassivePlugin {
         Enchant.register(PickaxeRefinerEnchant.get());
         Enchant.register(PickaxeSpeedEnchant.get());
         Enchant.register(PickaxeVeinEnchant.get());
+
+        this.activate(PouchCommand.class);
+
+        // ACTIVATE ENGINES/COLLECTORS
+        this.activateAuto();
 
         QuestPath.register(PathIntroduction.get());
 

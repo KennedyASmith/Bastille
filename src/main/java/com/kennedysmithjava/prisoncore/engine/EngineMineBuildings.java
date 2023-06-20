@@ -4,11 +4,10 @@ import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.entity.MConf;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.mines.MineColl;
-import com.kennedysmithjava.prisoncore.tools.Pickaxe;
+import com.kennedysmithjava.prisoncore.gui.EnchantMenuGui;
 import com.kennedysmithjava.prisoncore.util.Color;
-import com.kennedysmithjava.prisoncore.util.regions.LazyRegion;
-import com.kennedysmithjava.prisoncore.tools.enchantment.Enchant;
 import com.kennedysmithjava.prisoncore.util.Glow;
+import com.kennedysmithjava.prisoncore.util.regions.LazyRegion;
 import com.massivecraft.massivecore.Engine;
 import com.massivecraft.massivecore.chestgui.ChestGui;
 import com.massivecraft.massivecore.util.MUtil;
@@ -29,7 +28,6 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class EngineMineBuildings extends Engine {
 
@@ -129,19 +127,15 @@ public class EngineMineBuildings extends Engine {
                     break;
                 case CHEST:
                     chestMenu(event.getPlayer());
-                    event.setCancelled(true);
                     break;
                 case BEACON:
                     beaconMenu(event.getPlayer());
-                    event.setCancelled(true);
                     break;
                 case ANVIL:
                     anvilMenu(event.getPlayer());
-                    event.setCancelled(true);
                     break;
                 case HOPPER:
                     hopperMenu(event.getPlayer());
-                    event.setCancelled(true);
                     break;
             }
 
@@ -150,59 +144,8 @@ public class EngineMineBuildings extends Engine {
     }
 
     public void enchantMenu(Player player){
-
-        ItemStack item = player.getInventory().getItemInMainHand();
-
-        if(!Pickaxe.isPickaxe(item)){ player.sendMessage(Color.get("You are not holding an enchantable item.")); return; }
-
-        Pickaxe pickaxe = Pickaxe.get(item);
-
-        Inventory enchantInv= Bukkit.createInventory(null, 6*9, Color.get("&8&lPickaxe Enchantments"));
-        ChestGui gui = ChestGui.getCreative(enchantInv);
-        gui.setAutoclosing(false);
-        blockFill(enchantInv, Material.WHITE_STAINED_GLASS_PANE, (short) 1);
-
-        enchantInv.setItem(13, item.clone());
-
-        Map<String, Integer> enchants = pickaxe.getEnchantsRaw();
-
-        ItemStack pickaxeItem = pickaxe.getItem();
-
-        Enchant.getActiveEnchants().forEach((id, enchant) -> {
-
-            if(enchants.containsKey(id)){
-                enchantInv.setItem(enchant.getEnchantGUISlot(), getItem(enchant.getDisplayName().replaceAll("%name%", enchant.getName()), enchant.getIcon(),  enchant.getGUILore(enchants.get(id)), true));
-                gui.setAction(enchant.getEnchantGUISlot(), inventoryClickEvent -> {
-                            pickaxe.addEnchant(enchant, enchant.incrementLevel(enchants.get(id)));
-                            player.sendMessage(Color.get("&aYou have upgraded your " + enchant.getDisplayName().replaceAll("%name%", enchant.getName()) + " &aenchant!"));
-                            ItemStack newItem = pickaxe.getItem();
-                            ItemMeta meta = pickaxeItem.getItemMeta();
-                            meta.setLore(pickaxe.getType().getLore(pickaxe.getEnchants(), pickaxe.getLeveledAbility(), pickaxe.getDurability(), pickaxe.getMaxDurability()));
-                            newItem.setItemMeta(meta);
-                            player.setItemInHand(newItem);
-                            player.closeInventory();
-                            return false;
-                        });
-            }else{
-                enchantInv.setItem(enchant.getEnchantGUISlot(), getItem(enchant.getDisplayName().replaceAll("%name%", enchant.getName()), enchant.getIcon(),  MUtil.list("You have not unlocked this."), false));
-
-                gui.setAction(enchant.getEnchantGUISlot(), inventoryClickEvent -> {
-                    pickaxe.addEnchant(enchant, 1);
-                    player.sendMessage(Color.get("&aYou have upgraded your " + enchant.getDisplayName().replaceAll("%name%", enchant.getName()) + " &aenchant!"));
-                    ItemStack newItem = pickaxe.getItem();
-                    ItemMeta meta = pickaxeItem.getItemMeta();
-                    meta.setLore(pickaxe.getType().getLore(pickaxe.getEnchants(), pickaxe.getLeveledAbility(), pickaxe.getDurability(), pickaxe.getMaxDurability()));
-                    newItem.setItemMeta(meta);
-                    player.setItemInHand(newItem);
-                    player.closeInventory();
-                    return false;
-                });
-            }
-
-        });
-
-        player.openInventory(gui.getInventory());
-
+        EnchantMenuGui menu = new EnchantMenuGui(player);
+        menu.open();
     }
 
     public void chestMenu(Player player){

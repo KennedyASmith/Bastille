@@ -15,7 +15,7 @@ public enum EssenceType {
     AIR(Material.WHITE_DYE, "&fAir Essence", MUtil.list("&dEnchanting Material", " &r", "&7The magical essence of air!!&7")),
     FIRE(Material.BLAZE_POWDER, "&cFire Essence", MUtil.list("&dEnchanting Material", " &r", "&7The magical essence of fire!!&7")),
     WATER(Material.BLUE_DYE, "&bWater Essence", MUtil.list("&dEnchanting Material", " &r", "&7The magical essence of water!!&7")),
-    EARTH(Material.BROWN_DYE, "&cEarth Essence", MUtil.list("&dEnchanting Material", " &r", "&7The magical essence of earth!!&7"));
+    EARTH(Material.BROWN_DYE, "&aEarth Essence", MUtil.list("&dEnchanting Material", " &r", "&7The magical essence of earth!!&7"));
     final String displayName;
     final List<String> lore;
     final Material material;

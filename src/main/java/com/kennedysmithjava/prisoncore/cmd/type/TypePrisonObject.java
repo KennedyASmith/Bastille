@@ -2,17 +2,19 @@ package com.kennedysmithjava.prisoncore.cmd.type;
 
 import com.kennedysmithjava.prisoncore.crafting.PrisonObject;
 import com.kennedysmithjava.prisoncore.crafting.objects.*;
+import com.kennedysmithjava.prisoncore.crafting.objects.type.EssenceType;
 import com.kennedysmithjava.prisoncore.crafting.objects.type.LogType;
 import com.kennedysmithjava.prisoncore.crafting.objects.type.MetalType;
 import com.kennedysmithjava.prisoncore.crafting.objects.type.StickType;
-import com.kennedysmithjava.prisoncore.entity.farming.TreesConf;
 import com.kennedysmithjava.prisoncore.entity.farming.objects.TreeTemplate;
+import com.kennedysmithjava.prisoncore.tools.enchantment.Enchant;
 import com.massivecraft.massivecore.MassiveException;
 import com.massivecraft.massivecore.command.type.TypeAbstract;
-import com.massivecraft.massivecore.comparator.ComparatorCaseInsensitive;
 import org.bukkit.command.CommandSender;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TypePrisonObject extends TypeAbstract<PrisonObject> {
     // -------------------------------------------- //
@@ -37,6 +39,17 @@ public class TypePrisonObject extends TypeAbstract<PrisonObject> {
             add("LOG_" + logType.name(), new PrisonLog(logType));
         }
 
+        for(Enchant<?> enchant : Enchant.getActiveEnchants().values()){
+            add("ENCHANT_BOOK_" + enchant.getID().toUpperCase(), new PrisonEnchantBook(enchant, 1));
+        }
+
+        for (EssenceType value : EssenceType.values()) {
+            add("ESSENCE_" + value.name(), new PrisonEssence(value));
+        }
+
+        add("BOOK", new PrisonBook());
+        add("FEATHER", new PrisonFeather());
+        add("FOOT", new PrisonFoot());
         add("SAWDUST", new PrisonSawdust());
         add("BOWL", new PrisonBowl());
         add("STRING", new PrisonString());

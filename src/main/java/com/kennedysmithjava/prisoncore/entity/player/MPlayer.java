@@ -104,7 +104,7 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
 
     /**
      * Remove money from the player's balance.
-     *
+     * ! DON'T USE FOR TRANSACTIONS !
      * @param eco    CurrencyType
      * @param amount amount of money you want to remove from the player's balance.
      */
@@ -292,6 +292,22 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
         QuestPath activeQuestPath = getQuestProfile().getActiveQuestPath();
         if(activeQuestPath == null) return;
         activeQuestPath.deactivate(this);
+    }
+
+    public boolean hasCurrency(CurrencyType type, double neededAmount){
+        if(!economy.containsKey(type)) return false;
+        double hasAmt = economy.get(type);
+        return hasAmt >= neededAmount;
+    }
+
+    /**
+     * Used for transactions.
+     * @return true if the transaction was successful
+     */
+    public boolean takeCurrency(CurrencyType type, double amount){
+        if(!hasCurrency(type, amount)) return false;
+        removeBalance(type, amount);
+        return true;
     }
 
 }

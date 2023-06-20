@@ -81,18 +81,18 @@ public class EnchantConf extends Entity<EnchantConf>
     public String PickaxeVisionEnchantLore                  = "&7%name%";
 
 
-    public List<String> PickaxeConeEnchantGUILore             = MUtil.list("&7Level &8[&7%level%&8/&7%max_level%&8]", "", "&7Breaks blocks in a large cone shape!");
-    public List<String> PickaxeEfficiencyEnchantGUILore       = MUtil.list("&7Level &8[&7%level%&8/&7%max_level%&8]", "", "&7Increases the speed of mining!");
-    public List<String> PickaxeExplosiveEnchantGUILore        = MUtil.list("&7Level &8[&7%level%&8/&7%max_level%&8]", "", "&7Breaks blocks with an explosion!");
-    public List<String> PickaxeRefinerEnchantGUILore          = MUtil.list("&7Level &8[&7%level%&8/&7%max_level%&8]", "", "&7Breaks blocks with an explosion!");
-    public List<String> PickaxeHasteEnchantGUILore            = MUtil.list("&7Level &8[&7%level%&8/&7%max_level%&8]", "", "&7Gives you a haste potion effect", "while holding this item.");
-    public List<String> PickaxeJackhammerEnchantGUILore       = MUtil.list("&7Level &8[&7%level%&8/&7%max_level%&8]", "", "&7Increases the chance of mining", "&7an entire layer of a mine!");
-    public List<String> PickaxeJackpotEnchantGUILore          = MUtil.list("&7Level &8[&7%level%&8/&7%max_level%&8]", "", "&7Increases the chance finding", "crate keys, tokens, and money while mining!");
-    public List<String> PickaxeLaserEnchantGUILore            = MUtil.list("&7Level &8[&7%level%&8/&7%max_level%&8]", "", "&7Mines blocks in the direction you're facing!", "(It's a laser!)");
-    public List<String> PickaxeLuckEnchantGUILore             = MUtil.list("&7Level &8[&7%level%&8/&7%max_level%&8]", "", "&7Increases the chance of finding", "a Mystery Egg while mining!");
-    public List<String> PickaxeSpeedEnchantGUILore            = MUtil.list("&7Level &8[&7%level%&8/&7%max_level%&8]", "", "&7Gives you a speed potion effect", "while holding this item.");
-    public List<String> PickaxeVeinEnchantGUILore             = MUtil.list("&7Level &8[&7%level%&8/&7%max_level%&8]", "", "&7Allows you to mine many blocks of the same type!");
-    public List<String> PickaxeVisionEnchantGUILore             = MUtil.list("&7Level &8[&7%level%&8/&7%max_level%&8]", "", "&7Gives you a night vision potion effect", "while holding this item.");
+    public List<String> PickaxeConeEnchantGUILore             = MUtil.list("&7Breaks blocks in a large cone shape!");
+    public List<String> PickaxeEfficiencyEnchantGUILore       = MUtil.list("&7Increases the speed of mining!");
+    public List<String> PickaxeExplosiveEnchantGUILore        = MUtil.list("&7Breaks blocks with an explosion!");
+    public List<String> PickaxeRefinerEnchantGUILore          = MUtil.list("&7Breaks blocks with an explosion!");
+    public List<String> PickaxeHasteEnchantGUILore            = MUtil.list("&7Gives you a haste potion effect", "&7while holding this item.");
+    public List<String> PickaxeJackhammerEnchantGUILore       = MUtil.list("&7Increases the chance of mining", "&7an entire layer of a mine!");
+    public List<String> PickaxeJackpotEnchantGUILore          = MUtil.list("&7Increases the chance finding", "&7crate keys, tokens, and money while mining!");
+    public List<String> PickaxeLaserEnchantGUILore            = MUtil.list("&7Mines blocks in the direction you're facing!", "&7(It's a laser!)");
+    public List<String> PickaxeLuckEnchantGUILore             = MUtil.list("&7Increases the chance of finding", "&7a Mystery Egg while mining!");
+    public List<String> PickaxeSpeedEnchantGUILore            = MUtil.list("&7Gives you a speed potion effect", "&7while holding this item.");
+    public List<String> PickaxeVeinEnchantGUILore             = MUtil.list("&7Allows you to mine many blocks of the same type!");
+    public List<String> PickaxeVisionEnchantGUILore             = MUtil.list("&7Gives you a night vision potion effect", "&7while holding this item.");
 
 
     public int PickaxeEfficiencyEnchantGUISlot       = 28;
