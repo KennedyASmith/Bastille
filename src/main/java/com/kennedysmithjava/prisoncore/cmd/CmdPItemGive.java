@@ -2,19 +2,13 @@ package com.kennedysmithjava.prisoncore.cmd;
 
 import com.kennedysmithjava.prisoncore.Perm;
 import com.kennedysmithjava.prisoncore.cmd.type.TypePrisonObject;
-import com.kennedysmithjava.prisoncore.cmd.type.TypeTree;
 import com.kennedysmithjava.prisoncore.crafting.PrisonObject;
-import com.kennedysmithjava.prisoncore.engine.EngineTrees;
-import com.kennedysmithjava.prisoncore.entity.farming.objects.TreeTemplate;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.massivecraft.massivecore.MassiveException;
 import com.massivecraft.massivecore.command.requirement.RequirementHasPerm;
 import com.massivecraft.massivecore.command.requirement.RequirementIsPlayer;
 import com.massivecraft.massivecore.command.type.primitive.TypeInteger;
-import com.massivecraft.massivecore.mixin.MixinMessage;
-import com.massivecraft.massivecore.util.Txt;
 import org.bukkit.ChatColor;
-import org.bukkit.block.Block;
 
 public class CmdPItemGive extends CoreCommand {
 
@@ -28,7 +22,7 @@ public class CmdPItemGive extends CoreCommand {
 
         // Parameters
         this.addParameter(TypePrisonObject.get(), "name");
-        this.addParameter(TypeInteger.get(), "amount");
+        this.addParameter(1, TypeInteger.get(), "amount");
     }
 
     @Override

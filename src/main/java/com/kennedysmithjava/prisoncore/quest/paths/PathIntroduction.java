@@ -1,5 +1,6 @@
 package com.kennedysmithjava.prisoncore.quest.paths;
 
+import com.kennedysmithjava.prisoncore.eco.CurrencyType;
 import com.kennedysmithjava.prisoncore.entity.mines.WarrenConf;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.tools.PickaxeType;
@@ -14,7 +15,6 @@ import com.kennedysmithjava.prisoncore.util.ItemBuilder;
 import com.kennedysmithjava.prisoncore.util.regions.Offset;
 import com.massivecraft.massivecore.util.MUtil;
 import net.citizensnpcs.api.npc.NPC;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -54,7 +54,7 @@ public class PathIntroduction extends QuestPath {
 
     @Override
     public void onActivate(MPlayer player) {
-        Bukkit.broadcastMessage("You've activated the QuestPath!");
+
     }
 
     public List<Quest> getInitializedQuests(MPlayer player){
@@ -69,13 +69,34 @@ public class PathIntroduction extends QuestPath {
                         PART_1_POS_3_OFFSET,
                         PART_1_POS_4_OFFSET),
                 MUtil.list(
-                        "Hey you!",
-                        "I'm Warren, the Warden around here.",
-                        "This here is your mine",
-                        "Take this pickaxe and mine 10 blocks. With an anvil, and the right blocks, you can make your own!"
+                        MUtil.list(
+                                "&7&l ???",
+                                " &7\"Hey you!",
+                                " &7Where do you think you're wandering off to?\""
+                        ),
+                        MUtil.list(
+                                "&6&lWarren the Warden",
+                                " &7\"I'm &eWarren&7, the Warden around here.",
+                                " &7You'll be working for me, for the time being.",
+                                " I'll walk you through things to get started.\""
+                        ),
+                        MUtil.list(
+                                "&6&lWarren the Warden",
+                                " &7\"This pit down here is your &eMine.",
+                                " &7You can exchange these blocks &7for &a" + CurrencyType.CASH.getSymbol() + " " + CurrencyType.CASH.getDisplayName(),
+                                " &7if you speak with &eCaleb the Collector&7.\""
+                        ),
+                        MUtil.list(
+                                "&6&lWarren the Warden",
+                                "&7\"Here, grab this pickaxe and mine a few blocks.",
+                                " &7&eMetal &7can also be found while mining, which",
+                                " &7can be used to forge new &e Pickaxes&7!\"",
+                                " &a- New Task: &7Pick up the &ePickaxe",
+                                " &a- New Task: &7Mine &e10 &7blocks."
+                        )
                 ),
                 false,
-                3*20,
+                5*20,
                 "Warren",
                 WarrenConf.get().warrenSkin);
 
@@ -95,12 +116,32 @@ public class PathIntroduction extends QuestPath {
                         PART_2_POS_1_OFFSET,
                         PART_2_POS_2_OFFSET),
                 MUtil.list(
-                        "Good work.",
-                        "Your mine is almost out of blocks!",
-                        "Press this lever to regen your mine!"
+
+                        MUtil.list(
+                                "&6&lWarren the Warden",
+                                " &7\"Nice work.",
+                                " &7Those &eBlocks &7aren't useful on their own,",
+                                " &7But you can sell them &7for &aCash",
+                                " &7if you speak with &eColin the Collector&7!\""
+                        ),
+                        MUtil.list(
+                                "&6&lWarren the Warden",
+                                " &7\"&a" + CurrencyType.CASH.getSymbol() + " " + CurrencyType.CASH.getDisplayName() + " &7 is very useful for spending on",
+                                " &7Enchantments, &bAuto Miners&7,",
+                                " &7Mine Upgrades & Decorations&7, &7and even",
+                                " &7your &ePlayer Level&7 if you speak with me later!\""
+                        ),
+                        MUtil.list(
+                                "&6&lWarren the Warden",
+                                " &7\"Anyways, it looks like your mine is",
+                                " &7almost out of blocks. Flip this lever to",
+                                " &7regenerate the blocks in your mine!\"",
+                                " &r",
+                                " &a- New Task: &7Flip the Regen Lever"
+                        )
                 ),
                 false,
-                3*20,
+                5*20,
                 "Warren",
                 WarrenConf.get().warrenSkin,
                 npc);
@@ -113,11 +154,25 @@ public class PathIntroduction extends QuestPath {
                 MUtil.list(PART_2_POS_2_OFFSET,
                         PART_3_POS_1_OFFSET),
                 MUtil.list(
-                        "Great work. ",
-                        "I'll be over here if you need me."
+                        MUtil.list(
+                                "&6&lWarren the Warden",
+                                " &7\"You seem like you'd get lost easily.",
+                                " &7I'll give you a map &6&lMap&7 in a moment.",
+                                " &7You can use it to track Quests&7,",
+                                " &7view nearby NPCs, find shops, and more!\""
+                        ),
+                        MUtil.list(
+                                "&6&lWarren the Warden",
+                                " &7\"I'll be over here if you need me.",
+                                " &7&eArchie &7 will be on my left to help you ",
+                                " &7edit your &eMine. &eColin &7will be on ",
+                                " &7my right if you need to sell &eblocks.",
+                                " &r",
+                                " &7Now get working!\""
+                        )
                 ),
                 true,
-                3*20,
+                5*20,
                 "Warren",
                 WarrenConf.get().warrenSkin,
                 npc);
@@ -134,10 +189,10 @@ public class PathIntroduction extends QuestPath {
     }
 
     @Override
-    public void onCompleteQuest(int questPart) {
-        switch (questPart) {
-            case 0 -> Bukkit.broadcastMessage("You finished part 1.");
-            case 1 -> Bukkit.broadcastMessage("You finished part 2.");
+    public void onCompleteQuest(int questPart, MPlayer player) {
+        if(questPart == 5){
+            //TODO: Give player a map here
+            player.getQuestProfile().addUnlockedQuestPath(PathStarterGateway.get());
         }
     }
 

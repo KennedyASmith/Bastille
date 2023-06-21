@@ -17,4 +17,6 @@ public class Skin {
     public String getTexture() {
         return texture;
     }
+
+
 }

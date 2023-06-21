@@ -4,11 +4,11 @@ import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class EventMineChanged extends Event {
+public class EventMineArchitectureChanged extends Event {
 
     private final Mine mine;
 
-    public EventMineChanged(Mine mine) {
+    public EventMineArchitectureChanged(Mine mine) {
         this.mine = mine;
     }
 

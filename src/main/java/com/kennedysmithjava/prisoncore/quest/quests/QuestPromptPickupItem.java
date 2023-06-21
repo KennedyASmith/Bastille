@@ -12,7 +12,6 @@ import com.kennedysmithjava.prisoncore.util.vfx.CircleSequence;
 import com.kennedysmithjava.prisoncore.util.vfx.ParticleFn;
 import me.filoghost.holographicdisplays.api.beta.HolographicDisplaysAPI;
 import me.filoghost.holographicdisplays.api.beta.hologram.Hologram;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -103,7 +102,6 @@ public class QuestPromptPickupItem extends Quest {
     @Override
     public void onEnterRegion() {
         Player p = player.getPlayer();
-        Bukkit.broadcastMessage("Entered the region for pickup quest.");
         MiscUtil.givePlayerItem(p, item, 1);
         this.completeThisQuest();
     }

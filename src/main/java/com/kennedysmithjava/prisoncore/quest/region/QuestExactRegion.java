@@ -1,6 +1,5 @@
 package com.kennedysmithjava.prisoncore.quest.region;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.map.MapCanvas;
 
@@ -20,7 +19,6 @@ public class QuestExactRegion implements QuestRegion {
     }
 
     public boolean has(Location loc) {
-        Bukkit.broadcastMessage("Goal X:" + x + " Y: " + y + " Z:" + z);
         return loc.getBlockX() == x && loc.getBlockY() == y && loc.getBlockZ() == z;
     }
 

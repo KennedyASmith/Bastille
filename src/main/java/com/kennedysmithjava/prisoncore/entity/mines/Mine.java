@@ -6,7 +6,7 @@ import com.kennedysmithjava.prisoncore.util.regions.MinesWorldManager;
 import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.cmd.type.TypeMobility;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.Floor;
-import com.kennedysmithjava.prisoncore.event.EventMineChanged;
+import com.kennedysmithjava.prisoncore.event.EventMineArchitectureChanged;
 import com.kennedysmithjava.prisoncore.blockhandler.BlockWrapper;
 import com.kennedysmithjava.prisoncore.npc.mine.NPCArchitect;
 import com.kennedysmithjava.prisoncore.npc.mine.NPCCoinCollector;
@@ -305,7 +305,7 @@ public class  Mine extends Entity<Mine> implements Named {
         this.setHeightVar(h);
         this.regen();
         this.pauseRegenCountdown(false);
-        Bukkit.getServer().getPluginManager().callEvent(new EventMineChanged(this));
+        Bukkit.getServer().getPluginManager().callEvent(new EventMineArchitectureChanged(this));
     }
 
     /**
@@ -385,7 +385,7 @@ public class  Mine extends Entity<Mine> implements Named {
                 setMineMax(newMax);
                 setMineMin(newMin);
                 onFinish.run();
-                Bukkit.getServer().getPluginManager().callEvent(new EventMineChanged(mine));
+                Bukkit.getServer().getPluginManager().callEvent(new EventMineArchitectureChanged(mine));
             });
         });
     }

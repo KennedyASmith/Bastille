@@ -5,12 +5,14 @@ import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.npc.Skin;
 import com.kennedysmithjava.prisoncore.npc.SkinManager;
 import com.kennedysmithjava.prisoncore.quest.Quest;
+import com.kennedysmithjava.prisoncore.quest.QuestMessage;
 import com.kennedysmithjava.prisoncore.quest.QuestPath;
 import com.kennedysmithjava.prisoncore.quest.region.QuestExactRegion;
 import com.kennedysmithjava.prisoncore.quest.region.QuestRegion;
 import com.kennedysmithjava.prisoncore.util.regions.Offset;
 import net.citizensnpcs.api.ai.Navigator;
 import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.trait.SkinTrait;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -25,7 +27,7 @@ public class QuestWalkAndTalk extends Quest {
 
     private final Location origin;
     private final List<Offset> locations;
-    private final List<String> dialogue;
+    private final List<List<String>> dialogue;
     private final long messageDelay;
     private final String npcName;
     private final Skin npcSkin;
@@ -40,7 +42,7 @@ public class QuestWalkAndTalk extends Quest {
 
     public QuestWalkAndTalk(MPlayer player, Location origin,
                             List<Offset> locations,
-                            List<String> dialogue,
+                            List<List<String>> dialogue,
                             boolean despawnAfterDone,
                             long messageDelay,
                             String npcName,
@@ -60,7 +62,7 @@ public class QuestWalkAndTalk extends Quest {
 
     public QuestWalkAndTalk(MPlayer player, Location origin,
                             List<Offset> locations,
-                            List<String> dialogue,
+                            List<List<String>> dialogue,
                             boolean despawnAfterDone,
                             long messageDelay,
                             String npcName,
@@ -92,7 +94,12 @@ public class QuestWalkAndTalk extends Quest {
 
     @Override
     public void continueQuest(int progress, QuestPath path) {
-        if(npc == null) Bukkit.broadcastMessage("NPC IS NULL");
+        if(npc == null) Bukkit.broadcastMessage("QuestWalkAndTalk: NPC IS NULL");
+        SkinTrait skinTrait = npc.getOrAddTrait(SkinTrait.class);
+        String texture = skinTrait.getTexture();
+        String signature = skinTrait.getSignature();
+        Skin skin = new Skin(texture, signature);
+
         deactivated = false;
         if(progress == locations.size()){
             completeThisQuest();
@@ -102,7 +109,7 @@ public class QuestWalkAndTalk extends Quest {
         if(entity == null){
             spawnNPC(progress);
         }
-        runDialogue(path, origin, progress);
+        runDialogue(path, origin, progress, skin);
     }
 
     private void spawnNPC(int progress){
@@ -113,7 +120,7 @@ public class QuestWalkAndTalk extends Quest {
         SkinManager.skin(npc, npcName, npcSkin, 10);
         entity = npc.getEntity();
     }
-    private void runDialogue(QuestPath path, Location origin, int progress){
+    private void runDialogue(QuestPath path, Location origin, int progress, Skin skin){
         Location target = locations.get(progress).getFrom(origin);
         final AtomicBoolean notBegunNavigating = new AtomicBoolean(true);
         AtomicReference<Navigator> navigator = new AtomicReference<>();
@@ -134,7 +141,11 @@ public class QuestWalkAndTalk extends Quest {
                     return;
                 }
                 // Otherwise, it has reached its target
-                player.msg(dialogue.get(progress));
+                if(player.getPlayer() != null){
+                    QuestMessage questMessage = new QuestMessage(npcName, skin, dialogue.get(progress));
+                    questMessage.sendMessage(player.getPlayer());
+                }
+
                 new BukkitRunnable() {
                     @Override
                     public void run() {
@@ -159,7 +170,6 @@ public class QuestWalkAndTalk extends Quest {
         if(npc.isSpawned()) npc.despawn();
         npc.destroy();
         deactivated = true;
-        Bukkit.broadcastMessage("Deactivated quest");
     }
 
     @Override

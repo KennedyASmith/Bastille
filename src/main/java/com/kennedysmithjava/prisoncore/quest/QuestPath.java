@@ -73,7 +73,7 @@ public abstract class QuestPath {
         }
         onActivate(player);
     }
-    public abstract void onCompleteQuest(int currentPathProgress);
+    public abstract void onCompleteQuest(int currentPathProgress, MPlayer player);
 
     public void deactivate(MPlayer player){
         QuestProfile profile = player.getQuestProfile();
@@ -91,7 +91,7 @@ public abstract class QuestPath {
             PrisonMapRenderer.reRenderQuest.remove(player.getUuid());
         }
         profile.resetCurrentQuestProgress();
-        onCompleteQuest(currentPathProgress);
+        onCompleteQuest(currentPathProgress, player);
         profile.setActiveQuest(null);
         if(hasNext(player, profile.getPathQuestList(player), currentPathProgress)){
             profile.incrementCurrentPathProgress();

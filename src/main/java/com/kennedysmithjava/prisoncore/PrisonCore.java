@@ -14,6 +14,7 @@ import com.kennedysmithjava.prisoncore.entity.mines.objects.Floor;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.Wall;
 import com.kennedysmithjava.prisoncore.entity.npcs.FarmerConfColl;
 import com.kennedysmithjava.prisoncore.entity.npcs.FarmerGuiConfColl;
+import com.kennedysmithjava.prisoncore.entity.npcs.SkinsConfColl;
 import com.kennedysmithjava.prisoncore.entity.player.*;
 import com.kennedysmithjava.prisoncore.entity.tools.BufferConfColl;
 import com.kennedysmithjava.prisoncore.entity.tools.EnchantConfColl;
@@ -23,6 +24,7 @@ import com.kennedysmithjava.prisoncore.event.EventNewMine;
 import com.kennedysmithjava.prisoncore.npc.NPCBlacksmithTrait;
 import com.kennedysmithjava.prisoncore.npc.NPCLimboTrait;
 import com.kennedysmithjava.prisoncore.npc.NPCLumberjackTrait;
+import com.kennedysmithjava.prisoncore.npc.SkinManager;
 import com.kennedysmithjava.prisoncore.placeholders.*;
 import com.kennedysmithjava.prisoncore.quest.QuestPath;
 import com.kennedysmithjava.prisoncore.quest.paths.PathIntroduction;
@@ -83,6 +85,9 @@ public class PrisonCore extends MassivePlugin {
     @Override
     public void onEnableInner() {
 
+        // ACTIVATE ENGINES/COLLECTORS
+        this.activateAuto();
+
         Enchant.register(PickaxeConeEnchant.get());
         Enchant.register(PickaxeEfficiencyEnchant.get());
         Enchant.register(PickaxeExplosiveEnchant.get());
@@ -97,9 +102,6 @@ public class PrisonCore extends MassivePlugin {
         Enchant.register(PickaxeVeinEnchant.get());
 
         this.activate(PouchCommand.class);
-
-        // ACTIVATE ENGINES/COLLECTORS
-        this.activateAuto();
 
         QuestPath.register(PathIntroduction.get());
 
@@ -125,6 +127,7 @@ public class PrisonCore extends MassivePlugin {
         Pickaxe.LORE_UPDATER.runTaskTimerAsynchronously(this, 20L, 5 * 20L);
         getServer().getPluginManager().registerEvents(new EngineTools(), this);
         this.protocolManager = ProtocolLibrary.getProtocolManager();
+        SkinManager.registerAll();
     }
 
     @Override
@@ -185,7 +188,8 @@ public class PrisonCore extends MassivePlugin {
                 TreesConfColl.class,
                 FishingConfColl.class,
                 SkillsConfColl.class,
-                SkillProfileColl.class
+                SkillProfileColl.class,
+                SkinsConfColl.class
         );
     }
 

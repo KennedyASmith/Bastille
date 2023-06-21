@@ -5,7 +5,6 @@ import com.kennedysmithjava.prisoncore.tools.Pickaxe;
 import com.kennedysmithjava.prisoncore.util.ItemBuilder;
 import com.massivecraft.massivecore.chestgui.ChestGui;
 import com.massivecraft.massivecore.util.MUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -86,7 +85,6 @@ public class EnchantBookSelectGui extends BaseGui {
         setItem(50, confirmMaterial, "&aContinue", confirmLore, false);
         setAction(50, inventoryClickEvent -> {
             if(selectedEnchants.size() < 1) return false;
-            Bukkit.broadcastMessage("Selected enchants: " + selectedEnchants.toString());
             EnchantApplyGui applyGui = new EnchantApplyGui(player, pickaxe, selectedEnchants, originalBookItems, this);
             close();
             applyGui.open();

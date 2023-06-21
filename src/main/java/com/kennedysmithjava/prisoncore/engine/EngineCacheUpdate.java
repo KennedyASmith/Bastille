@@ -2,7 +2,7 @@ package com.kennedysmithjava.prisoncore.engine;
 
 import com.kennedysmithjava.prisoncore.blockhandler.MineRegionCache;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
-import com.kennedysmithjava.prisoncore.event.EventMineChanged;
+import com.kennedysmithjava.prisoncore.event.EventMineArchitectureChanged;
 import com.massivecraft.massivecore.Engine;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -34,7 +34,7 @@ public class EngineCacheUpdate extends Engine {
      * cache isn't storing incorrect values that produce undesirable effects.
      */
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onMineChanged(EventMineChanged event) {
+    public void onMineChanged(EventMineArchitectureChanged event) {
         final Mine mine = event.getMine();
 
         cache.invalidate(mine.getLazyRegion());

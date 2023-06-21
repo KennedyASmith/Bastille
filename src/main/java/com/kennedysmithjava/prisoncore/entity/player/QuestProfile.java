@@ -180,5 +180,11 @@ public class QuestProfile extends Entity<QuestProfile> {
         if(pathQuestList == null) pathQuestList = getActiveQuestPath().getInitializedQuests(player);
         return pathQuestList;
     }
+
+    public void addUnlockedQuestPath(QuestPath path){
+        unlockedQuestsData.add(path.getClass().getSimpleName());
+        unlockedQuests.add(path);
+        this.changed();
+    }
 }
 
