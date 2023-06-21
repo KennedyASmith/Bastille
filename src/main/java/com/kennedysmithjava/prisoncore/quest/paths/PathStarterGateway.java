@@ -19,6 +19,10 @@ import java.util.List;
 
 public class PathStarterGateway extends QuestPath {
 
+    /**
+     * Remember: Register all QuestPath objects with PrisonCore plugin.
+     */
+
     private static PathStarterGateway i = new PathStarterGateway();
     public static PathStarterGateway get() {
         return i;

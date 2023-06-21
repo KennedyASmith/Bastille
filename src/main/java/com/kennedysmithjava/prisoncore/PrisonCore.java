@@ -1,6 +1,5 @@
 package com.kennedysmithjava.prisoncore;
 
-import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.kennedysmithjava.prisoncore.cmd.PouchCommand;
 import com.kennedysmithjava.prisoncore.engine.EngineTools;
@@ -28,6 +27,7 @@ import com.kennedysmithjava.prisoncore.npc.SkinManager;
 import com.kennedysmithjava.prisoncore.placeholders.*;
 import com.kennedysmithjava.prisoncore.quest.QuestPath;
 import com.kennedysmithjava.prisoncore.quest.paths.PathIntroduction;
+import com.kennedysmithjava.prisoncore.quest.paths.PathStarterGateway;
 import com.kennedysmithjava.prisoncore.tools.Pickaxe;
 import com.kennedysmithjava.prisoncore.tools.ability.*;
 import com.kennedysmithjava.prisoncore.tools.enchantment.*;
@@ -84,10 +84,11 @@ public class PrisonCore extends MassivePlugin {
 
     @Override
     public void onEnableInner() {
+        /* REGISTER QUESTS BEFORE COLLECTORS */
+        QuestPath.register(PathIntroduction.get());
+        QuestPath.register(PathStarterGateway.get());
 
-        // ACTIVATE ENGINES/COLLECTORS
-        this.activateAuto();
-
+        /* REGISTER ENCHANTS */
         Enchant.register(PickaxeConeEnchant.get());
         Enchant.register(PickaxeEfficiencyEnchant.get());
         Enchant.register(PickaxeExplosiveEnchant.get());
@@ -100,44 +101,46 @@ public class PrisonCore extends MassivePlugin {
         Enchant.register(PickaxeRefinerEnchant.get());
         Enchant.register(PickaxeSpeedEnchant.get());
         Enchant.register(PickaxeVeinEnchant.get());
+        this.registerGlow();
 
-        this.activate(PouchCommand.class);
-
-        QuestPath.register(PathIntroduction.get());
-
+        /* REGISTER PICKAXE ABILITIES */
         Ability.register(AbilityAsteroidStrike.get());
         Ability.register(AbilityPulverize.get());
         Ability.register(AbilityTetris.get());
         Ability.register(AbilityBlackhole.get());
 
-        this.registerGlow(); //Register glow enchantment
 
+        /* REGISTER ALL CITIZENS TRAITS */
+        CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(NPCLimboTrait.class));
+        CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(NPCLumberjackTrait.class));
+        CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(NPCBlacksmithTrait.class));
+
+        /* ACTIVATE ENGINES/COLLECTORS */
+        this.activateAuto();
+
+        /* ACTIVATE POUCHES */
+        this.activate(PouchCommand.class);
+        ConfigurationSerialization.registerClass(DatalessPouchable.class);
+
+        /* REGISTER ALL SKINS IN SKINS CONFIG */
+        SkinManager.registerAll();
+
+        /* MISC REGISTRY */
+        Pickaxe.LORE_UPDATER.runTaskTimerAsynchronously(this, 20L, 5 * 20L);
+        getServer().getPluginManager().registerEvents(new EngineTools(), this);
+
+        /* ACTIVATE PLACEHOLDER EXPANSIONS */
         new MineCountdownPlaceholder(this).register();
         new TreeHologramPlaceholder(this).register();
         new MineCurrencyPlaceholder(this).register();
         new SkillPlaceholder(this).register();
         new QuestPlaceholder(this).register();
-
-        ConfigurationSerialization.registerClass(DatalessPouchable.class);
-
-        CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(NPCLimboTrait.class));
-        CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(NPCLumberjackTrait.class));
-        CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(NPCBlacksmithTrait.class));
-
-        Pickaxe.LORE_UPDATER.runTaskTimerAsynchronously(this, 20L, 5 * 20L);
-        getServer().getPluginManager().registerEvents(new EngineTools(), this);
-        this.protocolManager = ProtocolLibrary.getProtocolManager();
-        SkinManager.registerAll();
     }
 
     @Override
     public void onEnablePost() {
         nonPersistNPCRegistry = CitizensAPI.createAnonymousNPCRegistry(new MemoryNPCDataStore());
-        try {
-            EngineTrees.get().loadTreeMaterialCache();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        EngineTrees.get().loadTreeMaterialCache();
     }
 
     public void registerGlow() {

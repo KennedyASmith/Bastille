@@ -86,7 +86,7 @@ public abstract class QuestPath {
     public void innerCompleteQuest(MPlayer player, int currentPathProgress){
         QuestProfile profile = player.getQuestProfile();
         Quest quest = profile.getActiveQuest();
-        if(quest != null && quest.hasRegion(quest.getProgress())){
+        if(quest != null){
             EngineRegions.get().removeFromRegionTracker(player.getUuid());
             PrisonMapRenderer.reRenderQuest.remove(player.getUuid());
         }

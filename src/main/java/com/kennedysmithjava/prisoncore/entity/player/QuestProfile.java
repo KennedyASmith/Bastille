@@ -19,13 +19,9 @@ public class QuestProfile extends Entity<QuestProfile> {
     public String activeQuestPathData = "";
     public int activeQuestPathProgress = 0;
     public int activeQuestProgress = 0;
-    public List<String> currentQuestsData =  new ArrayList<>();
     public List<String> unlockedQuestsData = new ArrayList<>();
     public List<String> completedQuestsData = new ArrayList<>();
 
-    public transient List<QuestPath> currentQuests = new ArrayList<>();
-
-    public transient List<QuestPath> unlockedQuests = new ArrayList<>();
     public transient QuestPath activeQuestPath;
     public transient Quest activeQuest;
 
@@ -38,31 +34,11 @@ public class QuestProfile extends Entity<QuestProfile> {
     @Override
     public QuestProfile load(QuestProfile that) {
         this.setTotalCompletedQuests(that.totalCompletedQuests);
-        this.setCurrentQuestsData(that.currentQuestsData);
         this.setCompletedQuestsData(that.completedQuestsData);
         this.setUnlockedQuestsData(that.unlockedQuestsData);
         this.setActiveQuestPathData(that.activeQuestPathData);
-        for (String currentQuestsDatum : currentQuestsData) {
-            currentQuests.add(QuestPathRegistry.get().getQuest(currentQuestsDatum));
-        }
-        for (String unlockedQuestsDatum : unlockedQuestsData) {
-            unlockedQuests.add(QuestPathRegistry.get().getQuest(unlockedQuestsDatum));
-        }
         setActiveQuestPath(QuestPathRegistry.get().getQuest(that.activeQuestPathData));
         return this;
-    }
-
-    public List<QuestPath> getCurrentQuests() {
-        return currentQuests;
-    }
-
-    public void setCurrentQuestsData(List<String> currentQuestsData) {
-        this.currentQuestsData = currentQuestsData;
-        this.changed();
-    }
-
-    public int getTotalCompletedQuests() {
-        return totalCompletedQuests;
     }
 
     public void setTotalCompletedQuests(int totalCompletedQuests) {
@@ -84,24 +60,17 @@ public class QuestProfile extends Entity<QuestProfile> {
         this.unlockedQuestsData = unlockedQuestsData;
     }
 
-    public List<String> getUnlockedQuestsData() {
-        return unlockedQuestsData;
-    }
-
-
     public List<QuestPath> getUnlockedQuests() {
-        return unlockedQuests;
+        List<QuestPath> unlockedQs = new ArrayList<>();
+        for (String unlockedQuestsDatum : unlockedQuestsData) {
+            QuestPath path = QuestPathRegistry.get().getQuest(unlockedQuestsDatum);
+            if(path != null) unlockedQs.add(path);
+        }
+        return unlockedQs;
     }
 
-    public void removeCurrentQuest(String questName, QuestPath path){
-        this.currentQuestsData.remove(questName);
-        this.currentQuests.remove(path);
-        this.changed();
-    }
-
-    public void removeUnlockedQuest(String questName, QuestPath path){
+    public void removeUnlockedQuest(String questName){
         this.unlockedQuestsData.remove(questName);
-        this.unlockedQuests.remove(path);
         this.changed();
     }
 
@@ -114,8 +83,7 @@ public class QuestProfile extends Entity<QuestProfile> {
         if(activeQuestPath == null) return;
         setActiveQuestPathData(activeQuestPath.getClass().getSimpleName());
         this.activeQuestPath = activeQuestPath;
-        removeCurrentQuest(activeQuestPathData, activeQuestPath);
-        removeUnlockedQuest(activeQuestPathData, activeQuestPath);
+        removeUnlockedQuest(activeQuestPathData);
         MPlayer player = MPlayerColl.get().getByUUID(this.getId());
         setPathQuestList(activeQuestPath.getInitializedQuests(player));
         activeQuestPath.activateCurrentQuest(player, activeQuestPathProgress);
@@ -132,16 +100,12 @@ public class QuestProfile extends Entity<QuestProfile> {
         return activeQuestPath;
     }
 
-    private String getActiveQuestPathData() {
-        return activeQuestPathData;
-    }
-
     public void finalizeQuestPathCompletion(QuestPath questPath){
         if(activeQuestPath.equals(questPath)){
             this.activeQuestPathData = "";
             this.activeQuestPath = null;
             this.activeQuestPathProgress = 0;
-        } else removeUnlockedQuest(questPath.getClass().getSimpleName(), questPath);
+        } else removeUnlockedQuest(questPath.getClass().getSimpleName());
         completedQuestsData.add(questPath.getQuestPathDisplayName());
         this.changed();
     }
@@ -183,7 +147,6 @@ public class QuestProfile extends Entity<QuestProfile> {
 
     public void addUnlockedQuestPath(QuestPath path){
         unlockedQuestsData.add(path.getClass().getSimpleName());
-        unlockedQuests.add(path);
         this.changed();
     }
 }

@@ -2,7 +2,6 @@ package com.kennedysmithjava.prisoncore.quest;
 
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.util.Color;
-import com.kennedysmithjava.prisoncore.util.Glow;
 import com.kennedysmithjava.prisoncore.util.ItemBuilder;
 import com.massivecraft.massivecore.chestgui.ChestGui;
 import com.massivecraft.massivecore.util.MUtil;
@@ -34,12 +33,12 @@ public class QuestListGUI {
      *
      * @param player             the player for whom the GUI is created
      * @param unlockedQuestPaths the list of unlocked quest paths
-     * @param activeQuestPaths   the list of active quest paths
+     * @param activeQuestPath    the active quest path
      * @param completedQuests    the list of completed quests
      */
-    public QuestListGUI(MPlayer player, List<QuestPath> unlockedQuestPaths, List<QuestPath> activeQuestPaths, List<String> completedQuests) {
+    public QuestListGUI(MPlayer player, List<QuestPath> unlockedQuestPaths, QuestPath activeQuestPath, List<String> completedQuests) {
         this.player = player;
-        firstGuiMenu = getQuestInventory(activeQuestPaths, unlockedQuestPaths, completedQuests.stream().sorted().toList(), null);
+        firstGuiMenu = getQuestInventory(activeQuestPath, unlockedQuestPaths, completedQuests.stream().sorted().toList(), null);
     }
 
     /**
@@ -54,13 +53,13 @@ public class QuestListGUI {
      * Creates and returns the quest inventory GUI based on the given lists of active quest paths,
      * unlocked quest paths, completed quests, and the last page GUI.
      *
-     * @param activeQuestPaths   the list of active quest paths
+     * @param activeQuestPath   the active quest path (can be null)
      * @param unlockedQuestPaths the list of unlocked quest paths
      * @param completedQuests    the list of completed quests
      * @param lastPage           the last page GUI
      * @return the quest inventory GUI
      */
-    private ChestGui getQuestInventory(List<QuestPath> activeQuestPaths, List<QuestPath> unlockedQuestPaths, List<String> completedQuests, ChestGui lastPage){
+    private ChestGui getQuestInventory(QuestPath activeQuestPath, List<QuestPath> unlockedQuestPaths, List<String> completedQuests, ChestGui lastPage){
         Inventory inventory = Bukkit.createInventory(null, 6*9, Color.get("&8&lPick a Quest"));
         ChestGui gui = ChestGui.getCreative(inventory);
         ItemStack nextPageItem = new ItemBuilder(Material.ARROW)
@@ -90,32 +89,18 @@ public class QuestListGUI {
             });
         }
 
-        for (int i = 0; i < activeQuestPaths.size(); i++) {
+        if(activeQuestPath != null) {
             int firstSlot = inventory.firstEmpty();
-            if(firstSlot == -1){ // The inv is full
-                ChestGui nextPage = getQuestInventory(
-                        activeQuestPaths.subList(i, activeQuestPaths.size()),
-                        unlockedQuestPaths,
-                        completedQuests,
-                        gui);
-                inventory.setItem(51, nextPageItem);
-                nextPage.setAction(51, inventoryClickEvent -> {
-                    player.getPlayer().openInventory(nextPage.getInventory());
-                    return false;
-                });
-                return gui;
-            }
-            QuestPath path = activeQuestPaths.get(i);
-            ItemStack pathIcon = path.getPathIcon();
-            pathIcon.addEnchantment(Glow.getGlow(), 1);
-            inventory.setItem(firstSlot, pathIcon);
+            ItemStack pathIcon = activeQuestPath.getPathIcon();
+            ItemBuilder builder = new ItemBuilder(pathIcon).addGlow();
+            inventory.setItem(firstSlot, builder.build());
         }
 
         for (int i = 0; i < unlockedQuestPaths.size(); i++) {
             int firstSlot = inventory.firstEmpty();
             if(firstSlot == -1){ // The inv is full
                 ChestGui nextPage = getQuestInventory(
-                        new ArrayList<>(),
+                        null,
                         unlockedQuestPaths.subList(i, unlockedQuestPaths.size()),
                         completedQuests,
                         gui);
@@ -126,7 +111,7 @@ public class QuestListGUI {
                 });
                 return gui;
             }
-            QuestPath path = activeQuestPaths.get(i);
+            QuestPath path = unlockedQuestPaths.get(i);
             inventory.setItem(firstSlot, path.getPathIcon());
         }
 
@@ -134,7 +119,7 @@ public class QuestListGUI {
             int firstSlot = inventory.firstEmpty();
             if(firstSlot == -1) { // The inv is full
                 ChestGui nextPage = getQuestInventory(
-                        new ArrayList<>(),
+                        null,
                         new ArrayList<>(),
                         completedQuests.subList(i, completedQuests.size()),
                         gui);
@@ -146,7 +131,7 @@ public class QuestListGUI {
                 return gui;
             }
 
-            ItemStack completedQuestItem = new ItemBuilder(Material.ARROW)
+            ItemStack completedQuestItem = new ItemBuilder(Material.GRAY_WOOL)
                     .name("&a" + completedQuests.get(i))
                     .lore(MUtil.list("&7You've completed this quest."))
                     .build();

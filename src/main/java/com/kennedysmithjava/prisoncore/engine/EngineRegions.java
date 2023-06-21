@@ -48,6 +48,10 @@ public class EngineRegions extends Engine {
             if(inTheirRegion.contains(player.getUniqueId())) return;
             MPlayer p = MPlayer.get(player);
             Quest q = p.getQuestProfile().getActiveQuest();
+            if(q == null){
+                inTheirRegion.remove(player.getUniqueId());
+                return;
+            }
             q.onEnterRegion();
         }else {
             inTheirRegion.remove(player.getUniqueId());

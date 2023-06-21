@@ -23,6 +23,10 @@ import java.awt.*;
 import java.util.List;
 public class PathIntroduction extends QuestPath {
 
+    /**
+     * Remember: Register all QuestPath objects with PrisonCore plugin.
+     */
+
     private static PathIntroduction i = new PathIntroduction();
     public static PathIntroduction get() {
         return i;
@@ -78,7 +82,7 @@ public class PathIntroduction extends QuestPath {
                                 "&6&lWarren the Warden",
                                 " &7\"I'm &eWarren&7, the Warden around here.",
                                 " &7You'll be working for me, for the time being.",
-                                " I'll walk you through things to get started.\""
+                                " &7I'll walk you through things to get started.\""
                         ),
                         MUtil.list(
                                 "&6&lWarren the Warden",
@@ -96,7 +100,7 @@ public class PathIntroduction extends QuestPath {
                         )
                 ),
                 false,
-                5*20,
+                6*20,
                 "Warren",
                 WarrenConf.get().warrenSkin);
 
@@ -127,9 +131,9 @@ public class PathIntroduction extends QuestPath {
                         MUtil.list(
                                 "&6&lWarren the Warden",
                                 " &7\"&a" + CurrencyType.CASH.getSymbol() + " " + CurrencyType.CASH.getDisplayName() + " &7 is very useful for spending on",
-                                " &7Enchantments, &bAuto Miners&7,",
-                                " &7Mine Upgrades & Decorations&7, &7and even",
-                                " &7your &ePlayer Level&7 if you speak with me later!\""
+                                " &7Enchantments, Auto Miners&7,",
+                                " &7Mine Upgrades & Decorations&7, &7and your",
+                                " &7&ePlayer Level&7 if you speak with me later!\""
                         ),
                         MUtil.list(
                                 "&6&lWarren the Warden",
@@ -141,7 +145,7 @@ public class PathIntroduction extends QuestPath {
                         )
                 ),
                 false,
-                5*20,
+                6*20,
                 "Warren",
                 WarrenConf.get().warrenSkin,
                 npc);
@@ -172,7 +176,7 @@ public class PathIntroduction extends QuestPath {
                         )
                 ),
                 true,
-                5*20,
+                6*20,
                 "Warren",
                 WarrenConf.get().warrenSkin,
                 npc);

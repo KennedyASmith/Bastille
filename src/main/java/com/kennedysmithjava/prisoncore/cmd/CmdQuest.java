@@ -6,7 +6,6 @@ import com.kennedysmithjava.prisoncore.quest.QuestListGUI;
 import com.kennedysmithjava.prisoncore.quest.QuestPath;
 import com.massivecraft.massivecore.MassiveException;
 import com.massivecraft.massivecore.util.MUtil;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -49,9 +48,9 @@ public class CmdQuest extends CoreCommand {
         MPlayer player = MPlayer.get(sender);
         QuestProfile questProfile = player.getQuestProfile();
         List<QuestPath> unlockedQuests = questProfile.getUnlockedQuests();
-        List<QuestPath> activeQuests = questProfile.getCurrentQuests();
+        QuestPath activeQuestPath = questProfile.getActiveQuestPath();
         List<String> completedQuests = questProfile.getCompletedQuestsData();
-        QuestListGUI questListGUI = new QuestListGUI(player, unlockedQuests, activeQuests, completedQuests);
+        QuestListGUI questListGUI = new QuestListGUI(player, unlockedQuests, activeQuestPath, completedQuests);
         questListGUI.open();
     }
 }
