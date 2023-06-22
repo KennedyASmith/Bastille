@@ -11,6 +11,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class EngineResearchPoint extends Engine {
 
@@ -27,7 +28,7 @@ public class EngineResearchPoint extends Engine {
 
     private static final Map<Player, Integer> oweList = new HashMap<>();
     private static final long delay = 10*20L;
-    public static Random random = new java.util.Random();
+    public static Random random = ThreadLocalRandom.current();
     public static int globalMultiplier = 1;
 
     public EngineResearchPoint() {
@@ -36,16 +37,17 @@ public class EngineResearchPoint extends Engine {
             oweList.forEach((player, count) -> {
                 int total = 0;
                 for (int i = 0; i < count; i++) {
-                    double r = random.nextDouble();
-                    double chance = 0.25;
-                    if(r < chance){
+                    double pRandom = random.nextDouble();
+                    double pointChance = 0.25;
+                    if(pRandom < pointChance){
                         total += globalMultiplier /* x localMultiplier */;
                     }
+
                 }
                 if(total > 0){
                     MPlayer mPlayer = MPlayer.get(player);
                     mPlayer.addBalance(CurrencyType.RESEARCH, (double) total);
-                    player.sendMessage(Color.get("&7[&bServer&7] &7You have gained &b✪" + total + " &7for breaking &e" + count + " &7blocks."));
+                    player.sendMessage(Color.get("&7[&b&l⛏&7] &7You have gained &b✪" + total + " &7for breaking &e" + count + " &7blocks."));
                 }
             });
             oweList.clear();
@@ -56,4 +58,6 @@ public class EngineResearchPoint extends Engine {
         int v = oweList.getOrDefault(player, 0);
         oweList.put(player, v + 1);
     }
+
+
 }

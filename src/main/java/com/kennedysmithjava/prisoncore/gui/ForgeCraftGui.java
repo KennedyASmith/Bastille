@@ -25,7 +25,6 @@ import java.util.Map;
 public class ForgeCraftGui extends BaseGui{
     public ForgeCraftGui(Player player) {
         super(player, "&4&lSelect Ore", 6, false, true);
-
     }
 
     @Override

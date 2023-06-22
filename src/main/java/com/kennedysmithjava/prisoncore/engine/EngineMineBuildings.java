@@ -130,7 +130,10 @@ public class EngineMineBuildings extends Engine {
                 }
                 case CHEST -> chestMenu(event.getPlayer());
                 case BEACON -> beaconMenu(event.getPlayer());
-                case ANVIL -> anvilMenu(event.getPlayer());
+                case ANVIL -> {
+                    event.setCancelled(true);
+                    anvilMenu(event.getPlayer());
+                }
                 case HOPPER -> hopperMenu(event.getPlayer());
                 case FURNACE -> {
                     event.setCancelled(true);
