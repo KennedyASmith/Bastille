@@ -19,6 +19,7 @@ import java.util.Map;
 
 public class CraftingDepositGui extends BaseGui{
     Map<Integer, ItemStack> givenIngredients;
+    Map<Integer, PrisonObject> neededIngredients;
     Recipe recipe;
     ItemStack slotted;
     int reqIngredientSlot;
@@ -27,12 +28,9 @@ public class CraftingDepositGui extends BaseGui{
     BaseGui craftingMenu;
 
     public CraftingDepositGui(Player player,
-                              Map<Integer, ItemStack> givenIngredients, Recipe recipe,
-                              Integer reqIngredientSlot, ItemStack slotted, PrisonObject requiredIngredient, BaseGui craftingMenu, BaseGui homeMenu) {
+                              Map<Integer, ItemStack> givenIngredients,ItemStack slotted, PrisonObject requiredIngredient, BaseGui craftingMenu, BaseGui homeMenu) {
         super(player, "Add Ingredient: &c" + ChatColor.stripColor(Color.get(requiredIngredient.getName())), 3, false, false, craftingMenu);
         this.givenIngredients = givenIngredients;
-        this.recipe = recipe;
-        this.reqIngredientSlot = reqIngredientSlot;
         this.slotted = slotted;
         this.requiredIngredient = requiredIngredient;
         this.homeMenu = homeMenu;
@@ -58,6 +56,13 @@ public class CraftingDepositGui extends BaseGui{
 
         inventory.setItem(23, confirmItem);
         inventory.setItem(21, cancelItem);
+
+        setAction(21, inventoryClickEvent -> {
+            CraftingMenuGui craftingMenuGui = new CraftingMenuGui(player, craftingMenu.getName(), givenIngredients, recipe, homeMenu);
+            close();
+            craftingMenuGui.open();
+            return false;
+        });
 
         setAction(23, inventoryClickEvent -> {
             ItemStack slotted1 = inventory.getItem(13);

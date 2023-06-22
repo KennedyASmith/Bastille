@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 public class ProductItem {
     Consumer<CraftingRequest> productConsumer;
 
-    ProductItem(Consumer<CraftingRequest> productConsumer) {
+    public ProductItem(Consumer<CraftingRequest> productConsumer) {
         this.productConsumer = productConsumer;
     }
 

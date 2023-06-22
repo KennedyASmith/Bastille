@@ -7,38 +7,28 @@ import org.bukkit.Material;
 import java.util.List;
 
 public enum MetalType {
-
     //Used for crafting and comparison
-    ANY(Material.IRON_INGOT, "&7Metal or Gem", 0, 0),
+    ANY("&7Metal Ingot", Material.IRON_INGOT,  -1, 0, 0),
+    TIN_INGOT("&6Tin Ingot", Material.IRON_INGOT, 10, 1, 1),
+    COPPER_INGOT("&4Copper Ingot", Material.BRICK, 11, 1, 1),
+    IRON_INGOT("&fIron Ingot", Material.NETHERITE_INGOT, 12, 1, 1),
+    SILVER_INGOT("&7Silver Ingot", Material.IRON_INGOT, 13,1, 1),
+    GOLD_INGOT("&eGold Ingot", Material.GOLD_INGOT, 14, 1, 1),
+    ADAMANTINE_INGOT("&dAdamantine Ingot", Material.COPPER_INGOT, 15, 1, 1),
+    MITHRIL_INGOT("&3Mithril Ingot", Material.IRON_INGOT, 16,1, 1),
+    TITANIUM_INGOT("&8Titanium Ingot", Material.NETHERITE_INGOT, 19, 1, 1),
+    PROMETHIUM_INGOT("&9Promethium Ingot", Material.IRON_INGOT, 20,1, 1),
+    AETHERIUM_INGOT("&aAetherium Ingot", Material.GOLD_INGOT, 21, 1, 1),
+    DRAGONSTONE_INGOT("&cDratinium Ingot", Material.NETHER_BRICK, 22, 1, 1),
+    ELYSIUM_INGOT("&2Elysium Ingot", Material.NETHERITE_INGOT, 23, 1, 1),
+    CELESTIUM_ORE("&bCelestium Ingot", Material.BRICK, 24, 1, 1),
+    PRIMORDIAL_INGOT("&dPrimordial Ingot", Material.IRON_INGOT, 25,1, 1),
+    MAGNITE_INGOT("&bMagnite Ingot", Material.COPPER_INGOT, 29, 1, 1),
+    ARCANITE_INGOT("&cArcanite Ingot", Material.BRICK, 30, 1, 1),
+    OSMIUM_INGOT("&8Osmium Ingot", Material.GOLD_INGOT, 31, 1, 1),
+    PALLADIUM_INGOT("&8Palladium Ingot", Material.NETHER_QUARTZ_ORE, 32, 1, 1),
+    VOIDITE_INGOT("&8Voidite Ingot", Material.NETHER_QUARTZ_ORE, 33, 1, 1);
 
-    // Common
-    IRON_INGOT(Material.IRON_INGOT, "&7Iron Ingot", 1, 4),
-    COAL(Material.COAL, "&0Coal", 1, 1),
-
-    // Uncommon
-    COPPER(Material.COPPER_INGOT, "&6Copper", 2, 3),
-    BRICK(Material.BRICK, "&6Brick", 2, 2),
-    SCUTE(Material.SCUTE, "&aScute", 2, 4),
-    CLAY_BALL(Material.CLAY_BALL, "&7Clay Ball", 2, 2),
-
-    // Rare
-    FLINT(Material.FLINT, "&8Flint", 3, 1),
-    GOLD_INGOT(Material.GOLD_INGOT, "&e&lGold Ingot", 3, 3),
-    SLIME_BALL(Material.SLIME_BALL, "&aSlime Ball", 3, 1),
-
-    // Epic
-    LAPIS_LAZULI(Material.LAPIS_LAZULI, "&9Lapis Lazuli", 4, 2),
-    DIAMOND(Material.DIAMOND, "&bDiamond", 4, 5),
-    NETHERITE_INGOT(Material.NETHERITE_INGOT, "&8Netherite Ingot", 4, 5),
-
-    // Legendary
-
-    QUARTZ(Material.QUARTZ, "&f&lQuartz", 5, 5),
-    EMERALD(Material.EMERALD, "&a&lEmerald", 5, 4),
-
-    // Mythic
-    HEART_OF_THE_SEA(Material.HEART_OF_THE_SEA, "&e&lHeart Of The Sea", 10, 3),
-    AMETHYST(Material.AMETHYST_SHARD, "&d&lAmethyst Shard", 3, 10, Rarity.MYTHIC);
     final String displayName;
     final Material material;
     final int hardness;
@@ -48,54 +38,19 @@ public enum MetalType {
     final Rarity rarityClass;
 
 
-    MetalType(Material material, String displayName, int rarity, int hardness) {
+    MetalType(String displayName, Material material, int guiSlot, int rarity, int hardness) {
         this.displayName = displayName;
         this.hardness = hardness;
         this.rarity = rarity;
         this.material = material;
-
-        lore = MUtil.list(
+        this.lore = MUtil.list(
                 "&7Crafting Material",
                 " &r",
-                "&7Hardness: &f%hardness%",
-                "&7Rarity: &f%rarity%",
-                "",
-                "%rarityDisplay% &7material used for crafting &etools&7!"
-        );
-        rarityClass = Rarity.getFromRarityInt(rarity);
-    }
-
-    MetalType(Material material, String displayName, int rarity, int hardness, List<String> customLore) {
-        this.displayName = displayName;
-        this.hardness = hardness;
-        this.rarity = rarity;
-        this.material = material;
-        this.lore = customLore;
-        rarityClass = Rarity.getFromRarityInt(rarity);
-    }
-
-    MetalType(Material material, String displayName, int rarity, int hardness, Rarity rarityClass) {
-        this.displayName = displayName;
-        this.hardness = hardness;
-        this.rarity = rarity;
-        this.material = material;
-        this.rarityClass = rarityClass;
-        lore = MUtil.list(
-                "&7Crafting Material",
-                " &r",
-                "&7Hardness: &f%hardness%",
-                "&7Rarity: &f%rarity%",
+                "&7Hardness: &f" + getHardness(),
+                "&7Rarity: " + getRarity(),
                 ""
         );
-    }
-
-    MetalType(Material material, String displayName, int rarity, int hardness, List<String> customLore, Rarity rarityClass) {
-        this.displayName = displayName;
-        this.hardness = hardness;
-        this.rarity = rarity;
-        this.material = material;
-        this.lore = customLore;
-        this.rarityClass = rarityClass;
+        this.rarityClass = Rarity.getFromRarityInt(rarity);
     }
 
 
@@ -122,4 +77,5 @@ public enum MetalType {
     public Rarity getRarityClass() {
         return rarityClass;
     }
+
 }

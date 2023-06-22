@@ -1,10 +1,13 @@
 package com.kennedysmithjava.prisoncore.engine;
 
 import com.kennedysmithjava.prisoncore.PrisonCore;
+import com.kennedysmithjava.prisoncore.crafting.Recipe;
 import com.kennedysmithjava.prisoncore.entity.MConf;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.mines.MineColl;
+import com.kennedysmithjava.prisoncore.gui.CraftingMenuGui;
 import com.kennedysmithjava.prisoncore.gui.EnchantMenuGui;
+import com.kennedysmithjava.prisoncore.gui.ForgeCraftGui;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.Glow;
 import com.kennedysmithjava.prisoncore.util.regions.LazyRegion;
@@ -27,6 +30,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class EngineMineBuildings extends Engine {
@@ -38,7 +42,7 @@ public class EngineMineBuildings extends Engine {
 
     private static final MineColl mineColl = MineColl.get();
     private static final double VELOCITY = Math.sqrt(4 * 4 * 0.08);
-    private static final List<Material> BUILDINGS = MUtil.list(Material.ENCHANTING_TABLE, Material.BEACON, Material.CHEST, Material.ANVIL, Material.HOPPER);
+    private static final List<Material> BUILDINGS = MUtil.list(Material.ENCHANTING_TABLE, Material.BEACON, Material.CHEST, Material.ANVIL, Material.HOPPER, Material.FURNACE);
 
     @EventHandler
     public void onJumpPadPress(PlayerInteractEvent ev) {
@@ -118,25 +122,20 @@ public class EngineMineBuildings extends Engine {
             Block block = event.getClickedBlock();
             if(!BUILDINGS.contains(block.getType())) return;
 
-            switch(block.getType()){
-                default:
-                    return;
-                case ENCHANTING_TABLE:
-                    enchantMenu(event.getPlayer());
+            switch (block.getType()) {
+                default -> {}
+                case ENCHANTING_TABLE -> {
                     event.setCancelled(true);
-                    break;
-                case CHEST:
-                    chestMenu(event.getPlayer());
-                    break;
-                case BEACON:
-                    beaconMenu(event.getPlayer());
-                    break;
-                case ANVIL:
-                    anvilMenu(event.getPlayer());
-                    break;
-                case HOPPER:
-                    hopperMenu(event.getPlayer());
-                    break;
+                    enchantMenu(event.getPlayer());
+                }
+                case CHEST -> chestMenu(event.getPlayer());
+                case BEACON -> beaconMenu(event.getPlayer());
+                case ANVIL -> anvilMenu(event.getPlayer());
+                case HOPPER -> hopperMenu(event.getPlayer());
+                case FURNACE -> {
+                    event.setCancelled(true);
+                    furanceMenu(event.getPlayer());
+                }
             }
 
 
@@ -152,12 +151,19 @@ public class EngineMineBuildings extends Engine {
 
     }
 
+
+    public void furanceMenu(Player player){
+        ForgeCraftGui gui = new ForgeCraftGui(player);
+        gui.open();
+    }
+
     public void beaconMenu(Player player){
 
     }
 
     public void anvilMenu(Player player){
-
+        CraftingMenuGui craftingMenuGui = new CraftingMenuGui(player, "&4Craft a Pickaxe", new HashMap<>(), Recipe.PICKAXE, null);
+        craftingMenuGui.open();
     }
 
     public void hopperMenu(Player player){

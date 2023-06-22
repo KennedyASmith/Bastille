@@ -69,13 +69,12 @@ public enum Recipe {
             22, new PrisonBook()
     ), () -> new ProductItem(cr ->
             PrisonEnchantBook.beginCrafting(PickaxeEfficiencyEnchant.get(), cr)),
-            PickaxeEfficiencyEnchant.get().getCraftCosts())
-    ;
+            PickaxeEfficiencyEnchant.get().getCraftCosts());
 
     //Key: GUI Slot ||| Value: Ingredient for that slot
-    private final Map<Integer, PrisonObject> ingredients;
+    private Map<Integer, PrisonObject> ingredients;
 
-    private final Supplier<ProductItem> product;
+    private Supplier<ProductItem> product;
 
     private final List<Cost> additionalCosts;
 
@@ -102,9 +101,18 @@ public enum Recipe {
         return product.get();
     }
 
+    public void setIngredients(Map<Integer, PrisonObject> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public void setProduct(Supplier<ProductItem> product) {
+        this.product = product;
+    }
+
     public List<Cost> getAdditionalCosts() {
         return additionalCosts;
     }
+
 }
 
 

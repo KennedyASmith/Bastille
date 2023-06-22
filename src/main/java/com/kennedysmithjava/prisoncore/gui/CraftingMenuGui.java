@@ -2,6 +2,7 @@ package com.kennedysmithjava.prisoncore.gui;
 
 import com.kennedysmithjava.prisoncore.crafting.CraftingRequest;
 import com.kennedysmithjava.prisoncore.crafting.PrisonObject;
+import com.kennedysmithjava.prisoncore.crafting.ProductItem;
 import com.kennedysmithjava.prisoncore.crafting.Recipe;
 import com.kennedysmithjava.prisoncore.eco.Cost;
 import com.kennedysmithjava.prisoncore.engine.EngineCooldown;
@@ -23,32 +24,44 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 
 public class CraftingMenuGui extends BaseGui{
-    Map<Integer, ItemStack> givenIngredients;
-    Recipe recipe;
+    private final Map<Integer, ItemStack> givenIngredients;
+
+    private final Map<Integer, PrisonObject> neededIngredients;
+    private final ProductItem product;
+
+    private final List<Cost> additionalCosts;
 
     public CraftingMenuGui(Player player, String name, Map<Integer, ItemStack> givenIngredients, Recipe recipe, BaseGui returningMenu) {
         super(player, name, 6, false, false, returningMenu);
         this.givenIngredients = givenIngredients;
-        this.recipe = recipe;
+        this.additionalCosts = recipe.getAdditionalCosts();
+        this.product = recipe.getProduct();
+        this.neededIngredients = recipe.getIngredients();
+    }
+
+    public CraftingMenuGui(Player player, String name, Map<Integer, ItemStack> givenIngredients, Map<Integer, PrisonObject> neededIngredients, ProductItem product, List<Cost> additionalCosts,  BaseGui returningMenu) {
+        super(player, name, 6, false, false, returningMenu);
+        this.givenIngredients = givenIngredients;
+        this.additionalCosts = additionalCosts;
+        this.product = product;
+        this.neededIngredients = neededIngredients;
     }
 
     @Override
     public void onBuild(Player player, ChestGui gui, Inventory inventory) {
-        Map<Integer, PrisonObject> ingredients = recipe.getIngredients();
         gui.getMeta().put("craftingmenu", 1);
         blockFill(Material.BLACK_STAINED_GLASS_PANE);
 
         List<PrisonObject> ingredientsNotMet = new ArrayList<>();
 
-        for (Integer s : ingredients.keySet()) {
+        for (Integer s : neededIngredients.keySet()) {
             if (!givenIngredients.containsKey(s)) {
-                ingredientsNotMet.add(ingredients.get(s));
+                ingredientsNotMet.add(neededIngredients.get(s));
             }
         }
 
         boolean allIngredientsEntered = (ingredientsNotMet.size() == 0);
 
-        List<Cost> additionalCosts = recipe.getAdditionalCosts();
         List<Cost> costsNotMet = new ArrayList<>();
         MPlayer mPlayer = MPlayer.get(player);
         for (Cost additionalCost : additionalCosts) {
@@ -84,7 +97,7 @@ public class CraftingMenuGui extends BaseGui{
                 player.closeInventory();
                 additionalCosts.forEach(additionalCost -> additionalCost.transaction(mPlayer));
                 if(canReturnToLastMenu()) returnToLastMenu();
-                recipe.getProduct().get(new CraftingRequest(recipe, player, givenIngredients));
+                product.get(new CraftingRequest(player, givenIngredients, product, additionalCosts));
                 return false;
             });
         }else {
@@ -118,7 +131,7 @@ public class CraftingMenuGui extends BaseGui{
         /* Used for auto-add button */
         Map<Integer, PrisonObject> unslottedIngredients = new HashMap<>();
 
-        ingredients.forEach((slot, ingredient) -> {
+        neededIngredients.forEach((slot, ingredient) -> {
             ItemStack slotted = new ItemStack(Material.AIR);
             if(!givenIngredients.containsKey(slot)){ //If this ingredient isn't already provided
                 ItemStack ingredientItem = new ItemBuilder(Material.WHITE_STAINED_GLASS_PANE)
@@ -132,9 +145,9 @@ public class CraftingMenuGui extends BaseGui{
                 slotted = givenIngredients.get(slot);
             }
 
-            ItemStack finalSlotted = slotted;
+            ItemStack finalSlottedItem = slotted;
             setAction(slot, inventoryClickEvent -> {
-                CraftingDepositGui depositGui = new CraftingDepositGui(player, givenIngredients, recipe, slot, finalSlotted, ingredient, this, this.getReturnMenu());
+                CraftingDepositGui depositGui = new CraftingDepositGui(player, givenIngredients, finalSlottedItem, ingredient, this, this.getReturnMenu());
                 depositGui.open();
                 return false;
             });
@@ -164,14 +177,12 @@ public class CraftingMenuGui extends BaseGui{
 
     public void getAllHadIngredient(Player player){
 
-        Map<Integer, PrisonObject> recipeIngredients = recipe.getIngredients();
-
         ItemStack[] itemStacks = InventoryUtil.getContentsAll(player.getInventory());
 
         for (ItemStack item : itemStacks) {
             if(item == null) continue;
             if(!PrisonObject.isPrisonObj(item)) continue;
-            for (Map.Entry<Integer, PrisonObject> ie : recipeIngredients.entrySet()) {
+            for (Map.Entry<Integer, PrisonObject> ie : neededIngredients.entrySet()) {
                 if(givenIngredients.containsKey(ie.getKey())) continue;
                 if(!ie.getValue().is(item)) continue;
                 int amt = item.getAmount();

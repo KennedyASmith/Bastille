@@ -2,10 +2,7 @@ package com.kennedysmithjava.prisoncore.cmd.type;
 
 import com.kennedysmithjava.prisoncore.crafting.PrisonObject;
 import com.kennedysmithjava.prisoncore.crafting.objects.*;
-import com.kennedysmithjava.prisoncore.crafting.objects.type.EssenceType;
-import com.kennedysmithjava.prisoncore.crafting.objects.type.LogType;
-import com.kennedysmithjava.prisoncore.crafting.objects.type.MetalType;
-import com.kennedysmithjava.prisoncore.crafting.objects.type.StickType;
+import com.kennedysmithjava.prisoncore.crafting.objects.type.*;
 import com.kennedysmithjava.prisoncore.entity.farming.objects.TreeTemplate;
 import com.kennedysmithjava.prisoncore.tools.enchantment.Enchant;
 import com.massivecraft.massivecore.MassiveException;
@@ -45,6 +42,10 @@ public class TypePrisonObject extends TypeAbstract<PrisonObject> {
 
         for (EssenceType value : EssenceType.values()) {
             add("ESSENCE_" + value.name(), new PrisonEssence(value));
+        }
+
+        for (OreType value : OreType.values()) {
+            add("ORE_" + value.name(), new PrisonOre(value));
         }
 
         add("BOOK", new PrisonBook());
