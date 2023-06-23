@@ -24,7 +24,7 @@ public class GuiOpenerButton extends GuiButton {
 
     @Override
     public List<String> getBuyPrompt() {
-        return MUtil.list();
+        return MUtil.list(" &r", "&7&lREQUIREMENTS");
     }
 
     @Override

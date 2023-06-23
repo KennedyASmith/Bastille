@@ -9,6 +9,7 @@ import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.CooldownReason;
 import com.kennedysmithjava.prisoncore.util.ItemBuilder;
 import com.massivecraft.massivecore.util.MUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -68,8 +69,10 @@ public class GuiButton {
             lore.add(0, buttonTag);
             lore.add(1, " &r");
         }
-        lore.addAll(buyPrompt);
-        lore.addAll(getCostLore(player));
+        if(!isPurchased){
+            lore.addAll(buyPrompt);
+            lore.addAll(getCostLore(player));
+        }
         return lore;
     }
 
@@ -110,7 +113,7 @@ public class GuiButton {
 
 
     public List<String> getBuyPrompt(){
-        return MUtil.list(" &r", "&eClick to purchase!", " &r");
+        return MUtil.list(" &r", "&eClick to purchase!", " &r", " &7&lREQUIREMENTS");
     }
 
     public ItemStack getItem(MPlayer player, Mine mine){
@@ -118,6 +121,7 @@ public class GuiButton {
         boolean isAffordable = isAffordable(player);
         boolean isUnlocked = isUnlocked(mine, player);
         boolean isActive = isActive(mine);
+        Bukkit.broadcastMessage("IsUnlocked: " + isUnlocked + " IsAffordable: " + isAffordable);
         String name = getDisplayName();
         Material buttonMaterial = getMaterial();
         if(!isUnlocked) buttonMaterial = Material.IRON_BARS;
@@ -142,7 +146,7 @@ public class GuiButton {
 
     public boolean isUnlocked(Mine mine, MPlayer player){
         for (UpgradeName upgrade : getRequiredUnlockedUpgrades()) {
-            if(!mine.isUpgradePurchased(upgrade.get())) return false;
+            if(!mine.isUpgradeUnlocked(upgrade.get())) return false;
         }
         return true;
     }

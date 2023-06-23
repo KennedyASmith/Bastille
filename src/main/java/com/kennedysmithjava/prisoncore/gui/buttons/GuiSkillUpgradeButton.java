@@ -39,7 +39,6 @@ public class GuiSkillUpgradeButton extends GuiButton {
         }else {
             baseLore.add("&7XP: (~~/~~)");
         }
-        baseLore.add(" &r");
         return baseLore;
     }
 
@@ -57,7 +56,7 @@ public class GuiSkillUpgradeButton extends GuiButton {
         if(skill.maxLevelReached()){
             MUtil.list(" &r", "&7Maximum level reached!", " &r");
         }
-        return MUtil.list(" &r", "&eClick to purchase next level!", " &r");
+        return MUtil.list(" &r", "&eClick to purchase next level!", " &r", "&e&lCOST");
     }
 
     @Override

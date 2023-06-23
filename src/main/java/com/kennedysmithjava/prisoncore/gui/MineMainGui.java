@@ -27,7 +27,7 @@ public class MineMainGui extends BaseGui{
     public static final  List<Integer> lockableButtons = MUtil.list(3,5,15,33,41,39,29,11);
     public static final List<Integer> lightGreyGlass = MUtil.list(2,4,10,19,20,28,38,6,16,24,25,34,42,40);
     public static final List<Integer> darkGreyGlass = MUtil.list(0,1,9,18,27,36,37,7,8,17,26,35,44,43);
-    public static final String CATEGORY_TAG = "&7[CATEGORY]";
+    public static final String CATEGORY_TAG = "&7[MENU]";
 
     private final MPlayer mPlayer;
 
@@ -56,12 +56,12 @@ public class MineMainGui extends BaseGui{
     public static List<GuiButton> getButtons(Player player, MPlayer mPlayer, BaseGui currentMenu){
         return MUtil.list(
                 new GuiSkillUpgradeButton(mPlayer, SkillType.PLAYER, 22,
-                        MUtil.list("&Increase your player level to", "&7access more upgrades!"),
+                        MUtil.list("&7Increase your player level to", "&7access more upgrades!"),
                         () -> {}),
 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                new GuiOpenerButton("&6Building Menu", CATEGORY_TAG, 3,
+                new GuiOpenerButton("&6Building", CATEGORY_TAG, 3,
                         MUtil.list("&7Unlock new buildings for your mine!"),
                         Material.CRAFTING_TABLE,
                         new MineMenuBuildingsGui(player, "&4&lBuildings &7- Menu", 3, currentMenu), currentMenu,
@@ -69,7 +69,7 @@ public class MineMainGui extends BaseGui{
 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                new GuiOpenerButton("&6Mine Regeneration Menu", CATEGORY_TAG, 15,
+                new GuiOpenerButton("&6Mine Regeneration", CATEGORY_TAG, 15,
                         MUtil.list("&7Unlock upgrades to improve how your mine regenerates!"),
                         Material.PISTON,
                         new MineMenuRegenerationGui(player, "&4&lMine Regeneration &7- Menu", 3, currentMenu), currentMenu,
@@ -77,7 +77,7 @@ public class MineMainGui extends BaseGui{
 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                new GuiOpenerButton("&6Architecture Menu", CATEGORY_TAG, 5,
+                new GuiOpenerButton("&6Architecture", CATEGORY_TAG, 5,
                         MUtil.list("&7Unlock new size and decor upgrades for your mine!"),
                         Material.OAK_FENCE,
                         new MineMenuArchitectureGui(player, "&4&lArchitecture &7- Menu", 3,  currentMenu), currentMenu,
@@ -85,7 +85,7 @@ public class MineMainGui extends BaseGui{
 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                new GuiOpenerButton("&6Environment Menu", CATEGORY_TAG, 11,
+                new GuiOpenerButton("&6Environment", CATEGORY_TAG, 11,
                         MUtil.list("&7Unlock new environments for your mine!"),
                         Material.CLOCK,
                         new MineMenuArchitectureGui(player, "&4&lEnvironment &7- Menu", 3,  currentMenu), currentMenu,
@@ -93,7 +93,7 @@ public class MineMainGui extends BaseGui{
 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                new GuiOpenerButton("&6Block Collection Menu", CATEGORY_TAG, 29,
+                new GuiOpenerButton("&6Block Collection", CATEGORY_TAG, 29,
                         MUtil.list("&7Unlock new upgrades to make gathering", "&7and selling blocks easier!"),
                         Material.HOPPER,
                         new MineMenuArchitectureGui(player, "&4&lBlock Collection &7- Menu", 3,  currentMenu), currentMenu,
@@ -101,7 +101,7 @@ public class MineMainGui extends BaseGui{
 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                new GuiOpenerButton("&6Portal Menu", CATEGORY_TAG, 33,
+                new GuiOpenerButton("&6Portal", CATEGORY_TAG, 33,
                         MUtil.list("&7Unlock new places to travel!"),
                         Material.FEATHER,
                         new MineMenuArchitectureGui(player, "&4&lTravel &7- Menu", 3,  currentMenu), currentMenu,
@@ -109,7 +109,7 @@ public class MineMainGui extends BaseGui{
 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                new GuiOpenerButton("&6Automation Menu", CATEGORY_TAG, 39,
+                new GuiOpenerButton("&6Automation", CATEGORY_TAG, 39,
                         MUtil.list("&7Unlock new ways to automate your mine!"),
                         Material.REPEATER,
                         new MineMenuArchitectureGui(player, "&4&lAutomation &7- Menu", 3,  currentMenu), currentMenu,
@@ -117,7 +117,7 @@ public class MineMainGui extends BaseGui{
 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                new GuiOpenerButton("&6Mobility Menu", CATEGORY_TAG, 41,
+                new GuiOpenerButton("&6Mobility", CATEGORY_TAG, 41,
                         MUtil.list("&7Unlock new ways to move around your mine!"),
                         Material.LADDER,
                         new MineMenuArchitectureGui(player, "&4&lAutomation &7- Menu", 3,  currentMenu), currentMenu,
