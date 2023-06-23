@@ -5,6 +5,7 @@ import com.kennedysmithjava.prisoncore.blockhandler.Reward;
 import com.kennedysmithjava.prisoncore.crafting.objects.PrisonOre;
 import com.kennedysmithjava.prisoncore.crafting.objects.type.OreType;
 import com.kennedysmithjava.prisoncore.engine.EngineResearchPoint;
+import com.kennedysmithjava.prisoncore.engine.EngineXP;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.PrisonBlock;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.Skill;
@@ -75,12 +76,14 @@ public class BlockEventFulfiller {
         new BukkitRunnable() {
             @Override
             public void run() {
+
+                Player player = finishedEvent.getPlayer();
+                MPlayer mPlayer = MPlayer.get(player);
+                EngineXP.giveXP(SkillType.MINING, MPlayer.get(player), 2);
                 double oRandom = random.nextDouble();
                 double oreChance = 0.50;
                 if(oRandom < oreChance){
-                    Player player = finishedEvent.getPlayer();
                     if(player == null) return;
-                    MPlayer mPlayer = MPlayer.get(player);
                     Skill skill = mPlayer.getSkillProfile().getSkill(SkillType.MINING);
                     int skillLevel = skill.getCurrentLevel();
                     List<OreType> suitableOres = new ArrayList<>();
@@ -104,6 +107,7 @@ public class BlockEventFulfiller {
         }.runTaskAsynchronously(PrisonCore.get());
 
         rpEngine.addBlockCount(finishedEvent.getPlayer());
+
     }
 
     public void handleEventReturn(EventAbilityUse finishedEvent) {

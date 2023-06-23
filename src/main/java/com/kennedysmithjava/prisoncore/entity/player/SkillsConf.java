@@ -6,7 +6,6 @@ import com.massivecraft.massivecore.store.Entity;
 import com.massivecraft.massivecore.util.MUtil;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
-import org.bukkit.Bukkit;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -84,12 +83,10 @@ public class SkillsConf extends Entity<SkillsConf> {
     public static int getXpRequired(SkillType type, int level){
         if(xpNeeded.isEmpty()) SkillsConf.get().buildFormulas();
         Map<Integer, Integer> xpMap = xpNeeded.get(type);
-        if(xpMap == null){
-            Bukkit.broadcastMessage("No XP formula exists for skill type: " + type);
-            return 42069;
-        }else {
-            return xpMap.get(level);
+        if(xpMap == null) {
+            throw new NullPointerException("No XP formula exists for skill type: " + type);
         }
+            return xpMap.get(level);
     }
 
     public void buildFormulas(){
@@ -99,7 +96,7 @@ public class SkillsConf extends Entity<SkillsConf> {
                     .variables(LEVEL_VARIABLE)
                     .build();
             Map<Integer, Integer> xpNeed = new HashMap<>();
-            for (int level = 0; level <= maxLevels.get(skillType); level++) {
+            for (int level = 0; level <= getMaxLevel(skillType); level++) {
                 e.setVariable("level", level);
                 int xp = (int) e.evaluate();
                 xpNeed.put(level, xp);
@@ -114,5 +111,9 @@ public class SkillsConf extends Entity<SkillsConf> {
 
     public Map<SkillType, Integer> getMaxLevels() {
         return maxLevels;
+    }
+
+    public Integer getMaxLevel(SkillType type){
+        return maxLevels.get(type);
     }
 }

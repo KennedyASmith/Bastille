@@ -147,7 +147,7 @@ public class CraftingMenuGui extends BaseGui{
 
             ItemStack finalSlottedItem = slotted;
             setAction(slot, inventoryClickEvent -> {
-                CraftingDepositGui depositGui = new CraftingDepositGui(player, givenIngredients, finalSlottedItem, ingredient, this, this.getReturnMenu());
+                CraftingDepositGui depositGui = new CraftingDepositGui(player, slot, givenIngredients, neededIngredients, finalSlottedItem, ingredient, product, additionalCosts, this, this.getReturnMenu());
                 depositGui.open();
                 return false;
             });

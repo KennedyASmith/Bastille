@@ -44,8 +44,8 @@ public class UpgradesConf extends Entity<UpgradesConf>
                     MUtil.list())
     );
 
-    public static Map<String, UpgradeGUI> upgradeGUIs = MUtil.map(
-      "MAIN", new UpgradeGUI("&4Mine Upgrades", 9 * 5, MUtil.list(
+    public static Map<String, UpgradeGuiWrapper> upgradeGUIs = MUtil.map(
+      "MAIN", new UpgradeGuiWrapper("&4Mine Upgrades", 9 * 5, MUtil.list(
                 new GUIButtonMainUpgrade("&6&lCell Upgrade",
                         22,
                         Material.MINECART,
@@ -101,7 +101,7 @@ public class UpgradesConf extends Entity<UpgradesConf>
                             MUtil.list(new ActionOpenGUI("MOBILITY")), MUtil.list(UpgradeName.CATEGORY_MOBILITY.get()))
             )),
 
-            "ENVIRONMENT", new UpgradeGUI("&4Mine Blocks", 9 * 5, MUtil.list(
+            "ENVIRONMENT", new UpgradeGuiWrapper("&4Mine Blocks", 9 * 5, MUtil.list(
                     new GUIButton(
                             "&6BACK",
                             36, MUtil.list("", "&7Main Menu"),
@@ -110,7 +110,7 @@ public class UpgradesConf extends Entity<UpgradesConf>
                             MUtil.list(new ActionOpenGUI("MAIN")), MUtil.list())
             )),
 
-            "ARCHITECTURE", new UpgradeGUI("&4Mine Blocks", 9 * 6, MUtil.list(
+            "ARCHITECTURE", new UpgradeGuiWrapper("&4Mine Blocks", 9 * 6, MUtil.list(
                     new GUIButtonPurchasable(
                             "&6Floor Customization",
                             UpgradeName.ARCHITECTURE_PATHS.get(),
@@ -168,7 +168,7 @@ public class UpgradesConf extends Entity<UpgradesConf>
                     )
                 )
             ),
-            "COLLECTION", new UpgradeGUI("&4Mine Blocks", 9 * 3, MUtil.list(
+            "COLLECTION", new UpgradeGuiWrapper("&4Mine Blocks", 9 * 3, MUtil.list(
                     new GUIButton(
                             "&6BACK",
                             18, MUtil.list("", "&7Main Menu"),
@@ -237,7 +237,7 @@ public class UpgradesConf extends Entity<UpgradesConf>
                             MUtil.list(new ActionCollectionChangeSetting(), new ActionMineToggleUpgradeOff(MUtil.list(UpgradeName.COLLECTION_SELL_ALL.get(), UpgradeName.COLLECTION_SELECT_ALL.get(), UpgradeName.COLLECTION_DEFAULT.get(), UpgradeName.COLLECTION_AUTO_1.get(), UpgradeName.COLLECTION_AUTO_2.get(), UpgradeName.COLLECTION_AUTO_4.get()))),
                             MUtil.list())
             )),
-            "REGENERATION", new UpgradeGUI("&4Mine Blocks", 9 * 5, MUtil.list(
+            "REGENERATION", new UpgradeGuiWrapper("&4Mine Blocks", 9 * 5, MUtil.list(
                     new GUIButton(
                             "&6BACK",
                             36, MUtil.list("", "&7Main Menu"),
@@ -245,7 +245,7 @@ public class UpgradesConf extends Entity<UpgradesConf>
                             Material.ARROW,
                             MUtil.list(new ActionOpenGUI("MAIN")), MUtil.list())
             )),
-            "ROBOTICS", new UpgradeGUI("&4Mine Blocks", 9 * 5, MUtil.list(
+            "ROBOTICS", new UpgradeGuiWrapper("&4Mine Blocks", 9 * 5, MUtil.list(
                     new GUIButton(
                             "&6BACK",
                             36, MUtil.list("", "&7Main Menu"),
@@ -253,7 +253,7 @@ public class UpgradesConf extends Entity<UpgradesConf>
                             Material.ARROW,
                             MUtil.list(new ActionOpenGUI("MAIN")), MUtil.list())
             )),
-            "MOBILITY", new UpgradeGUI("&4Mine Blocks", 9 * 3, MUtil.list(
+            "MOBILITY", new UpgradeGuiWrapper("&4Mine Blocks", 9 * 3, MUtil.list(
                     new GUIButtonPurchasableToggleable(
                             "&6Ladders 1",
                             UpgradeName.MOBILITY_LADDER_1.get(),
@@ -312,7 +312,7 @@ public class UpgradesConf extends Entity<UpgradesConf>
                             MUtil.list(new ActionOpenGUI("MAIN")), MUtil.list())
             )),
 
-            "BUILDINGS", new UpgradeGUI("&4Mine Buildings", 9 * 3, MUtil.list(
+            "BUILDINGS", new UpgradeGuiWrapper("&4Mine Buildings", 9 * 3, MUtil.list(
                     new GUIButton(
                             "&6Portal",
                             11, MUtil.list("", "&e&lCOST", "&a⛃100.00", "&b✪10", "", "&7Build a portal to the &6Old Town&7."),
@@ -357,7 +357,7 @@ public class UpgradesConf extends Entity<UpgradesConf>
                             MUtil.list(new ActionOpenGUI("MAIN")), MUtil.list())
             )),
 
-            "FAST_TRAVEL", new UpgradeGUI("&4Fast Travel", 9 * 3, MUtil.list(
+            "FAST_TRAVEL", new UpgradeGuiWrapper("&4Fast Travel", 9 * 3, MUtil.list(
                     new GUIButton(
                             "&6BACK",
                             18, MUtil.list("", "&7Buildings"),

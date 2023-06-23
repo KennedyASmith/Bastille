@@ -8,6 +8,8 @@ import com.kennedysmithjava.prisoncore.crafting.objects.type.MetalType;
 import com.kennedysmithjava.prisoncore.crafting.objects.type.OreType;
 import com.kennedysmithjava.prisoncore.eco.Cost;
 import com.kennedysmithjava.prisoncore.eco.CostSkillLevel;
+import com.kennedysmithjava.prisoncore.engine.EngineXP;
+import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.skill.SkillType;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.ItemBuilder;
@@ -24,7 +26,7 @@ import java.util.Map;
 
 public class ForgeCraftGui extends BaseGui{
     public ForgeCraftGui(Player player) {
-        super(player, "&4&lSelect Ore", 6, false, true);
+        super(player, "&4&lSelect Ore to smelt:", 6, false, true);
     }
 
     @Override
@@ -47,7 +49,7 @@ public class ForgeCraftGui extends BaseGui{
             ItemStack oreItem = ore.give(1);
             List<String> lore = oreItem.getItemMeta().getLore();
             lore.add( " &r");
-            lore.add( "&eClick to forge!");
+            lore.add( "&eClick to smelt!");
             lore.add(" &r");
             lore.add("&7&lREQUIREMENTS");
             for (Cost additionalCost : additionalCosts) {
@@ -60,7 +62,10 @@ public class ForgeCraftGui extends BaseGui{
 
             setAction(oreType.getForgeGuiSlot(), inventoryClickEvent -> {
                 Map<Integer, PrisonObject> neededIngredients = MUtil.map(22, ore);
-                ProductItem productItem = new ProductItem(craftingRequest -> craftingRequest.give(metal.give(1)));
+                ProductItem productItem = new ProductItem(craftingRequest -> {
+                    craftingRequest.give(metal.give(1));
+                    EngineXP.giveXP(SkillType.METALWORKING, MPlayer.get(player), oreType.getSmeltingXP());
+                });
                 CraftingMenuGui craftingMenuGui = new CraftingMenuGui(
                         player,
                         Color.strip(oreType.getDisplayName()),

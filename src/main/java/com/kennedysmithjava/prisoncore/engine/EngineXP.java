@@ -36,25 +36,7 @@ public class EngineXP extends Engine {
         scheduler.scheduleSyncRepeatingTask(PrisonCore.get(), () -> {
             oweList.forEach((player, skillMap) -> {
                 SkillProfile profile = player.getSkillProfile();
-                skillMap.forEach((type, xp) -> {
-                    Skill skill = profile.getSkill(type);
-                    boolean leveledUp = skill.addXP(xp);
-                    int neededXP = SkillsConf.getXpRequired(type, skill.getCurrentLevel());
-                    if(leveledUp){
-                        String colorCoded = Color.getGradient(
-                                " ※ You have reached " +
-                                        Color.strip(type.getDisplayName()) +
-                                        " level " +
-                                        skill.getCurrentLevel() + "! ※"
-                                , "43EF20", "24FDF7");
-                        player.msg("&7[&fSkills&7]"+ colorCoded);
-                    } else {
-                        player.msg("&7[&fSkills&7] &aYou have gained &e" + xp + " " + type.getDisplayName() + " &axp!");
-                        player.msg("&7XP Remaining for next level: "
-                                + skill.getXPBar(neededXP)
-                                + " &7(&e" + skill.getCurrentXP() + "&7/&e" + neededXP + "&7)");
-                    }
-                });
+                skillMap.forEach((type, xp) -> forceGive(player, profile, type, xp));
             });
             oweList.clear();
         }, 20*10L, delay);
@@ -69,5 +51,25 @@ public class EngineXP extends Engine {
         if(xpAlreadyOwed == null) xpAlreadyOwed = 0;
         skillXpMap.put(type, xpAmount + xpAlreadyOwed);
         oweList.put(player, skillXpMap);
+    }
+
+    public static void forceGive(MPlayer player, SkillProfile profile, SkillType type, int xp){
+        Skill skill = profile.getSkill(type);
+        boolean leveledUp = skill.addXP(xp);
+        int neededXP = SkillsConf.getXpRequired(type, skill.getCurrentLevel());
+        if(leveledUp){
+            String colorCoded = Color.getGradient(
+                    " ※ You have reached " +
+                            Color.strip(type.getDisplayName()) +
+                            " level " +
+                            skill.getCurrentLevel() + "! ※"
+                    , "43EF20", "24FDF7");
+            player.msg("&7[&fSkills&7]"+ colorCoded);
+        } else {
+            player.msg("&7[&fSkills&7] &aYou have gained &e" + xp + " " + type.getDisplayName() + " &axp!");
+            player.msg("&7XP Remaining for next level: "
+                    + skill.getXPBar(neededXP)
+                    + " &7(&e" + skill.getCurrentXP() + "&7/&e" + neededXP + "&7)");
+        }
     }
 }

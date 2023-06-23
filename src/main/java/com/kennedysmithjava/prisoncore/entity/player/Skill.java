@@ -14,12 +14,15 @@ public class Skill extends EntityInternal<SkillProfile> {
     private int currentLevel;
     private int currentXP;
 
+    private final int maxLevel;
+
     public transient static Map<SkillType, Map<Integer, Integer>> xpNeeded = new HashMap<>();
 
     public Skill(SkillType type, int currentLevel, int currentXP) {
         this.type = type;
         this.currentLevel = currentLevel;
         this.currentXP = currentXP;
+        this.maxLevel = SkillsConf.get().maxLevels.get(type);
     }
 
     public int getCurrentLevel() {
@@ -40,6 +43,7 @@ public class Skill extends EntityInternal<SkillProfile> {
      * @return true if this levels up the player
      */
     public boolean addXP(int xp){
+        if(maxLevelReached()) return false;
         int xpRequired = SkillsConf.getXpRequired(type, currentLevel);
         if(currentXP + xp >= xpRequired){
             this.setLevel(currentLevel + 1, currentXP - xp);
@@ -66,6 +70,23 @@ public class Skill extends EntityInternal<SkillProfile> {
         builder.insert(Math.max(0, Math.min(numberOfGreen, length - 1)), "&7");
         builder.insert(0, "&a");
         return builder.toString();
+    }
+
+    public String getXPBar(){
+        return getXPBar(getXPRequired());
+    }
+
+    public int getXPRequired(){
+        if(maxLevelReached()) return -1;
+        return SkillsConf.getXpRequired(type, currentLevel);
+    }
+
+    public boolean maxLevelReached(){
+        return maxLevel <= currentLevel;
+    }
+
+    public int getMaxLevel(){
+        return SkillsConf.get().getMaxLevels().get(type);
     }
 
 

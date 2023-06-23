@@ -1,12 +1,10 @@
 package com.kennedysmithjava.prisoncore.gui;
 
 import com.kennedysmithjava.prisoncore.crafting.PrisonObject;
-import com.kennedysmithjava.prisoncore.crafting.Recipe;
+import com.kennedysmithjava.prisoncore.crafting.ProductItem;
+import com.kennedysmithjava.prisoncore.eco.Cost;
 import com.kennedysmithjava.prisoncore.engine.EngineCraftingMenu;
-import com.kennedysmithjava.prisoncore.util.ClickHandler;
-import com.kennedysmithjava.prisoncore.util.Color;
-import com.kennedysmithjava.prisoncore.util.ItemBuilder;
-import com.kennedysmithjava.prisoncore.util.RemovableItem;
+import com.kennedysmithjava.prisoncore.util.*;
 import com.massivecraft.massivecore.chestgui.ChestGui;
 import com.massivecraft.massivecore.util.MUtil;
 import org.bukkit.ChatColor;
@@ -15,26 +13,32 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
 import java.util.Map;
 
 public class CraftingDepositGui extends BaseGui{
-    Map<Integer, ItemStack> givenIngredients;
-    Map<Integer, PrisonObject> neededIngredients;
-    Recipe recipe;
-    ItemStack slotted;
-    int reqIngredientSlot;
-    PrisonObject requiredIngredient;
-    BaseGui homeMenu;
-    BaseGui craftingMenu;
+    private Map<Integer, ItemStack> givenIngredients;
+    private Map<Integer, PrisonObject> neededIngredients;
+    private ItemStack slotted;
+    private int reqIngredientSlot;
+    private PrisonObject requiredIngredient;
+    private BaseGui homeMenu;
+    private BaseGui craftingMenu;
+    private ProductItem productItem;
+    private List<Cost> additionalCosts;
 
-    public CraftingDepositGui(Player player,
-                              Map<Integer, ItemStack> givenIngredients,ItemStack slotted, PrisonObject requiredIngredient, BaseGui craftingMenu, BaseGui homeMenu) {
+    public CraftingDepositGui(Player player, int requiredIngedientSlot,
+                              Map<Integer, ItemStack> givenIngredients, Map<Integer, PrisonObject> neededIngredients, ItemStack slotted, PrisonObject requiredIngredient, ProductItem productItem, List<Cost> additionalCosts, BaseGui craftingMenu, BaseGui homeMenu) {
         super(player, "Add Ingredient: &c" + ChatColor.stripColor(Color.get(requiredIngredient.getName())), 3, false, false, craftingMenu);
         this.givenIngredients = givenIngredients;
         this.slotted = slotted;
         this.requiredIngredient = requiredIngredient;
+        this.productItem = productItem;
         this.homeMenu = homeMenu;
         this.craftingMenu = craftingMenu;
+        this.additionalCosts = additionalCosts;
+        this.reqIngredientSlot = requiredIngedientSlot;
+        this.neededIngredients = neededIngredients;
     }
 
     @Override
@@ -58,7 +62,11 @@ public class CraftingDepositGui extends BaseGui{
         inventory.setItem(21, cancelItem);
 
         setAction(21, inventoryClickEvent -> {
-            CraftingMenuGui craftingMenuGui = new CraftingMenuGui(player, craftingMenu.getName(), givenIngredients, recipe, homeMenu);
+            ItemStack cSlotted = inventory.getItem(13);
+            if(cSlotted != null){
+                MiscUtil.givePlayerItem(player, cSlotted, 1);
+            }
+            CraftingMenuGui craftingMenuGui = new CraftingMenuGui(player, craftingMenu.getName(), givenIngredients, neededIngredients, productItem, additionalCosts, homeMenu);
             close();
             craftingMenuGui.open();
             return false;
@@ -80,7 +88,7 @@ public class CraftingDepositGui extends BaseGui{
                         .build());
             }else {
                 givenIngredients.put(reqIngredientSlot, slotted1);
-                CraftingMenuGui craftingMenuGui = new CraftingMenuGui(player, craftingMenu.getName(), givenIngredients, recipe, homeMenu);
+                CraftingMenuGui craftingMenuGui = new CraftingMenuGui(player, craftingMenu.getName(), givenIngredients, neededIngredients, productItem, additionalCosts, homeMenu);
                 close();
                 craftingMenuGui.open();
                 EngineCraftingMenu.removeFromCache(player);

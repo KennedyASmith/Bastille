@@ -1,10 +1,10 @@
 package com.kennedysmithjava.prisoncore.util;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class IntRange {
 
-    public static Random random = new Random();
+    public static ThreadLocalRandom random = ThreadLocalRandom.current();
     int min;
     int max;
     public IntRange(int min, int max) {

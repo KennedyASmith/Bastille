@@ -49,6 +49,7 @@ public class EngineResearchPoint extends Engine {
                     mPlayer.addBalance(CurrencyType.RESEARCH, (double) total);
                     player.sendMessage(Color.get("&7[&b&l⛏&7] &7You have gained &b✪" + total + " &7for breaking &e" + count + " &7blocks."));
                 }
+
             });
             oweList.clear();
         }, 20*60L, delay);

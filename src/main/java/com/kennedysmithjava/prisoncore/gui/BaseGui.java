@@ -69,6 +69,7 @@ public abstract class BaseGui {
         this.gui.setAutoremoving(true);
         this.gui.setSoundOpen(null);
         this.gui.setSoundClose(null);
+        this.onBuildInner(player, gui, inventory);
         this.onBuild(player, gui, inventory);
     }
 
@@ -76,6 +77,14 @@ public abstract class BaseGui {
         player.closeInventory();
         if(gui == null) buildMenu();
         player.openInventory(gui.getInventory());
+        this.onOpen();
+    }
+
+    public void onBuildInner(Player player, ChestGui gui, Inventory inventory) {
+
+    }
+    public void onOpen(){
+
     }
 
     public void blockFill(Material material, int start, int end){
@@ -94,6 +103,14 @@ public abstract class BaseGui {
 
     public void setItem(int slot, ItemStack item){
         inventory.setItem(slot, item);
+    }
+
+    public void setItem(int slot, Material material){
+        ItemStack p = new ItemStack(material, 1);
+        ItemMeta itemMeta = p.getItemMeta();
+        if(itemMeta != null) itemMeta.setDisplayName(" ");
+        p.setItemMeta(itemMeta);
+        inventory.setItem(slot, p);
     }
 
     public void setItem(int slot, Material material, String displayName, List<String> lore, boolean glow){

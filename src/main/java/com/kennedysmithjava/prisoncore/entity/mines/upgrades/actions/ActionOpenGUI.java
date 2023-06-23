@@ -5,7 +5,7 @@ import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.mines.UpgradesConf;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.npc.NPCWarrenTrait;
-import com.kennedysmithjava.prisoncore.entity.mines.upgrades.UpgradeGUI;
+import com.kennedysmithjava.prisoncore.entity.mines.upgrades.UpgradeGuiWrapper;
 import com.kennedysmithjava.prisoncore.entity.mines.upgrades.buttons.ButtonType;
 import com.kennedysmithjava.prisoncore.entity.mines.upgrades.buttons.GUIButtonPurchasable;
 import com.kennedysmithjava.prisoncore.entity.mines.upgrades.buttons.GUIButtonPurchasableToggleable;
@@ -40,16 +40,16 @@ public class ActionOpenGUI extends AbstractAction {
         if(!menuID.equals(UpgradesConf.mainMenu)){
 
             Mine mine = mPlayer.getMine();
-            UpgradeGUI upgradeGUI = UpgradesConf.upgradeGUIs.get(menuID);
+            UpgradeGuiWrapper upgradeGuiWrapper = UpgradesConf.upgradeGUIs.get(menuID);
 
-            ChestGui gui = ChestGui.getCreative(Bukkit.createInventory(null, upgradeGUI.getSize(), upgradeGUI.getName()));
+            ChestGui gui = ChestGui.getCreative(Bukkit.createInventory(null, upgradeGuiWrapper.size(), upgradeGuiWrapper.name()));
             gui.setBottomInventoryAllow(false);
             gui.setAutoclosing(false);
 
             Inventory inv = gui.getInventory();
             blockFill(inv, Material.WHITE_STAINED_GLASS_PANE);
 
-            upgradeGUI.getButtons().forEach(button -> {
+            upgradeGuiWrapper.buttons().forEach(button -> {
 
                 List<AbstractAction> actions = button.getOnClick();
 
@@ -77,7 +77,6 @@ public class ActionOpenGUI extends AbstractAction {
                         switch(buttonType){
                             case TOGGLEABLE:
                             {
-
                                 String toggleableUpgrade = "";
                                 boolean purchased = true;
                                 List<AbstractAction> toggleOn;

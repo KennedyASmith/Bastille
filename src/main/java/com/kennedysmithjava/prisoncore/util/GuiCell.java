@@ -1,6 +1,7 @@
 package com.kennedysmithjava.prisoncore.util;
 
 import com.kennedysmithjava.prisoncore.entity.mines.WarrenGUIConf;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 public class GuiCell {
@@ -16,6 +17,14 @@ public class GuiCell {
 
         col = (slot - (9 * row));
         this.item = item;
+    }
+
+    public GuiCell(Material material, int slot) {
+
+        row = Math.floorDiv(slot, 9);
+
+        col = (slot - (9 * row));
+        this.item = new ItemBuilder(material).name(" ").build();
     }
 
     public GuiCell(ItemStack item, int row, int col) {

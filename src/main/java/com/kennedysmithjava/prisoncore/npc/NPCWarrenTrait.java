@@ -5,16 +5,18 @@ import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.mines.UpgradesConf;
 import com.kennedysmithjava.prisoncore.entity.mines.WarrenConf;
 import com.kennedysmithjava.prisoncore.entity.mines.WarrenGUIConf;
-import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
-import com.kennedysmithjava.prisoncore.entity.player.MPlayerColl;
 import com.kennedysmithjava.prisoncore.entity.mines.upgrades.MainUpgrade;
-import com.kennedysmithjava.prisoncore.entity.mines.upgrades.UpgradeGUI;
+import com.kennedysmithjava.prisoncore.entity.mines.upgrades.UpgradeGuiWrapper;
 import com.kennedysmithjava.prisoncore.entity.mines.upgrades.actions.AbstractAction;
-import com.kennedysmithjava.prisoncore.entity.mines.upgrades.actions.ActionMineDistribution;
 import com.kennedysmithjava.prisoncore.entity.mines.upgrades.buttons.GUIButton;
 import com.kennedysmithjava.prisoncore.entity.mines.upgrades.buttons.GUIButtonMainUpgrade;
+import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
+import com.kennedysmithjava.prisoncore.entity.player.MPlayerColl;
+import com.kennedysmithjava.prisoncore.gui.MineCobwebGui;
+import com.kennedysmithjava.prisoncore.gui.MineMainGui;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.GuiCell;
+import com.kennedysmithjava.prisoncore.util.ItemBuilder;
 import com.massivecraft.massivecore.chestgui.ChestGui;
 import com.massivecraft.massivecore.util.MUtil;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
@@ -23,7 +25,6 @@ import net.citizensnpcs.api.trait.Trait;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.Inventory;
@@ -41,15 +42,15 @@ public class NPCWarrenTrait extends Trait {
     }
 
 
-    public static List<Integer> centerGlass = MUtil.list(12, 13, 14,21, 23, 30, 31, 32);
-    public static List<Integer> fillerGlassLeft = MUtil.list(2,4,10,19,20,28,38);
-    public static List<Integer> fillerGlassRight = MUtil.list(6,16,24,25,34,42,40);
-    public static List<Integer> edgeGlassLeft = MUtil.list(0,1,9,18,27,36,37);
-    public static List<Integer> edgeGlassRight = MUtil.list(7,8,17,26,35,44,43);
-    public static List<Integer> lockableButtons = MUtil.list(3,5,15,33,41,39,29,11);
-    public static ItemStack lightGreyItem = new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE);
-    public static ItemStack darkGreyItem = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
-    public static ItemStack whiteItem = new ItemStack(Material.WHITE_STAINED_GLASS_PANE);
+    public static final List<Integer> centerGlass = MUtil.list(12, 13, 14,21, 23, 30, 31, 32);
+    public static final  List<Integer> fillerGlassLeft = MUtil.list(2,4,10,19,20,28,38);
+    public static final  List<Integer> fillerGlassRight = MUtil.list(6,16,24,25,34,42,40);
+    public static final  List<Integer> edgeGlassLeft = MUtil.list(0,1,9,18,27,36,37);
+    public static final  List<Integer> edgeGlassRight = MUtil.list(7,8,17,26,35,44,43);
+    public static final  List<Integer> lockableButtons = MUtil.list(3,5,15,33,41,39,29,11);
+    public static final  ItemStack lightGreyItem = new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE);
+    public static final  ItemStack darkGreyItem = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+    public static final  ItemStack whiteItem = new ItemStack(Material.WHITE_STAINED_GLASS_PANE);
 
     @EventHandler
     public void click(NPCRightClickEvent event) {
@@ -63,60 +64,19 @@ public class NPCWarrenTrait extends Trait {
     }
 
     public void openGUI(MPlayer player) {
-
         Mine mine = player.getMine();
-        UpgradeGUI upGui = UpgradesConf.upgradeGUIs.get("MAIN");
-
         if(!mine.isUpgradeUnlocked(UpgradesConf.initialUpgrade)){
-
-            /*
-             * Set up inventory
-             */
-            ChestGui gui = ChestGui.getCreative(Bukkit.createInventory(null, WarrenGUIConf.get().guiSize, Color.get("&4&lMine Upgrades &r&7- Menu")));
-            gui.setBottomInventoryAllow(false);
-            gui.setAutoclosing(false);
-            Inventory inv = gui.getInventory();
-            blockFill(inv, Material.WHITE_STAINED_GLASS_PANE);
-
-            /*
-             * Set up cobweb clear item and actions
-             */
-            ItemStack cobwebButtonItem = new ItemStack(Material.COBWEB, 1);
-            ItemMeta meta = cobwebButtonItem.getItemMeta();
-            meta.setDisplayName(Color.get("&f&lClear Cobwebs"));
-            meta.setLore(Color.get(MUtil.list("", "&e&lCOST","&aFREE", "", "&7Clear the cobwebs from your mine!")));
-            cobwebButtonItem.setItemMeta(meta);
-            inv.setItem(22, cobwebButtonItem);
-            gui.setAction(22, event -> {
-                HumanEntity whoClicked = event.getWhoClicked();
-                if(!(whoClicked instanceof Player)) return false;
-                gui.setAction(22, inventoryClickEvent -> false);
-                inv.setItem(22, new ItemStack(Material.WHITE_STAINED_GLASS_PANE, 1));
-
-                /* Open the GUI with animation */
-                menuIntroductionAnimation(gui, upGui.getButtons(), () -> {
-                            mine.unlockUpgrade(UpgradesConf.initialUpgrade, true, true);
-                            new ActionMineDistribution(1);
-                            openMainMenu(player, upGui);
-                        }
-                );
-
-                return false;
-            });
-
-            player.getPlayer().openInventory(gui.getInventory());
-
+            MineCobwebGui mineCobwebGui = new MineCobwebGui(player.getPlayer(), player, mine);
+            mineCobwebGui.open();
         }else{
-            /*
-             * Open the GUI without animation
-             */
-
-            openMainMenu(player, upGui);
+            /* Open the GUI without animation */
+            MineMainGui mainGui = new MineMainGui(player.getPlayer(), player);
+            mainGui.open();
         }
 
     }
 
-    public static void openMainMenu(MPlayer player, UpgradeGUI upGui){
+    public static void openMainMenu(MPlayer player, UpgradeGuiWrapper upGui){
 
         if(player.getPlayer() == null) return;
 
@@ -126,7 +86,7 @@ public class NPCWarrenTrait extends Trait {
         gui.setAutoclosing(true);
         Inventory inv = gui.getInventory();
 
-        List<GUIButton> buttons = upGui.getButtons();
+        List<GUIButton> buttons = upGui.buttons();
         List<Integer> lightGrey = MUtil.list(2,4,10,19,20,28,38,6,16,24,25,34,42,40);
         List<Integer> darkGrey = MUtil.list(0,1,9,18,27,36,37,7,8,17,26,35,44,43);
 
@@ -244,13 +204,12 @@ public class NPCWarrenTrait extends Trait {
         List<GuiCell> rightDarkGreyGuiCells = new ArrayList<>();
         List<GuiCell> centeredGuiCells = new ArrayList<>();
 
+        /* Group buttons into left, right or centered */
         buttons.forEach(button -> {
-            ItemStack item = new ItemStack(button.getMaterial());
-            ItemMeta meta = item.getItemMeta();
-            meta.setDisplayName(Color.get(button.getName()));
-            meta.setLore(Color.get(button.getLore()));
-            item.setItemMeta(meta);
-
+            ItemBuilder buttonBuilder = new ItemBuilder(button.getMaterial())
+                    .name(button.getName())
+                    .lore(button.getLore());
+            ItemStack item = buttonBuilder.build();
             GuiCell guiCell = new GuiCell(item, button.getSlot());
             if(guiCell.getCol() > 4){
                 guiCell.moveCol(5);
@@ -289,15 +248,14 @@ public class NPCWarrenTrait extends Trait {
             rightDarkGreyGuiCells.add(guiCell);
         });
 
-
         /*
          * Runnable for the animation
          */
         new BukkitRunnable() {
 
-            int counter = 0;
-            int frame;
-            int locked = lockableButtons.size();
+            private int counter = 0;
+            private int frame;
+            private int locked = lockableButtons.size();
 
             @Override
             public void run() {
