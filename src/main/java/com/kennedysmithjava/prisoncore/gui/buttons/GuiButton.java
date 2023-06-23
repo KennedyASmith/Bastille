@@ -116,11 +116,13 @@ public class GuiButton {
     public ItemStack getItem(MPlayer player, Mine mine){
         boolean isPurchased = isPurchased(mine);
         boolean isAffordable = isAffordable(player);
-        boolean isUnlocked = isUnlocked(mine);
+        boolean isUnlocked = isUnlocked(mine, player);
         boolean isActive = isActive(mine);
         String name = getDisplayName();
+        Material buttonMaterial = getMaterial();
+        if(!isUnlocked) buttonMaterial = Material.IRON_BARS;
         List<String> lore = getLore(player, isUnlocked, isPurchased, isAffordable);
-        ItemBuilder builder = new ItemBuilder(getMaterial()).name(name).lore(lore);
+        ItemBuilder builder = new ItemBuilder(buttonMaterial).name(name).lore(lore);
         if(isActive) builder.addGlow();
         return builder.build();
     }
@@ -138,7 +140,7 @@ public class GuiButton {
         return true;
     }
 
-    public boolean isUnlocked(Mine mine){
+    public boolean isUnlocked(Mine mine, MPlayer player){
         for (UpgradeName upgrade : getRequiredUnlockedUpgrades()) {
             if(!mine.isUpgradePurchased(upgrade.get())) return false;
         }

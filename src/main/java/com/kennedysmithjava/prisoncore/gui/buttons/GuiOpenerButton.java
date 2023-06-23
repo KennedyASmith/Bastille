@@ -3,6 +3,7 @@ package com.kennedysmithjava.prisoncore.gui.buttons;
 import com.kennedysmithjava.prisoncore.eco.Cost;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.mines.upgrades.UpgradeName;
+import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.gui.BaseGui;
 import com.massivecraft.massivecore.util.MUtil;
 import org.bukkit.Material;
@@ -29,5 +30,11 @@ public class GuiOpenerButton extends GuiButton {
     @Override
     public boolean isActive(Mine mine) {
         return false;
+    }
+
+    @Override
+    public boolean isUnlocked(Mine mine, MPlayer player) {
+        boolean hasRequiredUpgrades = super.isUnlocked(mine, player);
+        return isAffordable(player) && hasRequiredUpgrades;
     }
 }
