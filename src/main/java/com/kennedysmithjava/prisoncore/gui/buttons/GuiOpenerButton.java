@@ -11,35 +11,70 @@ import org.bukkit.Material;
 import java.util.List;
 
 public class GuiOpenerButton extends GuiButton {
+
+    BaseGui destinationGUI;
+
+    public GuiOpenerButton(String displayName, String buttonTag, int slot,
+                           List<String> lore, Material material, BaseGui destinationGUI, List<UpgradeName> requiredUpgradesToUnlock,
+                           List<Cost> additionalCosts) {
+        super(displayName, buttonTag, slot, lore, material, requiredUpgradesToUnlock, null, () -> {}, additionalCosts);
+
+        this.destinationGUI = destinationGUI;
+    }
+
     public GuiOpenerButton(String displayName, String buttonTag, int slot,
                            List<String> lore, Material material, BaseGui destinationGUI,
-                           BaseGui returningGUI, List<UpgradeName> requiredUpgradesToUnlock,
-                           List<Cost> additionalCosts) {
-        super(displayName, buttonTag, slot, lore, material, requiredUpgradesToUnlock, null,
-                () -> {
-            returningGUI.close();
-            destinationGUI.open();
-        }, additionalCosts);
+                           UpgradeName thisUpgrade, List<UpgradeName> requiredUpgradesToUnlock,
+                           List<Cost> additionalCosts, Runnable onClick) {
+        super(displayName, buttonTag, slot, lore, material, requiredUpgradesToUnlock, thisUpgrade,
+                onClick, additionalCosts);
+        this.destinationGUI = destinationGUI;
     }
 
     @Override
     public List<String> getBuyPrompt(boolean isUnlocked) {
-        return MUtil.list(" &r", "&7&lREQUIREMENTS");
+        if(getThisUpgrade() == null){
+            return MUtil.list(" &r", "&7&lREQUIREMENTS");
+        }else {
+            return super.getBuyPrompt(isUnlocked);
+        }
+    }
+
+    @Override
+    public Runnable getOnClick() {
+        BaseGui returnableGui = destinationGUI.getReturnMenu();
+        return () -> {
+            GuiOpenerButton.super.getOnClick().run();
+            returnableGui.close();
+            destinationGUI.open();
+        };
     }
 
     @Override
     public boolean isActive(Mine mine) {
-        return false;
+        if(getThisUpgrade() == null) {
+            return false;
+        }else {
+            return super.isActive(mine);
+        }
     }
 
     @Override
     public boolean isPurchased(Mine mine) {
-        return true;
+        if(getThisUpgrade() == null){
+            return true;
+        }else {
+            return super.isPurchased(mine);
+        }
     }
 
     @Override
     public boolean isUnlocked(Mine mine, MPlayer player) {
-        boolean hasRequiredUpgrades = super.isUnlocked(mine, player);
-        return isAffordable(player) && hasRequiredUpgrades;
+        if(getThisUpgrade() == null){
+            boolean hasRequiredUpgrades = super.isUnlocked(mine, player);
+            return isAffordable(player) && hasRequiredUpgrades;
+        }else {
+            return super.isUnlocked(mine, player);
+        }
     }
 }

@@ -1,13 +1,14 @@
 package com.kennedysmithjava.prisoncore.entity.mines;
 
 import com.kennedysmithjava.prisoncore.blockhandler.BlockWrapper;
+import com.kennedysmithjava.prisoncore.eco.Cost;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.PrisonBlock;
 import com.massivecraft.massivecore.util.MUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Distribution {
     private final transient Map<Integer, Material> blocks = new HashMap<>();
@@ -23,15 +24,17 @@ public class Distribution {
     private final String name;
     private final Integer totalEntries;
     private final List<String> lore;
-    private final transient Random random = new Random();
+    private final List<Cost> cost;
+    private final transient ThreadLocalRandom random = ThreadLocalRandom.current();
 
 
-    public Distribution(String name, Material icon, Map<Integer, Integer> rates, List<String> lore) {
+    public Distribution(String name, Material icon, Map<Integer, Integer> rates, List<String> lore, List<Cost> cost) {
         this.icon = icon;
         this.name = name;
         this.lore = lore;
         this.storedRates.putAll(rates);
         this.totalEntries = sum(storedRates.values());
+        this.cost = cost;
         storedRates.forEach((id, entries) -> {
             PrisonBlock pb = BlocksConf.get().blocks.get(id);
             Material mat = pb.getBlock().getMaterial();
@@ -65,7 +68,6 @@ public class Distribution {
         return icon;
     }
 
-    //TODO: Include blockdata
     public PrisonBlock generatePrisonBlock(Material material, BlockData blockData) {
 
         if (Collections.frequency(materials, material) > 1){
@@ -102,4 +104,7 @@ public class Distribution {
         return sum;
     }
 
+    public List<Cost> getCost() {
+        return cost;
+    }
 }

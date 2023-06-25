@@ -26,7 +26,7 @@ public abstract class BaseGui {
     private final boolean autoRemoving;
 
     private final boolean allowBottomInv;
-    private final String name;
+    private String name;
 
     public BaseGui(Player player, String name, int rows, boolean allowBottomInv, boolean autoClosing, BaseGui returnMenu, boolean autoRemoving){
         this.player = player;
@@ -164,6 +164,10 @@ public abstract class BaseGui {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name){
+        this.name = name;
     }
 
     public Player getPlayer() {

@@ -1,5 +1,7 @@
 package com.kennedysmithjava.prisoncore.entity.mines;
 
+import com.kennedysmithjava.prisoncore.eco.CostCurrency;
+import com.kennedysmithjava.prisoncore.eco.CurrencyType;
 import com.kennedysmithjava.prisoncore.util.DistributionPage;
 import com.massivecraft.massivecore.command.editor.annotation.EditorName;
 import com.massivecraft.massivecore.store.Entity;
@@ -38,32 +40,20 @@ public class DistributionConf extends Entity<DistributionConf> {
 
     public Map<Integer, Distribution> distribution = MUtil.map(
 
-            1, new Distribution("&7Dusty Cobweb Pit", Material.GRAVEL,
+            0, new Distribution("&7Dusty Cobweb Pit", Material.GRAVEL,
                     MUtil.map(  
                             
                             3, 3,
                             
                             2, 8,
                                     1, 10),
-                    MUtil.list("&7Common", "", "&fBlocks:", "&740% - &7Pebble &a$0.10", "&710% - &7Pebble &a$0.20", "&750% - &7Cobweb &a$0.00")),
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            2, new Distribution("&7Dusty Pit", Material.STONE,
+                    MUtil.list("&7Common", "", "&fBlocks:", "&740% - &7Pebble &a$0.10", "&710% - &7Pebble &a$0.20", "&750% - &7Cobweb &a$0.00"),
+                    MUtil.list(new CostCurrency(CurrencyType.CASH, 10.0))),
+            1, new Distribution("&7Dusty Pit", Material.STONE,
                     MUtil.map(  3, 1,
-                            2, 10), MUtil.list("&7Common", "", "&fBlocks:", "&790% - &7✦✧✧ &7Pebble &a$0.10", "&710% - &e✦✦✧ &7Pebble &a$0.20"))
+                            2, 10), MUtil.list("&7Common", "", "&fBlocks:", "&790% - &7✦✧✧ &7Pebble &a$0.10", "&710% - &e✦✦✧ &7Pebble &a$0.20"),
+                    MUtil.list(new CostCurrency(CurrencyType.CASH, 10.0))
+                    )
     );
 
     public Map<Integer, DistributionPage> pages = MUtil.map(

@@ -77,7 +77,20 @@ public enum UpgradeName {
     COLLECTION_AUTO_1,
     COLLECTION_AUTO_2,
     COLLECTION_AUTO_3,
-    COLLECTION_AUTO_4;
+    COLLECTION_AUTO_4,
+
+    /* Storage */
+    STORAGE_1,
+    STORAGE_2,
+    STORAGE_3,
+    STORAGE_4,
+    STORAGE_5,
+    STORAGE_6,
+    STORAGE_7,
+    STORAGE_8,
+    STORAGE_9,
+
+    STORAGE_PRESTIGE;
 
     private final List<Cost> costs;
     private final String displayName;

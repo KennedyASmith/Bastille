@@ -132,6 +132,11 @@ public class ItemBuilder
         return this;
     }
 
+    public ItemBuilder setType(Material material){
+        this.item.setType(material);
+        return this;
+    }
+
     public ItemStack build() {
         return this.item;
     }

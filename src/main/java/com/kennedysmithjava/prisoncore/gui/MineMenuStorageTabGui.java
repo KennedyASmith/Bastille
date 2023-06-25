@@ -9,10 +9,10 @@ import org.bukkit.inventory.Inventory;
 
 import java.util.List;
 
-public class MineMenuRegenerationGui extends UpgradesGui {
+public class MineMenuStorageTabGui extends UpgradesGui {
 
-    public MineMenuRegenerationGui(Player player, String name, int rows, BaseGui returnMenu) {
-        super(player, name, rows, true, returnMenu);
+    public MineMenuStorageTabGui(Player player, int tab, BaseGui returnMenu) {
+        super(player, "&4&lStorage - &7Tab " + tab, 3, true, returnMenu);
     }
 
     @Override

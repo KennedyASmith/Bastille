@@ -79,6 +79,7 @@ public class  Mine extends Entity<Mine> implements Named {
         this.setHeightVar(that.height);
         this.setWidthVar(that.width);
         this.setUnlockedDistributions(that.unlockedDistributions);
+        this.setPurchasedDistributions(that.purchasedDistributions);
         this.setBlockDistribution(that.currentDistributionID);
         this.setAutoRegenEnabled(that.autoRegenEnabled);
         this.setSelectedMobility(that.selectedMobility);
@@ -97,6 +98,7 @@ public class  Mine extends Entity<Mine> implements Named {
     private int level = 1;
     private Map<String, UpgradeStatus> upgrades = MUtil.map(UpgradeName.MOBILITY_LADDER_1.get(), new UpgradeStatus(true, true));
     private List<Integer> unlockedDistributions = new ArrayList<>();
+    private List<Integer> purchasedDistributions = new ArrayList<>();
     private TypeMobility selectedMobility = TypeMobility.LADDER_1;
     private List<BuildingType> unlockedBuildings = new ArrayList<>();
 
@@ -1043,8 +1045,19 @@ public class  Mine extends Entity<Mine> implements Named {
         this.changed();
     }
 
+    public void setPurchasedDistributions(List<Integer> purchasedDistributions) {
+        this.purchasedDistributions = purchasedDistributions;
+        this.changed();
+    }
+
     public void addUnlockedDistribution(Integer integer){
         unlockedDistributions.add(integer);
+        this.changed();
+    }
+
+
+    public void addPurchasedDistribution(Integer integer){
+        purchasedDistributions.add(integer);
         this.changed();
     }
 

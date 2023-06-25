@@ -5,4 +5,4 @@ api-version: 1.18
 authors: [ "KennedySmithJava" ]
 description: its a plugin
 website: MCRivals.com
-depend: [Citizens, MassiveCore, FastAsyncWorldEdit, ProtocolLib, HolographicDisplays, ProtocolLib, WorldGuard, PlaceholderAPI]
+depend: [Citizens, MassiveCore, FastAsyncWorldEdit, ProtocolLib, HolographicDisplays, ProtocolLib, WorldGuard, PlaceholderAPI, Perm, SkinsRestorerAPI]

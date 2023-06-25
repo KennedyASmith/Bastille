@@ -1,0 +1,27 @@
+package com.kennedysmithjava.prisoncore.gui;
+
+
+import com.kennedysmithjava.prisoncore.gui.buttons.GuiButton;
+import com.massivecraft.massivecore.chestgui.ChestGui;
+import com.massivecraft.massivecore.util.MUtil;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+
+import java.util.List;
+
+public class MineMenuStoragePrestigeGui extends UpgradesGui {
+
+    public MineMenuStoragePrestigeGui(Player player, BaseGui returnMenu) {
+        super(player, "&4&lPrestige Storage Upgrades", 3, true, returnMenu);
+    }
+
+    @Override
+    public void onBuild(Player player, ChestGui gui, Inventory inventory) {
+
+    }
+
+    @Override
+    public List<GuiButton> getButtons() {
+        return MUtil.list();
+    }
+}

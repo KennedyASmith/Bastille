@@ -274,8 +274,8 @@ public class PrisonCore extends MassivePlugin {
         mine.setWallID(MinesConf.get().mineDefaultWallID);
         mine.setWidthVar(MinesConf.get().mineDefaultWidth);
         mine.setHeightVar(MinesConf.get().mineDefaultHeight);
-        mine.setUnlockedDistributions(MUtil.list(1));
-        mine.setBlockDistribution(1);
+        mine.setUnlockedDistributions(MUtil.list(0));
+        mine.setBlockDistribution(0);
         mine.setAutoRegenEnabled(false);
 
         MineColl.get().attach(mine, id);
