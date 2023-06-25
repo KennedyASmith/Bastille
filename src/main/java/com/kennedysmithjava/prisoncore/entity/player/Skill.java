@@ -3,26 +3,19 @@ package com.kennedysmithjava.prisoncore.entity.player;
 import com.kennedysmithjava.prisoncore.skill.SkillType;
 import com.massivecraft.massivecore.store.EntityInternal;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Skill extends EntityInternal<SkillProfile> {
 
     // Name of type of tree
-    private SkillType type;
+    private final SkillType type;
 
     private int currentLevel;
     private int currentXP;
 
-    private final int maxLevel;
-
-    public transient static Map<SkillType, Map<Integer, Integer>> xpNeeded = new HashMap<>();
 
     public Skill(SkillType type, int currentLevel, int currentXP) {
         this.type = type;
         this.currentLevel = currentLevel;
         this.currentXP = currentXP;
-        this.maxLevel = SkillsConf.get().maxLevels.get(type);
     }
 
     public int getCurrentLevel() {
@@ -82,7 +75,7 @@ public class Skill extends EntityInternal<SkillProfile> {
     }
 
     public boolean maxLevelReached(){
-        return maxLevel <= currentLevel;
+        return getMaxLevel() <= currentLevel;
     }
 
     public int getMaxLevel(){

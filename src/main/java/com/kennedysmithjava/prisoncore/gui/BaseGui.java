@@ -69,8 +69,8 @@ public abstract class BaseGui {
         this.gui.setAutoremoving(true);
         this.gui.setSoundOpen(null);
         this.gui.setSoundClose(null);
-        this.onBuildInner(player, gui, inventory);
         this.onBuild(player, gui, inventory);
+        this.onBuildInner(player, gui, inventory);
     }
 
     public void open(){
@@ -164,5 +164,9 @@ public abstract class BaseGui {
 
     public String getName() {
         return name;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }

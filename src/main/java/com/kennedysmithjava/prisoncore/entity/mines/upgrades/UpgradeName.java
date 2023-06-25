@@ -1,5 +1,15 @@
 package com.kennedysmithjava.prisoncore.entity.mines.upgrades;
 
+import com.kennedysmithjava.prisoncore.eco.Cost;
+import com.kennedysmithjava.prisoncore.eco.CostCurrency;
+import com.kennedysmithjava.prisoncore.eco.CostSkillLevel;
+import com.kennedysmithjava.prisoncore.eco.CurrencyType;
+import com.kennedysmithjava.prisoncore.skill.SkillType;
+import com.massivecraft.massivecore.util.MUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public enum UpgradeName {
 
     /* Upgrade Categories */
@@ -18,6 +28,7 @@ public enum UpgradeName {
     BUILDING_ANVIL,
     BUILDING_BEACON,
     BUILDING_STORAGE,
+    BUILDING_FURNACE,
 
     /* ARCHITECTURE */
     ARCHITECTURE_HEIGHT_INCREASE,
@@ -53,11 +64,11 @@ public enum UpgradeName {
     REGENERATION_AUTO_SPEED_7,
 
     /* Mobility */
-    MOBILITY_LADDER_1,
-    MOBILITY_LADDER_2,
-    MOBILITY_LADDER_3,
-    MOBILITY_JUMP_PAD,
-    MOBILITY_FLIGHT,
+    MOBILITY_LADDER_1("&6Ladders 1", MUtil.list(new CostCurrency(CurrencyType.CASH, 10), new CostSkillLevel(SkillType.PLAYER, 10))),
+    MOBILITY_LADDER_2("&6Ladders 2", MUtil.list(new CostCurrency(CurrencyType.CASH, 10), new CostSkillLevel(SkillType.PLAYER, 10))),
+    MOBILITY_LADDER_3("&6Ladders 3", MUtil.list(new CostCurrency(CurrencyType.CASH, 10), new CostSkillLevel(SkillType.PLAYER, 10))),
+    MOBILITY_JUMP_PAD("&6Jump Pad", MUtil.list(new CostCurrency(CurrencyType.CASH, 10), new CostSkillLevel(SkillType.PLAYER, 10))),
+    MOBILITY_FLIGHT("&6Flight", MUtil.list(new CostCurrency(CurrencyType.CASH, 10), new CostSkillLevel(SkillType.PLAYER, 10))),
 
     /* COLLECTION */
     COLLECTION_DEFAULT,
@@ -66,12 +77,29 @@ public enum UpgradeName {
     COLLECTION_AUTO_1,
     COLLECTION_AUTO_2,
     COLLECTION_AUTO_3,
-    COLLECTION_AUTO_4
+    COLLECTION_AUTO_4;
 
-    ;
+    private final List<Cost> costs;
+    private final String displayName;
+    UpgradeName(){
+        this.costs = new ArrayList<>();
+        this.displayName = get();
+    }
+
+    UpgradeName(String displayName, List<Cost> costs){
+        this.costs = costs;
+        this.displayName = displayName;
+    }
 
     public String get(){
         return this.name();
     }
 
+    public List<Cost> getCosts() {
+        return costs;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
 }

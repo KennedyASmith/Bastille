@@ -85,6 +85,10 @@ public class QuestProfile extends Entity<QuestProfile> {
         this.activeQuestPath = activeQuestPath;
         removeUnlockedQuest(activeQuestPathData);
         MPlayer player = MPlayerColl.get().getByUUID(this.getId());
+        if(player == null){
+            this.detach();
+            return;
+        }
         setPathQuestList(activeQuestPath.getInitializedQuests(player));
         activeQuestPath.activateCurrentQuest(player, activeQuestPathProgress);
     }

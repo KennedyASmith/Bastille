@@ -3,6 +3,7 @@ package com.kennedysmithjava.prisoncore.gui;
 
 import com.kennedysmithjava.prisoncore.eco.CostSkillLevel;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
+import com.kennedysmithjava.prisoncore.entity.mines.upgrades.UpgradeName;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.gui.buttons.GuiButton;
 import com.kennedysmithjava.prisoncore.gui.buttons.GuiOpenerButton;
@@ -64,7 +65,7 @@ public class MineMainGui extends BaseGui{
                 new GuiOpenerButton("&6Building", CATEGORY_TAG, 3,
                         MUtil.list("&7Unlock new buildings for your mine!"),
                         Material.CRAFTING_TABLE,
-                        new MineMenuBuildingsGui(player, "&4&lBuildings &7- Menu", 3, currentMenu), currentMenu,
+                        new MineMenuMobilityGui(player, "&4&lBuildings &7- Menu", 3, currentMenu), currentMenu,
                         MUtil.list(), MUtil.list(new CostSkillLevel(SkillType.PLAYER, 2))),
 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,7 +106,7 @@ public class MineMainGui extends BaseGui{
                         MUtil.list("&7Unlock new places to travel!"),
                         Material.FEATHER,
                         new MineMenuArchitectureGui(player, "&4&lTravel &7- Menu", 3,  currentMenu), currentMenu,
-                        MUtil.list(), MUtil.list(new CostSkillLevel(SkillType.PLAYER, 3))),
+                        MUtil.list(UpgradeName.BUILDING_PORTAL), MUtil.list(new CostSkillLevel(SkillType.PLAYER, 3))),
 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -120,7 +121,7 @@ public class MineMainGui extends BaseGui{
                 new GuiOpenerButton("&6Mobility", CATEGORY_TAG, 41,
                         MUtil.list("&7Unlock new ways to move around your mine!"),
                         Material.LADDER,
-                        new MineMenuArchitectureGui(player, "&4&lAutomation &7- Menu", 3,  currentMenu), currentMenu,
+                        new MineMenuMobilityGui(player, "&4&lMobility &7- Menu", 3,  currentMenu), currentMenu,
                         MUtil.list(), MUtil.list(new CostSkillLevel(SkillType.PLAYER, 3)))
         );
     }

@@ -3,6 +3,8 @@ package com.kennedysmithjava.prisoncore.eco;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.util.Color;
 
+import java.text.DecimalFormat;
+
 public class CostCurrency extends Cost{
 
     private final CurrencyType currencyType;
@@ -30,7 +32,7 @@ public class CostCurrency extends Cost{
 
     @Override
     public String getPriceline() {
-        return currencyType.getDisplayName() + " " + amount + " " + currencyType.getSymbol();
+        return currencyType.getDisplayName() + " " + formatNumberWithCommas(amount) + " " + currencyType.getSymbol();
     }
 
     @Override
@@ -38,8 +40,8 @@ public class CostCurrency extends Cost{
         return "&cInsufficient "
                 + Color.strip(currencyType.getDisplayName())
                 + ": &e" + Color.strip(currencyType.getSymbol())
-                + " " + player.getEconomy().get(currencyType)
-                + "&7/&7&o" + getAmount();
+                + " " + formatNumberWithCommas(player.getEconomy().get(currencyType))
+                + "&7/&7&o" + formatNumberWithCommas(getAmount());
     }
 
     @Override
@@ -50,5 +52,10 @@ public class CostCurrency extends Cost{
 
     public double getAmount() {
         return amount;
+    }
+
+    public static String formatNumberWithCommas(double number) {
+        DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
+        return decimalFormat.format(number);
     }
 }

@@ -1,6 +1,7 @@
 package com.kennedysmithjava.prisoncore.entity.mines;
 
 import com.kennedysmithjava.prisoncore.entity.mines.objects.UpgradeStatus;
+import com.kennedysmithjava.prisoncore.entity.mines.upgrades.UpgradeName;
 import com.kennedysmithjava.prisoncore.util.MineRegenCountdown;
 import com.kennedysmithjava.prisoncore.util.regions.MinesWorldManager;
 import com.kennedysmithjava.prisoncore.PrisonCore;
@@ -94,7 +95,7 @@ public class  Mine extends Entity<Mine> implements Named {
 
     // LEVEL & UPGRADES
     private int level = 1;
-    private Map<String, UpgradeStatus> upgrades = MUtil.map("LADDER_1_ON", new UpgradeStatus(true, true));
+    private Map<String, UpgradeStatus> upgrades = MUtil.map(UpgradeName.MOBILITY_LADDER_1.get(), new UpgradeStatus(true, true));
     private List<Integer> unlockedDistributions = new ArrayList<>();
     private TypeMobility selectedMobility = TypeMobility.LADDER_1;
     private List<BuildingType> unlockedBuildings = new ArrayList<>();
@@ -112,6 +113,7 @@ public class  Mine extends Entity<Mine> implements Named {
     private PS beaconLocation;
     private PS chestLocation;
     private PS anvilLocation;
+    private PS furnaceLocation;
     private PS portalMaxLocation;
     private PS portalMinLocation;
 
@@ -425,6 +427,7 @@ public class  Mine extends Entity<Mine> implements Named {
         this.setBeaconLocation(floor.getBeacon().getFrom(getOrigin()));
         this.setChestLocation(floor.getChest().getFrom(getOrigin()));
         this.setAnvilLocation(floor.getAnvil().getFrom(getOrigin()));
+        this.setFurnaceLocation(floor.getFurnace().getFrom(getOrigin()));
         this.setPortalMaxLocation(floor.getPortalMax().getFrom(getOrigin()));
         this.setPortalMinLocation(floor.getPortalMin().getFrom(getOrigin()));
         this.changed();
@@ -524,6 +527,7 @@ public class  Mine extends Entity<Mine> implements Named {
         buildEnchantTable(true);
         buildPortal(true);
         buildAnvil(true);
+        buildFurnace(true);
     }
 
     public void buildBuildings(){
@@ -532,6 +536,7 @@ public class  Mine extends Entity<Mine> implements Named {
         buildEnchantTable(false);
         buildPortal(false);
         buildAnvil(false);
+        buildFurnace(false);
     }
 
     public boolean hasBuilding(BuildingType buildingType){
@@ -586,6 +591,11 @@ public class  Mine extends Entity<Mine> implements Named {
         setBlock(getFloor().getAnvilBlock(), getAnvilLocation(), destroy);
     }
 
+    public void buildFurnace(boolean destroy){
+        if(!hasBuilding(BuildingType.FURNACE)) return;
+        setBlock(getFloor().getFurnaceBlock(), getFurnaceLocation(), destroy);
+    }
+
     private void setBlock(BlockWrapper material, Location location, boolean destroy){
         Block block = location.getBlock();
         if(destroy) material = new BlockWrapper(Material.AIR);
@@ -616,8 +626,10 @@ public class  Mine extends Entity<Mine> implements Named {
     }
 
     public void deactivateUpgrade(String upgradeID){
-        upgrades.put(upgradeID, new UpgradeStatus(true, false));
-        this.changed();
+        if(upgrades.containsKey(upgradeID)){
+            upgrades.put(upgradeID, new UpgradeStatus(isUpgradePurchased(upgradeID), false));
+            this.changed();
+        }
     }
 
     public void lockUpgrade(String upgradeID) {
@@ -910,6 +922,10 @@ public class  Mine extends Entity<Mine> implements Named {
         this.anvilLocation = anvilLocation;
     }
 
+    public void setFurnaceLocation(PS furnaceLocation) {
+        this.furnaceLocation = furnaceLocation;
+    }
+
     public void setEnchantTableLocation(PS enchantTableLocation) {
         this.enchantTableLocation = enchantTableLocation;
     }
@@ -942,6 +958,10 @@ public class  Mine extends Entity<Mine> implements Named {
         this.setAnvilLocation(PS.valueOf(anvilLocation));
     }
 
+    public void setFurnaceLocation(Location furnaceLocation) {
+        this.setFurnaceLocation(PS.valueOf(furnaceLocation));
+    }
+
     public void setEnchantTableLocation(Location enchantTableLocation) {
         this.setEnchantTableLocation(PS.valueOf(enchantTableLocation));
     }
@@ -967,6 +987,10 @@ public class  Mine extends Entity<Mine> implements Named {
 
     public Location getAnvilLocation() {
         return new Location(MinesWorldManager.get().getWorld(), anvilLocation.getLocationX(), anvilLocation.getLocationY(), anvilLocation.getLocationZ());
+    }
+
+    public Location getFurnaceLocation() {
+        return new Location(MinesWorldManager.get().getWorld(), furnaceLocation.getLocationX(), furnaceLocation.getLocationY(), furnaceLocation.getLocationZ());
     }
 
     // -------------------------------------------- //

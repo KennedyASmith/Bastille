@@ -6,7 +6,8 @@ public enum BuildingType {
     BEACON("Beacon"),
     PORTAL("Portal"),
     CHEST("Storage Chest"),
-    ANVIL("Anvil");
+    ANVIL("Anvil"),
+    FURNACE("Furnace");
 
     final String name;
     BuildingType(String name){

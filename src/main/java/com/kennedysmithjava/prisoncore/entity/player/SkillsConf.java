@@ -86,7 +86,7 @@ public class SkillsConf extends Entity<SkillsConf> {
         if(xpMap == null) {
             throw new NullPointerException("No XP formula exists for skill type: " + type);
         }
-            return xpMap.get(level);
+        return xpMap.get(level);
     }
 
     public void buildFormulas(){

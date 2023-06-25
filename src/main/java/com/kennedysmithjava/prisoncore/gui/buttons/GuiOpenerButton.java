@@ -23,13 +23,18 @@ public class GuiOpenerButton extends GuiButton {
     }
 
     @Override
-    public List<String> getBuyPrompt() {
+    public List<String> getBuyPrompt(boolean isUnlocked) {
         return MUtil.list(" &r", "&7&lREQUIREMENTS");
     }
 
     @Override
     public boolean isActive(Mine mine) {
         return false;
+    }
+
+    @Override
+    public boolean isPurchased(Mine mine) {
+        return true;
     }
 
     @Override

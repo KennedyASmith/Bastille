@@ -93,6 +93,7 @@ public class LayoutConf extends Entity<LayoutConf> {
                     new Offset(-27, 50, -50, 0F, 90F),
                     new Offset(-76, 51, -50, 0F, 270F),
                     new Offset(-45, 50, -31, 0F, 180F),
+                    new Offset(-59, 50, -33),
                     new Offset(-59, 50, -34),
                     new Offset(-52, 54, -80, 0F, 0F),
                     new Offset(-50, 49, -80, 0F, 0F)

@@ -9,7 +9,6 @@ import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.CooldownReason;
 import com.kennedysmithjava.prisoncore.util.ItemBuilder;
 import com.massivecraft.massivecore.util.MUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -24,11 +23,10 @@ public class GuiButton {
     private final Material material;
     private final Runnable onClick;
     private final List<UpgradeName> requiredUnlockedUpgrades;
-
     private final UpgradeName thisUpgrade;
-
     private final String buttonTag;
     protected final List<Cost> additionalCosts;
+
 
     public GuiButton(String displayName, String buttonTag, int slot, List<String> lore, Material material, List<UpgradeName> requiredUpgradesToUnlock, UpgradeName thisUpgrade, Runnable onClick, List<Cost> additionalCosts) {
         this.displayName = displayName;
@@ -40,6 +38,7 @@ public class GuiButton {
         this.onClick = onClick;
         this.requiredUnlockedUpgrades = requiredUpgradesToUnlock;
         this.additionalCosts = additionalCosts;
+
     }
 
     public void clicked(MPlayer player){
@@ -61,17 +60,21 @@ public class GuiButton {
         }
     }
 
-    public List<String> getLore(MPlayer player, boolean isUnlocked, boolean isAffordable, boolean isPurchased) {
+    public List<String> getLore(MPlayer player, boolean isUnlocked, boolean isAffordable, boolean isPurchased, boolean isActive) {
         List<String> lore = getBaseLore();
-        String buttonTag = getButtonTag(isUnlocked, isAffordable, isPurchased);
-        List<String> buyPrompt = getBuyPrompt();
+        String buttonTag = getButtonTag(isUnlocked, isAffordable, isPurchased, isActive);
+        List<String> buyPrompt = getBuyPrompt(isUnlocked);
         if(!buttonTag.equals("")){
             lore.add(0, buttonTag);
             lore.add(1, " &r");
         }
         if(!isPurchased){
             lore.addAll(buyPrompt);
-            lore.addAll(getCostLore(player));
+            if(isUnlocked){
+                lore.addAll(getCostLore(player));
+            }else {
+                lore.addAll(getUnlockRequirements());
+            }
         }
         return lore;
     }
@@ -87,6 +90,7 @@ public class GuiButton {
 
     public List<String> getCostLore(MPlayer player){
         List<String> lore = new ArrayList<>();
+
         for (Cost cost : getAdditionalCosts()) {
             if(cost.hasCost(player)){
                 lore.add("&7- " + cost.getPriceline());
@@ -97,12 +101,14 @@ public class GuiButton {
         return lore;
     }
 
-    public String getButtonTag(boolean isUnlocked, boolean isPurchased, boolean isAffordable){
+    public String getButtonTag(boolean isUnlocked, boolean isAffordable, boolean isPurchased, boolean isActive){
         String buttonTag = this.buttonTag;
         if(!isPurchased){
             if(isUnlocked && isAffordable){
-                buttonTag = "&7[&aPURCHASABLE&7]";
-            } else if (isUnlocked) {
+                buttonTag = "&7[&aPURCHASE&7]";
+            } else if(!isAffordable && isUnlocked){
+                buttonTag = "&7[&cCANT AFFORD&7]";
+            } else if (isActive) {
                 buttonTag = "&7[&7UNLOCKED&7]";
             }  else {
                 buttonTag = "&7[&cLOCKED&7]";
@@ -112,8 +118,12 @@ public class GuiButton {
     }
 
 
-    public List<String> getBuyPrompt(){
-        return MUtil.list(" &r", "&eClick to purchase!", " &r", " &7&lREQUIREMENTS");
+    public List<String> getBuyPrompt(boolean isUnlocked){
+        if(isUnlocked){
+            return MUtil.list(" &r", "&eClick to purchase!", " &r", " &7&lREQUIREMENTS");
+        } else {
+            return MUtil.list(" &r", "&cUnlock previous upgrades first:");
+        }
     }
 
     public ItemStack getItem(MPlayer player, Mine mine){
@@ -121,11 +131,10 @@ public class GuiButton {
         boolean isAffordable = isAffordable(player);
         boolean isUnlocked = isUnlocked(mine, player);
         boolean isActive = isActive(mine);
-        Bukkit.broadcastMessage("IsUnlocked: " + isUnlocked + " IsAffordable: " + isAffordable);
         String name = getDisplayName();
         Material buttonMaterial = getMaterial();
         if(!isUnlocked) buttonMaterial = Material.IRON_BARS;
-        List<String> lore = getLore(player, isUnlocked, isPurchased, isAffordable);
+        List<String> lore = getLore(player, isUnlocked, isAffordable, isPurchased, isActive);
         ItemBuilder builder = new ItemBuilder(buttonMaterial).name(name).lore(lore);
         if(isActive) builder.addGlow();
         return builder.build();
@@ -152,17 +161,20 @@ public class GuiButton {
     }
 
     public boolean isPurchased(Mine mine){
-        if(thisUpgrade == null) return true;
         return mine.isUpgradePurchased(thisUpgrade.get());
     }
 
     public boolean isActive(Mine mine){
-        if(thisUpgrade == null) return true;
         return mine.isUpgradeActive(thisUpgrade.get());
     }
 
     public void addCost(Cost cost){
         additionalCosts.add(cost);
+    }
+
+
+    public List<String> getUnlockRequirements() {
+        return new ArrayList<>();
     }
 
     public List<Cost> getAdditionalCosts() {
@@ -185,4 +197,7 @@ public class GuiButton {
         return requiredUnlockedUpgrades;
     }
 
+    public UpgradeName getThisUpgrade() {
+        return thisUpgrade;
+    }
 }
