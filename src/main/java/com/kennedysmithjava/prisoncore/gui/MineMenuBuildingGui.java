@@ -22,8 +22,8 @@ import java.util.List;
 
 public class MineMenuBuildingGui extends UpgradesGui {
 
-    public MineMenuBuildingGui(Player player, String name, int rows, BaseGui returnMenu) {
-        super(player, name, rows, true, returnMenu);
+    public MineMenuBuildingGui(Player player, String name, BaseGui returnMenu) {
+        super(player, name, 3, true, returnMenu);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class MineMenuBuildingGui extends UpgradesGui {
                 "&7[BUILDING]",
                 11,
                 MUtil.list("&7Build a portal to visit new destinations!"),
-                Material.NETHER_PORTAL,
+                Material.COMPASS,
                 MUtil.list(),
                 UpgradeName.BUILDING_PORTAL,
                 () -> new ActionBuildingUnlock(BuildingType.PORTAL).apply(player),
@@ -91,7 +91,7 @@ public class MineMenuBuildingGui extends UpgradesGui {
                 "&7[BUILDING]",
                 14,
                 MUtil.list("&7Build a furnace to smelt ores from home!"),
-                Material.NETHER_PORTAL,
+                Material.FURNACE,
                 MUtil.list(),
                 UpgradeName.BUILDING_FURNACE,
                 () -> new ActionBuildingUnlock(BuildingType.FURNACE).apply(player),

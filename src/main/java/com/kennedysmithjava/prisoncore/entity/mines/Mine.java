@@ -1065,6 +1065,10 @@ public class  Mine extends Entity<Mine> implements Named {
         return unlockedDistributions;
     }
 
+    public List<Integer> getPurchasedDistributions() {
+        return purchasedDistributions;
+    }
+
     @SuppressWarnings("unused")
     public void spawnArchitectNPC(){
         despawnArchitectNPC();

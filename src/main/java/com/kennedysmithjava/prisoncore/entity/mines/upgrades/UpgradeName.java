@@ -23,7 +23,7 @@ public enum UpgradeName {
     CATEGORY_ENVIRONMENT,
 
     /* BUILDINGS */
-    BUILDING_PORTAL,
+    BUILDING_PORTAL("&dPortal", MUtil.list()),
     BUILDING_ENCHANT_TABLE,
     BUILDING_ANVIL,
     BUILDING_BEACON,

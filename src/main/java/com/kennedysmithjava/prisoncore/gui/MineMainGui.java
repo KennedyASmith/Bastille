@@ -17,8 +17,7 @@ import org.bukkit.inventory.Inventory;
 
 import java.util.List;
 
-public class MineMainGui extends BaseGui{
-
+public class MineMainGui extends BaseGui {
 
     public static final List<Integer> centerGlass = MUtil.list(12, 13, 14,21, 23, 30, 31, 32);
     public static final  List<Integer> fillerGlassLeft = MUtil.list(2,4,10,19,20,28,38);
@@ -65,7 +64,7 @@ public class MineMainGui extends BaseGui{
                 new GuiOpenerButton("&6Building", CATEGORY_TAG, 3,
                         MUtil.list("&7Unlock new buildings for your mine!"),
                         Material.CRAFTING_TABLE,
-                        new MineMenuMobilityGui(player, "&4&lBuildings &7- Menu", 3, currentMenu),
+                        new MineMenuBuildingGui(player, "&4&lBuildings &7- Menu",  currentMenu),
                         MUtil.list(), MUtil.list(new CostSkillLevel(SkillType.PLAYER, 2))),
 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////

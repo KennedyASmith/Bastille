@@ -32,7 +32,7 @@ public class GuiButton {
         this.displayName = displayName;
         this.buttonTag = buttonTag;
         this.slot = slot;
-        this.lore = lore;
+        this.lore = new ArrayList<>(lore);
         this.material = material;
         this.thisUpgrade = thisUpgrade;
         this.onClick = onClick;
@@ -49,9 +49,10 @@ public class GuiButton {
             return;
         }
         Mine mine = player.getMine();
-        boolean isPurchased = isPurchased(mine);
+        boolean isPurchased = isPurchased(mine, player);
+        boolean isUnlocked = isUnlocked(mine, player);
         boolean isAffordable = isAffordable(player);
-        if(!isPurchased && isAffordable){
+        if(!isPurchased && isAffordable && isUnlocked){
             payCosts(player);
             if(thisUpgrade != null) mine.unlockUpgrade(thisUpgrade.get(), true, true);
             getOnClick().run();
@@ -61,7 +62,7 @@ public class GuiButton {
     }
 
     public List<String> getLore(MPlayer player, boolean isUnlocked, boolean isAffordable, boolean isPurchased, boolean isActive) {
-        List<String> lore = getBaseLore();
+        List<String> lore = new ArrayList<>(getBaseLore());
         String buttonTag = getButtonTag(isUnlocked, isAffordable, isPurchased, isActive);
         List<String> buyPrompt = getBuyPrompt(isUnlocked);
         if(!buttonTag.equals("")){
@@ -127,7 +128,7 @@ public class GuiButton {
     }
 
     public ItemStack getItem(MPlayer player, Mine mine){
-        boolean isPurchased = isPurchased(mine);
+        boolean isPurchased = isPurchased(mine, player);
         boolean isAffordable = isAffordable(player);
         boolean isUnlocked = isUnlocked(mine, player);
         boolean isActive = isActive(mine);
@@ -160,7 +161,7 @@ public class GuiButton {
         return true;
     }
 
-    public boolean isPurchased(Mine mine){
+    public boolean isPurchased(Mine mine, MPlayer player){
         return mine.isUpgradePurchased(thisUpgrade.get());
     }
 

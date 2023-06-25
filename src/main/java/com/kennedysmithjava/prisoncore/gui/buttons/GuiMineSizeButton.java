@@ -31,6 +31,11 @@ public class GuiMineSizeButton extends GuiButton {
     }
 
     @Override
+    public boolean isPurchased(Mine mine, MPlayer player) {
+        return false;
+    }
+
+    @Override
     public boolean isActive(Mine mine) {
         return false;
     }

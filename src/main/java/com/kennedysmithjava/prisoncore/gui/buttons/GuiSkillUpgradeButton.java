@@ -75,7 +75,7 @@ public class GuiSkillUpgradeButton extends GuiButton {
     }
 
     @Override
-    public boolean isPurchased(Mine mine) {
+    public boolean isPurchased(Mine mine, MPlayer player) {
         return false;
     }
 

@@ -30,7 +30,7 @@ public class MineMenuBlocksGui extends UpgradesGui {
     boolean hasPreviousPage;
 
     public MineMenuBlocksGui(Player player, BaseGui returnMenu, int pageNum) {
-        super(player, "Blocks", 9*6,  false, returnMenu);
+        super(player, "Blocks", 5,  true, returnMenu);
         this.pageNum = pageNum;
         this.page = DistributionConf.get().pages.get(pageNum);
         this.setName(page.getName());
@@ -40,15 +40,18 @@ public class MineMenuBlocksGui extends UpgradesGui {
 
     @Override
     public void onBuild(Player player, ChestGui gui, Inventory inventory) {
-        blockFill(Material.WHITE_STAINED_GLASS_PANE);
+        blockFill(Material.BLUE_STAINED_GLASS_PANE, 0, 8);
+        blockFill(Material.LIGHT_BLUE_STAINED_GLASS_PANE, 9, 35);
+        blockFill(Material.BLUE_STAINED_GLASS_PANE, 36, 44);
 
         /* Set item and ChestAction for the back button */
-        int BACK_BUTTON_SLOT = 45;
+        int BACK_BUTTON_SLOT = 36;
         ItemBuilder backButtonBuilder = new ItemBuilder(Material.RED_WOOL, 1)
                 .name("&c&lGo Back")
                 .lore(MUtil.list(   "&7" + Color.strip(this.getReturnMenu().getName())));
         setItem(BACK_BUTTON_SLOT, backButtonBuilder.build());
         setAction(BACK_BUTTON_SLOT, inventoryClickEvent -> {
+            close();
             returnToLastMenu();
             return false;
         });
@@ -95,6 +98,7 @@ public class MineMenuBlocksGui extends UpgradesGui {
         List<Integer> fillableSlots = MUtil.list(10,11,12,13,14,15,16,19,20,21,22,23,24,25,28,29,30,31,32,33,34);
         Map<Integer, Distribution> distributions = DistributionConf.get().distribution;
         Iterator<Integer> pageIterator = page.getDistributionIDs().iterator();
+
         for (Integer slot : fillableSlots) {
             if(pageIterator.hasNext()){
                 int distributionID = pageIterator.next();
@@ -108,6 +112,8 @@ public class MineMenuBlocksGui extends UpgradesGui {
                         distribution.getIcon(),
                         MUtil.list(new CostCurrency(CurrencyType.CASH, 100)));
                 buttons.add(distributionButton);
+            }else{
+                setItem(slot, Material.WHITE_STAINED_GLASS_PANE);
             }
         }
 

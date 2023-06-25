@@ -8,6 +8,7 @@ import com.kennedysmithjava.prisoncore.gui.BaseGui;
 import com.massivecraft.massivecore.util.MUtil;
 import org.bukkit.Material;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GuiOpenerButton extends GuiButton {
@@ -60,11 +61,20 @@ public class GuiOpenerButton extends GuiButton {
     }
 
     @Override
-    public boolean isPurchased(Mine mine) {
-        if(getThisUpgrade() == null){
-            return true;
+    public List<String> getUnlockRequirements() {
+        List<String> list = new ArrayList<>();
+        for (UpgradeName upgrade : getRequiredUnlockedUpgrades()) {
+            list.add("&7- " + upgrade.getDisplayName() + " &7required.");
+        }
+        return list;
+    }
+
+    @Override
+    public boolean isPurchased(Mine mine, MPlayer player) {
+        if(getThisUpgrade() == null || getRequiredUnlockedUpgrades().size() > 0){
+            return isUnlocked(mine, player);
         }else {
-            return super.isPurchased(mine);
+            return super.isPurchased(mine, player);
         }
     }
 

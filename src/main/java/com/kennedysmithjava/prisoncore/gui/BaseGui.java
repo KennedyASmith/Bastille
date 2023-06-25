@@ -83,6 +83,7 @@ public abstract class BaseGui {
     public void onBuildInner(Player player, ChestGui gui, Inventory inventory) {
 
     }
+
     public void onOpen(){
 
     }
@@ -148,7 +149,7 @@ public abstract class BaseGui {
     }
 
     public void close(){
-        this.gui.remove();
+        if(gui != null) this.gui.remove();
         this.gui = null;
         this.inventory = null;
         this.player.closeInventory();

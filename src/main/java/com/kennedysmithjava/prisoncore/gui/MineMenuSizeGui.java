@@ -34,7 +34,7 @@ public class MineMenuSizeGui extends UpgradesGui {
     private static final int DECREASE_HEIGHT_SLOT = 30;
 
     public MineMenuSizeGui(Player player, String name, BaseGui returnMenu) {
-        super(player, name, 9*6,  false, returnMenu);
+        super(player, name, 5,  false, returnMenu);
         MPlayer mPlayer = MPlayer.get(getPlayer());
         Mine mine = mPlayer.getMine();
         this.height = mine.getHeight();
@@ -50,7 +50,7 @@ public class MineMenuSizeGui extends UpgradesGui {
         blockFill(Material.WHITE_STAINED_GLASS_PANE);
 
         /* Set item and ChestAction for the back button */
-        int BACK_BUTTON_SLOT = 45;
+        int BACK_BUTTON_SLOT = 36;
         ItemBuilder backButtonBuilder = new ItemBuilder(Material.RED_WOOL, 1)
                 .name("&c&lGo Back")
                 .lore(MUtil.list(   "&7" + Color.strip(this.getReturnMenu().getName())));
@@ -59,6 +59,12 @@ public class MineMenuSizeGui extends UpgradesGui {
             returnToLastMenu();
             return false;
         });
+
+        int HEIGHT_SLOT = 21;
+        setItem(HEIGHT_SLOT, Material.OAK_STAIRS, "&aMine Height", MUtil.list("&7Current: &e" + height), true);
+
+        int WIDTH_SLOT = 23;
+        setItem(WIDTH_SLOT, Material.OAK_FENCE, "&aMine Width", MUtil.list("&7Current: &e" + width), true);
 
         if(!canUpgradeWidth){
             setItem(INCREASE_WIDTH_SLOT, Material.GRAY_WOOL, "&aIncrease Width", MUtil.list("&7[MAXIMUM WIDTH REACHED]"), false);
@@ -83,7 +89,6 @@ public class MineMenuSizeGui extends UpgradesGui {
         MPlayer player = MPlayer.get(getPlayer());
         List<GuiButton> buttons = new ArrayList<>();
 
-
         if(canUpgradeWidth){
             double widthCost = Math.pow(10, width-1);
             buttons.add(
@@ -92,7 +97,7 @@ public class MineMenuSizeGui extends UpgradesGui {
                             "&aIncrease Width",
                             width + 1, height,
                             INCREASE_WIDTH_SLOT,
-                            MUtil.list("", "&7(&f" + width + "&7) &m->&r&7 (&e" + Math.addExact(width, 1) + "&7)"),
+                            MUtil.list("&7(&f" + width + "&7) &m->&r&7 (&e" + Math.addExact(width, 1) + "&7)"),
                             Material.LIME_WOOL,
                             MUtil.list(new CostCurrency(CurrencyType.CASH, widthCost))
                     )
@@ -106,7 +111,7 @@ public class MineMenuSizeGui extends UpgradesGui {
                         "&cDecrease Width",
                         width - 1, height,
                         DECREASE_WIDTH_SLOT,
-                        MUtil.list("", "&7(&f" + width + "&7) &m->&r&7 (&e" + Math.addExact(width, -1) + "&7)"),
+                        MUtil.list("&7(&f" + width + "&7) &m->&r&7 (&e" + Math.addExact(width, -1) + "&7)"),
                         Material.LIME_WOOL,
                         MUtil.list(new CostCurrency(CurrencyType.GEMS, 100))
                 )
@@ -121,7 +126,7 @@ public class MineMenuSizeGui extends UpgradesGui {
                             "&aIncrease Height",
                             width , height + 1,
                             INCREASE_HEIGHT_SLOT,
-                            MUtil.list("", "&7(&f" + height + "&7) &m->&r&7 (&e" + Math.addExact(height, 1) + "&7)"),
+                            MUtil.list( "&7(&f" + height + "&7) &m->&r&7 (&e" + Math.addExact(height, 1) + "&7)"),
                             Material.LIME_WOOL,
                             MUtil.list(new CostCurrency(CurrencyType.CASH, heightCost))
                     )
@@ -135,7 +140,7 @@ public class MineMenuSizeGui extends UpgradesGui {
                             "&cDecrease Height",
                             width, height - 1,
                             DECREASE_HEIGHT_SLOT,
-                            MUtil.list("", "&7(&f" + height + "&7) &m->&r&7 (&e" + Math.addExact(height, -1) + "&7)"),
+                            MUtil.list("&7(&f" + height + "&7) &m->&r&7 (&e" + Math.addExact(height, -1) + "&7)"),
                             Material.LIME_WOOL,
                             MUtil.list(new CostCurrency(CurrencyType.GEMS, 100))
                     )

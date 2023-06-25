@@ -53,9 +53,9 @@ public class DistributionConf extends Entity<DistributionConf> {
     );
 
     public Map<Integer, DistributionPage> pages = MUtil.map(
-            0, new DistributionPage("&7&lCommon Blocks", MUtil.list(1, 2, 3)),
-            1, new DistributionPage("&4&lRare Blocks", MUtil.list(4, 5, 6)),
-            2, new DistributionPage("&8&lDonor Blocks", MUtil.list(7))
+            0, new DistributionPage("&7&lCommon Blocks", MUtil.list(0, 1)),
+            1, new DistributionPage("&4&lRare Blocks", MUtil.list(0)),
+            2, new DistributionPage("&8&lDonor Blocks", MUtil.list(0))
     );
 
 }
