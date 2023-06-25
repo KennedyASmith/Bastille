@@ -78,10 +78,10 @@ public class MineMainGui extends BaseGui{
 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                new GuiOpenerButton("&6Architecture", CATEGORY_TAG, 5,
-                        MUtil.list("&7Unlock new size and decor upgrades for your mine!"),
+                new GuiOpenerButton("&6Mine Size", CATEGORY_TAG, 5,
+                        MUtil.list("&7Expand your mine!"),
                         Material.OAK_FENCE,
-                        new MineMenuArchitectureGui(player, "&4&lArchitecture &7- Menu", 3,  currentMenu),
+                        new MineMenuSizeGui(player, "&4&lMine Size &7- Menu", currentMenu),
                         MUtil.list(), MUtil.list(new CostSkillLevel(SkillType.PLAYER, 3))),
 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////

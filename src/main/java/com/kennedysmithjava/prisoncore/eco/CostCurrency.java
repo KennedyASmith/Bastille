@@ -58,4 +58,14 @@ public class CostCurrency extends Cost{
         DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
         return decimalFormat.format(number);
     }
+
+    @Override
+    public String toString() {
+        return "CostCurrency{" +
+                "currencyType=" + currencyType +
+                ", amount=" + amount +
+                '}';
+    }
+
+
 }

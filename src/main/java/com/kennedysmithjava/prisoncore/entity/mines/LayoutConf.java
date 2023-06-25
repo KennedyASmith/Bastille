@@ -73,6 +73,7 @@ public class LayoutConf extends Entity<LayoutConf> {
             1, new Floor(
                     "&7&lDefault Mine",
                     Material.GRASS,0,
+                    9,
                     MUtil.map(
                         3, "default_mine_1.schem",
                         4, "default_mine_2.schem",

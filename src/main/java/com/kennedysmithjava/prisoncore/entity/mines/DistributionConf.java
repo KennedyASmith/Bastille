@@ -1,7 +1,5 @@
 package com.kennedysmithjava.prisoncore.entity.mines;
 
-import com.kennedysmithjava.prisoncore.eco.CostCurrency;
-import com.kennedysmithjava.prisoncore.eco.CurrencyType;
 import com.kennedysmithjava.prisoncore.util.DistributionPage;
 import com.massivecraft.massivecore.command.editor.annotation.EditorName;
 import com.massivecraft.massivecore.store.Entity;
@@ -47,19 +45,17 @@ public class DistributionConf extends Entity<DistributionConf> {
                             
                             2, 8,
                                     1, 10),
-                    MUtil.list("&7Common", "", "&fBlocks:", "&740% - &7Pebble &a$0.10", "&710% - &7Pebble &a$0.20", "&750% - &7Cobweb &a$0.00"),
-                    MUtil.list(new CostCurrency(CurrencyType.CASH, 10.0))),
+                    MUtil.list("&7Common", "", "&fBlocks:", "&740% - &7Pebble &a$0.10", "&710% - &7Pebble &a$0.20", "&750% - &7Cobweb &a$0.00")),
             1, new Distribution("&7Dusty Pit", Material.STONE,
                     MUtil.map(  3, 1,
-                            2, 10), MUtil.list("&7Common", "", "&fBlocks:", "&790% - &7✦✧✧ &7Pebble &a$0.10", "&710% - &e✦✦✧ &7Pebble &a$0.20"),
-                    MUtil.list(new CostCurrency(CurrencyType.CASH, 10.0))
+                            2, 10), MUtil.list("&7Common", "", "&fBlocks:", "&790% - &7✦✧✧ &7Pebble &a$0.10", "&710% - &e✦✦✧ &7Pebble &a$0.20")
                     )
     );
 
     public Map<Integer, DistributionPage> pages = MUtil.map(
-            1, new DistributionPage("&7&lCommon Blocks", MUtil.list(1, 2, 3)),
-            2, new DistributionPage("&4&lRare Blocks", MUtil.list(4, 5, 6)),
-            3, new DistributionPage("&8&lDonor Blocks", MUtil.list(7))
+            0, new DistributionPage("&7&lCommon Blocks", MUtil.list(1, 2, 3)),
+            1, new DistributionPage("&4&lRare Blocks", MUtil.list(4, 5, 6)),
+            2, new DistributionPage("&8&lDonor Blocks", MUtil.list(7))
     );
 
 }

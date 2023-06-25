@@ -29,12 +29,14 @@ public class Floor {
     Offset furnace;
     Offset portalMax;
     Offset portalMin;
+    int maxWidth;
 
-    public Floor(String displayName, Material icon, int materialData, Map<Integer, String> schematics, List<String> lore, List<Integer> compatibleWalls, String directory, Offset spawn, Offset mineCenter, Offset architectNPC, Offset researcherNPC, Offset collectorNPC, Offset enchantTable, Offset beacon, Offset chest, Offset anvil, Offset furnace, Offset portalMax, Offset portalMin) {
+    public Floor(String displayName, Material icon, int materialData, int maxWidth, Map<Integer, String> schematics, List<String> lore, List<Integer> compatibleWalls, String directory, Offset spawn, Offset mineCenter, Offset architectNPC, Offset researcherNPC, Offset collectorNPC, Offset enchantTable, Offset beacon, Offset chest, Offset anvil, Offset furnace, Offset portalMax, Offset portalMin) {
         this.displayName = displayName;
         this.icon = icon;
         this.materialData = materialData;
         this.schematics = schematics;
+        this.maxWidth = maxWidth;
         this.lore = lore;
         this.compatibleWalls = compatibleWalls;
         this.directory = directory;
@@ -155,6 +157,10 @@ public class Floor {
         return new BlockWrapper(Material.FURNACE);
     }
 
+    public int getMaxWidth() {
+        return maxWidth;
+    }
+
     @Override
     public String toString() {
         return "Floor{" +
@@ -177,6 +183,7 @@ public class Floor {
                 ", furnace=" + furnace +
                 ", portalMax=" + portalMax +
                 ", portalMin=" + portalMin +
+                ", maxWidth=" + maxWidth +
                 '}';
     }
 }

@@ -1,6 +1,8 @@
 package com.kennedysmithjava.prisoncore.gui;
 
 
+import com.kennedysmithjava.prisoncore.eco.CostCurrency;
+import com.kennedysmithjava.prisoncore.eco.CurrencyType;
 import com.kennedysmithjava.prisoncore.entity.mines.Distribution;
 import com.kennedysmithjava.prisoncore.entity.mines.DistributionConf;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
@@ -104,7 +106,7 @@ public class MineMenuBlocksGui extends UpgradesGui {
                         slot,
                         distribution.getLore(),
                         distribution.getIcon(),
-                        distribution.getCost());
+                        MUtil.list(new CostCurrency(CurrencyType.CASH, 100)));
                 buttons.add(distributionButton);
             }
         }
