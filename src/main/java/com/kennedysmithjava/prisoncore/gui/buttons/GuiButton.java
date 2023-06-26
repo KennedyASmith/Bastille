@@ -56,6 +56,7 @@ public class GuiButton {
             payCosts(player);
             if(thisUpgrade != null) mine.unlockUpgrade(thisUpgrade.get(), true, true);
             getOnClick().run();
+            getOnPurchase().run();
         }else if (isPurchased){
             getOnClick().run();
         }
@@ -87,6 +88,11 @@ public class GuiButton {
 
     public Runnable getOnClick() {
         return onClick;
+    }
+
+
+    public Runnable getOnPurchase(){
+        return () -> {};
     }
 
     public List<String> getCostLore(MPlayer player){

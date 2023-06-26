@@ -62,7 +62,7 @@ public class MineMenuBuildingGui extends UpgradesGui {
                 MUtil.list(),
                 UpgradeName.BUILDING_PORTAL,
                 () -> new ActionBuildingUnlock(BuildingType.PORTAL).apply(player),
-                MUtil.list()
+                MUtil.list(new CostCurrency(CurrencyType.CASH, 100))
                 );
         GuiButton enchant_table = new GuiButton(
                 "&d&lEnchantment Table",

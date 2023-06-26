@@ -36,10 +36,13 @@ public class Skill extends EntityInternal<SkillProfile> {
      * @return true if this levels up the player
      */
     public boolean addXP(int xp){
+        if(xp == 0) return false;
         if(maxLevelReached()) return false;
         int xpRequired = SkillsConf.getXpRequired(type, currentLevel);
-        if(currentXP + xp >= xpRequired){
-            this.setLevel(currentLevel + 1, currentXP - xp);
+        int xpActualNeed = xpRequired - currentXP;
+        if(xp >= xpActualNeed){
+            this.setLevel(currentLevel + 1, 0);
+            this.addXP(xp - xpActualNeed);
             return true;
         }else{
             this.currentXP += xp;

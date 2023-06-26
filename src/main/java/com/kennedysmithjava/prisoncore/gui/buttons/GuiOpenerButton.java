@@ -14,6 +14,7 @@ import java.util.List;
 public class GuiOpenerButton extends GuiButton {
 
     BaseGui destinationGUI;
+    Runnable onPurchase;
 
     public GuiOpenerButton(String displayName, String buttonTag, int slot,
                            List<String> lore, Material material, BaseGui destinationGUI, List<UpgradeName> requiredUpgradesToUnlock,
@@ -26,11 +27,13 @@ public class GuiOpenerButton extends GuiButton {
     public GuiOpenerButton(String displayName, String buttonTag, int slot,
                            List<String> lore, Material material, BaseGui destinationGUI,
                            UpgradeName thisUpgrade, List<UpgradeName> requiredUpgradesToUnlock,
-                           List<Cost> additionalCosts, Runnable onClick) {
+                           List<Cost> additionalCosts, Runnable onPurchase) {
         super(displayName, buttonTag, slot, lore, material, requiredUpgradesToUnlock, thisUpgrade,
-                onClick, additionalCosts);
+                () -> {}, additionalCosts);
         this.destinationGUI = destinationGUI;
+        this.onPurchase = onPurchase;
     }
+
 
     @Override
     public List<String> getBuyPrompt(boolean isUnlocked) {
@@ -39,6 +42,11 @@ public class GuiOpenerButton extends GuiButton {
         }else {
             return super.getBuyPrompt(isUnlocked);
         }
+    }
+
+    @Override
+    public Runnable getOnPurchase() {
+        return onPurchase;
     }
 
     @Override
@@ -71,7 +79,7 @@ public class GuiOpenerButton extends GuiButton {
 
     @Override
     public boolean isPurchased(Mine mine, MPlayer player) {
-        if(getThisUpgrade() == null || getRequiredUnlockedUpgrades().size() > 0){
+        if(getThisUpgrade() == null){
             return isUnlocked(mine, player);
         }else {
             return super.isPurchased(mine, player);

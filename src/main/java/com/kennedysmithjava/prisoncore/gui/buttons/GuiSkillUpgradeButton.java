@@ -31,7 +31,7 @@ public class GuiSkillUpgradeButton extends GuiButton {
         this.xpRequired = skill.getXPRequired();
         this.maxLevel = skill.getMaxLevel();
         this.maxLevelReached = maxLevel <= skill.getCurrentLevel();
-        this.addCost(new CostCurrency(CurrencyType.CASH, xpRequired));
+        this.addCost(new CostCurrency(CurrencyType.CASH, xpRequired - skill.getCurrentXP()));
     }
 
     @Override
@@ -52,7 +52,7 @@ public class GuiSkillUpgradeButton extends GuiButton {
     public Runnable getOnClick() {
         return () -> {
             if(!skill.maxLevelReached()){
-                EngineXP.forceGive(player, player.getSkillProfile(), skill.getType(), xpRequired);
+                EngineXP.forceGive(player, player.getSkillProfile(), skill.getType(), xpRequired - skill.getCurrentXP());
                 GuiSkillUpgradeButton.super.getOnClick().run();
             }
         };
