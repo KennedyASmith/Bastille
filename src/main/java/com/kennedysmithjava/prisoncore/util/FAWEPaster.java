@@ -1,6 +1,8 @@
 package com.kennedysmithjava.prisoncore.util;
 
 import com.fastasyncworldedit.core.FaweAPI;
+import com.fastasyncworldedit.core.util.TaskManager;
+import com.fastasyncworldedit.core.util.task.RunnableVal;
 import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
@@ -9,8 +11,6 @@ import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
-import com.sk89q.worldedit.function.operation.Operation;
-import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import org.bukkit.Bukkit;
@@ -46,15 +46,28 @@ public class FAWEPaster {
                         }
                     }
                 }
-            } else {
-                try (EditSession es = WorldEdit.getInstance().newEditSession(FaweAPI.getWorld(world))) {
 
-                    Operation operation = new ClipboardHolder(clipboard)
+            } else {
+                try (EditSession es = WorldEdit.getInstance().newEditSessionBuilder()
+                        .world(FaweAPI.getWorld(world))
+                        .fastMode(true)
+                        .build()) {
+
+                    Runnable runnable = () -> new ClipboardHolder(clipboard)
                             .createPaste(es)
                             .to(to)
                             .ignoreAirBlocks(true)
                             .build();
-                    Operations.complete(operation);
+
+                    TaskManager taskManager = FaweAPI.getTaskManager();
+                    taskManager.async(runnable);
+                    taskManager.syncWhenFree(new RunnableVal<Object>(whenDone) {
+                        @Override
+                        public void run(Object value) {
+                            whenDone.run();
+                        }
+                    });
+
                 }
             }
             com.fastasyncworldedit.core.util.TaskManager.taskManager().taskNow(whenDone, false);

@@ -80,11 +80,10 @@ public class MConf extends Entity<MConf>
     public int gangNameLengthMax = 9;
 
     public List<String> loadingFrames = MUtil.list(
-            "&7[ &l&6Loading &7]",
-            "&7[  &l&6Loading  &7]",
-            "&7[   &l&6Loading   &7]",
-            "&7[  &l&6Loading  &7]",
-            "&7[ &l&6Loading &7]");
+            "&a&l◰",
+            "&a&l◳",
+            "&a&l◲",
+            "&a&l◱");
 
     public String introductionTutorialTourMessage =
             " \n \n \n" +

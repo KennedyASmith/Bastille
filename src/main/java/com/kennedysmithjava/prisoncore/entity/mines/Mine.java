@@ -1188,7 +1188,7 @@ public class  Mine extends Entity<Mine> implements Named {
         Hologram hologram = api.createHologram(getLeverLocation().clone().add(0.5, 1.5, 0.5));
         hologram.setResolvePlaceholders(ResolvePlaceholders.ALL);
         hologram.getLines().appendText(Color.get("&a&lREGEN MINE"));
-        hologram.getLines().appendText(Color.get("&a{papi: countdown_" + this.getId() + "}"));
+        hologram.getLines().appendText(Color.get("{papi: countdown_" + this.getId() + "}"));
         setRegenHologram(hologram);
     }
 

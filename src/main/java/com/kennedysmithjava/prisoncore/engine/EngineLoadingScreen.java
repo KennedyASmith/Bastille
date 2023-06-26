@@ -2,7 +2,7 @@ package com.kennedysmithjava.prisoncore.engine;
 
 import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.entity.MConf;
-import com.kennedysmithjava.prisoncore.util.TitleUtility;
+import com.kennedysmithjava.prisoncore.util.Color;
 import com.massivecraft.massivecore.Engine;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -52,11 +52,12 @@ public class EngineLoadingScreen extends Engine {
                     //Give player blindness effect for 5 seconds
                     if (!player.hasPotionEffect(PotionEffectType.BLINDNESS))
                         player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 9999, 1));
-                    player.sendTitle(title, "Please wait", 0, 20, 10);
+                    player.sendTitle(Color.get(title), Color.get("&7Loading, please wait."), 0, -1, 0);
                 });
 
             }
-        }.runTaskTimer(PrisonCore.get(), 0L, 5L);
+
+        }.runTaskTimer(PrisonCore.get(), 0L, 2L);
 
     }
 
@@ -77,6 +78,7 @@ public class EngineLoadingScreen extends Engine {
                 //Remove blindness from the player, if applicable.
                 if (player.hasPotionEffect(PotionEffectType.BLINDNESS))
                     player.removePotionEffect(PotionEffectType.BLINDNESS);
+                player.sendTitle(Color.get(" &r"), Color.get(" &r"), 0, -1, 0);
                 //Cancel the limbo runnable.
                 if (lPlayers.isEmpty()) active = false;
             }

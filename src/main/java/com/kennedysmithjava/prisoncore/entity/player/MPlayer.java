@@ -360,6 +360,7 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
 
     public void openStorage(StorageType type, Player player){
         Inventory inv = getStorage(type);
+
         player.openInventory(inv);
         PlayerVaults.getInstance().getInVault().put(player.getUniqueId().toString(), new VaultViewInfo(this.getName(), type.getId()));
     }

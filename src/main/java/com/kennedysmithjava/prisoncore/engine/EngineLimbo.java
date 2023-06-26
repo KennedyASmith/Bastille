@@ -7,7 +7,6 @@ import com.kennedysmithjava.prisoncore.util.Color;
 import com.massivecraft.massivecore.Engine;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -69,12 +68,6 @@ public class EngineLimbo extends Engine {
         Player p = player.getPlayer();
         if (p == null) return;
 
-        //Hide this player to all other players in limbo.
-        limbo.forEach((pl, l) -> {
-            if (pl.getPlayer() == null) return;
-            pl.getPlayer().hidePlayer(p);
-        });
-
         //Teleport this player to the limbo spawn location
         p.teleport(MConf.get().getLimboLocation());
     }
@@ -83,13 +76,6 @@ public class EngineLimbo extends Engine {
         limbo.remove(player);
         if (limbo.isEmpty() && active) active = false;
     }
-
-    @EventHandler
-    public void onPlayerChat(AsyncPlayerChatEvent event) {
-        Player player = event.getPlayer();
-        if (limbo.containsKey(player)) event.setCancelled(true);
-    }
-
 
 
 }

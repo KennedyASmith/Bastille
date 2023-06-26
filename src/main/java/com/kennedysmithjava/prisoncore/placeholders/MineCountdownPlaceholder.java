@@ -3,6 +3,7 @@ package com.kennedysmithjava.prisoncore.placeholders;
 import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.mines.MineColl;
+import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.MineRegenCountdown;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
@@ -61,11 +62,11 @@ public class MineCountdownPlaceholder extends PlaceholderExpansion {
             if(mine == null) return "";
             MineRegenCountdown regenCountdown = mine.getRegenCountdown();
             if(regenCountdown == null) return "";
-            if(regenCountdown.isRegenerating()) return "&7[&eRegenerating&7]";
+            if(regenCountdown.isRegenerating()) return Color.get("&7[&eRegenerating&7]");
             if(regenCountdown.getTimeLeft() == 0){
-                return "&7[&eReady&7]";
+                return Color.get("&7[&aReady&7]");
             }else{
-                return mine.getRegenCountdown().getTimeLeftFormatted();
+                return Color.get("&e" + mine.getRegenCountdown().getTimeLeftFormatted());
             }
         }
 

@@ -50,6 +50,7 @@ public class CmdMineCreate extends CoreCommand {
 
         AtomicBoolean mineFinished = new AtomicBoolean(false);
         EngineLimbo.get().removeFromLimbo(player);
+
         EngineLoadingScreen.addLoadingScreen(player, player.getLocation());
 
         PrisonCore.createMine(mPlayer, () ->{

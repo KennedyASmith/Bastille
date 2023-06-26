@@ -164,6 +164,7 @@ public class PickaxeType extends Entity<PickaxeType> {
     }
 
     public String getDurabilityLore(int currentDurability, int maxDurability){
+
         StringBuilder builder = new StringBuilder("&a‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖");
         int length = builder.length();
         double percentage = (double) currentDurability / (double) maxDurability;
