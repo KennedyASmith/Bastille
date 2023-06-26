@@ -3,7 +3,7 @@ package com.kennedysmithjava.prisoncore.storage;
 public enum StorageType {
 
     PRESTIGE(0, 30),
-    QUEST(1, 32),
+    COLLECTIBLES(1, 32),
     STORAGE_1(2, 10),
 
     STORAGE_2(3, 11),

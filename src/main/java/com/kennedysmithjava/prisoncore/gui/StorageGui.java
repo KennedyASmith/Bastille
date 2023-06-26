@@ -14,7 +14,7 @@ import java.util.List;
 
 public class StorageGui extends BaseGui {
     public StorageGui(Player player) {
-        super(player, "&4&lSelect a storage tab", 5, false, true);
+        super(player, "&4&lSelect storage", 5, false, true);
     }
 
     @Override
@@ -30,13 +30,13 @@ public class StorageGui extends BaseGui {
             ItemBuilder storageButton = new ItemBuilder(wrapper.getIcon());
             if(wrapper.isUnlocked() || player.isOp()){
                 List<String> lore = MUtil.list("&r", "&eLeft Click &7to open.");
-                boolean isEditable = (type != StorageType.PRESTIGE && type != StorageType.QUEST);
+                boolean isEditable = (type != StorageType.PRESTIGE && type != StorageType.COLLECTIBLES);
                 if(isEditable) lore.add("&eRight Click&7 to edit settings.");
                 storageButton.lore(lore);
                 storageButton.name(wrapper.getName());
                 setAction(slot, inventoryClickEvent -> {
                     if(inventoryClickEvent.isLeftClick()){
-                        if(type == StorageType.QUEST){
+                        if(type == StorageType.COLLECTIBLES){
                             //TODO
                         }else {
                             close();

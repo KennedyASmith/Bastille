@@ -72,16 +72,16 @@ public class MineMenuStorageTabGui extends BaseGui {
         });
 
         /* Set item and ChestAction for the back button */
-        int NAME_BUTTON_SLOT = 12;
-        ItemBuilder nameButtonBuilder = new ItemBuilder(Material.PAINTING, 1)
+        int NAME_BUTTON_SLOT = 14;
+        ItemBuilder nameButtonBuilder = new ItemBuilder(Material.NAME_TAG, 1)
                 .name("&a&lEdit Name")
                 .lore(MUtil.list(   "&r", "&7Edit the name that appears for this storage!"));
         setItem(NAME_BUTTON_SLOT, nameButtonBuilder.build());
         setAction(NAME_BUTTON_SLOT, inventoryClickEvent -> {
             close();
-            player.sendMessage(
+            player.sendMessage(Color.get(
                     "&7[&bStorage&7] &7Use the command &e/storage rename " + type.getId()
-                            + " &7to rename your &f" + Color.strip(storageWrapper.getName()) + " &7storage vault!");
+                            + " &7to rename your &f" + Color.strip(storageWrapper.getName()) + " &7storage vault!"));
             return false;
         });
     }

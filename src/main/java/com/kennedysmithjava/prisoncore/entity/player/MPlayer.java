@@ -49,8 +49,8 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
             StorageType.STORAGE_5, new StorageWrapper(false, Material.CHEST, "&aStorage 5"),
             StorageType.STORAGE_6, new StorageWrapper(false, Material.CHEST, "&aStorage 6"),
             StorageType.STORAGE_7, new StorageWrapper(false, Material.CHEST, "&aStorage 7"),
-            StorageType.QUEST, new StorageWrapper(false, Material.ENDER_CHEST, "&aQuest"),
-            StorageType.PRESTIGE, new StorageWrapper(false, Material.ENDER_CHEST, "&aPrestige")
+            StorageType.COLLECTIBLES, new StorageWrapper(false, Material.ENDER_CHEST, "&aCollectibles"),
+            StorageType.PRESTIGE, new StorageWrapper(false, Material.ENDER_CHEST, "&aRebirth Vault")
     );
 
     public static MPlayer get(Object oid) {

@@ -30,7 +30,7 @@ public class MineMenuStorageIconGui extends BaseGui {
     public MineMenuStorageIconGui(Player player, StorageType type, BaseGui returnMenu) {
         super(player, "", 5, false, true, returnMenu);
         this.wrapper = MPlayer.get(player).getStorageWrapper(type);
-        setName("&4&lEdit Storage Icon &8- " + Color.strip(wrapper.getName()));
+        setName("&4&lEdit Icon &8- " + Color.strip(wrapper.getName()));
     }
 
     @Override
