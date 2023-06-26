@@ -7,5 +7,4 @@ description: its a plugin
 website: MCRivals.com
 depend: [Citizens, MassiveCore, FastAsyncWorldEdit, ProtocolLib, HolographicDisplays, ProtocolLib, WorldGuard, PlaceholderAPI]
 softdepend:
-  - Perm
-  - SkinsRestorerAPI
+  - SkinsRestorer

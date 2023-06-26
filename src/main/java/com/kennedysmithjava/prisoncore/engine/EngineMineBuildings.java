@@ -8,6 +8,7 @@ import com.kennedysmithjava.prisoncore.entity.mines.MineColl;
 import com.kennedysmithjava.prisoncore.gui.CraftingMenuGui;
 import com.kennedysmithjava.prisoncore.gui.EnchantMenuGui;
 import com.kennedysmithjava.prisoncore.gui.ForgeCraftGui;
+import com.kennedysmithjava.prisoncore.gui.StorageGui;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.Glow;
 import com.kennedysmithjava.prisoncore.util.regions.LazyRegion;
@@ -42,7 +43,7 @@ public class EngineMineBuildings extends Engine {
 
     private static final MineColl mineColl = MineColl.get();
     private static final double VELOCITY = Math.sqrt(4 * 4 * 0.08);
-    private static final List<Material> BUILDINGS = MUtil.list(Material.ENCHANTING_TABLE, Material.BEACON, Material.CHEST, Material.ANVIL, Material.HOPPER, Material.FURNACE);
+    private static final List<Material> BUILDINGS = MUtil.list(Material.ENCHANTING_TABLE, Material.BEACON, Material.TRAPPED_CHEST, Material.ANVIL, Material.HOPPER, Material.FURNACE);
 
     @EventHandler
     public void onJumpPadPress(PlayerInteractEvent ev) {
@@ -128,7 +129,10 @@ public class EngineMineBuildings extends Engine {
                     event.setCancelled(true);
                     enchantMenu(event.getPlayer());
                 }
-                case CHEST -> chestMenu(event.getPlayer());
+                case TRAPPED_CHEST -> {
+                    event.setCancelled(true);
+                    chestMenu(event.getPlayer());
+                }
                 case BEACON -> beaconMenu(event.getPlayer());
                 case ANVIL -> {
                     event.setCancelled(true);
@@ -151,7 +155,8 @@ public class EngineMineBuildings extends Engine {
     }
 
     public void chestMenu(Player player){
-
+        StorageGui storageGui = new StorageGui(player);
+        storageGui.open();
     }
 
 

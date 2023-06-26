@@ -1,18 +1,24 @@
 package com.kennedysmithjava.prisoncore.entity.player;
 
+import com.drtshock.playervaults.PlayerVaults;
+import com.drtshock.playervaults.vaultmanagement.VaultViewInfo;
 import com.kennedysmithjava.prisoncore.PrisonParticipator;
 import com.kennedysmithjava.prisoncore.eco.CurrencyType;
-import com.kennedysmithjava.prisoncore.util.CooldownReason;
 import com.kennedysmithjava.prisoncore.engine.EngineCooldown;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.mines.MineColl;
-//import com.kennedysmithjava.prisoncore.quest.QuestPhaseGroup;
-//import com.kennedysmithjava.prisoncore.quest.QuestProfile;
+import com.kennedysmithjava.prisoncore.entity.player.objects.StorageWrapper;
 import com.kennedysmithjava.prisoncore.quest.QuestPath;
 import com.kennedysmithjava.prisoncore.quest.quests.enums.CollectibleKey;
+import com.kennedysmithjava.prisoncore.storage.StorageManager;
+import com.kennedysmithjava.prisoncore.storage.StorageType;
+import com.kennedysmithjava.prisoncore.util.CooldownReason;
 import com.massivecraft.massivecore.store.SenderEntity;
 import com.massivecraft.massivecore.util.MUtil;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
@@ -35,6 +41,18 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
 
     private int level = 1;
 
+    private Map<StorageType, StorageWrapper> storage = MUtil.map(
+            StorageType.STORAGE_1, new StorageWrapper(false, Material.CHEST, "&aStorage 1"),
+            StorageType.STORAGE_2, new StorageWrapper(false, Material.CHEST, "&aStorage 2"),
+            StorageType.STORAGE_3, new StorageWrapper(false, Material.CHEST, "&aStorage 3"),
+            StorageType.STORAGE_4, new StorageWrapper(false, Material.CHEST, "&aStorage 4"),
+            StorageType.STORAGE_5, new StorageWrapper(false, Material.CHEST, "&aStorage 5"),
+            StorageType.STORAGE_6, new StorageWrapper(false, Material.CHEST, "&aStorage 6"),
+            StorageType.STORAGE_7, new StorageWrapper(false, Material.CHEST, "&aStorage 7"),
+            StorageType.QUEST, new StorageWrapper(false, Material.ENDER_CHEST, "&aQuest"),
+            StorageType.PRESTIGE, new StorageWrapper(false, Material.ENDER_CHEST, "&aPrestige")
+    );
+
     public static MPlayer get(Object oid) {
         return MPlayerColl.get().get(oid);
     }
@@ -44,6 +62,7 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
         this.setMineID(that.mineID);
         this.setXP(that.xp);
         this.setXpRequired(that.xpRequired);
+        this.setStorage(that.storage);
         return this;
     }
 
@@ -310,6 +329,39 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
         return true;
     }
 
+    public void setStorage(Map<StorageType, StorageWrapper> storage) {
+        this.storage = storage;
+        this.changed();
+    }
 
+    public void unlockStorage(StorageType type, boolean unlocked){
+        storage.get(type).setUnlocked(unlocked);
+        this.changed();
+    }
+
+    public void setStorageIcon(StorageType type, Material icon){
+        storage.get(type).setIcon(icon);
+        this.changed();
+    }
+
+    public void setStorageName(StorageType type, String name){
+        storage.get(type).setName(name);
+        this.changed();
+    }
+
+
+    public StorageWrapper getStorageWrapper(StorageType type){
+        return storage.get(type);
+    }
+
+    public Inventory getStorage(StorageType type){
+        return StorageManager.get().loadChest(this, type);
+    }
+
+    public void openStorage(StorageType type, Player player){
+        Inventory inv = getStorage(type);
+        player.openInventory(inv);
+        PlayerVaults.getInstance().getInVault().put(player.getUniqueId().toString(), new VaultViewInfo(this.getName(), type.getId()));
+    }
 }
 

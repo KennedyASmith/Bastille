@@ -148,7 +148,7 @@ public class Floor {
         return new BlockWrapper(Material.BEACON);
     }
     public BlockWrapper getChestBlock(){
-        return new BlockWrapper(Material.CHEST);
+        return new BlockWrapper(Material.TRAPPED_CHEST);
     }
     public BlockWrapper getAnvilBlock(){
         return new BlockWrapper(Material.ANVIL);
