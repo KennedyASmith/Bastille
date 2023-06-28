@@ -1,10 +1,10 @@
-package com.kennedysmithjava.prisoncore.quest.region;
+package com.kennedysmithjava.prisoncore.regions;
 
 
 import org.bukkit.Location;
 import org.bukkit.map.MapCanvas;
 
-public class QuestCuboidRegion implements QuestRegion {
+public class RegionCuboid implements Region {
     private final int minX;
     private final int minY;
     private final int minZ;
@@ -12,7 +12,7 @@ public class QuestCuboidRegion implements QuestRegion {
     private final int maxY;
     private final int maxZ;
 
-    public QuestCuboidRegion(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
+    public RegionCuboid(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
         this.minX = Math.min(minX, maxX);
         this.minY = Math.min(minY, maxY);
         this.minZ = Math.min(minZ, maxZ);

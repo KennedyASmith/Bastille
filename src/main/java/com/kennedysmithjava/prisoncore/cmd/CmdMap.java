@@ -1,6 +1,7 @@
 package com.kennedysmithjava.prisoncore.cmd;
 
-import com.kennedysmithjava.prisoncore.entity.mines.MinesConf;
+import com.kennedysmithjava.prisoncore.maps.MapUtil;
+import com.massivecraft.massivecore.MassiveException;
 import com.massivecraft.massivecore.util.MUtil;
 
 import java.util.List;
@@ -30,6 +31,14 @@ public class CmdMap extends CoreCommand
     // -------------------------------------------- //
     // OVERRIDE
     // -------------------------------------------- //
+
+
+    @Override
+    public void perform() throws MassiveException {
+        if(senderIsConsole) return;
+        MapUtil.removeMaps(me);
+
+    }
 
     @Override
     public List<String> getAliases()

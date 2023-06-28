@@ -3,7 +3,7 @@ package com.kennedysmithjava.prisoncore.entity.mines;
 import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.Floor;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.Wall;
-import com.kennedysmithjava.prisoncore.util.regions.Offset;
+import com.kennedysmithjava.prisoncore.regions.Offset;
 import com.massivecraft.massivecore.command.editor.annotation.EditorName;
 import com.massivecraft.massivecore.store.Entity;
 import com.massivecraft.massivecore.util.MUtil;

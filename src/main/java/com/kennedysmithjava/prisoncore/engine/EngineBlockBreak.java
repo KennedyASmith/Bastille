@@ -1,10 +1,10 @@
 package com.kennedysmithjava.prisoncore.engine;
 
 import com.kennedysmithjava.prisoncore.blockhandler.MineRegionCache;
-import com.kennedysmithjava.prisoncore.util.regions.MinesWorldManager;
+import com.kennedysmithjava.prisoncore.regions.MinesWorldManager;
 import com.kennedysmithjava.prisoncore.event.EventMineBlockBreak;
 import com.kennedysmithjava.prisoncore.entity.mines.Distribution;
-import com.kennedysmithjava.prisoncore.util.regions.LazyRegion;
+import com.kennedysmithjava.prisoncore.regions.LazyRegion;
 import com.massivecraft.massivecore.Engine;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;

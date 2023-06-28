@@ -12,7 +12,7 @@ import com.kennedysmithjava.prisoncore.quest.quests.QuestInteractBlock;
 import com.kennedysmithjava.prisoncore.quest.quests.QuestPromptPickupItem;
 import com.kennedysmithjava.prisoncore.quest.quests.QuestWalkAndTalk;
 import com.kennedysmithjava.prisoncore.util.ItemBuilder;
-import com.kennedysmithjava.prisoncore.util.regions.Offset;
+import com.kennedysmithjava.prisoncore.regions.Offset;
 import com.massivecraft.massivecore.util.MUtil;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Location;

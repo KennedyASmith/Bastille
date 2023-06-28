@@ -1,9 +1,9 @@
-package com.kennedysmithjava.prisoncore.quest.region;
+package com.kennedysmithjava.prisoncore.regions;
 
 import org.bukkit.Location;
 import org.bukkit.map.MapCanvas;
 
-public interface QuestRegion {
+public interface Region {
     boolean has(Location location);
     boolean has(int x, int z);
 
@@ -14,5 +14,6 @@ public interface QuestRegion {
      */
     boolean displayOnMap(int mapOriginX, int mapOriginZ, MapCanvas canvas);
     Location getCenterPosition();
+
 
 }

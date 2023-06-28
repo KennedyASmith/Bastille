@@ -1,6 +1,6 @@
 package com.kennedysmithjava.prisoncore.entity.mines;
 
-import com.kennedysmithjava.prisoncore.util.regions.MinesWorldManager;
+import com.kennedysmithjava.prisoncore.regions.MinesWorldManager;
 import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.util.MiscUtil;
 import com.massivecraft.massivecore.store.Coll;

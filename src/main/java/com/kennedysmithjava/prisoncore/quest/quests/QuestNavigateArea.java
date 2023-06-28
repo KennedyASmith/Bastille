@@ -1,13 +1,5 @@
 package com.kennedysmithjava.prisoncore.quest.quests;
 
-import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
-import com.kennedysmithjava.prisoncore.quest.Quest;
-import com.kennedysmithjava.prisoncore.quest.QuestPath;
-import com.kennedysmithjava.prisoncore.quest.QuestReward;
-import com.kennedysmithjava.prisoncore.quest.region.QuestRegion;
-
-import java.util.List;
-
 /*
 public class QuestNavigateArea extends Quest {
 

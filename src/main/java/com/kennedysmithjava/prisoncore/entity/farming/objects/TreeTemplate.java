@@ -1,8 +1,7 @@
 package com.kennedysmithjava.prisoncore.entity.farming.objects;
 
 import com.kennedysmithjava.prisoncore.blockhandler.BlockWrapper;
-import com.kennedysmithjava.prisoncore.entity.farming.TreesConf;
-import com.kennedysmithjava.prisoncore.util.regions.Offset;
+import com.kennedysmithjava.prisoncore.regions.Offset;
 import com.massivecraft.massivecore.store.EntityInternal;
 import lombok.AllArgsConstructor;
 import lombok.Data;

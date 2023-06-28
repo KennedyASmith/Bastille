@@ -4,10 +4,10 @@ import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.quest.Quest;
 import com.kennedysmithjava.prisoncore.quest.QuestPath;
-import com.kennedysmithjava.prisoncore.quest.region.QuestExactRegion;
-import com.kennedysmithjava.prisoncore.quest.region.QuestRegion;
+import com.kennedysmithjava.prisoncore.regions.RegionExact;
+import com.kennedysmithjava.prisoncore.regions.Region;
 import com.kennedysmithjava.prisoncore.util.MiscUtil;
-import com.kennedysmithjava.prisoncore.util.regions.Offset;
+import com.kennedysmithjava.prisoncore.regions.Offset;
 import com.kennedysmithjava.prisoncore.util.vfx.CircleSequence;
 import com.kennedysmithjava.prisoncore.util.vfx.ParticleFn;
 import me.filoghost.holographicdisplays.api.beta.HolographicDisplaysAPI;
@@ -95,8 +95,8 @@ public class QuestPromptPickupItem extends Quest {
     }
 
     @Override
-    public QuestRegion getRegion(int progress) {
-        return new QuestExactRegion(location);
+    public Region getRegion(int progress) {
+        return new RegionExact(location);
     }
 
     @Override

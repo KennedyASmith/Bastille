@@ -2,7 +2,7 @@ package com.kennedysmithjava.prisoncore.quest;
 
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.QuestProfile;
-import com.kennedysmithjava.prisoncore.quest.region.QuestRegion;
+import com.kennedysmithjava.prisoncore.regions.Region;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,7 +93,7 @@ public abstract class Quest {
         return rewards;
     }
 
-    public abstract QuestRegion getRegion(int questProgress);
+    public abstract Region getRegion(int questProgress);
 
     public boolean hasRegion(int questProgress) {
         return getRegion(questProgress) != null;

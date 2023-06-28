@@ -4,7 +4,7 @@ import com.kennedysmithjava.prisoncore.engine.EngineRegions;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.QuestProfile;
 import com.kennedysmithjava.prisoncore.maps.PrisonMapRenderer;
-import com.kennedysmithjava.prisoncore.quest.region.QuestRegion;
+import com.kennedysmithjava.prisoncore.regions.Region;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
@@ -65,9 +65,9 @@ public abstract class QuestPath {
         quest.continueQuest(questProgress, this);
         player.getQuestProfile().setActiveQuest(quest);
         if(quest.hasRegion(questProgress)){
-            QuestRegion region = quest.getRegion(questProgress);
+            Region region = quest.getRegion(questProgress);
             EngineRegions.get().addToRegionTracker(player.getUuid(), region);
-            if(PrisonMapRenderer.mappedPlayers.containsKey(player.getUuid())){
+            if(PrisonMapRenderer.mapRenderers.containsKey(player.getUuid())){
                 PrisonMapRenderer.reRenderQuest.add(player.getUuid());
             }
         }

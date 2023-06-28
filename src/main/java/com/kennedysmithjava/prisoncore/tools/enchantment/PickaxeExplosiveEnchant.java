@@ -10,7 +10,7 @@ import com.kennedysmithjava.prisoncore.entity.mines.objects.PrisonBlock;
 import com.kennedysmithjava.prisoncore.entity.tools.EnchantConf;
 import com.kennedysmithjava.prisoncore.event.EventMineBlockBreak;
 import com.kennedysmithjava.prisoncore.skill.SkillType;
-import com.kennedysmithjava.prisoncore.util.regions.LazyRegion;
+import com.kennedysmithjava.prisoncore.regions.LazyRegion;
 import com.massivecraft.massivecore.util.MUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;

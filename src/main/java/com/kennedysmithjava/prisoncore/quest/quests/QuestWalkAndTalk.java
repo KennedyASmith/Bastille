@@ -7,9 +7,9 @@ import com.kennedysmithjava.prisoncore.npc.SkinManager;
 import com.kennedysmithjava.prisoncore.quest.Quest;
 import com.kennedysmithjava.prisoncore.quest.QuestMessage;
 import com.kennedysmithjava.prisoncore.quest.QuestPath;
-import com.kennedysmithjava.prisoncore.quest.region.QuestExactRegion;
-import com.kennedysmithjava.prisoncore.quest.region.QuestRegion;
-import com.kennedysmithjava.prisoncore.util.regions.Offset;
+import com.kennedysmithjava.prisoncore.regions.RegionExact;
+import com.kennedysmithjava.prisoncore.regions.Region;
+import com.kennedysmithjava.prisoncore.regions.Offset;
 import net.citizensnpcs.api.ai.Navigator;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.trait.SkinTrait;
@@ -183,12 +183,12 @@ public class QuestWalkAndTalk extends Quest {
     }
 
     @Override
-    public QuestRegion getRegion(int progress) {
+    public Region getRegion(int progress) {
         if(progress > locations.size() - 1) return null;
         Offset offset = locations.get(progress);
-        QuestExactRegion region = null;
+        RegionExact region = null;
         if(offset != null){
-            region = new QuestExactRegion(offset.getFrom(origin));
+            region = new RegionExact(offset.getFrom(origin));
         }
         return region;
     }

@@ -3,20 +3,20 @@ package com.kennedysmithjava.prisoncore.quest.quests;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.quest.Quest;
 import com.kennedysmithjava.prisoncore.quest.QuestPath;
-import com.kennedysmithjava.prisoncore.quest.region.QuestExactRegion;
-import com.kennedysmithjava.prisoncore.quest.region.QuestRegion;
+import com.kennedysmithjava.prisoncore.regions.RegionExact;
+import com.kennedysmithjava.prisoncore.regions.Region;
 import com.kennedysmithjava.prisoncore.util.BuildingType;
 
 public class QuestMineBuildBuilding extends Quest {
 
     private final BuildingType buildingType;
 
-    private final QuestExactRegion warrenLocation;
+    private final RegionExact warrenLocation;
 
     public QuestMineBuildBuilding(MPlayer player, BuildingType buildingType){
         super(player);
         this.buildingType = buildingType;
-        this.warrenLocation = new QuestExactRegion(player.getMine().getResearcherLocation());
+        this.warrenLocation = new RegionExact(player.getMine().getResearcherLocation());
     }
 
     @Override
@@ -50,7 +50,7 @@ public class QuestMineBuildBuilding extends Quest {
     }
 
     @Override
-    public QuestRegion getRegion(int progress) {
+    public Region getRegion(int progress) {
         return warrenLocation;
     }
 

@@ -1,7 +1,7 @@
 package com.kennedysmithjava.prisoncore.entity.mines.objects;
 
 import com.kennedysmithjava.prisoncore.blockhandler.BlockWrapper;
-import com.kennedysmithjava.prisoncore.util.regions.Offset;
+import com.kennedysmithjava.prisoncore.regions.Offset;
 import org.bukkit.Material;
 
 import java.util.List;

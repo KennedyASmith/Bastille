@@ -5,6 +5,7 @@ import com.kennedysmithjava.prisoncore.cmd.PouchCommand;
 import com.kennedysmithjava.prisoncore.engine.EngineTools;
 import com.kennedysmithjava.prisoncore.engine.EngineTrees;
 import com.kennedysmithjava.prisoncore.entity.MConfColl;
+import com.kennedysmithjava.prisoncore.entity.RegionsColl;
 import com.kennedysmithjava.prisoncore.entity.farming.FarmingConfColl;
 import com.kennedysmithjava.prisoncore.entity.farming.FishingConfColl;
 import com.kennedysmithjava.prisoncore.entity.farming.TreesConfColl;
@@ -28,14 +29,14 @@ import com.kennedysmithjava.prisoncore.placeholders.*;
 import com.kennedysmithjava.prisoncore.quest.QuestPath;
 import com.kennedysmithjava.prisoncore.quest.paths.PathIntroduction;
 import com.kennedysmithjava.prisoncore.quest.paths.PathStarterGateway;
+import com.kennedysmithjava.prisoncore.regions.MinesWorldManager;
+import com.kennedysmithjava.prisoncore.regions.VoidGenerator;
 import com.kennedysmithjava.prisoncore.tools.Pickaxe;
 import com.kennedysmithjava.prisoncore.tools.ability.*;
 import com.kennedysmithjava.prisoncore.tools.enchantment.*;
 import com.kennedysmithjava.prisoncore.tools.pouch.DatalessPouchable;
 import com.kennedysmithjava.prisoncore.util.FAWEPaster;
 import com.kennedysmithjava.prisoncore.util.Glow;
-import com.kennedysmithjava.prisoncore.util.regions.MinesWorldManager;
-import com.kennedysmithjava.prisoncore.util.regions.VoidGenerator;
 import com.massivecraft.massivecore.MassivePlugin;
 import com.massivecraft.massivecore.collections.MassiveList;
 import com.massivecraft.massivecore.util.MUtil;
@@ -168,6 +169,7 @@ public class PrisonCore extends MassivePlugin {
 
         return new MassiveList<>(
                 MConfColl.class,
+                RegionsColl.class,
                 MPlayerColl.class,
                 QuestProfileColl.class,
                 MinesConfColl.class,

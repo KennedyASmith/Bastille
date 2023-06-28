@@ -7,7 +7,7 @@ import com.kennedysmithjava.prisoncore.entity.farming.objects.TreeTemplate;
 import com.kennedysmithjava.prisoncore.entity.farming.objects.TwoDVector;
 import com.kennedysmithjava.prisoncore.util.FAWEPaster;
 import com.kennedysmithjava.prisoncore.util.MiscUtil;
-import com.kennedysmithjava.prisoncore.util.regions.Offset;
+import com.kennedysmithjava.prisoncore.regions.Offset;
 import com.massivecraft.massivecore.Engine;
 import com.massivecraft.massivecore.ps.PS;
 import com.sk89q.worldedit.math.BlockVector3;

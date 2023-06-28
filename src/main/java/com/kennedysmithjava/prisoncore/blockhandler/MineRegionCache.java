@@ -1,13 +1,13 @@
 package com.kennedysmithjava.prisoncore.blockhandler;
 
-import com.kennedysmithjava.prisoncore.util.regions.MinesWorldManager;
+import com.kennedysmithjava.prisoncore.regions.MinesWorldManager;
 import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.entity.mines.Distribution;
 import com.kennedysmithjava.prisoncore.entity.mines.DistributionConf;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.mines.MineColl;
 import com.kennedysmithjava.prisoncore.util.SoftHashMap;
-import com.kennedysmithjava.prisoncore.util.regions.LazyRegion;
+import com.kennedysmithjava.prisoncore.regions.LazyRegion;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 
@@ -127,6 +127,11 @@ public class MineRegionCache {
     }
 
     public LazyRegion getRegion(Block b) {
+        return this.mineRegionCache.getOrDefault(this.getKey(b),
+                this.alternativelyCachedRegions.stream().filter(r -> r.contains(b)).findFirst().orElse(null)) ;
+    }
+
+    public LazyRegion getRegion(Location b) {
         return this.mineRegionCache.getOrDefault(this.getKey(b),
                 this.alternativelyCachedRegions.stream().filter(r -> r.contains(b)).findFirst().orElse(null)) ;
     }

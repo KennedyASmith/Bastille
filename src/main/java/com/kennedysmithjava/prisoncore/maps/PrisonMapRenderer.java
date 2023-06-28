@@ -2,7 +2,7 @@ package com.kennedysmithjava.prisoncore.maps;
 
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.quest.Quest;
-import com.kennedysmithjava.prisoncore.quest.region.QuestRegion;
+import com.kennedysmithjava.prisoncore.regions.Region;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -19,26 +19,35 @@ public class PrisonMapRenderer extends MapRenderer {
     public static String MAP_KEY = "§" + MapPalette.matchColor(190, 190, 190) + ";Key";
     public static byte GRAY_COLOR = MapPalette.matchColor(79, 79, 79);
     public static byte BLACK_COLOR = MapPalette.matchColor(50, 50, 50);
-    public static Map<UUID, Boolean> mappedPlayers = new HashMap<>();
-    public static List<UUID> reRenderQuest = new ArrayList<>();
+    public static Set<UUID> shouldRenderPlayers = new HashSet<>();
+    public static Map<UUID, PrisonMapRenderer> mapRenderers = new HashMap<>();
+    public static Set<UUID> reRenderQuest = new HashSet<>();
 
-    private final String areaName;
-    private final int textWidth;
+    private String areaName;
+    private int textWidth;
+
+    private boolean clearTextArea = false;
+
+    //** For quests
+    //private List<Integer, Color> lastQuestRegionPixels <-Turn all transparent each iteration
+    //private Region questRegion
+    //
 
 
-    private QuestRegion region;
+    private Region region;
 
     private static final int textX = 4;
     public PrisonMapRenderer(boolean contextual, String areaName){
         super(contextual);
-        this.areaName = "§" + MapPalette.matchColor(254, 254, 254) + ";" + areaName;
-        this.textWidth = MinecraftFont.Font.getWidth(areaName);
+        setAreaName(areaName);
     }
 
     @Override
     public void render(MapView mapView, MapCanvas mapCanvas, Player player) {
-        boolean shouldRender = mappedPlayers.get(player.getUniqueId());
+        boolean shouldRender = shouldRenderPlayers.contains(player.getUniqueId());
         if(!shouldRender) return;
+
+        Bukkit.broadcastMessage("Rendering map: " + areaName);
 
         if(reRenderQuest.contains(player.getUniqueId())){
             MPlayer mPlayer = MPlayer.get(player);
@@ -75,6 +84,14 @@ public class PrisonMapRenderer extends MapRenderer {
                 int bestY = (mapZ > 94) ? 94 : (Math.max(mapZ, -85));
                 cursors.addCursor(bestX, bestY, MapUtil.getDirectionFrom(loc, qCenter), MapCursor.Type.RED_MARKER.getValue(), true, "Quest");
             }
+        }
+        if(clearTextArea){
+            for (int x = 0; x < 128; x++) {
+                for (int y = 12; y < 128; y++) {
+                    mapCanvas.setPixel(x, y, MapPalette.TRANSPARENT);
+                }
+            }
+            clearTextArea = false;
         }
 
         int barTop = 111;
@@ -153,7 +170,20 @@ public class PrisonMapRenderer extends MapRenderer {
         mapCanvas.setCursors(cursors);
         mapCanvas.drawText(textX, 2, MinecraftFont.Font, areaName);
         mapCanvas.drawText(7, 116, MinecraftFont.Font, MAP_KEY);
-        mappedPlayers.put(player.getUniqueId(), false);
+        shouldRenderPlayers.remove(player.getUniqueId());
+    }
+
+    public void setQuestRegion(Region region) {
+        this.region = region;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = "§" + MapPalette.matchColor(254, 254, 254) + ";" + areaName;
+        this.textWidth = MinecraftFont.Font.getWidth(areaName);
+    }
+
+    public void setClearTextArea(boolean clearTextArea) {
+        this.clearTextArea = clearTextArea;
     }
 
     public static ItemStack mapPlayer(Player player, Location loc){
@@ -166,14 +196,15 @@ public class PrisonMapRenderer extends MapRenderer {
         mapView.setUnlimitedTracking(true);
         mapView.setTrackingPosition(true);
 
-        // Set the map renderer
-        mapView.addRenderer(new PrisonMapRenderer(true, loc.getWorld().getName()));
+        PrisonMapRenderer renderer = new PrisonMapRenderer(true, loc.getWorld().getName());
+        mapView.addRenderer(renderer);
 
         // Set the map ID in the map item's metadata
         mapMeta.setMapView(mapView);
         mapItem.setItemMeta(mapMeta);
-        mappedPlayers.put(player.getUniqueId(), true);
+        shouldRenderPlayers.add(player.getUniqueId());
         reRenderQuest.add(player.getUniqueId());
+        mapRenderers.put(player.getUniqueId(), renderer);
         return mapItem;
     }
 }

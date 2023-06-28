@@ -4,7 +4,7 @@ import com.kennedysmithjava.prisoncore.blockhandler.BlockWrapper;
 import com.kennedysmithjava.prisoncore.entity.farming.objects.Tree;
 import com.kennedysmithjava.prisoncore.entity.farming.objects.TreeTemplate;
 import com.kennedysmithjava.prisoncore.entity.farming.objects.TwoDVector;
-import com.kennedysmithjava.prisoncore.util.regions.Offset;
+import com.kennedysmithjava.prisoncore.regions.Offset;
 import com.massivecraft.massivecore.collections.MassiveMap;
 import com.massivecraft.massivecore.command.editor.annotation.EditorName;
 import com.massivecraft.massivecore.store.Entity;

@@ -1,4 +1,4 @@
-package com.kennedysmithjava.prisoncore.util.regions;
+package com.kennedysmithjava.prisoncore.regions;
 
 import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;

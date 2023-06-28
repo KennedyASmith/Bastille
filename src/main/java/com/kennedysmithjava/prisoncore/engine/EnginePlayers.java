@@ -1,11 +1,10 @@
 package com.kennedysmithjava.prisoncore.engine;
 
-import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.mines.MineColl;
-import com.kennedysmithjava.prisoncore.maps.MapUtil;
-import com.kennedysmithjava.prisoncore.util.CooldownReason;
+import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.quest.QuestPath;
+import com.kennedysmithjava.prisoncore.util.CooldownReason;
 import com.massivecraft.massivecore.Engine;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -93,6 +92,5 @@ public class EnginePlayers extends Engine {
         } else{
             EngineLimbo.get().addToLimbo(mPlayer.getPlayer());
         }
-        MapUtil.replaceAnyMaps(player, player.getLocation());
     }
 }

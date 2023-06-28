@@ -4,7 +4,7 @@ import com.kennedysmithjava.prisoncore.engine.EngineQuests;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.quest.Quest;
 import com.kennedysmithjava.prisoncore.quest.QuestPath;
-import com.kennedysmithjava.prisoncore.quest.region.QuestRegion;
+import com.kennedysmithjava.prisoncore.regions.Region;
 import org.bukkit.Material;
 
 
@@ -69,7 +69,7 @@ public class QuestBreakBlock extends Quest {
     }
 
     @Override
-    public QuestRegion getRegion(int progress) {
+    public Region getRegion(int progress) {
         return null;
     }
 

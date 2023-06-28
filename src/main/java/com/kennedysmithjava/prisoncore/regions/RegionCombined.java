@@ -1,18 +1,18 @@
-package com.kennedysmithjava.prisoncore.quest.region;
+package com.kennedysmithjava.prisoncore.regions;
 
 import org.bukkit.Location;
 import org.bukkit.map.MapCanvas;
 
 import java.util.Set;
 
-public class QuestCombinedRegion implements QuestRegion {
-    private final Set<QuestRegion> regions;
-    public QuestCombinedRegion(Set<QuestRegion> regions) {
+public class RegionCombined implements Region {
+    private final Set<Region> regions;
+    public RegionCombined(Set<RegionFlatSquare> regions) {
         this.regions = regions;
     }
 
     public boolean has(Location loc) {
-        for (QuestRegion region : regions) {
+        for (Region region : regions) {
             if(region.has(loc)){
                 return true;
             }

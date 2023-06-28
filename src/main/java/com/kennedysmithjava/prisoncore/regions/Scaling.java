@@ -1,4 +1,4 @@
-package com.kennedysmithjava.prisoncore.util.regions;
+package com.kennedysmithjava.prisoncore.regions;
 
 public class Scaling {
 

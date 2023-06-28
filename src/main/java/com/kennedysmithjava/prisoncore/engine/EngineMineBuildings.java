@@ -11,7 +11,7 @@ import com.kennedysmithjava.prisoncore.gui.ForgeCraftGui;
 import com.kennedysmithjava.prisoncore.gui.StorageGui;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.Glow;
-import com.kennedysmithjava.prisoncore.util.regions.LazyRegion;
+import com.kennedysmithjava.prisoncore.regions.LazyRegion;
 import com.massivecraft.massivecore.Engine;
 import com.massivecraft.massivecore.chestgui.ChestGui;
 import com.massivecraft.massivecore.util.MUtil;

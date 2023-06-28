@@ -4,14 +4,14 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
+
+import java.util.UUID;
 
 public class MapUtil {
 
     public static boolean insideMapBounds(int x, int z){
         return (x > 4 && x < 125) && (z > 14 && z < 107);
     }
-
 
     public static byte getDirectionFrom(Location origin, Location target) {
         double deltaX = target.getX() - origin.getX();
@@ -28,13 +28,25 @@ public class MapUtil {
         return directions[index].d;
     }
 
-    public static void replaceAnyMaps(Player player, Location newLocation){
+    public static void refreshMapName(Player player, String name){
+        UUID uuid = player.getUniqueId();
+        if(!PrisonMapRenderer.mapRenderers.containsKey(uuid)) return;
+        if(!hasMap(player)) return;
+        PrisonMapRenderer renderer = PrisonMapRenderer.mapRenderers.get(uuid);
+        renderer.setAreaName(name);
+        renderer.setClearTextArea(true);
+    }
+
+    public static void removeMaps(Player player){
         Inventory inv = player.getInventory();
         if(!inv.contains(Material.FILLED_MAP)) return;
-        int firstMapSlot = inv.first(Material.FILLED_MAP);
         inv.remove(Material.FILLED_MAP);
-        ItemStack newMap = PrisonMapRenderer.mapPlayer(player, newLocation);
-        inv.setItem(firstMapSlot, newMap);
+        removeMaps(player);
+    }
+
+    public static boolean hasMap(Player player){
+        Inventory inv = player.getInventory();
+        return inv.contains(Material.FILLED_MAP);
     }
 
 }

@@ -1,6 +1,6 @@
 package com.kennedysmithjava.prisoncore.util.vfx;
 
-import com.kennedysmithjava.prisoncore.util.regions.BlockArea;
+import com.kennedysmithjava.prisoncore.regions.BlockArea;
 import com.kennedysmithjava.prisoncore.util.XYPair;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

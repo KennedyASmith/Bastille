@@ -7,7 +7,7 @@ import com.kennedysmithjava.prisoncore.entity.mines.MineColl;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.PrisonBlock;
 import com.kennedysmithjava.prisoncore.tools.Pickaxe;
 import com.kennedysmithjava.prisoncore.tools.ability.LeveledAbility;
-import com.kennedysmithjava.prisoncore.util.regions.LazyRegion;
+import com.kennedysmithjava.prisoncore.regions.LazyRegion;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;

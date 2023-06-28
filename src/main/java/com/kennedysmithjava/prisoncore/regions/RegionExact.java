@@ -1,17 +1,17 @@
-package com.kennedysmithjava.prisoncore.quest.region;
+package com.kennedysmithjava.prisoncore.regions;
 
 import org.bukkit.Location;
 import org.bukkit.map.MapCanvas;
 
 import static com.kennedysmithjava.prisoncore.maps.MapUtil.insideMapBounds;
 
-public class QuestExactRegion implements QuestRegion {
+public class RegionExact implements Region {
     private final int x;
     private final int y;
     private final int z;
     private final Location centerPositon;
 
-    public QuestExactRegion(Location location) {
+    public RegionExact(Location location) {
         this.x = location.getBlockX();
         this.y = location.getBlockY();
         this.z = location.getBlockZ();

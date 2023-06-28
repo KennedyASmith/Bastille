@@ -1,11 +1,11 @@
-package com.kennedysmithjava.prisoncore.quest.region;
+package com.kennedysmithjava.prisoncore.regions;
 
 import org.bukkit.Location;
 import org.bukkit.map.MapCanvas;
 
 import static com.kennedysmithjava.prisoncore.maps.MapUtil.insideMapBounds;
 
-public class QuestCylindricalRegion implements QuestRegion {
+public class RegionCylindrical implements Region {
     private final double centerX;
     private final double centerZ;
     private final double radiusSquared;
@@ -14,7 +14,7 @@ public class QuestCylindricalRegion implements QuestRegion {
 
     private final Location centerPosition;
 
-    public QuestCylindricalRegion(Location center, double radius, double height) {
+    public RegionCylindrical(Location center, double radius, double height) {
         this.centerX = center.getX();
         this.centerZ = center.getZ();
         this.radiusSquared = radius * radius;
