@@ -26,7 +26,6 @@ public class CmdPRegionAdd extends CoreCommand {
 
     @Override
     public void perform() throws MassiveException {
-        CmdPRegion.addToPosOneCache(me.getUniqueId().toString(), me.getLocation());
 
         if(!CmdPRegion.bothCachesContain(me)){
             msg(Color.get("&7[&bServer&7] First select a region with &e/pregion pos1 &7and &e/pregion pos2."));

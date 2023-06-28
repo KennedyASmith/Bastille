@@ -1,6 +1,7 @@
 package com.kennedysmithjava.prisoncore.cmd;
 
 import com.kennedysmithjava.prisoncore.Perm;
+import com.kennedysmithjava.prisoncore.util.Color;
 import com.massivecraft.massivecore.MassiveException;
 import com.massivecraft.massivecore.command.requirement.RequirementHasPerm;
 import com.massivecraft.massivecore.command.requirement.RequirementIsPlayer;
@@ -19,7 +20,7 @@ public class CmdPRegionPosOne extends CoreCommand {
     @Override
     public void perform() throws MassiveException {
         CmdPRegion.addToPosOneCache(me.getUniqueId().toString(), me.getLocation());
-        me.sendMessage("Position two saved.");
+        msg(Color.get("&7[&bServer&7] Position one saved."));
     }
 
 }

@@ -1,10 +1,10 @@
 package com.kennedysmithjava.prisoncore.cmd;
 
 import com.kennedysmithjava.prisoncore.Perm;
+import com.kennedysmithjava.prisoncore.util.Color;
 import com.massivecraft.massivecore.MassiveException;
 import com.massivecraft.massivecore.command.requirement.RequirementHasPerm;
 import com.massivecraft.massivecore.command.requirement.RequirementIsPlayer;
-import org.bukkit.entity.Player;
 
 public class CmdPRegionPosTwo extends CoreCommand {
 
@@ -21,7 +21,7 @@ public class CmdPRegionPosTwo extends CoreCommand {
     @Override
     public void perform() throws MassiveException {
         CmdPRegion.addToPosTwoCache(me.getUniqueId().toString(), me.getLocation());
-        me.sendMessage("Position two saved.");
+        msg(Color.get("&7[&bServer&7] Position two saved."));
     }
 
 }

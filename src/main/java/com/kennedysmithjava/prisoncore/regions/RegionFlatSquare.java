@@ -18,15 +18,10 @@ public class RegionFlatSquare implements Region {
     }
 
     public RegionFlatSquare(Location pos1, Location pos2) {
-        int minX = Math.min(pos1.getBlockX(), pos2.getBlockX());
-        int minZ = Math.min(pos1.getBlockZ(), pos2.getBlockZ());
-        int maxX = Math.max(pos1.getBlockX(), pos2.getBlockX());
-        int maxZ = Math.max(pos1.getBlockZ(), pos2.getBlockZ());
-
-        this.minX = Math.min(minX, maxX);
-        this.minZ = Math.min(minZ, maxZ);
-        this.maxX = Math.max(minX, maxX);
-        this.maxZ = Math.max(minZ, maxZ);
+        this.minX = Math.min(pos1.getBlockX(), pos2.getBlockX());
+        this.minZ = Math.min(pos1.getBlockZ(), pos2.getBlockZ());
+        this.maxX = Math.max(pos1.getBlockX(), pos2.getBlockX());
+        this.maxZ = Math.max(pos1.getBlockZ(), pos2.getBlockZ());
     }
 
     public boolean has(Location loc) {

@@ -34,7 +34,6 @@ public class MapUtil {
         if(!hasMap(player)) return;
         PrisonMapRenderer renderer = PrisonMapRenderer.mapRenderers.get(uuid);
         renderer.setAreaName(name);
-        renderer.setClearTextArea(true);
     }
 
     public static void removeMaps(Player player){

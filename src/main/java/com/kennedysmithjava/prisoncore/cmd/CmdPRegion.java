@@ -1,6 +1,6 @@
 package com.kennedysmithjava.prisoncore.cmd;
 
-import com.kennedysmithjava.prisoncore.entity.mines.MinesConf;
+import com.massivecraft.massivecore.util.MUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -44,7 +44,7 @@ public class CmdPRegion extends CoreCommand {
 
     @Override
     public List<String> getAliases() {
-        return MinesConf.get().aliasesOffset;
+        return MUtil.list("reg", "pregion");
     }
 
     public static void addToPosOneCache(String uuid, Location location){
@@ -55,13 +55,6 @@ public class CmdPRegion extends CoreCommand {
         posTwoCache.put(uuid, location);
     }
 
-    public static Map<String, Location> getPosOneCache() {
-        return posOneCache;
-    }
-
-    public static Map<String, Location> getPosTwoCache() {
-        return posTwoCache;
-    }
 
     public static boolean bothCachesContain(Player player){
         if(posTwoCache.get(player.getUniqueId().toString()) == null) return false;
@@ -72,7 +65,7 @@ public class CmdPRegion extends CoreCommand {
     }
 
     public static Location posOneCacheGet(Player player) {
-        return posTwoCache.get(player.getUniqueId().toString());
+        return posOneCache.get(player.getUniqueId().toString());
     }
 }
 

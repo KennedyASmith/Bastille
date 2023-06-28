@@ -6,13 +6,13 @@ import org.bukkit.map.MapCanvas;
 import java.util.Set;
 
 public class RegionCombined implements Region {
-    private final Set<Region> regions;
+    private final Set<RegionFlatSquare> regions;
     public RegionCombined(Set<RegionFlatSquare> regions) {
         this.regions = regions;
     }
 
     public boolean has(Location loc) {
-        for (Region region : regions) {
+        for (RegionFlatSquare region : regions) {
             if(region.has(loc)){
                 return true;
             }
@@ -22,6 +22,11 @@ public class RegionCombined implements Region {
 
     @Override
     public boolean has(int x, int z) {
+        for (RegionFlatSquare region : regions) {
+            if(region.has(x, z)){
+                return true;
+            }
+        }
         return false;
     }
 

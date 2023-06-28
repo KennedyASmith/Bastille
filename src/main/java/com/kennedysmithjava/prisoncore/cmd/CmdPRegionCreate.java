@@ -1,7 +1,6 @@
 package com.kennedysmithjava.prisoncore.cmd;
 
 import com.kennedysmithjava.prisoncore.Perm;
-import com.kennedysmithjava.prisoncore.cmd.type.TypeNamedRegion;
 import com.kennedysmithjava.prisoncore.cmd.type.TypeRegionType;
 import com.kennedysmithjava.prisoncore.entity.Regions;
 import com.kennedysmithjava.prisoncore.regions.RegionFlatSquare;
@@ -10,6 +9,7 @@ import com.kennedysmithjava.prisoncore.util.Color;
 import com.massivecraft.massivecore.MassiveException;
 import com.massivecraft.massivecore.command.requirement.RequirementHasPerm;
 import com.massivecraft.massivecore.command.requirement.RequirementIsPlayer;
+import com.massivecraft.massivecore.command.type.primitive.TypeString;
 import org.bukkit.Location;
 
 public class CmdPRegionCreate extends CoreCommand {
@@ -23,12 +23,11 @@ public class CmdPRegionCreate extends CoreCommand {
         this.setSetupPermBaseClassName("PREGION");
 
         this.addParameter(TypeRegionType.get());
-        this.addParameter(TypeNamedRegion.get());
+        this.addParameter(TypeString.get());
     }
 
     @Override
     public void perform() throws MassiveException {
-        CmdPRegion.addToPosOneCache(me.getUniqueId().toString(), me.getLocation());
 
         if(!CmdPRegion.bothCachesContain(me)){
             msg(Color.get("&7[&bServer&7] First select a region with &e/pregion pos1 &7and &e/pregion pos2."));

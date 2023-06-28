@@ -24,9 +24,6 @@ public class PrisonMapRenderer extends MapRenderer {
     public static Set<UUID> reRenderQuest = new HashSet<>();
 
     private String areaName;
-    private int textWidth;
-
-    private boolean clearTextArea = false;
 
     //** For quests
     //private List<Integer, Color> lastQuestRegionPixels <-Turn all transparent each iteration
@@ -85,14 +82,6 @@ public class PrisonMapRenderer extends MapRenderer {
                 cursors.addCursor(bestX, bestY, MapUtil.getDirectionFrom(loc, qCenter), MapCursor.Type.RED_MARKER.getValue(), true, "Quest");
             }
         }
-        if(clearTextArea){
-            for (int x = 0; x < 128; x++) {
-                for (int y = 12; y < 128; y++) {
-                    mapCanvas.setPixel(x, y, MapPalette.TRANSPARENT);
-                }
-            }
-            clearTextArea = false;
-        }
 
         int barTop = 111;
 
@@ -132,29 +121,17 @@ public class PrisonMapRenderer extends MapRenderer {
             mapCanvas.setPixel(124, y, BLACK_COLOR);
         }
 
-        int textPadding = 3;
-        //Gray bar at top for text
-        for (int x = 0; x < textX + textWidth + textPadding; x++) {
+
+        //Gray bar at top
+        for (int x = 0; x < 128; x++) {
             for (int y = 0; y < 13; y++) {
                 mapCanvas.setPixel(x, y, GRAY_COLOR);
             }
         }
 
-        //Gray bar at top after text
-        for (int x = textX + textWidth + textPadding; x < 128; x++) {
-            for (int y = 0; y < 3; y++) {
-                mapCanvas.setPixel(x, y, GRAY_COLOR);
-            }
-        }
-
-        //Black bar at top for text
-        for (int x = 3; x < textX + textWidth + textPadding; x++) {
-            mapCanvas.setPixel(x, 12, BLACK_COLOR);
-        }
-
         //Black bar at top after text
-        for (int x = textX + textWidth + textPadding; x < 125; x++) {
-            mapCanvas.setPixel(x, 2, BLACK_COLOR);
+        for (int x = 3; x < 125; x++) {
+            mapCanvas.setPixel(x, 13, BLACK_COLOR);
         }
 
         //Black bar after mapkey text
@@ -179,11 +156,6 @@ public class PrisonMapRenderer extends MapRenderer {
 
     public void setAreaName(String areaName) {
         this.areaName = "§" + MapPalette.matchColor(254, 254, 254) + ";" + areaName;
-        this.textWidth = MinecraftFont.Font.getWidth(areaName);
-    }
-
-    public void setClearTextArea(boolean clearTextArea) {
-        this.clearTextArea = clearTextArea;
     }
 
     public static ItemStack mapPlayer(Player player, Location loc){
