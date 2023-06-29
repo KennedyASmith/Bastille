@@ -94,7 +94,7 @@ public class QuestListGUI {
         int totalUnclaimed = player.getQuestProfile().getTotalUnclaimedRewards();
         ItemStack unclaimedQuestRewards = new ItemBuilder(Material.CHEST)
                 .name("&a&lQuest Rewards")
-                .lore(MUtil.list("&r", "&7Click to access unclaimed quest rewards!",
+                .lore(MUtil.list(" &r", "&7Click to access unclaimed quest rewards!",
                         "&aTotal Unclaimed: &e" + totalUnclaimed))
                 .build();
         inventory.setItem(49, unclaimedQuestRewards);
