@@ -1,10 +1,8 @@
 package com.kennedysmithjava.prisoncore.cmd;
 
 import com.kennedysmithjava.prisoncore.Perm;
-import com.kennedysmithjava.prisoncore.cmd.type.TypeNamedRegion;
 import com.kennedysmithjava.prisoncore.entity.Regions;
 import com.kennedysmithjava.prisoncore.regions.RegionFlatSquare;
-import com.kennedysmithjava.prisoncore.regions.RegionType;
 import com.kennedysmithjava.prisoncore.regions.RegionWrapper;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.massivecraft.massivecore.MassiveException;
@@ -12,35 +10,34 @@ import com.massivecraft.massivecore.command.requirement.RequirementHasPerm;
 import com.massivecraft.massivecore.command.requirement.RequirementIsPlayer;
 import org.bukkit.Location;
 
-public class CmdPRegionAdd extends CoreCommand {
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
-    public CmdPRegionAdd() {
+public class CmdPRegionUndo extends CoreCommand {
+
+    private static Map<UUID, RegionWrapper> lastRegions = new HashMap<>();
+    public CmdPRegionUndo() {
         this.addRequirements(RequirementHasPerm.get(Perm.PREGION));
         this.addRequirements(RequirementIsPlayer.get());
 
         // Aliases
-        this.addAliases("add");
+        this.addAliases("create");
         this.setSetupPermBaseClassName("PREGION");
 
-        this.addParameter(TypeNamedRegion.get());
     }
 
     @Override
     public void perform() throws MassiveException {
-
-        if(!CmdPRegion.bothCachesContain(me)){
-            msg(Color.get("&7[&bServer&7] First select a region with &e/pregion pos1 &7and &e/pregion pos2."));
-            return;
-        }
-
-        String regionName = readArg();
-        RegionType type = Regions.get().getRegionType(regionName);
+        RegionWrapper region = lastRegions.get(me.getUniqueId());
         Location pos1 = CmdPRegion.posOneCacheGet(me);
         Location pos2 = CmdPRegion.posTwoCacheGet(me);
-        RegionFlatSquare region = new RegionFlatSquare(pos1, pos2);
-        Regions.get().addRegion(regionName, region, type);
-        msg(Color.get("&7[&bServer&7] Region saved."));
-        CmdPRegionUndo.setLastRegionNames(me.getUniqueId(), new RegionWrapper(region, type, regionName));
+        RegionFlatSquare regionS = new RegionFlatSquare(pos1, pos2);
+        Regions.get().removeRegion(region.name(), regionS, region.type());
+        msg(Color.get("&7[&bServer&7] Region undone."));
     }
 
+    public static void setLastRegionNames(UUID playerUUID, RegionWrapper wrapper) {
+        CmdPRegionUndo.lastRegions.put(playerUUID, wrapper);
+    }
 }

@@ -5,6 +5,7 @@ import com.kennedysmithjava.prisoncore.cmd.type.TypeRegionType;
 import com.kennedysmithjava.prisoncore.entity.Regions;
 import com.kennedysmithjava.prisoncore.regions.RegionFlatSquare;
 import com.kennedysmithjava.prisoncore.regions.RegionType;
+import com.kennedysmithjava.prisoncore.regions.RegionWrapper;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.massivecraft.massivecore.MassiveException;
 import com.massivecraft.massivecore.command.requirement.RequirementHasPerm;
@@ -41,6 +42,7 @@ public class CmdPRegionCreate extends CoreCommand {
         RegionFlatSquare region = new RegionFlatSquare(pos1, pos2);
         Regions.get().addRegion(regionName, region, type);
         msg(Color.get("&7[&bServer&7] Region saved."));
+        CmdPRegionUndo.setLastRegionNames(me.getUniqueId(), new RegionWrapper(region, type, regionName));
     }
 
 }

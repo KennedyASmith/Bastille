@@ -45,4 +45,20 @@ public class RegionFlatSquare implements Region {
     public Location getCenterPosition() {
         return null;
     }
+
+    public int getMaxX() {
+        return maxX;
+    }
+
+    public int getMinZ() {
+        return minZ;
+    }
+
+    public int getMaxZ() {
+        return maxZ;
+    }
+
+    public int getMinX() {
+        return minX;
+    }
 }

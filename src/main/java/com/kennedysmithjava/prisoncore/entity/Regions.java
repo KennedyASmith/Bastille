@@ -54,6 +54,19 @@ public class Regions extends Entity<Regions>
         this.changed();
     }
 
+    public void removeRegion(String name, RegionFlatSquare region, RegionType type){
+        Set<RegionFlatSquare> regionFlatSquares = regions.getOrDefault(name, new HashSet<>());
+        if(regionFlatSquares.isEmpty()) return;
+        regionFlatSquares.remove(region);
+        if(regionFlatSquares.isEmpty()){
+            regions.remove(name);
+        }else {
+            regions.put(name, regionFlatSquares);
+        }
+        EngineRegions.addActiveRegion(name, getRegionWrapper(name, type, regionFlatSquares));
+        this.changed();
+    }
+
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     private static RegionWrapper getRegionWrapper(String name, RegionType type, Set<RegionFlatSquare> regionFlatSquares) {
         RegionWrapper wrapper;

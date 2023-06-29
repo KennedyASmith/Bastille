@@ -41,13 +41,17 @@ public class MapUtil {
         if(!inv.contains(Material.FILLED_MAP)) return;
         inv.remove(Material.FILLED_MAP);
         removeMaps(player);
+        removeRenderer(player.getUniqueId());
+    }
+
+    public static void removeRenderer(UUID uuid){
+        PrisonMapRenderer.mapRenderers.remove(uuid);
     }
 
     public static boolean hasMap(Player player){
         Inventory inv = player.getInventory();
         return inv.contains(Material.FILLED_MAP);
     }
-
 }
 
 enum MapDirection {

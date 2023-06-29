@@ -95,9 +95,8 @@ public class EngineRegions extends Engine {
         //Handle map updating
         if(PrisonMapRenderer.mapRenderers.containsKey(uuid)){
             PrisonMapRenderer.shouldRenderPlayers.add(uuid);
+            recentlyRegionAlteredPlayers.add(player); //This may need to change locations in future
         }
-
-        recentlyRegionAlteredPlayers.add(player);
 
         Region region = activeQuestRegions.get(uuid);
         if(region == null) return;
@@ -171,8 +170,10 @@ public class EngineRegions extends Engine {
         //Could skip this
         if(playerLocations.containsKey(uuid)){
             RegionWrapper knownRegion = playerLocations.get(uuid);
-            if(knownRegion.type() == RegionType.WORLD // If it's a world, we want to invalidate always
-                || !knownRegion.region().has(player.getLocation())){ // If it's a regular region & player not inside, invalidate
+            if(knownRegion.type() == RegionType.WORLD){
+                Pair<String, RegionWrapper> pair = getRegion(player, player.getLocation());
+                return !knownRegion.name().equals(pair.getLeft()); // It's not the same world
+            } else if(!knownRegion.region().has(player.getLocation())){ // If it's a regular region & player not inside, invalidate
                 Bukkit.broadcastMessage("Player is in world or not in known region: " + knownRegion.type());
                 playerLocations.remove(uuid); //Invalidate and try again recursively
                 return updateKnownRegion(player);
@@ -195,5 +196,9 @@ public class EngineRegions extends Engine {
 
     public static void addActiveRegion(String name, RegionWrapper wrapper){
         activeRegions.put(name, wrapper);
+    }
+
+    public static HashMap<String, RegionWrapper> getActiveRegions() {
+        return activeRegions;
     }
 }

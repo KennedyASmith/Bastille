@@ -26,6 +26,8 @@ public class CmdPRegion extends CoreCommand {
     CmdPRegionPosTwo pRegionPosTwo = new CmdPRegionPosTwo();
     CmdPRegionAdd pRegionAdd = new CmdPRegionAdd();
     CmdPRegionCreate pRegionCreate = new CmdPRegionCreate();
+    CmdPRegionVisualize regionVisualize = new CmdPRegionVisualize();
+    CmdPRegionUndo regionUndo = new CmdPRegionUndo();
 
     // -------------------------------------------- //
     // CONSTRUCT
