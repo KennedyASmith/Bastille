@@ -20,13 +20,13 @@ public class CmdQuest extends CoreCommand {
     // -------------------------------------------- //
     // FIELDS
     // -------------------------------------------- //
-    public CmdQuestHelp cmdQuestHelp = new CmdQuestHelp();
+    public CmdQuestRewards cmdQuestRewards = new CmdQuestRewards();
 
     // -------------------------------------------- //
     // CONSTRUCT
     // -------------------------------------------- //
     public CmdQuest() {
-
+        this.setSetupPermBaseClassName("QUEST");
     }
 
     public static CmdQuest get() {

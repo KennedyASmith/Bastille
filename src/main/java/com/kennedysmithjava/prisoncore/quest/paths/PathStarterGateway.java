@@ -5,9 +5,10 @@ import com.kennedysmithjava.prisoncore.entity.npcs.SkinsConf;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.npc.Skin;
 import com.kennedysmithjava.prisoncore.quest.Quest;
+import com.kennedysmithjava.prisoncore.quest.QuestDifficulty;
 import com.kennedysmithjava.prisoncore.quest.QuestMessage;
 import com.kennedysmithjava.prisoncore.quest.QuestPath;
-import com.kennedysmithjava.prisoncore.quest.QuestReward;
+import com.kennedysmithjava.prisoncore.quest.reward.QuestReward;
 import com.kennedysmithjava.prisoncore.quest.quests.QuestMineBuildBuilding;
 import com.kennedysmithjava.prisoncore.util.BuildingType;
 import com.kennedysmithjava.prisoncore.util.ItemBuilder;
@@ -41,7 +42,14 @@ public class PathStarterGateway extends QuestPath {
 
     @Override
     public ItemStack getPathIcon() {
-        return new ItemBuilder(Material.FEATHER).name(getQuestPathDisplayName()).build();
+        return new ItemBuilder(Material.FEATHER).name(getQuestPathDisplayName())
+                .lore(MUtil.list("&7Warren would like to speak with you ", "&7about a potential opportunity to &etravel &7outside", "&7of your mine!"))
+                .build();
+    }
+
+    @Override
+    public QuestDifficulty getDifficulty() {
+        return QuestDifficulty.TUTORIAL;
     }
 
     @Override

@@ -3,11 +3,11 @@ package com.kennedysmithjava.prisoncore.entity.player;
 import com.kennedysmithjava.prisoncore.quest.Quest;
 import com.kennedysmithjava.prisoncore.quest.QuestPath;
 import com.kennedysmithjava.prisoncore.quest.QuestPathRegistry;
+import com.kennedysmithjava.prisoncore.quest.reward.QuestReward;
 import com.massivecraft.massivecore.store.Entity;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class QuestProfile extends Entity<QuestProfile> {
 
@@ -22,10 +22,12 @@ public class QuestProfile extends Entity<QuestProfile> {
     public List<String> unlockedQuestsData = new ArrayList<>();
     public List<String> completedQuestsData = new ArrayList<>();
 
+    public Map<String, List<Integer>> unclaimedQuestRewards = new HashMap<>();
     public transient QuestPath activeQuestPath;
     public transient Quest activeQuest;
 
     public transient List<Quest> pathQuestList;
+
 
 
     public static QuestProfile get(UUID playerUUID) {
@@ -37,6 +39,7 @@ public class QuestProfile extends Entity<QuestProfile> {
         this.setCompletedQuestsData(that.completedQuestsData);
         this.setUnlockedQuestsData(that.unlockedQuestsData);
         this.setActiveQuestPathData(that.activeQuestPathData);
+        this.setUnclaimedQuestRewards(that.unclaimedQuestRewards);
         setActiveQuestPath(QuestPathRegistry.get().getQuest(that.activeQuestPathData));
         return this;
     }
@@ -152,6 +155,64 @@ public class QuestProfile extends Entity<QuestProfile> {
     public void addUnlockedQuestPath(QuestPath path){
         unlockedQuestsData.add(path.getClass().getSimpleName());
         this.changed();
+    }
+
+    public void setUnclaimedQuestRewards(Map<String, List<Integer>> unclaimedQuestRewards) {
+        this.unclaimedQuestRewards = unclaimedQuestRewards;
+        this.changed();
+    }
+
+    //Quest Path Index Key:
+    // -1: Quest Path rewards
+    // 0 to path.size(): Quest indexes
+    public void addUnclaimedReward(String pathName, int rewardIndex){
+        List<Integer> questRewards = unclaimedQuestRewards.getOrDefault(pathName, new ArrayList<>());
+        questRewards.add(rewardIndex);
+        unclaimedQuestRewards.put(pathName, questRewards);
+        this.changed();
+    }
+
+    public void removeUnclaimedReward(String pathName, int rewardIndex){
+        List<Integer> questRewards = unclaimedQuestRewards.getOrDefault(pathName, new ArrayList<>());
+        questRewards.remove(rewardIndex);
+        if(questRewards.size() == 0){
+            unclaimedQuestRewards.remove(pathName);
+        }else {
+            unclaimedQuestRewards.put(pathName, questRewards);
+        }
+        this.changed();
+    }
+
+    public Map<QuestPath, List<QuestReward>> getUnclaimedQuestRewards(){
+        Map<QuestPath, List<QuestReward>> unclaimedRewards = new HashMap<>();
+        for (Map.Entry<String, List<Integer>> entry : unclaimedQuestRewards.entrySet()) {
+                List<QuestReward> unclaimedPathRewards = new ArrayList<>();
+                List<Integer> rewardIndexes = entry.getValue();
+                QuestPath path = QuestPathRegistry.get().getQuest(entry.getKey());
+                if(path == null) continue;
+                List<QuestReward> pathRewards = path.getPathRewards();
+                for (Integer rewardIndex : rewardIndexes) {
+                    QuestReward reward = pathRewards.get(rewardIndex);
+                    if(reward != null) unclaimedPathRewards.add(reward);
+                }
+                unclaimedRewards.put(path, unclaimedPathRewards);
+        }
+        return unclaimedRewards;
+    }
+
+    public Map<String, List<Integer>> getUnclaimedQuestData(){
+        return this.unclaimedQuestRewards;
+    }
+
+
+    public int getTotalUnclaimedRewards(){
+        AtomicInteger total = new AtomicInteger(0);
+            unclaimedQuestRewards.forEach((s, integers) -> {
+                for (Integer integer : integers) {
+                    total.getAndIncrement();
+                }
+            });
+        return total.get();
     }
 }
 

@@ -31,6 +31,7 @@ public enum Perm implements Identified
     GIVE,
     MAP,
     HELP,
+    QUEST,
     FISH_POS_ONE,
     FISH_POS_TWO,
     FISH_CREATE,

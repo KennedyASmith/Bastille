@@ -4,10 +4,12 @@ import com.kennedysmithjava.prisoncore.engine.EngineRegions;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.QuestProfile;
 import com.kennedysmithjava.prisoncore.maps.PrisonMapRenderer;
+import com.kennedysmithjava.prisoncore.quest.reward.QuestReward;
 import com.kennedysmithjava.prisoncore.regions.Region;
+import com.kennedysmithjava.prisoncore.util.Color;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.List;
 
 /**
     This class represents a quest path. A quest path contains a series of quests
@@ -49,6 +51,7 @@ public abstract class QuestPath {
      * @return the quest path icon
      */
     public abstract ItemStack getPathIcon();
+    public abstract QuestDifficulty getDifficulty();
 
     public abstract void onActivate(MPlayer player);
 
@@ -97,10 +100,25 @@ public abstract class QuestPath {
             profile.incrementCurrentPathProgress();
             activateCurrentQuest(player, currentPathProgress + 1);
         } else {
+            int unclaimedRewards = 0;
             if(getPathRewards() != null){
-                for (QuestReward pathReward : getPathRewards()) {
-                    pathReward.give(player);
+                for (int i = 0; i < getPathRewards().size(); i++) {
+                    QuestReward reward = getPathRewards().get(i);
+                    if(reward.canGive(player)){
+                        player.msg("&7[&bQuests&7] You have been rewarded: " + reward.getQuantityLore());
+                        reward.applyRewardAction(player);
+                    }else {
+                        profile.addUnclaimedReward(this.getClass().getSimpleName(), i);
+                        unclaimedRewards++;
+                    }
                 }
+            }
+            if(unclaimedRewards > 0){
+                player.msg("&7[&bQuests&7] You were unable to receive &e"
+                        + unclaimedRewards +
+                        "&7 quest reward(s) for completing &6"
+                        + Color.strip(this.getQuestPathDisplayName()) +
+                        "&7. All unclaimed rewards are accessible with &e/quest rewards&7.");
             }
             player.getQuestProfile().finalizeQuestPathCompletion(this);
         }

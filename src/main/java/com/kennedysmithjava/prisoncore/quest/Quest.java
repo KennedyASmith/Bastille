@@ -2,6 +2,7 @@ package com.kennedysmithjava.prisoncore.quest;
 
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.QuestProfile;
+import com.kennedysmithjava.prisoncore.quest.reward.QuestReward;
 import com.kennedysmithjava.prisoncore.regions.Region;
 
 import java.util.ArrayList;
@@ -84,13 +85,6 @@ public abstract class Quest {
         onComplete();
         QuestPath path = player.getQuestProfile().getActiveQuestPath();
         path.innerCompleteQuest(player, player.getQuestProfile().activeQuestPathProgress);
-        for (QuestReward reward : getRewards()) {
-            reward.give(player);
-        }
-    }
-
-    public List<QuestReward> getRewards() {
-        return rewards;
     }
 
     public abstract Region getRegion(int questProgress);

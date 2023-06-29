@@ -1,16 +1,20 @@
 package com.kennedysmithjava.prisoncore.quest.paths;
 
+import com.kennedysmithjava.prisoncore.crafting.objects.PrisonMetal;
+import com.kennedysmithjava.prisoncore.crafting.objects.type.MetalType;
 import com.kennedysmithjava.prisoncore.eco.CurrencyType;
 import com.kennedysmithjava.prisoncore.entity.mines.WarrenConf;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.tools.PickaxeType;
 import com.kennedysmithjava.prisoncore.quest.Quest;
+import com.kennedysmithjava.prisoncore.quest.QuestDifficulty;
 import com.kennedysmithjava.prisoncore.quest.QuestPath;
-import com.kennedysmithjava.prisoncore.quest.QuestReward;
+import com.kennedysmithjava.prisoncore.quest.reward.QuestReward;
 import com.kennedysmithjava.prisoncore.quest.quests.QuestBreakBlock;
 import com.kennedysmithjava.prisoncore.quest.quests.QuestInteractBlock;
 import com.kennedysmithjava.prisoncore.quest.quests.QuestPromptPickupItem;
 import com.kennedysmithjava.prisoncore.quest.quests.QuestWalkAndTalk;
+import com.kennedysmithjava.prisoncore.quest.reward.QuestRewardPrisonObject;
 import com.kennedysmithjava.prisoncore.util.ItemBuilder;
 import com.kennedysmithjava.prisoncore.regions.Offset;
 import com.massivecraft.massivecore.util.MUtil;
@@ -42,7 +46,10 @@ public class PathIntroduction extends QuestPath {
 
     @Override
     public List<QuestReward> getPathRewards() {
-        return null;
+        return MUtil.list(
+                new QuestRewardPrisonObject(new PrisonMetal(MetalType.ADAMANTINE_INGOT), 64),
+                new QuestRewardPrisonObject(new PrisonMetal(MetalType.IRON_INGOT), 64)
+        );
     }
 
     @Override
@@ -190,6 +197,11 @@ public class PathIntroduction extends QuestPath {
                 part_5,
                 part_6
         );
+    }
+
+    @Override
+    public QuestDifficulty getDifficulty() {
+        return QuestDifficulty.TUTORIAL;
     }
 
     @Override

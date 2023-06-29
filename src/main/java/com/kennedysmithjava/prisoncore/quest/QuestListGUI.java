@@ -1,17 +1,23 @@
 package com.kennedysmithjava.prisoncore.quest;
 
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
+import com.kennedysmithjava.prisoncore.entity.player.QuestProfile;
+import com.kennedysmithjava.prisoncore.gui.QuestRewardsGui;
+import com.kennedysmithjava.prisoncore.quest.reward.QuestReward;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.ItemBuilder;
+import com.massivecraft.massivecore.chestgui.ChestAction;
 import com.massivecraft.massivecore.chestgui.ChestGui;
 import com.massivecraft.massivecore.util.MUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
      This class creates a GUI for displaying a list of quests to a player.
@@ -59,9 +65,14 @@ public class QuestListGUI {
      * @param lastPage           the last page GUI
      * @return the quest inventory GUI
      */
+    @SuppressWarnings("DataFlowIssue")
     private ChestGui getQuestInventory(QuestPath activeQuestPath, List<QuestPath> unlockedQuestPaths, List<String> completedQuests, ChestGui lastPage){
         Inventory inventory = Bukkit.createInventory(null, 6*9, Color.get("&8&lPick a Quest"));
         ChestGui gui = ChestGui.getCreative(inventory);
+        gui.setAutoremoving(true);
+        gui.setBottomInventoryAllow(false);
+        gui.setAutoclosing(true);
+
         ItemStack nextPageItem = new ItemBuilder(Material.ARROW)
                 .name("&aNext Page")
                 .lore(MUtil.list("&7Click to view the next page of quests!"))
@@ -72,14 +83,32 @@ public class QuestListGUI {
                 .lore(MUtil.list("&7Click to view the last page of quests!"))
                 .build();
 
-
         for (int i = 0; i < 9; i++) {
             int slot = 45 + i;
-            inventory.setItem(slot, new ItemBuilder(Material.WHITE_STAINED_GLASS_PANE)
-                            .name("&r ")
-                            .lore(MUtil.list(""))
-                            .build());
+            inventory.setItem(slot, new ItemBuilder(Material.LIGHT_BLUE_STAINED_GLASS_PANE)
+                    .name("&r ")
+                    .lore(MUtil.list(""))
+                    .build());
         }
+
+        int totalUnclaimed = player.getQuestProfile().getTotalUnclaimedRewards();
+        ItemStack unclaimedQuestRewards = new ItemBuilder(Material.CHEST)
+                .name("&a&lQuest Rewards")
+                .lore(MUtil.list("&r", "&7Click to access unclaimed quest rewards!",
+                        "&aTotal Unclaimed: &e" + totalUnclaimed))
+                .build();
+        inventory.setItem(49, unclaimedQuestRewards);
+        gui.setAction(49, inventoryClickEvent -> {
+            QuestProfile profile = player.getQuestProfile();
+            if(profile.getUnclaimedQuestData().size() > 0){
+                Map<QuestPath, List<QuestReward>> rewards = profile.getUnclaimedQuestRewards();
+                QuestRewardsGui gui1 = new QuestRewardsGui(player.getPlayer(), rewards);
+                gui1.open();
+            }else {
+                player.msg("&7[&bQuests&7] You have no unclaimed rewards!");
+            }
+            return false;
+        });
 
         if(lastPage != null){
             inventory.setItem(51, lastPageItem);
@@ -112,7 +141,24 @@ public class QuestListGUI {
                 return gui;
             }
             QuestPath path = unlockedQuestPaths.get(i);
-            inventory.setItem(firstSlot, path.getPathIcon());
+
+            ItemStack stockItem = path.getPathIcon();
+            List<String> lore = stockItem.getItemMeta().getLore();
+            lore.add(0, "&r");
+            lore.add(1, "&7Difficulty: " + path.getDifficulty().getDifficultyString());
+            lore.add(2, "&eClick to begin this quest!");
+            lore.add(3, "&r");
+            lore.add(4, "&7Description:");
+            ItemBuilder pathBuilder = new ItemBuilder(stockItem).lore(lore);
+            inventory.setItem(firstSlot, pathBuilder.build());
+            gui.setAction(firstSlot, new ChestAction() {
+                @Override
+                public boolean onClick(InventoryClickEvent inventoryClickEvent) {
+                    player.getQuestProfile().setActiveQuestPath(path);
+                    player.getPlayer().closeInventory();
+                    return false;
+                }
+            });
         }
 
         for (int i = 0; i < completedQuests.size(); i++) {
@@ -133,14 +179,12 @@ public class QuestListGUI {
 
             ItemStack completedQuestItem = new ItemBuilder(Material.GRAY_WOOL)
                     .name("&a" + completedQuests.get(i))
-                    .lore(MUtil.list("&7You've completed this quest."))
+                    .lore(MUtil.list(" &r", "&7You've already completed this quest.", "&7Great work!"))
                     .build();
 
             inventory.setItem(firstSlot, completedQuestItem);
         }
 
-
-        gui.setBottomInventoryAllow(false);
         return gui;
     }
 }

@@ -79,7 +79,6 @@ public abstract class BaseGui {
         player.openInventory(gui.getInventory());
         this.onOpen();
     }
-
     public void onBuildInner(Player player, ChestGui gui, Inventory inventory) {
 
     }
