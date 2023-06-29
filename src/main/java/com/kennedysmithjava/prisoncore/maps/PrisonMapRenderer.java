@@ -1,8 +1,10 @@
 package com.kennedysmithjava.prisoncore.maps;
 
+import com.kennedysmithjava.prisoncore.entity.farming.objects.TwoDVector;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.quest.Quest;
 import com.kennedysmithjava.prisoncore.regions.Region;
+import com.kennedysmithjava.prisoncore.util.MapMarker;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -25,12 +27,9 @@ public class PrisonMapRenderer extends MapRenderer {
     public static Set<UUID> reRenderQuest = new HashSet<>();
 
     private String areaName;
+    private List<MapMarker> cursorsToAdd = new ArrayList<>();
 
-    //** For quests
-    //private List<Integer, Color> lastQuestRegionPixels <-Turn all transparent each iteration
-    //private Region questRegion
-    //
-
+    private boolean clearCursors;
 
     private Region region;
 
@@ -65,9 +64,14 @@ public class PrisonMapRenderer extends MapRenderer {
         mapView.setCenterX(pX);
         mapView.setCenterZ(pZ);
 
+        //TODO: Might remove functionality, test later?
         MapCursorCollection cursors = mapCanvas.getCursors();
         while(cursors.size() > 0){
             cursors.removeCursor(cursors.getCursor(0));
+        }
+
+        for (MapMarker mapMarker : cursorsToAdd) {
+            addCursor(cursors, pX, pZ, mapMarker.twoDVector(), mapMarker.cursorType(), mapMarker.name());
         }
 
         if(region != null){
@@ -159,6 +163,10 @@ public class PrisonMapRenderer extends MapRenderer {
         this.areaName = "§" + MapPalette.matchColor(254, 254, 254) + ";" + areaName;
     }
 
+    public void setCursors(List<MapMarker> cursors) {
+        this.cursorsToAdd = Objects.requireNonNullElseGet(cursors, ArrayList::new);
+    }
+
     public static ItemStack mapPlayer(Player player, Location loc){
         ItemStack mapItem = new ItemStack(Material.FILLED_MAP);
         MapView mapView = Bukkit.getServer().createMap(loc.getWorld());
@@ -180,5 +188,15 @@ public class PrisonMapRenderer extends MapRenderer {
         mapRenderers.put(player.getUniqueId(), renderer);
         shouldRenderPlayers.add(player.getUniqueId());
         return mapItem;
+    }
+
+    private static void addCursor(MapCursorCollection cursors, int pX, int pZ, TwoDVector location, MapCursor.Type type, String name){
+        int x = (pX - location.getX());
+        int z = (pZ - location.getZ());
+        boolean visible = MapUtil.insideMapBoundsCursor(x, z);
+        if(!visible) return;
+        int mapX = -2 * x;
+        int mapZ = -2 * z;
+        cursors.addCursor(mapX, mapZ, (byte) 8, type.getValue(), true, name);
     }
 }

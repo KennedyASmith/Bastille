@@ -42,14 +42,13 @@ public class EngineRegions extends Engine {
     /* A set of players known to be standing in their quest region */
     private final Set<UUID> inTheirQuestRegion = new HashSet<>();
 
-
     /* The last known regions of each player */
     private static final HashMap<UUID, RegionWrapper> playerLocations = new HashMap<>();
 
     public static final HashMap<UUID, String> lastKnownWorldName = new HashMap<>();
     private static final HashMap<String, RegionWrapper> activeRegions = new HashMap<>();
 
-    private static final Set<Player> recentlyRegionAlteredPlayers = new HashSet<>();
+    public static final Set<Player> recentlyRegionAlteredPlayers = new HashSet<>();
     EngineRegions(){
         new BukkitRunnable() {
             @Override
@@ -60,7 +59,7 @@ public class EngineRegions extends Engine {
                     if(updated){
                         UUID uuid = player.getUniqueId();
                         if(!PrisonMapRenderer.shouldRenderPlayers.contains(uuid)) continue;
-                        MapUtil.refreshMapName(player, playerLocations.get(uuid).name());
+                        MapUtil.refreshMapRegion(player, playerLocations.get(uuid).name());
                     }
                 }
                 //Empty the list for next iteration

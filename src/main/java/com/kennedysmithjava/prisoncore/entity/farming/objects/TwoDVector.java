@@ -37,4 +37,11 @@ public class TwoDVector extends EntityInternal<TwoDVector> {
         return x == that.x && z == that.z && Objects.equals(world, that.world);
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public int getZ() {
+        return z;
+    }
 }

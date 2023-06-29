@@ -1,5 +1,6 @@
 package com.kennedysmithjava.prisoncore.maps;
 
+import com.kennedysmithjava.prisoncore.entity.Regions;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -9,8 +10,12 @@ import java.util.UUID;
 
 public class MapUtil {
 
-    public static boolean insideMapBounds(int x, int z){
-        return (x > 4 && x < 125) && (z > 14 && z < 107);
+    public static boolean insideMapBounds(int x, int z) {
+        return (x > 4  && x < 125 ) && (z > 14 && z < 107 );
+    }
+
+    public static boolean insideMapBoundsCursor(int x, int z) {
+        return (x > -60  && x < 60 ) && (z > -46 && z < 46 );
     }
 
     public static byte getDirectionFrom(Location origin, Location target) {
@@ -28,12 +33,13 @@ public class MapUtil {
         return directions[index].d;
     }
 
-    public static void refreshMapName(Player player, String name){
+    public static void refreshMapRegion(Player player, String name){
         UUID uuid = player.getUniqueId();
         if(!PrisonMapRenderer.mapRenderers.containsKey(uuid)) return;
         if(!hasMap(player)) return;
         PrisonMapRenderer renderer = PrisonMapRenderer.mapRenderers.get(uuid);
         renderer.setAreaName(name);
+        renderer.setCursors(Regions.get().getRegionMarkers(name));
     }
 
     public static void removeMaps(Player player){
