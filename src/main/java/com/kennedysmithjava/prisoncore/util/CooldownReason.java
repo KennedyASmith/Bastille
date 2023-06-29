@@ -8,5 +8,6 @@ public enum CooldownReason {
     LOG_OFF,
     LOF_ON,
     REGEN,
-    GUI_ACTION
+    GUI_ACTION,
+    REGION_UPDATE
 }

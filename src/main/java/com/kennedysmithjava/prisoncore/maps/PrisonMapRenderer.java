@@ -19,6 +19,7 @@ public class PrisonMapRenderer extends MapRenderer {
     public static String MAP_KEY = "§" + MapPalette.matchColor(190, 190, 190) + ";Key";
     public static byte GRAY_COLOR = MapPalette.matchColor(79, 79, 79);
     public static byte BLACK_COLOR = MapPalette.matchColor(50, 50, 50);
+    public static Set<UUID> shouldUpdateRenderPlayers = new HashSet<>();
     public static Set<UUID> shouldRenderPlayers = new HashSet<>();
     public static Map<UUID, PrisonMapRenderer> mapRenderers = new HashMap<>();
     public static Set<UUID> reRenderQuest = new HashSet<>();
@@ -41,7 +42,7 @@ public class PrisonMapRenderer extends MapRenderer {
 
     @Override
     public void render(MapView mapView, MapCanvas mapCanvas, Player player) {
-        boolean shouldRender = shouldRenderPlayers.contains(player.getUniqueId());
+        boolean shouldRender = shouldUpdateRenderPlayers.contains(player.getUniqueId()) && shouldRenderPlayers.contains(player.getUniqueId());
         if(!shouldRender) return;
 
         Bukkit.broadcastMessage("Rendering map: " + areaName);
@@ -147,7 +148,7 @@ public class PrisonMapRenderer extends MapRenderer {
         mapCanvas.setCursors(cursors);
         mapCanvas.drawText(textX, 2, MinecraftFont.Font, areaName);
         mapCanvas.drawText(7, 116, MinecraftFont.Font, MAP_KEY);
-        shouldRenderPlayers.remove(player.getUniqueId());
+        shouldUpdateRenderPlayers.remove(player.getUniqueId());
     }
 
     public void setQuestRegion(Region region) {
@@ -174,9 +175,10 @@ public class PrisonMapRenderer extends MapRenderer {
         // Set the map ID in the map item's metadata
         mapMeta.setMapView(mapView);
         mapItem.setItemMeta(mapMeta);
-        shouldRenderPlayers.add(player.getUniqueId());
+        shouldUpdateRenderPlayers.add(player.getUniqueId());
         reRenderQuest.add(player.getUniqueId());
         mapRenderers.put(player.getUniqueId(), renderer);
+        shouldRenderPlayers.add(player.getUniqueId());
         return mapItem;
     }
 }

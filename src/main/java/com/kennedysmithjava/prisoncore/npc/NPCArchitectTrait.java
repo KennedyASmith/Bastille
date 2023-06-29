@@ -245,7 +245,7 @@ public class NPCArchitectTrait extends Trait {
                     return true;
                 }
 
-                EngineCooldown.add(player.getPlayer(), 20 * 30, CooldownReason.DECOR);
+                EngineCooldown.add(player.getPlayer().getUniqueId(), 20 * 30, CooldownReason.DECOR);
 
                 EngineLoadingScreen.addLoadingScreen(player.getPlayer(), mine.getSpawnPoint());
                 mine.rebuildSchematics(selectedFloor, selectedWall, () -> {

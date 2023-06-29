@@ -1,23 +1,20 @@
 package com.kennedysmithjava.prisoncore.npc;
 
-import com.kennedysmithjava.prisoncore.util.CooldownReason;
 import com.kennedysmithjava.prisoncore.eco.WorthUtil;
 import com.kennedysmithjava.prisoncore.engine.EngineCooldown;
 import com.kennedysmithjava.prisoncore.entity.mines.CoinCollectorConf;
 import com.kennedysmithjava.prisoncore.entity.mines.CoinCollectorGuiConf;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.mines.MineColl;
+import com.kennedysmithjava.prisoncore.entity.mines.upgrades.UpgradeName;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayerColl;
 import com.kennedysmithjava.prisoncore.tools.pouch.DatalessPouchable;
 import com.kennedysmithjava.prisoncore.tools.pouch.Pouch;
 import com.kennedysmithjava.prisoncore.tools.pouch.PouchFullException;
 import com.kennedysmithjava.prisoncore.tools.pouch.PouchManager;
-import com.kennedysmithjava.prisoncore.entity.mines.upgrades.UpgradeName;
-import com.kennedysmithjava.prisoncore.util.ClickHandler;
-import com.kennedysmithjava.prisoncore.util.ClickItem;
 import com.kennedysmithjava.prisoncore.util.Color;
-import com.kennedysmithjava.prisoncore.util.RemovableItem;
+import com.kennedysmithjava.prisoncore.util.*;
 import com.massivecraft.massivecore.chestgui.ChestGui;
 import com.massivecraft.massivecore.util.MUtil;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
@@ -33,6 +30,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -57,20 +55,22 @@ public class NPCCoinCollectorTrait extends Trait {
             AUTO_SELL_IV = UpgradeName.COLLECTION_AUTO_4.get();
 
     private static final ClickHandler onConfirm = (p, i) -> {
-        if(EngineCooldown.inCooldown(p, CooldownReason.GUI_ACTION)){
-            int time = 1 + EngineCooldown.getTime(p, CooldownReason.GUI_ACTION);
+        UUID uuid = p.getUniqueId();
+        if(EngineCooldown.inCooldown(uuid, CooldownReason.GUI_ACTION)){
+            int time = 1 + EngineCooldown.getTime(uuid, CooldownReason.GUI_ACTION);
             p.sendMessage(Color.get("&7[&bCaleb&7] You cannot sell me your items for another &e" + time + " &7seconds!"));
             return true;
         }
         Inventory inv = i.getClickedInventory();
         sellAll(inv, p);
-        EngineCooldown.add(p, 60, CooldownReason.GUI_ACTION);
+        EngineCooldown.add(uuid, 60, CooldownReason.GUI_ACTION);
         return true;
     };
 
     private static final ClickHandler onSellAll = (p, i) -> {
-        if(EngineCooldown.inCooldown(p, CooldownReason.GUI_ACTION)){
-            int time = 1 + EngineCooldown.getTime(p, CooldownReason.GUI_ACTION);
+        UUID uuid = p.getUniqueId();
+        if(EngineCooldown.inCooldown(uuid, CooldownReason.GUI_ACTION)){
+            int time = 1 + EngineCooldown.getTime(uuid, CooldownReason.GUI_ACTION);
             p.sendMessage(Color.get("&7[&bCooldown&7] &bYou cannot sell me items for another &e" + time + "&b seconds!"));
             return true;
         }

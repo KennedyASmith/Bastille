@@ -4,6 +4,8 @@ package com.kennedysmithjava.prisoncore.regions;
 import org.bukkit.Location;
 import org.bukkit.map.MapCanvas;
 
+import java.util.Objects;
+
 public class RegionFlatSquare implements Region {
     private final int minX;
     private final int minZ;
@@ -60,5 +62,18 @@ public class RegionFlatSquare implements Region {
 
     public int getMinX() {
         return minX;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RegionFlatSquare that = (RegionFlatSquare) o;
+        return minX == that.minX && minZ == that.minZ && maxX == that.maxX && maxZ == that.maxZ;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(minX, minZ, maxX, maxZ);
     }
 }

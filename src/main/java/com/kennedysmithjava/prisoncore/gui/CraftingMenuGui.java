@@ -158,8 +158,9 @@ public class CraftingMenuGui extends BaseGui{
         ItemStack autoItem = new ItemBuilder(Material.HOPPER).name("&6&lAuto Add").lore("&7Add all recipe ingredients.").build();
         inventory.setItem(49, autoItem);
         setAction(49, inventoryClickEvent -> {
-            if(!EngineCooldown.inCooldown(player, CooldownReason.GUI_ACTION)){
-                EngineCooldown.add(player, 40, CooldownReason.GUI_ACTION);
+            UUID uuid = player.getUniqueId();
+            if(!EngineCooldown.inCooldown(uuid, CooldownReason.GUI_ACTION)){
+                EngineCooldown.add(uuid, 40, CooldownReason.GUI_ACTION);
                 getAllHadIngredient(player);
                 close();
                 open();

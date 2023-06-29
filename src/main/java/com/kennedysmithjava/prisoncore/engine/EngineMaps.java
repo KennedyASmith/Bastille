@@ -24,12 +24,14 @@ public class EngineMaps extends Engine {
     @EventHandler
     public void onItemHeldChange(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
-        ItemStack mainHand = player.getInventory().getItemInMainHand();
-        ItemStack offHand = player.getInventory().getItemInOffHand();
-        if(mainHand.getType() == Material.FILLED_MAP || offHand.getType() == Material.FILLED_MAP){
-            PrisonMapRenderer.shouldRenderPlayers.add(player.getUniqueId());
-        } else {
+        ItemStack item = player.getInventory().getItem(event.getNewSlot());
+        if(item == null){
             PrisonMapRenderer.shouldRenderPlayers.remove(player.getUniqueId());
+            return;
+        }
+
+        if(item.getType() == Material.FILLED_MAP){
+            PrisonMapRenderer.shouldRenderPlayers.add(player.getUniqueId());
         }
     }
 

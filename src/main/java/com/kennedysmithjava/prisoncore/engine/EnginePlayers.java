@@ -17,6 +17,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.UUID;
+
 public class EnginePlayers extends Engine {
 
     private static final EnginePlayers i = new EnginePlayers();
@@ -50,8 +52,9 @@ public class EnginePlayers extends Engine {
         if(!block.getType().equals(Material.LEVER)) return;
         Mine mine = MineColl.get().getByLocation(block);
         if(mine != null) {
-            if(EngineCooldown.inCooldown(event.getPlayer(), CooldownReason.REGEN)) return;
-            if(mine.tryManualRegen()) EngineCooldown.add(event.getPlayer(), 20*30, CooldownReason.REGEN);
+            UUID uuid = event.getPlayer().getUniqueId();
+            if(EngineCooldown.inCooldown(uuid, CooldownReason.REGEN)) return;
+            if(mine.tryManualRegen()) EngineCooldown.add(uuid, 20*30, CooldownReason.REGEN);
         }
     }
 
@@ -60,7 +63,7 @@ public class EnginePlayers extends Engine {
         MPlayer mPlayer = MPlayer.get(player);
         if(mPlayer.hasMine()){
             if(!mPlayer.inCooldown(CooldownReason.LOG_OFF)) {
-                EngineCooldown.add(player, 20 * 15, CooldownReason.LOG_OFF);
+                EngineCooldown.add(player.getUniqueId(), 20 * 15, CooldownReason.LOG_OFF);
                 Mine mine = mPlayer.getMine();
 
                 mine.despawnNPCs();

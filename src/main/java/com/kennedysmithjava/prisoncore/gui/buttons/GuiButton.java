@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class GuiButton {
 
@@ -42,9 +43,10 @@ public class GuiButton {
     }
 
     public void clicked(MPlayer player){
-        boolean inCooldown = EngineCooldown.inCooldown(player.getPlayer(), CooldownReason.GUI_ACTION);
+        UUID uuid = player.getUuid();
+        boolean inCooldown = EngineCooldown.inCooldown(uuid, CooldownReason.GUI_ACTION);
         if(inCooldown){
-            int time = EngineCooldown.getTime(player.getPlayer(), CooldownReason.GUI_ACTION);
+            int time = EngineCooldown.getTime(uuid, CooldownReason.GUI_ACTION);
             player.message(Color.get("&7[&bCooldown&7] &cPlease wait another &e" + time + " &cseconds to perform this action again."));
             return;
         }

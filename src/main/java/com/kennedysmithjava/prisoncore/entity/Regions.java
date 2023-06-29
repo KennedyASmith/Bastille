@@ -60,10 +60,12 @@ public class Regions extends Entity<Regions>
         regionFlatSquares.remove(region);
         if(regionFlatSquares.isEmpty()){
             regions.remove(name);
+            EngineRegions.removeActiveRegion(name);
         }else {
             regions.put(name, regionFlatSquares);
+            EngineRegions.addActiveRegion(name, getRegionWrapper(name, type, regionFlatSquares));
         }
-        EngineRegions.addActiveRegion(name, getRegionWrapper(name, type, regionFlatSquares));
+
         this.changed();
     }
 

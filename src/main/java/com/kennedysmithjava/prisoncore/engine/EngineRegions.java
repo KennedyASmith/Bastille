@@ -10,6 +10,7 @@ import com.kennedysmithjava.prisoncore.regions.Region;
 import com.kennedysmithjava.prisoncore.regions.RegionType;
 import com.kennedysmithjava.prisoncore.regions.RegionWorld;
 import com.kennedysmithjava.prisoncore.regions.RegionWrapper;
+import com.kennedysmithjava.prisoncore.util.CooldownReason;
 import com.kennedysmithjava.prisoncore.util.Pair;
 import com.massivecraft.massivecore.Engine;
 import org.bukkit.Bukkit;
@@ -65,7 +66,7 @@ public class EngineRegions extends Engine {
                 //Empty the list for next iteration
                 recentlyRegionAlteredPlayers.clear();
             }
-        }.runTaskTimerAsynchronously(PrisonCore.get(), 20, 10);
+        }.runTaskTimer(PrisonCore.get(), 20, 10);
 
         // Maybe set up a system for region priority to handle overlapping regions?
         /*new BukkitRunnable() {
@@ -93,10 +94,13 @@ public class EngineRegions extends Engine {
         UUID uuid = player.getUniqueId();
 
         //Handle map updating
-        if(PrisonMapRenderer.mapRenderers.containsKey(uuid)){
-            PrisonMapRenderer.shouldRenderPlayers.add(uuid);
-            recentlyRegionAlteredPlayers.add(player); //This may need to change locations in future
+
+        if(PrisonMapRenderer.shouldRenderPlayers.contains(uuid) && !EngineCooldown.inCooldown(uuid, CooldownReason.REGION_UPDATE)){
+            PrisonMapRenderer.shouldUpdateRenderPlayers.add(uuid);
+            EngineCooldown.add(uuid, 20, CooldownReason.REGION_UPDATE);
         }
+
+        recentlyRegionAlteredPlayers.add(player); //This may need to change locations in future
 
         Region region = activeQuestRegions.get(uuid);
         if(region == null) return;
@@ -120,8 +124,8 @@ public class EngineRegions extends Engine {
     @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent event){
         Player player = event.getPlayer();
-        lastKnownWorldName.put(player.getUniqueId(), player.getWorld().getName());
-        recentlyRegionAlteredPlayers.add(event.getPlayer());
+        MapUtil.removeMaps(player);
+        recentlyRegionAlteredPlayers.add(player);
     }
 
     @EventHandler
@@ -134,7 +138,8 @@ public class EngineRegions extends Engine {
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event){
         Player player = event.getPlayer();
-        lastKnownWorldName.remove(player.getUniqueId(), player.getWorld().getName());
+        lastKnownWorldName.remove(player.getUniqueId());
+        PrisonMapRenderer.shouldRenderPlayers.remove(player.getUniqueId());
     }
 
     public void addToRegionTracker(UUID player, Region region){
@@ -168,17 +173,16 @@ public class EngineRegions extends Engine {
     public static boolean updateKnownRegion(Player player){
         UUID uuid = player.getUniqueId();
         //Could skip this
+        //Could skip this
         if(playerLocations.containsKey(uuid)){
             RegionWrapper knownRegion = playerLocations.get(uuid);
-            if(knownRegion.type() == RegionType.WORLD){
-                Pair<String, RegionWrapper> pair = getRegion(player, player.getLocation());
-                return !knownRegion.name().equals(pair.getLeft()); // It's not the same world
-            } else if(!knownRegion.region().has(player.getLocation())){ // If it's a regular region & player not inside, invalidate
+            if(knownRegion.type() == RegionType.WORLD // If it's a world, we want to invalidate always
+                    || !knownRegion.region().has(player.getLocation())){ // If it's a regular region & player not inside, invalidate
                 Bukkit.broadcastMessage("Player is in world or not in known region: " + knownRegion.type());
                 playerLocations.remove(uuid); //Invalidate and try again recursively
                 return updateKnownRegion(player);
             }else {
-                Bukkit.broadcastMessage("Player is in their region: " + knownRegion.type());
+                Bukkit.broadcastMessage("Player is in their region: " + knownRegion.type() + " " + knownRegion.name());
                 return false;
             }
         }
@@ -196,6 +200,9 @@ public class EngineRegions extends Engine {
 
     public static void addActiveRegion(String name, RegionWrapper wrapper){
         activeRegions.put(name, wrapper);
+    }
+    public static void removeActiveRegion(String name){
+        activeRegions.remove(name);
     }
 
     public static HashMap<String, RegionWrapper> getActiveRegions() {

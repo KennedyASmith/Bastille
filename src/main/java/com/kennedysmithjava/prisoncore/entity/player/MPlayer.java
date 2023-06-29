@@ -245,7 +245,7 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
 */
 
     public boolean inCooldown(CooldownReason reason){
-        return EngineCooldown.inCooldown(this.getPlayer(), reason);
+        return EngineCooldown.inCooldown(this.getUuid(), reason);
     }
 
     public String getClanName() {
