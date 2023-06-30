@@ -7,6 +7,7 @@ import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.mines.MineColl;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.PrisonBlock;
 import com.kennedysmithjava.prisoncore.regions.LazyRegion;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -33,6 +34,10 @@ public class EventMineBlockBreak extends Event implements Cancellable {
     private double awardMultiplier = 1;
     private int toolDurabilityLoss = 5;
 
+    private List<Location> affectedBlockLocations;
+
+    private double oreChance = 0.02;
+
     public EventMineBlockBreak(BlockBreakEvent blockBreakEvent, LazyRegion region, Distribution distribution) {
         this(blockBreakEvent.getBlock(), blockBreakEvent.getPlayer(), region, distribution);
     }
@@ -42,10 +47,10 @@ public class EventMineBlockBreak extends Event implements Cancellable {
         this.player = player;
         this.distribution = distribution;
         this.mineRegion = region;
-
         this.rewards = new ArrayList<>();
         this.rewards.add(distribution.generatePrisonBlock(block.getType(), block.getBlockData()));
         this.breakAnimations = new ArrayList<>();
+        this.affectedBlockLocations = new ArrayList<>();
 
     }
 
@@ -110,6 +115,14 @@ public class EventMineBlockBreak extends Event implements Cancellable {
         return player;
     }
 
+    public List<Location> getAffectedBlockLocations() {
+        return affectedBlockLocations;
+    }
+
+    public void addAffectedBlock(Location location){
+        affectedBlockLocations.add(location);
+    }
+
     @Override
     public boolean isCancelled() {
         return this.cancelled;
@@ -128,11 +141,19 @@ public class EventMineBlockBreak extends Event implements Cancellable {
         this.awardMultiplier = awardMultiplier;
     }
 
+    public void setOreChance(double oreChance) {
+        this.oreChance = oreChance;
+    }
+
+    public double getOreChance() {
+        return oreChance;
+    }
+
     public void setBlockMultiplier(double blockMultiplier) {
         this.blockMultiplier = blockMultiplier;
     }
 
-    public double getAwardMultiplier() {
+    public double getAwardValueMultiplier() {
         return awardMultiplier;
     }
 

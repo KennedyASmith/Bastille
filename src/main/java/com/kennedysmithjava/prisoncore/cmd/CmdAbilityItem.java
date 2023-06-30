@@ -2,7 +2,7 @@ package com.kennedysmithjava.prisoncore.cmd;
 
 import com.kennedysmithjava.prisoncore.entity.tools.BufferConf;
 import com.kennedysmithjava.prisoncore.tools.AbilityItem;
-import com.kennedysmithjava.prisoncore.tools.ability.AbilityType;
+import com.kennedysmithjava.prisoncore.ability.AbilityType;
 import com.massivecraft.massivecore.MassiveException;
 import com.massivecraft.massivecore.command.type.primitive.TypeInteger;
 import com.massivecraft.massivecore.command.type.primitive.TypeString;

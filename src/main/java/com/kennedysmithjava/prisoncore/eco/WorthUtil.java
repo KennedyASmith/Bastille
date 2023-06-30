@@ -4,18 +4,15 @@ import com.kennedysmithjava.prisoncore.entity.mines.BlocksConf;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.PrisonBlock;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayerColl;
-import com.kennedysmithjava.prisoncore.tools.pouch.DatalessPouchable;
-import com.kennedysmithjava.prisoncore.tools.pouch.Pouch;
-import com.kennedysmithjava.prisoncore.tools.pouch.PouchManager;
+import com.kennedysmithjava.prisoncore.pouch.DatalessPouchable;
+import com.kennedysmithjava.prisoncore.pouch.Pouch;
+import com.kennedysmithjava.prisoncore.pouch.PouchManager;
 import com.kennedysmithjava.prisoncore.util.Color;
-import com.massivecraft.massivecore.util.MUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.*;
 

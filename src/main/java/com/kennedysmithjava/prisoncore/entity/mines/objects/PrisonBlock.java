@@ -1,17 +1,14 @@
 package com.kennedysmithjava.prisoncore.entity.mines.objects;
 
 import com.jeff_media.morepersistentdatatypes.DataType;
-import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.blockhandler.BlockWrapper;
 import com.kennedysmithjava.prisoncore.blockhandler.Product;
 import com.kennedysmithjava.prisoncore.blockhandler.ValueModifiedPrisonBlock;
 import com.kennedysmithjava.prisoncore.eco.CurrencyType;
 import com.kennedysmithjava.prisoncore.entity.mines.BlocksConf;
-import com.kennedysmithjava.prisoncore.tools.pouch.DatalessPouchable;
-import com.kennedysmithjava.prisoncore.tools.pouch.Pouchable;
+import com.kennedysmithjava.prisoncore.pouch.Pouchable;
 import com.kennedysmithjava.prisoncore.util.Color;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 

@@ -6,7 +6,7 @@ import com.kennedysmithjava.prisoncore.crafting.PrisonObject;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.SkillProfile;
 import com.kennedysmithjava.prisoncore.skill.SkillType;
-import com.kennedysmithjava.prisoncore.tools.enchantment.Enchant;
+import com.kennedysmithjava.prisoncore.enchantment.Enchant;
 import com.kennedysmithjava.prisoncore.util.ItemBuilder;
 import com.kennedysmithjava.prisoncore.util.MiscUtil;
 import com.massivecraft.massivecore.util.MUtil;

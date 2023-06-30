@@ -2,7 +2,7 @@ package com.kennedysmithjava.prisoncore.gui;
 
 import com.kennedysmithjava.prisoncore.crafting.Recipe;
 import com.kennedysmithjava.prisoncore.eco.Cost;
-import com.kennedysmithjava.prisoncore.tools.enchantment.Enchant;
+import com.kennedysmithjava.prisoncore.enchantment.Enchant;
 import com.kennedysmithjava.prisoncore.util.ItemBuilder;
 import com.massivecraft.massivecore.chestgui.ChestGui;
 import com.massivecraft.massivecore.util.MUtil;

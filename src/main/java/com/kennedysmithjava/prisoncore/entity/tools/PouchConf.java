@@ -1,6 +1,6 @@
 package com.kennedysmithjava.prisoncore.entity.tools;
 
-import com.kennedysmithjava.prisoncore.tools.pouch.PouchType;
+import com.kennedysmithjava.prisoncore.pouch.PouchType;
 import com.massivecraft.massivecore.store.Entity;
 import com.massivecraft.massivecore.util.MUtil;
 import org.bukkit.Material;

@@ -1,7 +1,7 @@
 package com.kennedysmithjava.prisoncore.engine;
 
 import com.kennedysmithjava.prisoncore.tools.Pickaxe;
-import com.kennedysmithjava.prisoncore.tools.enchantment.Enchant;
+import com.kennedysmithjava.prisoncore.enchantment.Enchant;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.Glow;
 import com.massivecraft.massivecore.Engine;

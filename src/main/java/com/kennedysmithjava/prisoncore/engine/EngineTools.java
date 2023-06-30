@@ -2,13 +2,13 @@ package com.kennedysmithjava.prisoncore.engine;
 
 import com.kennedysmithjava.prisoncore.blockhandler.MineRegionCache;
 import com.kennedysmithjava.prisoncore.entity.mines.Distribution;
-import com.kennedysmithjava.prisoncore.event.EventAbilityUse;
 import com.kennedysmithjava.prisoncore.event.BlockEventFulfiller;
+import com.kennedysmithjava.prisoncore.event.EventAbilityUse;
 import com.kennedysmithjava.prisoncore.event.EventMineBlockBreak;
-import com.kennedysmithjava.prisoncore.tools.Pickaxe;
-import com.kennedysmithjava.prisoncore.tools.enchantment.BlockBreakEnchant;
-import com.kennedysmithjava.prisoncore.tools.enchantment.HandEquipEnchant;
 import com.kennedysmithjava.prisoncore.regions.LazyRegion;
+import com.kennedysmithjava.prisoncore.tools.Pickaxe;
+import com.kennedysmithjava.prisoncore.enchantment.BlockBreakEnchant;
+import com.kennedysmithjava.prisoncore.enchantment.HandEquipEnchant;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -124,6 +124,7 @@ public class EngineTools implements Listener {
         if (p.getOriginalUser() == null) p.setOriginalUser(event.getPlayer().getUniqueId().toString());
         p.setDurability(p.getDurability()-1);
         Pickaxe.addToLoreUpdateQueue(p, p.getItem());
+
         fulfiller.handleEventReturn(event);
     }
 

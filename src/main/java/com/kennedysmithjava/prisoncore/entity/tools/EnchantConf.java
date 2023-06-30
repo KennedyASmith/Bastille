@@ -26,7 +26,7 @@ public class EnchantConf extends Entity<EnchantConf>
     }
 
     public String PickaxeEfficiencyEnchantName       = "Efficiency";    //Mine faster
-    public String PickaxeLuckEnchantName             = "Luck";          //Chance of getting other blocks from mine's distribution
+    public String PickaxeSieveEnchantName            = "Sieve";          //Chance of getting ores from mine's distribution
     public String PickaxeRefinerEnchantName          = "Refiner";       //Increases value of award
     public String pickaxeVisionEnchantName           = "Night Vision";  //Get NV effect while holding
     public String PickaxeJackpotEnchantName          = "Jackpot";       //Multiplies ores
@@ -38,7 +38,6 @@ public class EnchantConf extends Entity<EnchantConf>
     public String PickaxeJackhammerEnchantName       = "Jackhammer";    //Entire row of mine
     public String PickaxeVeinEnchantName             = "Vein Miner";    //Mines an entire vein of blocks. Takes up player's food.
     public String pickaxeMomentumEnchantName         = "Momentum";      //Multiplies value based on how long player is mining, like a combo.
-    public String pickaxeSieveEnchantName            = "Sieve";         //Chance of getting gems
     public String pickaxeShinyEnchantName            = "Shiny";         //Makes your pickaxe shiny. Nothing else.
 
     public Material PickaxeConeEnchantIcon             = Material.HOPPER;
@@ -48,7 +47,7 @@ public class EnchantConf extends Entity<EnchantConf>
     public Material PickaxeJackhammerEnchantIcon       = Material.IRON_HORSE_ARMOR;
     public Material PickaxeJackpotEnchantIcon          = Material.GOLD_BLOCK;
     public Material PickaxeLaserEnchantIcon            = Material.BLAZE_ROD;
-    public Material PickaxeLuckEnchantIcon             = Material.RABBIT_FOOT;
+    public Material PickaxeSieveEnchantIcon            = Material.BOWL;
     public Material PickaxeHasteEnchantIcon            = Material.FEATHER;
     public Material PickaxeSpeedEnchantIcon            = Material.POTION;
     public Material PickaxeVeinEnchantIcon             = Material.VINE;
@@ -62,10 +61,10 @@ public class EnchantConf extends Entity<EnchantConf>
     public String PickaxeJackhammerEnchantDisplayName       = "&c&l%name% Enchant";
     public String PickaxeJackpotEnchantDisplayName          = "&c&l%name% Enchant";
     public String PickaxeLaserEnchantDisplayName            = "&c&l%name% Enchant";
-    public String PickaxeLuckEnchantDisplayName             = "&c&l%name% Enchant";
+    public String PickaxeSieveEnchantDisplayName            = "&c&l%name% Enchant";
     public String PickaxeSpeedEnchantDisplayName            = "&c&l%name% Enchant";
     public String PickaxeVeinEnchantDisplayName             = "&c&l%name% Enchant";
-    public String PickaxeVisionEnchantDisplayName           = "&c&l%name% Enchant";
+    public String PickaxeXrayEnchantDisplayName             = "&c&l%name% Enchant";
 
     public String PickaxeConeEnchantLore                    = "&7%name% &7%roman_level% &8&o%level%";
     public String PickaxeEfficiencyEnchantLore              = "&7%name% &7%roman_level% &8&o%level%";
@@ -75,30 +74,28 @@ public class EnchantConf extends Entity<EnchantConf>
     public String PickaxeJackhammerEnchantLore              = "&7%name% &7%roman_level% &8&o%level%";
     public String PickaxeJackpotEnchantLore                 = "&7%name% &7%roman_level% &8&o%level%";
     public String PickaxeLaserEnchantLore                   = "&7%name% &7%roman_level% &8&o%level%";
-    public String PickaxeLuckEnchantLore                    = "&7%name% &7%roman_level% &8&o%level%";
+    public String PickaxeSieveEnchantLore                   = "&7%name% &7%roman_level% &8&o%level%";
     public String PickaxeSpeedEnchantLore                   = "&7%name% &7%roman_level% &8&o%level%";
     public String PickaxeVeinEnchantLore                    = "&a☄ %name% &7%roman_level% &8&o%level%";
-    public String PickaxeVisionEnchantLore                  = "&7%name%";
-
+    public String PickaxeXrayEnchantLore                    = "&7%name%  &7%roman_level% &8&o%level%";
 
     public List<String> PickaxeConeEnchantGUILore             = MUtil.list("&7Breaks blocks in a large cone shape!");
     public List<String> PickaxeEfficiencyEnchantGUILore       = MUtil.list("&7Increases the speed of mining!");
     public List<String> PickaxeExplosiveEnchantGUILore        = MUtil.list("&7Breaks blocks with an explosion!");
-    public List<String> PickaxeRefinerEnchantGUILore          = MUtil.list("&7Breaks blocks with an explosion!");
+    public List<String> PickaxeRefinerEnchantGUILore          = MUtil.list("&7Increases the value of the blocks you mine!");
     public List<String> PickaxeHasteEnchantGUILore            = MUtil.list("&7Gives you a haste potion effect", "&7while holding this item.");
     public List<String> PickaxeJackhammerEnchantGUILore       = MUtil.list("&7Increases the chance of mining", "&7an entire layer of a mine!");
     public List<String> PickaxeJackpotEnchantGUILore          = MUtil.list("&7Increases the chance finding", "&7crate keys, tokens, and money while mining!");
     public List<String> PickaxeLaserEnchantGUILore            = MUtil.list("&7Mines blocks in the direction you're facing!", "&7(It's a laser!)");
-    public List<String> PickaxeLuckEnchantGUILore             = MUtil.list("&7Increases the chance of finding", "&7a Mystery Egg while mining!");
+    public List<String> PickaxeSieveEnchantGUILore             = MUtil.list("&7Each level 2x the chance of finding", "&emetals &7while mining!");
     public List<String> PickaxeSpeedEnchantGUILore            = MUtil.list("&7Gives you a speed potion effect", "&7while holding this item.");
-    public List<String> PickaxeVeinEnchantGUILore             = MUtil.list("&7Allows you to mine many blocks of the same type!");
-    public List<String> PickaxeVisionEnchantGUILore             = MUtil.list("&7Gives you a night vision potion effect", "&7while holding this item.");
-
+    public List<String> PickaxeVeinEnchantGUILore             = MUtil.list("&7Allows you to mine an entire vein of" + "&7blocks that share the same type!");
+    public List<String> PickaxeXrayEnchantGUILore             = MUtil.list("&7Highlights the location of the rarest blocks in your mine!");
 
     public int PickaxeEfficiencyEnchantGUISlot       = 28;
-    public int PickaxeLuckEnchantGUISlot             = 29;
+    public int PickaxeSieveEnchantGUISlot            = 29;
     public int PickaxeRefinerEnchantGUISlot          = 30;
-    public int PickaxeVisionEnchantGUISlot           = 31;
+    public int PickaxeXrayEnchantGUISlot             = 31;
     public int PickaxeJackpotEnchantGUISlot          = 32;
     public int PickaxeHasteEnchantGUISlot            = 33;
     public int PickaxeExplosiveEnchantGUISlot        = 34;

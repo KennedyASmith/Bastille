@@ -2,9 +2,9 @@ package com.kennedysmithjava.prisoncore.engine;
 
 import com.kennedysmithjava.prisoncore.eco.WorthUtil;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.PrisonBlock;
-import com.kennedysmithjava.prisoncore.tools.pouch.DatalessPouchable;
-import com.kennedysmithjava.prisoncore.tools.pouch.Pouch;
-import com.kennedysmithjava.prisoncore.tools.pouch.PouchManager;
+import com.kennedysmithjava.prisoncore.pouch.DatalessPouchable;
+import com.kennedysmithjava.prisoncore.pouch.Pouch;
+import com.kennedysmithjava.prisoncore.pouch.PouchManager;
 import com.kennedysmithjava.prisoncore.util.ClickHandler;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.RemovableItem;

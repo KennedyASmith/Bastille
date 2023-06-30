@@ -3,7 +3,7 @@ package com.kennedysmithjava.prisoncore.blockhandler;
 import com.jeff_media.morepersistentdatatypes.DataType;
 import com.kennedysmithjava.prisoncore.eco.CurrencyType;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.PrisonBlock;
-import com.kennedysmithjava.prisoncore.tools.pouch.Pouchable;
+import com.kennedysmithjava.prisoncore.pouch.Pouchable;
 import org.bukkit.inventory.ItemStack;
 
 public class ValueModifiedPrisonBlock implements Pouchable, ValueMutable {

@@ -4,7 +4,7 @@ import com.kennedysmithjava.prisoncore.crafting.PrisonObject;
 import com.kennedysmithjava.prisoncore.crafting.objects.*;
 import com.kennedysmithjava.prisoncore.crafting.objects.type.*;
 import com.kennedysmithjava.prisoncore.entity.farming.objects.TreeTemplate;
-import com.kennedysmithjava.prisoncore.tools.enchantment.Enchant;
+import com.kennedysmithjava.prisoncore.enchantment.Enchant;
 import com.massivecraft.massivecore.MassiveException;
 import com.massivecraft.massivecore.command.type.TypeAbstract;
 import org.bukkit.command.CommandSender;

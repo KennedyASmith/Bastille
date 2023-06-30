@@ -9,5 +9,7 @@ public enum CooldownReason {
     LOF_ON,
     REGEN,
     GUI_ACTION,
-    REGION_UPDATE
+    REGION_UPDATE,
+
+    XRAY_ENCHANT
 }

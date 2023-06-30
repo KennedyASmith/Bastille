@@ -4,7 +4,7 @@ import com.kennedysmithjava.prisoncore.crafting.objects.PrisonEnchantBook;
 import com.kennedysmithjava.prisoncore.eco.Cost;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.tools.Pickaxe;
-import com.kennedysmithjava.prisoncore.tools.enchantment.Enchant;
+import com.kennedysmithjava.prisoncore.enchantment.Enchant;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.ItemBuilder;
 import com.massivecraft.massivecore.chestgui.ChestGui;
@@ -50,7 +50,7 @@ public class EnchantApplyGui extends BaseGui{
             if(currentLevelEnchants.containsKey(enchant)) {
                 currentLevel += currentLevelEnchants.get(enchant);
             }
-            if(currentLevel + book.getLevel() >= enchant.getMaxLevel()){
+            if(currentLevel + book.getLevel() > enchant.getMaxLevel()){
                 nonApplicableEnchants.put(invSlot, book);
             }else {
                 currentLevelEnchants.put(enchant, currentLevel + book.getLevel());

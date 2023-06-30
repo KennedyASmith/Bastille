@@ -7,7 +7,8 @@ import com.kennedysmithjava.prisoncore.crafting.objects.type.MetalType;
 import com.kennedysmithjava.prisoncore.crafting.objects.type.StickType;
 import com.kennedysmithjava.prisoncore.eco.Cost;
 import com.kennedysmithjava.prisoncore.engine.EngineBlacksmith;
-import com.kennedysmithjava.prisoncore.tools.enchantment.PickaxeEfficiencyEnchant;
+import com.kennedysmithjava.prisoncore.enchantment.PickaxeEfficiencyEnchant;
+import com.kennedysmithjava.prisoncore.enchantment.PickaxeXrayEnchant;
 import com.massivecraft.massivecore.util.MUtil;
 
 import java.util.ArrayList;
@@ -69,7 +70,20 @@ public enum Recipe {
             22, new PrisonBook()
     ), () -> new ProductItem(cr ->
             PrisonEnchantBook.beginCrafting(PickaxeEfficiencyEnchant.get(), cr)),
-            PickaxeEfficiencyEnchant.get().getCraftCosts());
+            PickaxeEfficiencyEnchant.get().getCraftCosts()),
+    ENCHANT_BOOK_XRAY(MUtil.map(
+            12, new PrisonFeather(),
+            14, new PrisonFeather(),
+            30, new PrisonFeather(),
+            32, new PrisonFeather(),
+            31, new PrisonEssence(EssenceType.EARTH),
+            13, new PrisonEssence(EssenceType.EARTH),
+            21, new PrisonEssence(EssenceType.EARTH),
+            23, new PrisonEssence(EssenceType.EARTH),
+            22, new PrisonBook()
+    ), () -> new ProductItem(cr ->
+            PrisonEnchantBook.beginCrafting(PickaxeXrayEnchant.get(), cr)),
+            PickaxeXrayEnchant.get().getCraftCosts());
 
     //Key: GUI Slot ||| Value: Ingredient for that slot
     private Map<Integer, PrisonObject> ingredients;

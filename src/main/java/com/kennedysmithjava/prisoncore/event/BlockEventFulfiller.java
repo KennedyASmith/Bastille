@@ -10,13 +10,15 @@ import com.kennedysmithjava.prisoncore.entity.mines.objects.PrisonBlock;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.Skill;
 import com.kennedysmithjava.prisoncore.skill.SkillType;
-import com.kennedysmithjava.prisoncore.tools.pouch.Pouch;
-import com.kennedysmithjava.prisoncore.tools.pouch.PouchFullException;
-import com.kennedysmithjava.prisoncore.tools.pouch.PouchManager;
-import com.kennedysmithjava.prisoncore.tools.pouch.Pouchable;
+import com.kennedysmithjava.prisoncore.enchantment.PickaxeXrayEnchant;
+import com.kennedysmithjava.prisoncore.pouch.Pouch;
+import com.kennedysmithjava.prisoncore.pouch.PouchFullException;
+import com.kennedysmithjava.prisoncore.pouch.PouchManager;
+import com.kennedysmithjava.prisoncore.pouch.Pouchable;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.IntRange;
 import com.kennedysmithjava.prisoncore.util.MiscUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -63,6 +65,7 @@ public class BlockEventFulfiller {
         }
 
         Block block = finishedEvent.getBlock();
+        finishedEvent.addAffectedBlock(block.getLocation());
 
         finishedEvent.getBreakAnimations().forEach(a -> a.play(block));
 
@@ -70,44 +73,16 @@ public class BlockEventFulfiller {
             block.setType(Material.AIR);
         }
 
-        this.rewardPlayer(finishedEvent.getPlayer(), finishedEvent.getRewards(), finishedEvent.getBlockMultiplier(), finishedEvent.getAwardMultiplier());
-
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-
-                Player player = finishedEvent.getPlayer();
-                MPlayer mPlayer = MPlayer.get(player);
-                EngineXP.giveXP(SkillType.MINING, MPlayer.get(player), 2);
-                double oRandom = random.nextDouble();
-                double oreChance = 0.50;
-                if(oRandom < oreChance){
-                    if(player == null) return;
-                    Skill skill = mPlayer.getSkillProfile().getSkill(SkillType.MINING);
-                    int skillLevel = skill.getCurrentLevel();
-                    List<OreType> suitableOres = new ArrayList<>();
-                    for (OreType value : OreType.values()) {
-                        if(value.getRequiredSkillLevel() <= skillLevel){
-                            suitableOres.add(value);
-                        }
-                    }
-                    if(suitableOres.size() > 0){
-                        int id = 0;
-                        if(suitableOres.size() > 1){
-                            id = new IntRange(0, suitableOres.size() - 1).getRandom();
-                        }
-                        OreType type = suitableOres.get(id);
-                        PrisonOre ore = new PrisonOre(type);
-                        MiscUtil.givePlayerItem(player, ore.give(1), 1);
-                        finishedEvent.getPlayer().sendMessage(Color.get("&7[&b&l⛏&7] &7You found " + ore.getName() + " &7while mining!"));
-                    }
-                }
-            }
-        }.runTaskAsynchronously(PrisonCore.get());
+        this.rewardPlayer(finishedEvent.getPlayer(), finishedEvent.getRewards(), finishedEvent.getBlockMultiplier(), finishedEvent.getAwardValueMultiplier(), finishedEvent.getOreChance());
 
         rpEngine.addBlockCount(finishedEvent.getPlayer());
 
+        UUID uuid = finishedEvent.getPlayer().getUniqueId();
+
+        Bukkit.broadcastMessage("Affected locations: " + finishedEvent.getAffectedBlockLocations());
+        if(PickaxeXrayEnchant.isXrayPlayer(uuid)){
+            PickaxeXrayEnchant.removeAnyCubes(finishedEvent.getPlayer(), finishedEvent.getAffectedBlockLocations());
+        }
     }
 
     public void handleEventReturn(EventAbilityUse finishedEvent) {
@@ -115,11 +90,14 @@ public class BlockEventFulfiller {
             return;
         }
 
-        Block block = finishedEvent.getBlock();
-        this.rewardPlayer(finishedEvent.getPlayer(), finishedEvent.getRewards(), finishedEvent.getBlockMultiplier(), finishedEvent.getAwardMultiplier());
+        this.rewardPlayer(finishedEvent.getPlayer(), finishedEvent.getRewards(), finishedEvent.getBlockMultiplier(), finishedEvent.getAwardMultiplier(), finishedEvent.getOreChance());
+        UUID uuid = finishedEvent.getPlayer().getUniqueId();
+        if(PickaxeXrayEnchant.isXrayPlayer(uuid)){
+            PickaxeXrayEnchant.removeAnyCubes(finishedEvent.getPlayer(), finishedEvent.getAffectedBlocks());
+        }
     }
 
-    private void rewardPlayer(Player player, List<Reward> r, double blockMultiplier, double awardMultiplier) {
+    private void rewardPlayer(Player player, List<Reward> r, double blockMultiplier, double awardMultiplier, double oreChance) {
 
         final List<Reward> rewards = r.stream().filter(Objects::nonNull).collect(Collectors.toList());
 
@@ -143,12 +121,41 @@ public class BlockEventFulfiller {
         });
 
         rewards.forEach(e ->{
-            if(e instanceof PrisonBlock){
-                PrisonBlock pb = (PrisonBlock) e;
+            if(e instanceof PrisonBlock pb){
                 pb.setValue(pb.getValue() * awardMultiplier);
             }
             player.getInventory().addItem(e.getProductItem((int) (blockMultiplier)));
         });
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                MPlayer mPlayer = MPlayer.get(player);
+                EngineXP.giveXP(SkillType.MINING, MPlayer.get(player), 2);
+                double oRandom = random.nextDouble();
+                if(oRandom < oreChance){
+                    Skill skill = mPlayer.getSkillProfile().getSkill(SkillType.MINING);
+                    int skillLevel = skill.getCurrentLevel();
+                    List<OreType> suitableOres = new ArrayList<>();
+                    for (OreType value : OreType.values()) {
+                        if(value.getRequiredSkillLevel() <= skillLevel){
+                            suitableOres.add(value);
+                        }
+                    }
+                    if(suitableOres.size() > 0){
+                        int id = 0;
+                        if(suitableOres.size() > 1){
+                            id = new IntRange(0, suitableOres.size() - 1).getRandom();
+                        }
+                        OreType type = suitableOres.get(id);
+                        PrisonOre ore = new PrisonOre(type);
+                        MiscUtil.givePlayerItem(player, ore.give(1), 1);
+                        player.sendMessage(Color.get("&7[&b&l⛏&7] &7You found " + ore.getName() + " &7while mining!"));
+                    }
+                }
+            }
+        }.runTaskAsynchronously(PrisonCore.get());
+
         player.updateInventory();
     }
 

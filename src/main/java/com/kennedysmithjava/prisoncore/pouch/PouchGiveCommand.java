@@ -1,6 +1,5 @@
-package com.kennedysmithjava.prisoncore.cmd;
+package com.kennedysmithjava.prisoncore.pouch;
 
-import com.kennedysmithjava.prisoncore.pouch.PouchType;
 import com.massivecraft.massivecore.MassiveException;
 import com.massivecraft.massivecore.command.MassiveCommand;
 import com.massivecraft.massivecore.command.requirement.RequirementIsPlayer;

@@ -1,7 +1,7 @@
 package com.kennedysmithjava.prisoncore.entity.tools;
 
-import com.kennedysmithjava.prisoncore.tools.ability.Ability;
-import com.kennedysmithjava.prisoncore.tools.ability.AbilityAsteroidStrike;
+import com.kennedysmithjava.prisoncore.ability.Ability;
+import com.kennedysmithjava.prisoncore.ability.AbilityAsteroidStrike;
 import com.massivecraft.massivecore.command.editor.annotation.EditorName;
 import com.massivecraft.massivecore.store.Entity;
 import com.massivecraft.massivecore.util.MUtil;
