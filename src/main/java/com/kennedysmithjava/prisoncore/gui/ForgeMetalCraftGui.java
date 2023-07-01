@@ -24,8 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ForgeCraftGui extends BaseGui{
-    public ForgeCraftGui(Player player) {
+public class ForgeMetalCraftGui extends BaseGui{
+    public ForgeMetalCraftGui(Player player) {
         super(player, "&4&lSelect Ore to smelt:", 6, false, true);
     }
 

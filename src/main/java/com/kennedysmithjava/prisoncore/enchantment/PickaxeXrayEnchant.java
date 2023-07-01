@@ -16,7 +16,6 @@ import com.kennedysmithjava.prisoncore.util.CooldownReason;
 import com.massivecraft.massivecore.util.MUtil;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.npc.NPCRegistry;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -78,8 +77,11 @@ public class PickaxeXrayEnchant extends HandEquipEnchant<PickaxeXrayEnchant> {
 
     @Override
     public void onEquip(Player player, int level) {
-        if(!EngineCooldown.inCooldown(player.getUniqueId(), CooldownReason.XRAY_ENCHANT)){
-            EngineCooldown.add(player.getUniqueId(), 20, CooldownReason.XRAY_ENCHANT);
+        if(!EngineCooldown.inCooldown(player.getUniqueId(), CooldownReason.XRAY_ENCHANT_EQUIP)){
+            EngineCooldown.add(player.getUniqueId(), 40, CooldownReason.XRAY_ENCHANT_EQUIP);
+            MPlayer mPlayer = MPlayer.get(player);
+            Mine mine = mPlayer.getMine();
+            if(mine.getMineCenter().distance(player.getLocation()) > 100) return; // If the player is 100 blocks away, don't even bother
             equippedXrayUsers.put(player.getUniqueId(), level);
             if(activeLocations.containsKey(player.getUniqueId())) return;
             refreshableUsers.add(player); //Adds to queue to summon magma
@@ -119,7 +121,7 @@ public class PickaxeXrayEnchant extends HandEquipEnchant<PickaxeXrayEnchant> {
                 for (int z = minZ; z <= maxZ; z++) {
                     Location currentLocation = new Location(world, x + 0.5, y, z + 0.5);
                     Block aboveBlock = currentLocation.clone().add(0, 1, 0).getBlock();
-                    if(aboveBlock.getType() != Material.AIR) continue; //Only highlight non-exposed blocks
+                    if(aboveBlock.getType() == Material.AIR) continue; //Only highlight non-exposed blocks
                     Block currentBlock = currentLocation.getBlock();
                     Material blockType = currentBlock.getType();
                     if(blockType == rarestMaterial && blocksFound < numberOfBlocks){
@@ -131,16 +133,16 @@ public class PickaxeXrayEnchant extends HandEquipEnchant<PickaxeXrayEnchant> {
                 }
             }
         }
-        Bukkit.broadcastMessage("Xray Locations: " + locations);
         return locations;
     }
 
     @Override
     public void onDequip(Player player, int level) {
-        if(!EngineCooldown.inCooldown(player.getUniqueId(), CooldownReason.XRAY_ENCHANT)){
+        if(!EngineCooldown.inCooldown(player.getUniqueId(), CooldownReason.XRAY_ENCHANT_DEQUIP)){
             hideAllCubes(player.getUniqueId());
             refreshableUsers.remove(player);
             equippedXrayUsers.remove(player.getUniqueId());
+            EngineCooldown.add(player.getUniqueId(), 20, CooldownReason.XRAY_ENCHANT_DEQUIP);
         }
     }
 
@@ -167,14 +169,9 @@ public class PickaxeXrayEnchant extends HandEquipEnchant<PickaxeXrayEnchant> {
     public static void removeAnyCubes(Player player, List<Location> possibleLocations) {
         UUID playerUUID = player.getUniqueId();
         Map<Location, UUID> magmaCubes = activeEntities.get(playerUUID);
-        if(magmaCubes == null){
-            Bukkit.broadcastMessage("Magmas null");
-            return;
-        }
+        if(magmaCubes == null) return;
         NPCRegistry registry = PrisonCore.getNonPersistNPCRegistry();
         List<Location> removables = new ArrayList<>();
-        Bukkit.broadcastMessage("Magmas: " + magmaCubes.keySet());
-        Bukkit.broadcastMessage("Affected: " + possibleLocations);
         for (Location location : magmaCubes.keySet()) {
             if(!possibleLocations.contains(location)) continue;
             UUID cubeUUID = magmaCubes.get(location);
@@ -213,7 +210,6 @@ public class PickaxeXrayEnchant extends HandEquipEnchant<PickaxeXrayEnchant> {
 
     public static boolean isXrayPlayer(UUID uuid){
         Map<Location, Integer> locations = activeLocations.get(uuid);
-        Bukkit.broadcastMessage("UUID Player: " + locations);
         return locations != null;
     }
 

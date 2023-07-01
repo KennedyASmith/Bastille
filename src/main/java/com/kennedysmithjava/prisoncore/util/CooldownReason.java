@@ -11,5 +11,6 @@ public enum CooldownReason {
     GUI_ACTION,
     REGION_UPDATE,
 
-    XRAY_ENCHANT
+    XRAY_ENCHANT_EQUIP,
+    XRAY_ENCHANT_DEQUIP
 }

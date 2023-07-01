@@ -31,17 +31,15 @@ import java.util.stream.Collectors;
  * A @code{Pickaxe} object represents a cached ItemStack for a specific {@link PickaxeType}.
  *
  * Every @code{Pickaxe} is cached on instantiation.
- * Useful for faster {@link Tool} enchant queries.
  *
  * @see PickaxeType
- * @see Tool
  * @see com.kennedysmithjava.prisoncore.cmd.CmdPickaxe
  * @see Enchant
  * @see <a href="https://www.spigotmc.org/threads/more-persistent-data-types-collections-maps-and-arrays-for-pdc.520677/">...</a>
  *
  * @author Kennedy Smith
  */
-public class Pickaxe  implements Tool {
+public class Pickaxe {
 
     // -------------------------------------------- //
     // STATIC PICKAXE CACHE
@@ -81,6 +79,10 @@ public class Pickaxe  implements Tool {
             }
         }
     };
+
+    static {
+        LORE_UPDATER.runTaskTimerAsynchronously(PrisonCore.get(), 20L, 5 * 20L);
+    }
 
 
     /**

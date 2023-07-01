@@ -1,17 +1,17 @@
 package com.kennedysmithjava.prisoncore.engine;
 
 import com.kennedysmithjava.prisoncore.blockhandler.MineRegionCache;
-import com.kennedysmithjava.prisoncore.regions.MinesWorldManager;
-import com.kennedysmithjava.prisoncore.event.EventMineBlockBreak;
 import com.kennedysmithjava.prisoncore.entity.mines.Distribution;
+import com.kennedysmithjava.prisoncore.event.EventMineBlockBreak;
 import com.kennedysmithjava.prisoncore.regions.LazyRegion;
+import com.kennedysmithjava.prisoncore.regions.MinesWorldManager;
 import com.massivecraft.massivecore.Engine;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 
-public class EngineBlockBreak extends Engine {
+public class EngineMining extends Engine {
 
     // -------------------------------------------- //
     // INSTANCE & CONSTRUCT
@@ -19,12 +19,12 @@ public class EngineBlockBreak extends Engine {
 
     private static final MineRegionCache cache = MineRegionCache.get();
 
-    private static final EngineBlockBreak i = new EngineBlockBreak();
+    private static final EngineMining i = new EngineMining();
 
-    public EngineBlockBreak() {
+    public EngineMining() {
     }
 
-    public static EngineBlockBreak get() {
+    public static EngineMining get() {
         return i;
     }
 
@@ -63,7 +63,6 @@ public class EngineBlockBreak extends Engine {
 
         EventMineBlockBreak customEvent = new EventMineBlockBreak(event, region, distribution);
         Bukkit.getPluginManager().callEvent(customEvent);
-
     }
 
 

@@ -4,21 +4,20 @@ import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.blockhandler.Reward;
 import com.kennedysmithjava.prisoncore.crafting.objects.PrisonOre;
 import com.kennedysmithjava.prisoncore.crafting.objects.type.OreType;
+import com.kennedysmithjava.prisoncore.enchantment.PickaxeXrayEnchant;
 import com.kennedysmithjava.prisoncore.engine.EngineResearchPoint;
 import com.kennedysmithjava.prisoncore.engine.EngineXP;
 import com.kennedysmithjava.prisoncore.entity.mines.objects.PrisonBlock;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.Skill;
-import com.kennedysmithjava.prisoncore.skill.SkillType;
-import com.kennedysmithjava.prisoncore.enchantment.PickaxeXrayEnchant;
 import com.kennedysmithjava.prisoncore.pouch.Pouch;
 import com.kennedysmithjava.prisoncore.pouch.PouchFullException;
 import com.kennedysmithjava.prisoncore.pouch.PouchManager;
 import com.kennedysmithjava.prisoncore.pouch.Pouchable;
+import com.kennedysmithjava.prisoncore.skill.SkillType;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.IntRange;
 import com.kennedysmithjava.prisoncore.util.MiscUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -79,7 +78,6 @@ public class BlockEventFulfiller {
 
         UUID uuid = finishedEvent.getPlayer().getUniqueId();
 
-        Bukkit.broadcastMessage("Affected locations: " + finishedEvent.getAffectedBlockLocations());
         if(PickaxeXrayEnchant.isXrayPlayer(uuid)){
             PickaxeXrayEnchant.removeAnyCubes(finishedEvent.getPlayer(), finishedEvent.getAffectedBlockLocations());
         }

@@ -1,15 +1,17 @@
 package com.kennedysmithjava.prisoncore.engine;
 
 import com.kennedysmithjava.prisoncore.blockhandler.MineRegionCache;
+import com.kennedysmithjava.prisoncore.enchantment.BlockBreakEnchant;
+import com.kennedysmithjava.prisoncore.enchantment.HandEquipEnchant;
 import com.kennedysmithjava.prisoncore.entity.mines.Distribution;
 import com.kennedysmithjava.prisoncore.event.BlockEventFulfiller;
 import com.kennedysmithjava.prisoncore.event.EventAbilityUse;
 import com.kennedysmithjava.prisoncore.event.EventMineBlockBreak;
 import com.kennedysmithjava.prisoncore.regions.LazyRegion;
+import com.kennedysmithjava.prisoncore.tools.Hoe;
 import com.kennedysmithjava.prisoncore.tools.Pickaxe;
-import com.kennedysmithjava.prisoncore.enchantment.BlockBreakEnchant;
-import com.kennedysmithjava.prisoncore.enchantment.HandEquipEnchant;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,10 +37,9 @@ public class EngineTools implements Listener {
     public void onPlayerUse(PlayerInteractEvent event) {
         if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
         Player player = event.getPlayer();
-        if (!player.isSneaking()) return;
         ItemStack i = player.getInventory().getItemInMainHand();
         Block block = event.getClickedBlock();
-        if(block.getType() == null) return;
+        if(block == null || block.getType() == Material.AIR) return;
         //Ensure that the player isn't already using an ability.
         if(usingAbilityCache.contains(player.getUniqueId())){
             player.sendMessage("You're already using an ability.");
@@ -112,7 +113,7 @@ public class EngineTools implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onBlockBreak(EventMineBlockBreak event) {
+    public void onMineBlockBreak(EventMineBlockBreak event) {
         ItemStack i = event.getPlayer().getInventory().getItemInMainHand();
         if (!Pickaxe.isPickaxe(i)) return;
         Pickaxe p = Pickaxe.get(i);
@@ -130,12 +131,16 @@ public class EngineTools implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onDisconnect(PlayerQuitEvent event) {
-        Pickaxe.removeFromCache(event.getPlayer().getUniqueId().toString());
+        String uuid = event.getPlayer().getUniqueId().toString();
+        Pickaxe.removeFromCache(uuid);
+        Hoe.removeFromCache(uuid);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onKick(PlayerQuitEvent event) {
-        Pickaxe.removeFromCache(event.getPlayer().getUniqueId().toString());
+        String uuid = event.getPlayer().getUniqueId().toString();
+        Pickaxe.removeFromCache(uuid);
+        Hoe.removeFromCache(uuid);
     }
 
 }

@@ -1,7 +1,9 @@
 package com.kennedysmithjava.prisoncore;
 
 import com.comphenix.protocol.ProtocolManager;
+import com.kennedysmithjava.prisoncore.ability.*;
 import com.kennedysmithjava.prisoncore.cmd.PouchCommand;
+import com.kennedysmithjava.prisoncore.enchantment.*;
 import com.kennedysmithjava.prisoncore.engine.EngineTools;
 import com.kennedysmithjava.prisoncore.engine.EngineTrees;
 import com.kennedysmithjava.prisoncore.entity.MConfColl;
@@ -16,25 +18,19 @@ import com.kennedysmithjava.prisoncore.entity.npcs.FarmerConfColl;
 import com.kennedysmithjava.prisoncore.entity.npcs.FarmerGuiConfColl;
 import com.kennedysmithjava.prisoncore.entity.npcs.SkinsConfColl;
 import com.kennedysmithjava.prisoncore.entity.player.*;
-import com.kennedysmithjava.prisoncore.entity.tools.BufferConfColl;
-import com.kennedysmithjava.prisoncore.entity.tools.EnchantConfColl;
-import com.kennedysmithjava.prisoncore.entity.tools.PickaxeTypeColl;
-import com.kennedysmithjava.prisoncore.entity.tools.PouchConfColl;
+import com.kennedysmithjava.prisoncore.entity.tools.*;
 import com.kennedysmithjava.prisoncore.event.EventNewMine;
 import com.kennedysmithjava.prisoncore.npc.NPCBlacksmithTrait;
 import com.kennedysmithjava.prisoncore.npc.NPCLimboTrait;
 import com.kennedysmithjava.prisoncore.npc.NPCLumberjackTrait;
 import com.kennedysmithjava.prisoncore.npc.SkinManager;
 import com.kennedysmithjava.prisoncore.placeholders.*;
+import com.kennedysmithjava.prisoncore.pouch.DatalessPouchable;
 import com.kennedysmithjava.prisoncore.quest.QuestPath;
 import com.kennedysmithjava.prisoncore.quest.paths.PathIntroduction;
 import com.kennedysmithjava.prisoncore.quest.paths.PathStarterGateway;
 import com.kennedysmithjava.prisoncore.regions.MinesWorldManager;
 import com.kennedysmithjava.prisoncore.regions.VoidGenerator;
-import com.kennedysmithjava.prisoncore.tools.Pickaxe;
-import com.kennedysmithjava.prisoncore.ability.*;
-import com.kennedysmithjava.prisoncore.enchantment.*;
-import com.kennedysmithjava.prisoncore.pouch.DatalessPouchable;
 import com.kennedysmithjava.prisoncore.util.FAWEPaster;
 import com.kennedysmithjava.prisoncore.util.Glow;
 import com.massivecraft.massivecore.MassivePlugin;
@@ -127,7 +123,6 @@ public class PrisonCore extends MassivePlugin {
         SkinManager.registerAll();
 
         /* MISC REGISTRY */
-        Pickaxe.LORE_UPDATER.runTaskTimerAsynchronously(this, 20L, 5 * 20L);
         getServer().getPluginManager().registerEvents(new EngineTools(), this);
 
         /* ACTIVATE PLACEHOLDER EXPANSIONS */
@@ -180,6 +175,7 @@ public class PrisonCore extends MassivePlugin {
                 PouchConfColl.class,
                 EnchantConfColl.class,
                 PickaxeTypeColl.class,
+                HoeTypeColl.class,
                 BufferConfColl.class,
                 WarrenConfColl.class,
                 WarrenGUIConfColl.class,

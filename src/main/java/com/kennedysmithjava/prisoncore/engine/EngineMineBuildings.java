@@ -1,17 +1,16 @@
 package com.kennedysmithjava.prisoncore.engine;
 
 import com.kennedysmithjava.prisoncore.PrisonCore;
-import com.kennedysmithjava.prisoncore.crafting.Recipe;
 import com.kennedysmithjava.prisoncore.entity.MConf;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.mines.MineColl;
-import com.kennedysmithjava.prisoncore.gui.CraftingMenuGui;
 import com.kennedysmithjava.prisoncore.gui.EnchantMenuGui;
-import com.kennedysmithjava.prisoncore.gui.ForgeCraftGui;
+import com.kennedysmithjava.prisoncore.gui.ForgeMetalCraftGui;
+import com.kennedysmithjava.prisoncore.gui.ForgeToolCraftGui;
 import com.kennedysmithjava.prisoncore.gui.StorageGui;
+import com.kennedysmithjava.prisoncore.regions.LazyRegion;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.Glow;
-import com.kennedysmithjava.prisoncore.regions.LazyRegion;
 import com.massivecraft.massivecore.Engine;
 import com.massivecraft.massivecore.chestgui.ChestGui;
 import com.massivecraft.massivecore.util.MUtil;
@@ -31,7 +30,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class EngineMineBuildings extends Engine {
@@ -161,7 +159,7 @@ public class EngineMineBuildings extends Engine {
 
 
     public void furanceMenu(Player player){
-        ForgeCraftGui gui = new ForgeCraftGui(player);
+        ForgeMetalCraftGui gui = new ForgeMetalCraftGui(player);
         gui.open();
     }
 
@@ -170,8 +168,8 @@ public class EngineMineBuildings extends Engine {
     }
 
     public void anvilMenu(Player player){
-        CraftingMenuGui craftingMenuGui = new CraftingMenuGui(player, "&4Craft a Pickaxe", new HashMap<>(), Recipe.PICKAXE, null);
-        craftingMenuGui.open();
+        ForgeToolCraftGui forgeToolCraftGui = new ForgeToolCraftGui(player);
+        forgeToolCraftGui.open();
     }
 
     public void hopperMenu(Player player){

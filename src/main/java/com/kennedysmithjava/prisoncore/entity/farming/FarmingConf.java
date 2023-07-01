@@ -3,7 +3,6 @@ package com.kennedysmithjava.prisoncore.entity.farming;
 import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.entity.farming.objects.Seed;
 import com.kennedysmithjava.prisoncore.util.MItem;
-import com.kennedysmithjava.prisoncore.util.MiscUtil;
 import com.massivecraft.massivecore.command.editor.annotation.EditorName;
 import com.massivecraft.massivecore.ps.PS;
 import com.massivecraft.massivecore.store.Entity;
@@ -12,7 +11,6 @@ import lombok.Getter;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.material.Crops;
 
 import java.util.List;
@@ -50,7 +48,7 @@ public class FarmingConf extends Entity<FarmingConf> {
      *
      * @param block
      */
-    private void addSeed(Block block) {
+    public void addSeed(Block block) {
         // Sets the block below to soil
         Location blockBelow = block.getLocation().clone().add(0, -1, 0);
         blockBelow.getBlock().setType(Material.FARMLAND);
@@ -99,48 +97,6 @@ public class FarmingConf extends Entity<FarmingConf> {
         world.spawnParticle(Particle.VILLAGER_HAPPY, loc.clone().add(0, 0.5, 0), 1);
         world.spawnParticle(Particle.VILLAGER_HAPPY, loc.clone().add(0, 0.3, 0), 1);
         world.playSound(loc, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 0.2f);
-    }
-
-    /**
-     * Called when a block is broken
-     *
-     * @param evt
-     */
-    public void onWheatBreak(BlockBreakEvent evt) {
-
-        // Must be material wheat
-        if (evt.getBlock().getType() != Material.WHEAT_SEEDS)
-            return;
-
-        // Objects
-        Block block = evt.getBlock();
-        Location loc = block.getLocation();
-
-        if (!(block.getState().getData() instanceof Crops)) {
-            System.out.println("This crop is not a crop. issue.");
-            return;
-        }
-
-        // If the crop is not ripe, don't do this
-        if (((Crops) block.getState().getData()).getState() != CropState.RIPE)
-            return;
-
-        // Must be in spawn world
-        if (!loc.getWorld().getName().equals(world))
-            return;
-
-        // Clears the drops and removes the event
-        evt.getBlock().getDrops().clear();
-        evt.setCancelled(true);
-
-        // 20% chance to get 2x wheat
-        int wheatToGive = ThreadLocalRandom.current().nextInt(0, 5) == 1 ? 2 : 1;
-
-        // Gives player the wheat
-        MiscUtil.givePlayerItem(evt.getPlayer(), wheatItem.build(), wheatToGive);
-
-        // Seeds the ground
-        addSeed(block);
     }
 
     public void save() {

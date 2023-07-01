@@ -31,6 +31,14 @@ public class CraftingMenuGui extends BaseGui{
 
     private final List<Cost> additionalCosts;
 
+    public CraftingMenuGui(Player player, String name, Recipe recipe, BaseGui returningMenu) {
+        super(player, name, 6, false, false, returningMenu);
+        this.givenIngredients = new HashMap<>();
+        this.additionalCosts = recipe.getAdditionalCosts();
+        this.product = recipe.getProduct();
+        this.neededIngredients = recipe.getIngredients();
+    }
+
     public CraftingMenuGui(Player player, String name, Map<Integer, ItemStack> givenIngredients, Recipe recipe, BaseGui returningMenu) {
         super(player, name, 6, false, false, returningMenu);
         this.givenIngredients = givenIngredients;

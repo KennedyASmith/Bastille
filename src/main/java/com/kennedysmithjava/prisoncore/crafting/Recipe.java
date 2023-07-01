@@ -6,7 +6,7 @@ import com.kennedysmithjava.prisoncore.crafting.objects.type.LogType;
 import com.kennedysmithjava.prisoncore.crafting.objects.type.MetalType;
 import com.kennedysmithjava.prisoncore.crafting.objects.type.StickType;
 import com.kennedysmithjava.prisoncore.eco.Cost;
-import com.kennedysmithjava.prisoncore.engine.EngineBlacksmith;
+import com.kennedysmithjava.prisoncore.engine.EngineCraftingTools;
 import com.kennedysmithjava.prisoncore.enchantment.PickaxeEfficiencyEnchant;
 import com.kennedysmithjava.prisoncore.enchantment.PickaxeXrayEnchant;
 import com.massivecraft.massivecore.util.MUtil;
@@ -24,10 +24,34 @@ public enum Recipe {
             14, new PrisonMetal(MetalType.ANY),
             20, new PrisonMetal(MetalType.ANY),
             24, new PrisonMetal(MetalType.ANY),
-            22, new PrisonStick(StickType.WOOD),
-            31, new PrisonStick(StickType.WOOD),
-            40, new PrisonStick(StickType.WOOD)), () -> new ProductItem(EngineBlacksmith::beginCrafting)),
-
+            22, new PrisonStick(StickType.ANY),
+            31, new PrisonStick(StickType.ANY),
+            40, new PrisonStick(StickType.ANY)), () -> new ProductItem(EngineCraftingTools::beginCraftingPickaxe)),
+    AXE(MUtil.map(
+            21, new PrisonMetal(MetalType.ANY),
+            12, new PrisonMetal(MetalType.ANY),
+            13, new PrisonMetal(MetalType.ANY),
+            14, new PrisonMetal(MetalType.ANY),
+            22, new PrisonStick(StickType.ANY),
+            31, new PrisonStick(StickType.ANY),
+            40, new PrisonStick(StickType.ANY)), () -> new ProductItem(EngineCraftingTools::beginCraftingAxe)),
+    HOE(MUtil.map(
+            12, new PrisonMetal(MetalType.ANY),
+            13, new PrisonMetal(MetalType.ANY),
+            14, new PrisonMetal(MetalType.ANY),
+            22, new PrisonStick(StickType.ANY),
+            31, new PrisonStick(StickType.ANY),
+            40, new PrisonStick(StickType.ANY)), () -> new ProductItem(EngineCraftingTools::beginCraftingHoe)),
+    FISHING_POLE(MUtil.map(
+            13, new PrisonString(),
+            23, new PrisonString(),
+            32, new PrisonString(),
+            41, new PrisonMetal(MetalType.ANY),
+            14, new PrisonMetal(MetalType.ANY),
+            12, new PrisonStick(StickType.WOOD),
+            21, new PrisonStick(StickType.WOOD),
+            30, new PrisonStick(StickType.WOOD),
+            39, new PrisonStick(StickType.WOOD)), () -> new ProductItem(EngineCraftingTools::beginCraftingPole)),
     STICK(MUtil.map(22, new PrisonWoodenPlank()), () -> giveItem(new PrisonStick(StickType.WOOD), 1)),
     WOODEN_PLANK_4X(MUtil.map(22, new PrisonLog(LogType.ANY)), () -> giveItem(new PrisonWoodenPlank(), 4)),
     WOODEN_AXE(MUtil.map(

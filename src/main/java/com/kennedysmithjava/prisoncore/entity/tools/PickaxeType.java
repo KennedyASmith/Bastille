@@ -2,7 +2,6 @@ package com.kennedysmithjava.prisoncore.entity.tools;
 
 import com.kennedysmithjava.prisoncore.tools.Buffer;
 import com.kennedysmithjava.prisoncore.tools.Pickaxe;
-import com.kennedysmithjava.prisoncore.tools.Tool;
 import com.kennedysmithjava.prisoncore.ability.Ability;
 import com.kennedysmithjava.prisoncore.ability.LeveledAbility;
 import com.kennedysmithjava.prisoncore.enchantment.Enchant;
@@ -21,7 +20,6 @@ import java.util.*;
  * A {@code Pickaxe} with a specific {@code PickaxeType} can be acquired in-game via CmdPickaxe
  *
  * @see Pickaxe
- * @see Tool
  * @see Enchant
  *
  * @author Kennedy Smith
