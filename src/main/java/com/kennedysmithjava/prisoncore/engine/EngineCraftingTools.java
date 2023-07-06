@@ -6,7 +6,9 @@ import com.kennedysmithjava.prisoncore.crafting.objects.PrisonStick;
 import com.kennedysmithjava.prisoncore.crafting.objects.type.MetalType;
 import com.kennedysmithjava.prisoncore.crates.CratePrize;
 import com.kennedysmithjava.prisoncore.crates.CrateRoulette;
+import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.tools.*;
+import com.kennedysmithjava.prisoncore.skill.SkillType;
 import com.massivecraft.massivecore.Engine;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -66,6 +68,7 @@ public class EngineCraftingTools extends Engine {
 
         //Show the crate animation to the player
         CrateRoulette.animate(craftingRequest.getPlayer(), prizes, 1.0);
+        MPlayer.get(craftingRequest.getPlayer()).getSkillProfile().getSkill(SkillType.METALWORKING).addXP(200);
     }
 
     @SuppressWarnings("DataFlowIssue")
@@ -108,6 +111,7 @@ public class EngineCraftingTools extends Engine {
 
         //Show the crate animation to the player
         CrateRoulette.animate(craftingRequest.getPlayer(), prizes, 1.0);
+        MPlayer.get(craftingRequest.getPlayer()).getSkillProfile().getSkill(SkillType.METALWORKING).addXP(100);
     }
 
     @SuppressWarnings("DataFlowIssue")
@@ -150,6 +154,7 @@ public class EngineCraftingTools extends Engine {
 
         //Show the crate animation to the player
         CrateRoulette.animate(craftingRequest.getPlayer(), prizes, 1.0);
+        MPlayer.get(craftingRequest.getPlayer()).getSkillProfile().getSkill(SkillType.METALWORKING).addXP(100);
     }
 
     @SuppressWarnings("DataFlowIssue")
@@ -191,6 +196,7 @@ public class EngineCraftingTools extends Engine {
 
         //Show the crate animation to the player
         CrateRoulette.animate(craftingRequest.getPlayer(), prizes, 1.0);
+        MPlayer.get(craftingRequest.getPlayer()).getSkillProfile().getSkill(SkillType.METALWORKING).addXP(20);
     }
 
 

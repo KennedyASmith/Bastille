@@ -176,6 +176,8 @@ public class PrisonCore extends MassivePlugin {
                 EnchantConfColl.class,
                 PickaxeTypeColl.class,
                 HoeTypeColl.class,
+                FishingPoleTypeColl.class,
+                AxeTypeColl.class,
                 BufferConfColl.class,
                 WarrenConfColl.class,
                 WarrenGUIConfColl.class,

@@ -5,9 +5,13 @@ import com.kennedysmithjava.prisoncore.entity.farming.TreesConf;
 import com.kennedysmithjava.prisoncore.entity.farming.objects.Tree;
 import com.kennedysmithjava.prisoncore.entity.farming.objects.TreeTemplate;
 import com.kennedysmithjava.prisoncore.entity.farming.objects.TwoDVector;
+import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
+import com.kennedysmithjava.prisoncore.entity.player.Skill;
+import com.kennedysmithjava.prisoncore.regions.Offset;
+import com.kennedysmithjava.prisoncore.skill.SkillType;
+import com.kennedysmithjava.prisoncore.tools.Axe;
 import com.kennedysmithjava.prisoncore.util.FAWEPaster;
 import com.kennedysmithjava.prisoncore.util.MiscUtil;
-import com.kennedysmithjava.prisoncore.regions.Offset;
 import com.massivecraft.massivecore.Engine;
 import com.massivecraft.massivecore.ps.PS;
 import com.sk89q.worldedit.math.BlockVector3;
@@ -15,9 +19,12 @@ import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.HashMap;
@@ -63,15 +70,33 @@ public class EngineTrees extends Engine {
 
         Tree tree = getTree(e.getBlock());
         if (tree == null) return;
+
         e.setCancelled(true);
         TreeTemplate template = TreesConf.get().getTreeTemplates().get(tree.getName());
         if (template.getBlockToReplaceWhenBroken().getMaterial().equals(e.getBlock().getType())) return;
+
+        Player player = e.getPlayer();
+        Inventory inv = player.getInventory();
+        ItemStack item = inv.getItem(player.getInventory().getHeldItemSlot());
+        if(Axe.isAxe(item)) {
+            Axe axe = Axe.get(item);
+            int newDurability = axe.getDurability() - 1;
+            if(newDurability <= 0) return;
+            axe.setDurability(newDurability);
+            Axe.addToLoreUpdateQueue(axe, axe.getItem());
+        }
+
+        Skill woodCuttingSkill = MPlayer.get(player).getSkillProfile().getSkill(SkillType.WOODCUTTING);
+
+        woodCuttingSkill.addXP(5);
         tree.setBlocksHit(tree.getBlocksHit() + 1);
-        MiscUtil.givePlayerItem(e.getPlayer(), PrisonLog.giveFromMaterial(e.getBlock().getType()), 1);
+        MiscUtil.givePlayerItem(player, PrisonLog.giveFromMaterial(e.getBlock().getType()), 1);
         e.getBlock().setType(template.getBlockToReplaceWhenBroken().getMaterial());
         tree.changed();
-        if (tree.getBlocksHit() >= template.getTimesNeededToReset())
+        if (tree.getBlocksHit() >= template.getTimesNeededToReset()){
             chopTree(tree, template);
+            woodCuttingSkill.addXP(20);
+        }
     }
 
     public void pasteTree(Tree tree) {

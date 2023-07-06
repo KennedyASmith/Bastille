@@ -4,6 +4,10 @@ import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.crafting.objects.PrisonFish;
 import com.kennedysmithjava.prisoncore.entity.farming.FishingConf;
 import com.kennedysmithjava.prisoncore.entity.farming.objects.FishingArea;
+import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
+import com.kennedysmithjava.prisoncore.entity.player.Skill;
+import com.kennedysmithjava.prisoncore.skill.SkillType;
+import com.kennedysmithjava.prisoncore.tools.FishingPole;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.IntRange;
 import com.kennedysmithjava.prisoncore.util.MiscUtil;
@@ -14,6 +18,7 @@ import org.bukkit.entity.FishHook;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -53,10 +58,25 @@ public class EngineFishing extends Engine {
                             player.sendMessage(Color.get("&7[&fFishing&7] &7You probably won't find any fish here..."));
                             event.setCancelled(true);
                         }else{
-                            //TODO: Fishing skill requirement here
-                            player.sendMessage(Color.get("&7[&fFishing&7] &7Fishing level &e" + fishArea.getLevelRequired() + " &7required for this area."));
-                            if(trulyFishingPlayers.containsKey(uuid)) continue;
-                            sendFishingAnimation(player, event, fishArea);
+                            MPlayer mPlayer = MPlayer.get(player);
+                            Skill skill = mPlayer.getSkillProfile().getSkill(SkillType.FISHING);
+                            if(skill.getCurrentLevel() >= fishArea.getLevelRequired()){
+                                if(trulyFishingPlayers.containsKey(uuid)) continue;
+
+                                Inventory inv = player.getInventory();
+                                ItemStack item = inv.getItem(player.getInventory().getHeldItemSlot());
+                                if(!FishingPole.isPole(item)) continue;
+                                FishingPole pole = FishingPole.get(item);
+                                int newDurability = pole.getDurability() - 1;
+                                if(newDurability <= 0) continue;
+                                pole.setDurability(newDurability);
+                                FishingPole.addToLoreUpdateQueue(pole, pole.getItem());
+
+                                sendFishingAnimation(player, event, fishArea);
+                            }else{
+                                event.setCancelled(true);
+                                player.sendMessage(Color.get("&7[&fFishing&7] &7Fishing level &e" + fishArea.getLevelRequired() + " &7required for this area."));
+                            }
                         }
                     }
                 }
@@ -91,6 +111,8 @@ public class EngineFishing extends Engine {
         UUID uuid = player.getUniqueId();
 
         new BukkitRunnable() {
+
+            final Skill fishingSkill = MPlayer.get(player).getSkillProfile().getSkill(SkillType.FISHING);
 
             final static int size = 44;
             final int maxWins = 3;
@@ -132,13 +154,13 @@ public class EngineFishing extends Engine {
                         if(wins == maxWins - 1){
                             PrisonFish prizeFish = PrisonFish.pickRandom(area);
                             ItemStack prizeItem = prizeFish.give(1);
-                            player.sendMessage(Color.get("&7[&fFishing&7] &aYou've successfully caught a fish!"));
+                            player.sendMessage(Color.get("&7[&b\uD83C\uDFA3&7] &aYou've successfully caught a fish!"));
                             player.sendTitle(
                                     Color.get("&a&lCaught!"),
                                     Color.get("&71x " + prizeFish.getName() + " &7(" + prizeFish.getType().getRarity().getDisplayName() + "&7)"),
                                     0, 20, 5);
                             MiscUtil.givePlayerItem(player, prizeItem, 1);
-
+                            fishingSkill.addXP(25);
                             trulyFishingPlayers.remove(player.getUniqueId());
                             sendFishingAnimation(player, fishingPlayers.get(player.getUniqueId()), area);
 
@@ -147,17 +169,17 @@ public class EngineFishing extends Engine {
                         }else {
                             wins++;
                             player.sendMessage(
-                                    Color.get("&7[&fFishing&7] Keep going! &aYou've made " + wins + "/" + maxWins + " successful reel attempts."));
-
+                                    Color.get("&7[&b\uD83C\uDFA3&7] Keep going! &aYou've made " + wins + "/" + maxWins + " successful reel attempts."));
+                            fishingSkill.addXP(5);
                             winMarkPair = getWinMarks(size, 4, 10);
                             winMarks = winMarkPair.getLeft();
                             semiMarks = winMarkPair.getRight();
                         }
                     }else if(semiMarks.contains(currentIndex)){
-                        player.sendMessage(Color.get("&7[&fFishing&7] &eOops! Try again!"));
+                        player.sendMessage(Color.get("&7[&b\uD83C\uDFA3&7] &eOops! Try again!"));
                     } else {
                         losses++;
-                        player.sendMessage(Color.get("&7[&fFishing&7] &cOops! You've tried to reel too early " + losses + "/" + maxLosses + " times!"));
+                        player.sendMessage(Color.get("&7[&b\uD83C\uDFA3&7] &cOops! You've tried to reel in too early " + losses + "/" + maxLosses + " times!"));
                     }
                 }
 

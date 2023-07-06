@@ -8,6 +8,7 @@ import com.kennedysmithjava.prisoncore.eco.Cost;
 import com.kennedysmithjava.prisoncore.engine.EngineCooldown;
 import com.kennedysmithjava.prisoncore.engine.EngineCraftingMenu;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
+import com.kennedysmithjava.prisoncore.skill.SkillType;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.CooldownReason;
 import com.kennedysmithjava.prisoncore.util.ItemBuilder;
@@ -106,6 +107,7 @@ public class CraftingMenuGui extends BaseGui{
                 additionalCosts.forEach(additionalCost -> additionalCost.transaction(mPlayer));
                 if(canReturnToLastMenu()) returnToLastMenu();
                 product.get(new CraftingRequest(player, givenIngredients, product, additionalCosts));
+                mPlayer.getSkillProfile().getSkill(SkillType.CRAFTING).addXP(givenIngredients.size() * 2);
                 return false;
             });
         }else {

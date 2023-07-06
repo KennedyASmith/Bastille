@@ -1,6 +1,8 @@
 package com.kennedysmithjava.prisoncore.engine;
 
 import com.kennedysmithjava.prisoncore.entity.farming.FarmingConf;
+import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
+import com.kennedysmithjava.prisoncore.skill.SkillType;
 import com.kennedysmithjava.prisoncore.tools.Hoe;
 import com.kennedysmithjava.prisoncore.util.MiscUtil;
 import com.massivecraft.massivecore.Engine;
@@ -60,6 +62,7 @@ public class EngineFarming extends Engine {
 
         // Gives player the wheat
         MiscUtil.givePlayerItem(evt.getPlayer(), FarmingConf.get().getWheatItem().build(), wheatToGive);
+        MPlayer.get(player).getSkillProfile().getSkill(SkillType.FARMING).addXP(wheatToGive);
 
         // Seeds the ground
         FarmingConf.get().addSeed(block);
