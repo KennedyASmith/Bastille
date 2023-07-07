@@ -46,7 +46,7 @@ public class EngineResearchPoint extends Engine {
                 }
                 if(total > 0){
                     MPlayer mPlayer = MPlayer.get(player);
-                    mPlayer.addBalance(CurrencyType.RESEARCH, (double) total);
+                    mPlayer.addBalance(CurrencyType.RESEARCH, (double) total, true);
                     player.sendMessage(Color.get("&7[&b&l⛏&7] &7You have gained &b✪" + total + " &7for breaking &e" + count + " &7blocks."));
                 }
 

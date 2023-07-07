@@ -15,7 +15,6 @@ import com.kennedysmithjava.prisoncore.storage.StorageType;
 import com.kennedysmithjava.prisoncore.util.CooldownReason;
 import com.massivecraft.massivecore.store.SenderEntity;
 import com.massivecraft.massivecore.util.MUtil;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -30,16 +29,12 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
     // CONSTANTS
     // -------------------------------------------- //
 
-    private final Map<CurrencyType, Double> economy = MUtil.map(CurrencyType.CASH, 0.25, CurrencyType.RESEARCH, 15.0, CurrencyType.GEMS, 50.0);
+    private Map<CurrencyType, Double> economy = MUtil.map(CurrencyType.CASH, 0.25, CurrencyType.RESEARCH, 15.0, CurrencyType.GEMS, 50.0);
+    private Map<CurrencyType, Double> economyMultiplier = MUtil.map(CurrencyType.CASH, 1.0, CurrencyType.RESEARCH, 1.0, CurrencyType.GEMS, 1.0);
+
     private String gangID = null;
     private String mineID = "none";
     private String clanName = "";
-    private int xp = 0;
-
-    //XP Required to level up your character
-    private int xpRequired = 0;
-
-    private int level = 1;
 
     private Map<StorageType, StorageWrapper> storage = MUtil.map(
             StorageType.STORAGE_1, new StorageWrapper(false, Material.CHEST, "&aStorage 1"),
@@ -59,20 +54,10 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
 
     @Override
     public MPlayer load(MPlayer that) {
+        this.setEconomy(that.economy);
         this.setMineID(that.mineID);
-        this.setXP(that.xp);
-        this.setXpRequired(that.xpRequired);
         this.setStorage(that.storage);
         return this;
-    }
-
-    /**
-     * Send the player a message.
-     *
-     * @param message Message to send...
-     */
-    public void sendMessage(String message) {
-        getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
     }
 
     // -------------------------------------------- //
@@ -117,8 +102,9 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
      * @param eco    CurrencyType
      * @param amount amount of money you want to add to the player's balance.
      */
-    public void addBalance(CurrencyType eco, Double amount) {
-        setBalance(eco, getBalance(eco) + amount);
+    public void addBalance(CurrencyType eco, Double amount, boolean applyMultiplier) {
+        double multiplier = economyMultiplier.get(eco);
+        setBalance(eco, getBalance(eco) + (amount * multiplier));
     }
 
     /**
@@ -131,53 +117,9 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
         setBalance(eco, getBalance(eco) - amount);
     }
 
-    // -------------------------------------------- //
-    // LEVEL AND PRESTIGE
-    // -------------------------------------------- //
-
-    /**
-     * set the player's current level
-     *
-     * @param level The level that you want the player to be
-     */
-    public void setLevel(int level) {
-        this.level = level;
+    public void setEconomy(Map<CurrencyType, Double> economy) {
+        this.economy = economy;
         this.changed();
-    }
-
-    /**
-     * Will simply level up the player.
-     */
-    public void levelUp() {
-        setLevel(level + 1);
-    }
-
-    /**
-     * Will level up the player x times.
-     *
-     * @param times How many times should the player be leveled up.
-     */
-    public void levelUp(int times) {
-        setLevel(level + times);
-    }
-
-    /**
-     * Will simply downgrade the player a level.
-     * <p>
-     * Not sure how this will be applicable but...
-     */
-    public void downgrade() {
-        setLevel(level - 1);
-    }
-
-    /**
-     * Will simply downgrade the player x times.
-     * <p>
-     * Not sure how this will be applicable but...
-     *
-     */
-    public void downgrade(int times) {
-        setLevel(level - times);
     }
 
     public void setMineID(String mineID) {
@@ -211,39 +153,6 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
         this.changed();
     }
 
-    /*public QuestProfile getQuestProfile() {
-        if(questProfile == null){
-            questProfile = new QuestProfile(this);
-            getActiveQuests().forEach((s, phase) -> {
-                QuestPhaseGroup group = PrisonCore.get().getQuestManager().get(s);
-                questProfile.rejoinQuest(group, phase);
-            });
-        }
-        return questProfile;
-    }
-
-    public void setQuestProfile(QuestProfile questProfile) {
-        this.questProfile = questProfile;
-    }
-
-    public void setActiveQuests(Map<String, Integer> activeQuests) {
-        this.activeQuests = activeQuests;
-    }
-
-    public void setActiveQuest(String questGroup, int progress) {
-        activeQuests.putIfAbsent(questGroup, progress);
-    }
-
-    public Map<String, Integer> getActiveQuests() {
-        return activeQuests;
-    }
-
-    public void removeQuest(String name){
-        activeQuests.remove(name);
-        this.changed();
-    }
-*/
-
     public boolean inCooldown(CooldownReason reason){
         return EngineCooldown.inCooldown(this.getUuid(), reason);
     }
@@ -254,41 +163,6 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
 
     public void setClanName(String clanName) {
         this.clanName = clanName;
-    }
-
-    public void setXP(int xp) {
-        this.xp = xp;
-        this.changed();
-    }
-
-    public void addXP(int xpToAdd){
-        int currentXP = this.xp;
-        int xpRequiredForNextLevel = getXpRequired();
-        int sumXP = currentXP + xpToAdd;
-        if(sumXP > xpRequiredForNextLevel){
-            int remainder = sumXP - xpRequiredForNextLevel;
-            setLevel(this.level + 1);
-            setXpRequired(calculateXpRequired());
-            addXP(remainder);
-        }
-    }
-
-    public void setXpRequired(int xpRequired) {
-        this.xpRequired = xpRequired;
-        this.changed();
-    }
-
-    public int getXpRequired() {
-        return xpRequired;
-    }
-
-    private int calculateXP(int level) {
-        return (int) Math.floor(10 * Math.pow(level, 0.2) * Math.pow(level, 2.0) + Math.pow(level - 1, 2.0));
-    }
-
-    public int calculateXpRequired() {
-        int level = this.level;
-        return calculateXP(level + 1) - calculateXP(level);
     }
 
     public QuestProfile getQuestProfile(){
@@ -349,7 +223,6 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
         this.changed();
     }
 
-
     public StorageWrapper getStorageWrapper(StorageType type){
         return storage.get(type);
     }
@@ -360,10 +233,20 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
 
     public void openStorage(StorageType type, Player player){
         Inventory inv = getStorage(type);
-
         player.openInventory(inv);
         PlayerVaults.getInstance().getInVault().put(player.getUniqueId().toString(), new VaultViewInfo(this.getName(), type.getId()));
     }
+
+    public void addEconomyMultiplier(CurrencyType type, double multiplier){
+        economyMultiplier.put(type, multiplier);
+        this.changed();
+    }
+
+    public void setEconomyMultiplier(Map<CurrencyType, Double> multiplier){
+        this.economyMultiplier = multiplier;
+        this.changed();
+    }
+
 
 }
 

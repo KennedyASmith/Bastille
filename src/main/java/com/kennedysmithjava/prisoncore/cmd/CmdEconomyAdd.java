@@ -31,7 +31,7 @@ public class CmdEconomyAdd extends CoreCommand {
         CurrencyType currency = readArg();
         Double value = readArg();
 
-        target.addBalance(currency, value);
+        target.addBalance(currency, value, false);
 
         player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                 "&eAdded " + value + " " + currency.getDisplayName() + " &eto "

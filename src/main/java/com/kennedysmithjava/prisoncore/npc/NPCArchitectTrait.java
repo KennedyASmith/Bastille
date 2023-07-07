@@ -175,7 +175,7 @@ public class NPCArchitectTrait extends Trait {
                         Optional<Integer> optionalWall = floor.getCompatibleWalls().stream().findFirst();
                         if(optionalWall.isPresent()){
                             openDecorMenu(player, pageNum, floorID, optionalWall.get());
-                        }else{ player.sendMessage(Color.get("&7[&f&lMCRivals&7] No walls exist for this floor! Please report to an administrator.")); }
+                        }else{ player.msg("&7[&7Server&7] No walls exist for this floor! Please report to an administrator."); }
                         return false;
                     });
                 }

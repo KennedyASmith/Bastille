@@ -72,7 +72,7 @@ public class WorthUtil {
         if (prisonBlock != null) {
             double value = prisonBlock.getValue() * i.getAmount();
             MPlayer byPlayer = MPlayerColl.get().getByPlayer(p);
-            byPlayer.addBalance(prisonBlock.getCurrencyType(), value);
+            byPlayer.addBalance(prisonBlock.getCurrencyType(), value, true);
             return value;
         }
         return -1D;

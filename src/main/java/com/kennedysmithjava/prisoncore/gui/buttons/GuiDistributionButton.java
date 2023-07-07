@@ -4,7 +4,6 @@ import com.kennedysmithjava.prisoncore.eco.Cost;
 import com.kennedysmithjava.prisoncore.entity.mines.Distribution;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
-import com.kennedysmithjava.prisoncore.util.Color;
 import com.massivecraft.massivecore.util.MUtil;
 import org.bukkit.Material;
 
@@ -20,7 +19,7 @@ public class GuiDistributionButton extends GuiButton {
     public GuiDistributionButton(MPlayer player, Distribution distribution, int distributionID, int slot, List<String> lore, Material material, List<Cost> additionalCosts) {
         super(distribution.getName(), "&7[BLOCK SET]", slot, lore, material,
                 new ArrayList<>(), null, () -> {
-                    player.sendMessage(Color.get("&7[&bServer]&7 You changed your mine's block set!"));
+                    player.msg("&7[&bServer]&7 You changed your mine's block set!");
                     Mine mine = player.getMine();
                     mine.addPurchasedDistribution(distributionID);
                     player.getMine().setBlockDistribution(distributionID);

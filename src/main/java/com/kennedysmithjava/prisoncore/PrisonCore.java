@@ -106,7 +106,6 @@ public class PrisonCore extends MassivePlugin {
         Ability.register(AbilityTetris.get());
         Ability.register(AbilityBlackhole.get());
 
-
         /* REGISTER ALL CITIZENS TRAITS */
         CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(NPCLimboTrait.class));
         CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(NPCLumberjackTrait.class));
@@ -192,7 +191,8 @@ public class PrisonCore extends MassivePlugin {
                 FishingConfColl.class,
                 SkillsConfColl.class,
                 SkillProfileColl.class,
-                SkinsConfColl.class
+                SkinsConfColl.class,
+                RebirthConfColl.class
         );
     }
 

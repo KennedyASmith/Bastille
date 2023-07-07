@@ -11,11 +11,14 @@ public class Skill extends EntityInternal<SkillProfile> {
     private int currentLevel;
     private int currentXP;
 
+    private double xpMultiplier;
+
 
     public Skill(SkillType type, int currentLevel, int currentXP) {
         this.type = type;
         this.currentLevel = currentLevel;
         this.currentXP = currentXP;
+        this.xpMultiplier = 1.0;
     }
 
     public int getCurrentLevel() {
@@ -38,6 +41,7 @@ public class Skill extends EntityInternal<SkillProfile> {
     public boolean addXP(int xp){
         if(xp == 0) return false;
         if(maxLevelReached()) return false;
+        xp = (int) (xp * xpMultiplier);
         int xpRequired = SkillsConf.getXpRequired(type, currentLevel);
         int xpActualNeed = xpRequired - currentXP;
         if(xp >= xpActualNeed){
@@ -55,6 +59,19 @@ public class Skill extends EntityInternal<SkillProfile> {
         this.currentXP = xp;
         this.currentLevel = level;
         this.changed();
+    }
+
+    public boolean addLevel(int level){
+        int maxLevel = getMaxLevel();
+        if(currentLevel + level > getMaxLevel()){
+            this.currentLevel = maxLevel;
+            this.changed();
+            return false;
+        }else {
+            this.currentLevel += level;
+            this.changed();
+            return true;
+        }
     }
 
 
@@ -85,5 +102,9 @@ public class Skill extends EntityInternal<SkillProfile> {
         return SkillsConf.get().getMaxLevels().get(type);
     }
 
+    public void addXpMultiplier(double xpMultiplier){
+        this.xpMultiplier += xpMultiplier;
+        this.changed();
+    }
 
 }

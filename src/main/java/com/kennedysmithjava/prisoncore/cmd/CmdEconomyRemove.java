@@ -31,7 +31,7 @@ public class CmdEconomyRemove extends CoreCommand {
         CurrencyType currency = readArg();
         Double value = readArg();
 
-        target.addBalance(currency, value);
+        target.addBalance(currency, value, false);
 
         player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                 "&eRemoved " + value + " " + currency.getDisplayName() + " &efrom "

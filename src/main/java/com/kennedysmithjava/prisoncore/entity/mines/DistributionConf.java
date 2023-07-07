@@ -32,10 +32,6 @@ public class DistributionConf extends Entity<DistributionConf> {
         return this;
     }
 
-    // -------------------------------------------- //
-    // COMMAND ALIASES
-    // -------------------------------------------- //
-
     public Map<Integer, Distribution> distribution = MUtil.map(
 
             0, new Distribution("&7Dusty Cobweb Pit", Material.GRAVEL,

@@ -1,7 +1,6 @@
 package com.kennedysmithjava.prisoncore.entity.mines.upgrades.actions;
 
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
-import com.kennedysmithjava.prisoncore.util.Color;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,9 +20,7 @@ public class ActionMessage extends AbstractAction {
 
     @Override
     public void apply(MPlayer player) {
-        messages.forEach(s -> {
-            player.sendMessage(Color.get(s));
-        });
+        messages.forEach(player::msg);
     }
 
 }
