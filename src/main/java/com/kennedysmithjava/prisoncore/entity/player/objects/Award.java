@@ -4,6 +4,8 @@ import com.kennedysmithjava.prisoncore.PrisonCore;
 import com.kennedysmithjava.prisoncore.crafting.objects.PrisonEnchantBook;
 import com.kennedysmithjava.prisoncore.eco.CurrencyType;
 import com.kennedysmithjava.prisoncore.enchantment.Enchant;
+import com.kennedysmithjava.prisoncore.entity.mines.Distribution;
+import com.kennedysmithjava.prisoncore.entity.mines.DistributionConf;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.player.MPlayer;
 import com.kennedysmithjava.prisoncore.entity.player.QuestProfile;
@@ -22,6 +24,7 @@ import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -282,6 +285,98 @@ public class Award {
 
     public void setXpMultiplierAward(Map<SkillType, Double> xpMultiplierAward) {
         this.xpMultiplierAward = xpMultiplierAward;
+    }
+
+    public List<String> getLore(){
+        List<String> lore = new ArrayList<>();
+        if(currencyAwards != null){
+            currencyAwards.forEach((currencyType, amount) -> {
+                lore.add("&7- " + currencyType.getColor() + amount + " " + currencyType.getDisplayName());
+            });
+        }
+
+        if(enchantAwards != null){
+            enchantAwards.forEach((enchantName, level) -> {
+                lore.add("&7- " + enchantName + " &7book (Level " + level + ")");
+            });
+        }
+
+        if(pouchAwards != null){
+            pouchAwards.forEach((id, count) -> {
+                PouchType type = PouchType.from(id);
+                lore.add("&7- " + count + "x " + type.getName());
+            });
+        }
+
+        if(skillLevelUpgradesAwards != null){
+            skillLevelUpgradesAwards.forEach((skillType, level) ->{
+                lore.add("&7- &e+" + level + " &6" + skillType.getDisplayName() + " &7level");
+                    });
+        }
+
+        if(skillXPUpgradesAwards != null){
+            skillXPUpgradesAwards.forEach((skillType, xp) -> {
+                lore.add("&7- &e+" + xp + " &6" + skillType.getDisplayName() + " &7xp");
+                    });
+        }
+
+        if(xpMultiplierAward != null){
+            xpMultiplierAward.forEach((skillType, multiplier) -> {
+                lore.add("&7- &e+" + (multiplier * 10) + "% &6" + skillType.getDisplayName() + " XP &7multiplier");
+                    });
+        }
+
+        if(currencyMultiplierAward != null){
+            currencyMultiplierAward.forEach((currency, multiplier) -> {
+                lore.add("&7- &e+" + (multiplier * 10) + "% &6" + currency.getDisplayName() + " &7multiplier");
+            });
+        }
+
+        if(questUnlockAwards != null){
+            QuestPathRegistry registry = QuestPathRegistry.get();
+            questUnlockAwards.forEach(s -> {
+                QuestPath path = registry.getQuest(s);
+                if(path != null){
+                    lore.add("&7- Unlock quest: &a" + path.getQuestPathDisplayName());
+                }
+            });
+        }
+
+        if(pickaxeAwards != null){
+            pickaxeAwards.forEach(pickName -> {
+                PickaxeType type = PickaxeType.get(pickName);
+                lore.add("&7- 1x " + type.getDisplayName());
+            });
+        }
+
+        if(hoeAwards != null){
+            hoeAwards.forEach(pickName -> {
+                HoeType type = HoeType.get(pickName);
+                lore.add("&7- 1x " + type.getDisplayName());
+            });
+        }
+
+        if(axeAwards != null){
+            axeAwards.forEach(pickName -> {
+                AxeType type = AxeType.get(pickName);
+                lore.add("&7- 1x " + type.getDisplayName());
+            });
+        }
+
+        if(fishingPoleAwards != null){
+            fishingPoleAwards.forEach(pickName -> {
+                FishingPoleType type = FishingPoleType.get(pickName);
+                lore.add("&7- 1x " + type.getDisplayName());
+            });
+        }
+
+        if(mineDistributionAwards != null){
+            mineDistributionAwards.forEach(id -> {
+                Distribution distribution = DistributionConf.get().distribution.get(id);
+                lore.add("&7- " + distribution.getName() + " block set");
+            });
+        }
+        return lore;
     }
 
 }

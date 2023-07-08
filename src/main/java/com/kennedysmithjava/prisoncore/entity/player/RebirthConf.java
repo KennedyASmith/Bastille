@@ -10,6 +10,8 @@ import com.massivecraft.massivecore.command.editor.annotation.EditorName;
 import com.massivecraft.massivecore.store.Entity;
 import com.massivecraft.massivecore.util.MUtil;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @EditorName("config")
@@ -46,13 +48,28 @@ public class RebirthConf extends Entity<RebirthConf> {
                     MUtil.list(1)
             ));
 
+    public transient Map<Integer, List<String>> awardLore = new HashMap<>();
+
     @Override
     public RebirthConf load(RebirthConf that) {
         this.setRebirthAwards(that.rebirthAwards);
+        this.getRebirthAwards().forEach((integer, award) -> awardLore.put(integer, award.getLore()));
         return this;
     }
 
     public void setRebirthAwards(Map<Integer, Award> rebirthAwards) {
         this.rebirthAwards = rebirthAwards;
+    }
+
+    public Map<Integer, Award> getRebirthAwards() {
+        return rebirthAwards;
+    }
+
+    public Award getAward(int level){
+        return rebirthAwards.get(level);
+    }
+
+    public Map<Integer, List<String>> getAwardLore() {
+        return awardLore;
     }
 }

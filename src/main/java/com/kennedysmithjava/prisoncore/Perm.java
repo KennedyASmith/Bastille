@@ -38,7 +38,8 @@ public enum Perm implements Identified
     FISHING,
     SKILL_GUI,
     SKILL_GIVE,
-    PREGION
+    PREGION,
+    REBIRTHCOMMAND
 
 
     // END OF LIST

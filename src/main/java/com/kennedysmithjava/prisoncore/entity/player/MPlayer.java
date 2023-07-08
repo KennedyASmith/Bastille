@@ -7,6 +7,7 @@ import com.kennedysmithjava.prisoncore.eco.CurrencyType;
 import com.kennedysmithjava.prisoncore.engine.EngineCooldown;
 import com.kennedysmithjava.prisoncore.entity.mines.Mine;
 import com.kennedysmithjava.prisoncore.entity.mines.MineColl;
+import com.kennedysmithjava.prisoncore.entity.player.objects.Award;
 import com.kennedysmithjava.prisoncore.entity.player.objects.StorageWrapper;
 import com.kennedysmithjava.prisoncore.quest.QuestPath;
 import com.kennedysmithjava.prisoncore.quest.quests.enums.CollectibleKey;
@@ -36,6 +37,8 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
     private String mineID = "none";
     private String clanName = "";
 
+    private int life = 1;
+
     private Map<StorageType, StorageWrapper> storage = MUtil.map(
             StorageType.STORAGE_1, new StorageWrapper(false, Material.CHEST, "&aStorage 1"),
             StorageType.STORAGE_2, new StorageWrapper(false, Material.CHEST, "&aStorage 2"),
@@ -57,6 +60,7 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
         this.setEconomy(that.economy);
         this.setMineID(that.mineID);
         this.setStorage(that.storage);
+        this.setLife(that.life, false);
         return this;
     }
 
@@ -237,6 +241,12 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
         PlayerVaults.getInstance().getInVault().put(player.getUniqueId().toString(), new VaultViewInfo(this.getName(), type.getId()));
     }
 
+    public void removeStorage(StorageType type){
+        Inventory inv = getStorage(type);
+        inv.clear();
+        StorageManager.get().saveChest(getPlayer(), type, inv);
+      }
+
     public void addEconomyMultiplier(CurrencyType type, double multiplier){
         economyMultiplier.put(type, multiplier);
         this.changed();
@@ -247,6 +257,19 @@ public class MPlayer extends SenderEntity<MPlayer> implements PrisonParticipator
         this.changed();
     }
 
+    public void setLife(int life, boolean giveAwards) {
+        this.life = life;
+        this.changed();
+        if(giveAwards){
+            Award award = RebirthConf.get().getAward(life);
+            if(award != null){
+                award.giveAward(this);
+            }
+        }
+    }
 
+    public int getLife() {
+        return life;
+    }
 }
 
