@@ -1,5 +1,7 @@
 # Bastille
 
+Inspired by the classic Minecraft "prisons" game mode.
+
 Features include:
 - Personal Mine Generation
 - Modular Mine Upgrades 
