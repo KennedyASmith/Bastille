@@ -1,17 +1,19 @@
 package com.kennedysmithjava.prisoncore.entity.tools;
 
-import com.kennedysmithjava.prisoncore.tools.Buffer;
-import com.kennedysmithjava.prisoncore.tools.Pickaxe;
 import com.kennedysmithjava.prisoncore.ability.Ability;
 import com.kennedysmithjava.prisoncore.ability.LeveledAbility;
 import com.kennedysmithjava.prisoncore.enchantment.Enchant;
+import com.kennedysmithjava.prisoncore.tools.Buffer;
+import com.kennedysmithjava.prisoncore.tools.Pickaxe;
 import com.kennedysmithjava.prisoncore.util.Color;
 import com.kennedysmithjava.prisoncore.util.MiscUtil;
 import com.kennedysmithjava.prisoncore.util.RarityName;
 import com.massivecraft.massivecore.collections.MassiveMap;
 import com.massivecraft.massivecore.store.Entity;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 
@@ -83,6 +85,28 @@ public class PickaxeType extends Entity<PickaxeType> {
     public ItemStack getItemStack() {
         Pickaxe pickaxe = Pickaxe.create(this);
         return pickaxe.getItem();
+    }
+
+    public ItemStack getIconItemStack(){
+
+        UUID uuid = UUID.randomUUID();
+
+        LeveledAbility leveledAbility = null;
+
+        ItemStack item = new ItemStack(getMaterial(), 1);
+        ItemMeta meta = item.getItemMeta();
+
+        if(!Objects.equals(getAbilityString(), "none") && getAbilityString() != null){
+            leveledAbility = new LeveledAbility(getAbility().getAbilityType(), 1, getBuffers());
+            }
+
+        meta.setDisplayName(getDisplayName());
+        meta.setLore(Color.get(getLore(getEnchants(), leveledAbility, getStartDurability(), getMaxDurability())));
+        meta.setUnbreakable(true);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
+        item.setItemMeta(meta);
+
+        return item;
     }
 
     /**
@@ -163,11 +187,13 @@ public class PickaxeType extends Entity<PickaxeType> {
 
     public String getDurabilityLore(int currentDurability, int maxDurability){
 
-        StringBuilder builder = new StringBuilder("&a‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖");
+        StringBuilder builder = new StringBuilder("‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖");
         int length = builder.length();
+        currentDurability = Math.min(currentDurability, maxDurability);
         double percentage = (double) currentDurability / (double) maxDurability;
         int numberOfGreen = (int) (percentage * (double) length);
-        builder.insert(numberOfGreen, "&7");
+        builder.insert(numberOfGreen - 1, "&7");
+        builder.insert(0, "&a");
         return builder.toString();
     }
 

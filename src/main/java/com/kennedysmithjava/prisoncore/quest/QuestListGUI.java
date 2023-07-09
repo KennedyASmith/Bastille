@@ -144,6 +144,7 @@ public class QuestListGUI {
 
             ItemStack stockItem = path.getPathIcon();
             List<String> lore = stockItem.getItemMeta().getLore();
+            if(lore == null) lore = new ArrayList<>();
             lore.add(0, "&r");
             lore.add(1, "&7Difficulty: " + path.getDifficulty().getDifficultyString());
             lore.add(2, "&eClick to begin this quest!");

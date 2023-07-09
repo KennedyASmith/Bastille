@@ -20,7 +20,7 @@ import org.bukkit.inventory.Inventory;
 
 public class RebirthGui extends BaseGui {
     public RebirthGui(Player player) {
-        super(player, "&d&lRebirth &r&7Main Menu", 5, false, true);
+        super(player, "&d&lRebirth &r&7Main Menu", 3, false, true);
     }
 
     @Override
@@ -57,16 +57,16 @@ public class RebirthGui extends BaseGui {
                                 "&7- &6Player &7level &e100",
                                 "&r",
                                 "&cYou will reset:",
-                                "&7- &6Player &7Level",
-                                "&7- &6Mine &7upgrades",
-                                "&7- All &aCash",
+                                "&7- Player Level",
+                                "&7- Mine upgrades",
+                                "&7- All Cash",
                                 "&7- Items",
                                 "&r",
                                 "&aYou will keep:",
-                                "&7- &6Skill &7levels",
-                                "&7- All &dGems",
-                                "&7- All items in &dRebirth Storage",
-                                "&7- &eCollectible &7items",
+                                "&7- Skill levels",
+                                "&7- All Gems",
+                                "&7- All items in Rebirth Storage",
+                                "&7- Collectible items",
                                 "&7- Mine Decorations"
                         ));
         setItem(12, rebirthButton.build());

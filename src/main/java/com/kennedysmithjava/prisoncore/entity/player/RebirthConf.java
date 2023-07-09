@@ -53,7 +53,6 @@ public class RebirthConf extends Entity<RebirthConf> {
     @Override
     public RebirthConf load(RebirthConf that) {
         this.setRebirthAwards(that.rebirthAwards);
-        this.getRebirthAwards().forEach((integer, award) -> awardLore.put(integer, award.getLore()));
         return this;
     }
 
@@ -70,6 +69,9 @@ public class RebirthConf extends Entity<RebirthConf> {
     }
 
     public Map<Integer, List<String>> getAwardLore() {
+        if(awardLore.isEmpty()){
+            this.getRebirthAwards().forEach((integer, award) -> awardLore.put(integer, award.getLore()));
+        }
         return awardLore;
     }
 }

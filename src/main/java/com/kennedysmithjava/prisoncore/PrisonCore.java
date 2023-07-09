@@ -20,10 +20,7 @@ import com.kennedysmithjava.prisoncore.entity.npcs.SkinsConfColl;
 import com.kennedysmithjava.prisoncore.entity.player.*;
 import com.kennedysmithjava.prisoncore.entity.tools.*;
 import com.kennedysmithjava.prisoncore.event.EventNewMine;
-import com.kennedysmithjava.prisoncore.npc.NPCBlacksmithTrait;
-import com.kennedysmithjava.prisoncore.npc.NPCLimboTrait;
-import com.kennedysmithjava.prisoncore.npc.NPCLumberjackTrait;
-import com.kennedysmithjava.prisoncore.npc.SkinManager;
+import com.kennedysmithjava.prisoncore.npc.*;
 import com.kennedysmithjava.prisoncore.placeholders.*;
 import com.kennedysmithjava.prisoncore.pouch.DatalessPouchable;
 import com.kennedysmithjava.prisoncore.quest.QuestPath;
@@ -110,6 +107,7 @@ public class PrisonCore extends MassivePlugin {
         CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(NPCLimboTrait.class));
         CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(NPCLumberjackTrait.class));
         CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(NPCBlacksmithTrait.class));
+        CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(NPCDeathTrait.class));
 
         /* ACTIVATE ENGINES/COLLECTORS */
         this.activateAuto();

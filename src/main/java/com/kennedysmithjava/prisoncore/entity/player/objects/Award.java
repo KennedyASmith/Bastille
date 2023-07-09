@@ -304,7 +304,9 @@ public class Award {
         if(pouchAwards != null){
             pouchAwards.forEach((id, count) -> {
                 PouchType type = PouchType.from(id);
-                lore.add("&7- " + count + "x " + type.getName());
+                if(type != null){
+                    lore.add("&7- " + count + "x " + type.getName());
+                }
             });
         }
 
@@ -345,35 +347,45 @@ public class Award {
         if(pickaxeAwards != null){
             pickaxeAwards.forEach(pickName -> {
                 PickaxeType type = PickaxeType.get(pickName);
-                lore.add("&7- 1x " + type.getDisplayName());
+                if(type != null){
+                    lore.add("&7- 1x " + type.getDisplayName());
+                }
             });
         }
 
         if(hoeAwards != null){
             hoeAwards.forEach(pickName -> {
                 HoeType type = HoeType.get(pickName);
-                lore.add("&7- 1x " + type.getDisplayName());
+                if(type != null){
+                    lore.add("&7- 1x " + type.getDisplayName());
+                }
             });
         }
 
         if(axeAwards != null){
             axeAwards.forEach(pickName -> {
                 AxeType type = AxeType.get(pickName);
-                lore.add("&7- 1x " + type.getDisplayName());
+                if(type != null){
+                    lore.add("&7- 1x " + type.getDisplayName());
+                }
             });
         }
 
         if(fishingPoleAwards != null){
             fishingPoleAwards.forEach(pickName -> {
                 FishingPoleType type = FishingPoleType.get(pickName);
-                lore.add("&7- 1x " + type.getDisplayName());
+                if(type != null){
+                    lore.add("&7- 1x " + type.getDisplayName());
+                }
             });
         }
 
         if(mineDistributionAwards != null){
             mineDistributionAwards.forEach(id -> {
                 Distribution distribution = DistributionConf.get().distribution.get(id);
-                lore.add("&7- " + distribution.getName() + " block set");
+                if(distribution != null){
+                    lore.add("&7- " + distribution.getName() + " block set");
+                }
             });
         }
         return lore;

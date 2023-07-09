@@ -26,7 +26,7 @@ public class ForgeToolCraftGui extends BaseGui{
         BaseGui baseGui = this;
 
         ItemBuilder pickItem = new ItemBuilder(Material.IRON_PICKAXE)
-                .name("&c&lForge Pickaxe")
+                .name("&cForge &6&lPickaxe")
                 .lore(MUtil.list(" &r", "Use materials to forge a new pickaxe for mining.", "&r", "&eClick to forge!"));
         setItem(22, pickItem.build());
         setAction(22, inventoryClickEvent -> {
@@ -37,10 +37,10 @@ public class ForgeToolCraftGui extends BaseGui{
         });
 
         ItemBuilder axeItem = new ItemBuilder(Material.IRON_HOE)
-                .name("&c&lForge Axe")
+                .name("&cForge &6&lAxe")
                 .lore(MUtil.list(" &r", "Use materials to forge a new axe for woodcutting.", "&r", "&eClick to forge!"));
-        setItem(33, axeItem.build());
-        setAction(33, inventoryClickEvent -> {
+        setItem(29, axeItem.build());
+        setAction(29, inventoryClickEvent -> {
             close();
             CraftingMenuGui craftingMenuGui = new CraftingMenuGui(player, "&c&lForging Axe", Recipe.AXE, baseGui);
             craftingMenuGui.open();
@@ -48,7 +48,7 @@ public class ForgeToolCraftGui extends BaseGui{
         });
 
         ItemBuilder hoeItem = new ItemBuilder(Material.IRON_HOE)
-                .name("&c&lForge Hoe")
+                .name("&cForge &6&lHoe")
                 .lore(MUtil.list(" &r", "Use materials to forge a new hoe for farming.", "&r", "&eClick to forge!"));
         setItem(33, hoeItem.build());
         setAction(33, inventoryClickEvent -> {

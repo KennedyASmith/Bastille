@@ -126,13 +126,16 @@ public class AxeType extends Entity<AxeType> {
 
     public String getDurabilityLore(int currentDurability, int maxDurability){
 
-        StringBuilder builder = new StringBuilder("&a‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖");
+        StringBuilder builder = new StringBuilder("‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖‖");
         int length = builder.length();
+        currentDurability = Math.min(currentDurability, maxDurability);
         double percentage = (double) currentDurability / (double) maxDurability;
         int numberOfGreen = (int) (percentage * (double) length);
-        builder.insert(numberOfGreen, "&7");
+        builder.insert(numberOfGreen - 1, "&7");
+        builder.insert(0, "&a");
         return builder.toString();
     }
+
 
 
     /**

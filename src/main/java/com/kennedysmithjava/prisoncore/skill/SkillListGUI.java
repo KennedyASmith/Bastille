@@ -35,10 +35,10 @@ public class SkillListGUI {
      */
     public void open(){
         if(player.getPlayer() == null) return;
-        player.getPlayer().openInventory(getQuestInventory(player).getInventory());
+        player.getPlayer().openInventory(getSkillInventory(player).getInventory());
     }
 
-    private ChestGui getQuestInventory(MPlayer player){
+    private ChestGui getSkillInventory(MPlayer player){
         Inventory inventory = Bukkit.createInventory(null, 4*9, Color.get("&c&l" + player.getName() + "&8's Skills"));
         ChestGui gui = ChestGui.getCreative(inventory);
         gui.setAutoclosing(false);

@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class RebirthRewardsGui extends BaseGui {
     public RebirthRewardsGui(Player player, BaseGui returnMenu) {
-        super(player, "&d&lRebirth &r&7Main Menu", 5, false, true, returnMenu);
+        super(player, "&d&lRebirth &r&7Rewards Menu", 6, false, true, returnMenu);
     }
 
     @Override
@@ -25,12 +25,12 @@ public class RebirthRewardsGui extends BaseGui {
 
         for (int i = 0; i < 45; i++) {
             int life = i + 2;
-            List<String> lore = MUtil.list("&7", "&7Awards for life ", "&r");
+            List<String> lore = MUtil.list("&7", "&7Awards for life " + life + ":");
             lore.add("&7- 1x Random &dReborn &7tier item");
             List<String> awardLore = awardLoreMap.get(life);
             if(awardLore == null) awardLore = awardLoreMap.get(-1);
             lore.addAll(awardLore);
-            ItemBuilder reward = new ItemBuilder(Material.TOTEM_OF_UNDYING)
+            ItemBuilder reward = new ItemBuilder(Material.TOTEM_OF_UNDYING, life)
                     .name("&b&lLife &e" + life)
                     .lore(lore);
             setItem(i, reward.build());
@@ -38,12 +38,12 @@ public class RebirthRewardsGui extends BaseGui {
 
         for (int i = 46; i < 52; i++) {
             int life = i + 2;
-            List<String> lore = MUtil.list("&7", "&7Awards for life ", "&r");
+            List<String> lore = MUtil.list("&7", "&7Awards for life " + life + ":");
             lore.add("&7- 1x Random &dReborn &7tier item");
             List<String> awardLore = awardLoreMap.get(life);
             if(awardLore == null) awardLore = awardLoreMap.get(-1);
             lore.addAll(awardLore);
-            ItemBuilder reward = new ItemBuilder(Material.TOTEM_OF_UNDYING)
+            ItemBuilder reward = new ItemBuilder(Material.TOTEM_OF_UNDYING, life)
                     .name("&b&lLife &e" + life)
                     .lore(lore);
             setItem(i, reward.build());
@@ -51,7 +51,7 @@ public class RebirthRewardsGui extends BaseGui {
 
         ItemBuilder lastLevel = new ItemBuilder(Material.TOTEM_OF_UNDYING)
                 .name("&b&lLife 51+")
-                .lore(MUtil.list("&r", "- 3x Random &dReborn &7tier items"));
+                .lore(MUtil.list("&r", "&7- 3x Random &dReborn &7tier items"));
         setItem(52, lastLevel.build());
 
         ItemBuilder randomRewards = new ItemBuilder(Material.CHEST)
