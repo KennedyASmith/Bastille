@@ -1,5 +1,6 @@
 # Bastille
 
+Currently under development.
 Inspired by the classic Minecraft "prisons" game mode.
 
 Features include:
